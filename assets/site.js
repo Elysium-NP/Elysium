@@ -109,7 +109,8 @@
   //      obligeait à repasser par le login). Remplacé par Supabase Auth en phase suivante. ----
   try {
     if (JSON.parse(localStorage.getItem('ely_user_demo') || 'null')) {
-      document.querySelectorAll('a.go[href="connexion.html"], a.go-m[href="connexion.html"]').forEach(function(a){
+      document.querySelectorAll('a.go, a.go-m').forEach(function(a){
+        if (!/connexion/i.test(a.getAttribute('href') || '')) return;   // Netlify réécrit connexion.html -> /connexion
         a.setAttribute('href', 'espace.html');
         var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
         a.appendChild(document.createTextNode('Mon espace'));

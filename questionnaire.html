@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELYSIUM — Construire mon programme</title>
+<meta name="description" content="Quelques questions et on construit ton programme sur-mesure, au gramme près.">
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-400-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  body{overflow-x:hidden}
+  .qtop{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px var(--edge);background:linear-gradient(var(--void),rgba(6,8,12,0))}
+  .qtop .back{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
+  .qtop .back:hover{color:var(--blue)}
+  .qprog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue-d),var(--blue));box-shadow:0 0 12px var(--blue);width:0;z-index:60;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .qwrap{max-width:680px;margin:0 auto;padding:120px var(--edge) 80px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  .qcount{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:18px}
+  .qstep{display:none;animation:qin .5s cubic-bezier(.2,.7,.2,1)}
+  .qstep.active{display:block}
+  @keyframes qin{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .qstep h2{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4.6vw,46px);color:var(--ice);text-transform:uppercase;line-height:1.02;letter-spacing:.005em;margin-bottom:10px}
+  .qstep .qhint{font-family:var(--mono);font-size:12.5px;color:var(--steel);margin-bottom:30px}
+  .qcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .qcards.one{grid-template-columns:1fr}
+  @media(max-width:520px){.qcards{grid-template-columns:1fr}}
+  .qcard{position:relative;display:flex;align-items:center;gap:12px;padding:18px 18px;border:1px solid var(--line);background:var(--void2);cursor:pointer;transition:border-color .3s,background .3s}
+  .qcard:hover{border-color:rgba(46,155,255,.5)}
+  .qcard input{position:absolute;opacity:0;pointer-events:none}
+  .qcard .dot{width:16px;height:16px;border:1px solid var(--steel);border-radius:50%;flex:none;transition:border-color .3s;position:relative}
+  .qcard .tx{font-family:var(--disp);font-weight:500;font-size:16px;color:var(--ice);text-transform:none}
+  .qcard:has(input:checked){border-color:var(--blue);background:rgba(46,155,255,.07)}
+  .qcard:has(input:checked) .dot{border-color:var(--blue)}
+  .qcard:has(input:checked) .dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)}
+  .qcard:has(input[type=checkbox]) .dot{border-radius:3px}
+  .qcard:has(input[type=checkbox]:checked) .dot::after{border-radius:1px;inset:3px}
+  .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:520px){.qgrid{grid-template-columns:1fr}}
+  .qfield{display:flex;flex-direction:column;gap:8px}
+  .qfield label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+  .qfield input{font-family:var(--mono);font-size:15px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;transition:border-color .3s;width:100%}
+  .qfield input::placeholder{color:var(--steel)}
+  .qfield input:focus{outline:none;border-color:var(--blue)}
+  .qnav{display:flex;align-items:center;gap:16px;margin-top:36px}
+  .qnav .prev{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);background:none;border:0;cursor:pointer;padding:8px 0;transition:color .3s}
+  .qnav .prev:hover{color:var(--ice)}
+  .qnav .btn{cursor:pointer;background:transparent;margin-left:auto}
+  .qerr{font-family:var(--mono);font-size:11.5px;color:#e8b04b;margin-top:14px;min-height:16px}
+  /* écran de fin */
+  #confetti{position:fixed;inset:0;z-index:90;pointer-events:none;display:none}
+  .qdone{display:none;position:fixed;inset:0;z-index:80;background:var(--void);align-items:center;justify-content:center;text-align:center;padding:40px var(--edge)}
+  .qdone.on{display:flex;animation:qin .6s ease}
+  .qdone-in{max-width:560px}
+  .qdone .em{font-family:var(--disp);font-weight:600;font-size:clamp(46px,9vw,90px);color:var(--blue);line-height:1;letter-spacing:.02em}
+  .qdone h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4vw,42px);color:var(--ice);text-transform:uppercase;margin:16px 0 18px;letter-spacing:.005em}
+  .qdone p{font-family:var(--mono);font-size:14px;line-height:1.7;color:var(--gris);max-width:46ch;margin:0 auto 32px}
+  .qdone p b{color:var(--ice);font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="qprog" id="prog" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<div class="qtop">
+  <a class="logo" href="index.html" aria-label="Elysium — Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
+  <a class="back" href="index.html">✕ Quitter</a>
+</div>
+
+<main>
+  <div class="qwrap">
+    <form name="questionnaire" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="qform">
+      <input type="hidden" name="form-name" value="questionnaire">
+      <p style="position:absolute;left:-9999px" aria-hidden="true"><label>Ne pas remplir : <input name="bot-field"></label></p>
+      <div class="qcount" id="count">Étape 1 / 5</div>
+
+      <!-- 1 -->
+      <div class="qstep active" data-step="1">
+        <h2>Ton objectif ?</h2>
+        <p class="qhint">Le point de départ de tout le reste.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="objectif" value="Prise de masse" required><span class="dot"></span><span class="tx">Prise de masse</span></label>
+          <label class="qcard"><input type="radio" name="objectif" value="Perte de poids"><span class="dot"></span><span class="tx">Perte de poids</span></label>
+          <label class="qcard"><input type="radio" name="objectif" value="Rééquilibrage"><span class="dot"></span><span class="tx">Rééquilibrage</span></label>
+          <label class="qcard"><input type="radio" name="objectif" value="Sèche / recomposition"><span class="dot"></span><span class="tx">Sèche / recompo</span></label>
+          <label class="qcard"><input type="radio" name="objectif" value="Je ne sais pas encore"><span class="dot"></span><span class="tx">Je ne sais pas encore</span></label>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="qstep" data-step="2">
+        <h2>Parle-nous de toi.</h2>
+        <p class="qhint">Les bases pour calculer ta cible.</p>
+        <div class="qcards" style="margin-bottom:16px">
+          <label class="qcard"><input type="radio" name="sexe" value="Homme" required><span class="dot"></span><span class="tx">Homme</span></label>
+          <label class="qcard"><input type="radio" name="sexe" value="Femme"><span class="dot"></span><span class="tx">Femme</span></label>
+        </div>
+        <div class="qgrid">
+          <div class="qfield"><label>Âge</label><input type="number" name="age" min="14" max="99" placeholder="ans" required></div>
+          <div class="qfield"><label>Poids (kg)</label><input type="number" name="poids" min="35" max="250" placeholder="kg" required></div>
+          <div class="qfield"><label>Taille (cm)</label><input type="number" name="taille" min="130" max="220" placeholder="cm" required></div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="qstep" data-step="3">
+        <h2>Ton quotidien.</h2>
+        <p class="qhint">Ton niveau d'activité affine le calcul.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="activite" value="Sédentaire" required><span class="dot"></span><span class="tx">Plutôt sédentaire</span></label>
+          <label class="qcard"><input type="radio" name="activite" value="Actif"><span class="dot"></span><span class="tx">Actif au quotidien</span></label>
+          <label class="qcard"><input type="radio" name="activite" value="Sportif"><span class="dot"></span><span class="tx">Sportif régulier</span></label>
+          <label class="qcard"><input type="radio" name="activite" value="Très sportif"><span class="dot"></span><span class="tx">Très sportif</span></label>
+        </div>
+        <div class="qfield" style="margin-top:16px"><label>Quels sports / à quelle fréquence ? (optionnel)</label><input type="text" name="sport" placeholder="ex. muscu 3×/sem, foot le week-end…"></div>
+      </div>
+
+      <!-- 4 -->
+      <div class="qstep" data-step="4">
+        <h2>Tes préférences.</h2>
+        <p class="qhint">On ne t'imposera jamais un aliment interdit ou détesté.</p>
+        <div class="qfield" style="margin-bottom:16px"><label>Petit-déjeuner : plutôt…</label></div>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="petit_dej" value="Sucré" required><span class="dot"></span><span class="tx">Sucré</span></label>
+          <label class="qcard"><input type="radio" name="petit_dej" value="Salé"><span class="dot"></span><span class="tx">Salé</span></label>
+          <label class="qcard"><input type="radio" name="petit_dej" value="Les deux / peu importe"><span class="dot"></span><span class="tx">Les deux / peu importe</span></label>
+        </div>
+        <div class="qfield" style="margin-top:22px"><label>Régime ou contrainte ? (coche ce qui s'applique)</label></div>
+        <div class="qcards">
+          <label class="qcard"><input type="checkbox" name="regimes" value="Végétarien"><span class="dot"></span><span class="tx">Végétarien</span></label>
+          <label class="qcard"><input type="checkbox" name="regimes" value="Sans gluten"><span class="dot"></span><span class="tx">Sans gluten</span></label>
+          <label class="qcard"><input type="checkbox" name="regimes" value="Sans lactose"><span class="dot"></span><span class="tx">Sans lactose</span></label>
+          <label class="qcard"><input type="checkbox" name="regimes" value="Halal"><span class="dot"></span><span class="tx">Halal</span></label>
+        </div>
+        <div class="qfield" style="margin-top:16px"><label>Aliments que tu détestes / allergies (optionnel)</label><input type="text" name="detestes" placeholder="ex. poisson, brocoli, allergie aux fruits à coque…"></div>
+      </div>
+
+      <!-- 5 -->
+      <div class="qstep" data-step="5">
+        <h2>On te recontacte où ?</h2>
+        <p class="qhint">On construit ton programme et on t'écrit. Zéro spam.</p>
+        <div class="qgrid">
+          <div class="qfield"><label>Prénom</label><input type="text" name="prenom" autocomplete="given-name" required></div>
+          <div class="qfield"><label>Nom</label><input type="text" name="nom" autocomplete="family-name" required></div>
+        </div>
+        <div class="qfield" style="margin-top:16px"><label>Email</label><input type="email" name="email" autocomplete="email" placeholder="ton@email.com" required></div>
+        <div class="qfield" style="margin-top:16px"><label>Téléphone (optionnel)</label><input type="tel" name="telephone" autocomplete="tel" placeholder="06…"></div>
+      </div>
+
+      <div class="qnav">
+        <button type="button" class="prev" id="prev" style="visibility:hidden">‹ Retour</button>
+        <button type="button" class="btn" id="next">Continuer ›</button>
+      </div>
+      <div class="qerr" id="err" role="alert"></div>
+    </form>
+  </div>
+</main>
+
+<!-- écran de fin -->
+<div class="qdone" id="done" role="status" aria-live="polite">
+  <div class="qdone-in">
+    <div class="em">C'est parti !</div>
+    <h2>Bienvenue chez Elysium.</h2>
+    <p>On a bien reçu ton profil. <b>Damien &amp; Yoann construisent ton programme sur-mesure</b>, relu à la main, et on te l'envoie <b>sous 10 jours</b> par mail. On revient vite vers toi !</p>
+    <a class="btn" href="index.html">Retour à l'accueil</a>
+  </div>
+</div>
+
+<script src="assets/site.js"></script>
+<script>
+(function(){
+  var form=document.getElementById('qform'), steps=[].slice.call(form.querySelectorAll('.qstep'));
+  var i=0, total=steps.length;
+  var prog=document.getElementById('prog'), count=document.getElementById('count');
+  var prev=document.getElementById('prev'), next=document.getElementById('next'), err=document.getElementById('err');
+
+  function render(){
+    steps.forEach(function(s,k){ s.classList.toggle('active',k===i); });
+    count.textContent='Étape '+(i+1)+' / '+total;
+    prog.style.width=((i)/(total-1)*100)+'%';
+    prev.style.visibility = i===0 ? 'hidden':'visible';
+    next.textContent = i===total-1 ? 'Envoyer mon profil' : 'Continuer ›';
+    err.textContent='';
+    var f=steps[i].querySelector('input:not([type=hidden]),select'); if(f && f.type!=='radio' && f.type!=='checkbox'){ setTimeout(function(){f.focus();},60); }
+  }
+  function valid(){
+    var reqs=steps[i].querySelectorAll('[required]');
+    for(var k=0;k<reqs.length;k++){ if(!reqs[k].checkValidity()){ reqs[k].reportValidity(); return false; } }
+    // groupe radio requis
+    var radios=steps[i].querySelectorAll('input[type=radio][required]');
+    if(radios.length){ var nm=radios[0].name; if(!form.querySelector('input[name="'+nm+'"]:checked')){ err.textContent='Choisis une option pour continuer.'; return false; } }
+    return true;
+  }
+  next.addEventListener('click',function(){
+    if(!valid()) return;
+    if(i<total-1){ i++; render(); window.scrollTo(0,0); }
+    else submit();
+  });
+  prev.addEventListener('click',function(){ if(i>0){ i--; render(); window.scrollTo(0,0); } });
+  form.addEventListener('keydown',function(e){ if(e.key==='Enter' && e.target.tagName!=='TEXTAREA'){ e.preventDefault(); next.click(); } });
+
+  function submit(){
+    next.disabled=true; next.textContent='Envoi…';
+    var body=new URLSearchParams(new FormData(form)).toString();
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
+      .then(done).catch(done);
+  }
+  function done(){
+    document.getElementById('done').classList.add('on');
+    confetti();
+  }
+
+  // ---- confettis (canvas, zéro dépendance) ----
+  function confetti(){
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var cv=document.getElementById('confetti'); cv.style.display='block';
+    var ctx=cv.getContext('2d'), W=cv.width=innerWidth, H=cv.height=innerHeight;
+    var cols=['#2E9BFF','#EAF2FF','#8fc6ff','#e8c56b','#ffffff'], P=[];
+    for(var n=0;n<150;n++){ P.push({x:W/2+(Math.random()-.5)*W*.35, y:H*.32+(Math.random()-.5)*70,
+      vx:(Math.random()-.5)*12, vy:Math.random()*-14-3, g:.30+Math.random()*.18, s:5+Math.random()*7,
+      r:Math.random()*6.28, vr:(Math.random()-.5)*.34, c:cols[n%cols.length], a:1}); }
+    var t0=Date.now();
+    (function loop(){
+      ctx.clearRect(0,0,W,H); var alive=false;
+      for(var k=0;k<P.length;k++){ var p=P[k]; p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; p.vx*=.99;
+        if(Date.now()-t0>1500) p.a-=.028; if(p.a<=0) continue; alive=true;
+        ctx.save(); ctx.globalAlpha=Math.max(0,p.a); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+        ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.62); ctx.restore(); }
+      if(alive) requestAnimationFrame(loop); else cv.style.display='none';
+    })();
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

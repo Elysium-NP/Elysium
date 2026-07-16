@@ -316,6 +316,26 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 .plates .note b{color:var(--gris);font-weight:500}
 .plates .note span:first-child{color:var(--blue)}
 @media(prefers-reduced-motion:reduce){.dish img{transition:none;transform:none}.dish .scan{display:none}}
+
+/* ---------- « Vrai ou Faux » : idées reçues (interactif, révèle 0 méthodo) ---------- */
+.myth{position:relative;z-index:1;background:var(--void);padding:clamp(90px,13vh,150px) var(--edge)}
+.myth-in{max-width:1000px;margin:0 auto}
+.myth .kick{margin-bottom:20px}
+.myth h2{font-family:var(--disp);font-weight:600;font-size:clamp(38px,5.6vw,74px);color:var(--ice);line-height:.94;text-transform:uppercase;letter-spacing:.005em}
+.myth h2 .l2{display:block;color:var(--blue)}
+.myth-lead{font-family:var(--serif);font-style:italic;font-size:clamp(17px,2.1vw,23px);color:#cdd6e4;margin:22px 0 42px;max-width:44ch}
+.myth-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.myth-grid{grid-template-columns:1fr}}
+.myth-card{position:relative;text-align:left;background:var(--void2);border:1px solid var(--line);padding:26px 24px;cursor:pointer;font:inherit;color:inherit;transition:border-color .4s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
+.myth-card:hover{border-color:rgba(46,155,255,.42);transform:translateY(-2px)}
+.myth-card .q{display:block;font-family:var(--disp);font-weight:500;font-size:clamp(17px,1.9vw,21px);color:var(--ice);line-height:1.28;text-transform:none}
+.myth-card .tap{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);transition:opacity .3s ease}
+.myth-card .rev{max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s ease,margin-top .5s ease}
+.myth-card.on .rev{max-height:340px;opacity:1;margin-top:18px}
+.myth-card.on .tap{opacity:0}
+.myth-card .verdict{display:inline-block;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:4px 13px;margin-bottom:13px}
+.myth-card .why{display:block;font-family:var(--mono);font-size:13px;line-height:1.62;color:var(--gris)}
+@media(prefers-reduced-motion:reduce){.myth-card,.myth-card .rev{transition:none}}
 </style>
 </head>
 <body>
@@ -482,6 +502,42 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
   <div class="note"><span>◇</span><span>Visuels d'illustration. Chaque programme est composé selon <b>ton</b> questionnaire.</span></div>
 </section>
 
+<!-- ===================== VRAI OU FAUX ===================== -->
+<section class="myth" id="idees">
+  <div class="myth-in">
+    <div class="kick">Idées reçues</div>
+    <h2>La diète t'a<span class="l2">menti.</span></h2>
+    <p class="myth-lead">Tape une croyance pour la retourner. Ce qu'on t'a répété n'est pas toujours vrai.</p>
+    <div class="myth-grid">
+      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Les glucides le soir, ça fait grossir. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">C'est le total de ta journée qui compte, pas l'heure de l'assiette. Du riz le soir ne t'a jamais fait grossir.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Pour progresser, il faut se priver. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">On ne tient jamais une diète qu'on déteste. De vrais repas, en quantité, pensés pour durer — c'est ça qui marche.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Un écart, et tout est foutu. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">La gourmandise a sa place : dosée, jamais supprimée. Un carré de chocolat ne ruine pas des semaines de travail.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Manger PLUS peut t'aider à progresser. »</span>
+        <span class="rev"><span class="verdict">Vrai</span><span class="why">En prise de masse, on vise de gros volumes — et c'est justement le plus dur à tenir sans un plan calibré.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Le même programme convient à tout le monde. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">Aucun corps n'a les mêmes besoins. Chaque cible est réglée pour un seul organisme : le tien.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== FINAL ===================== -->
 <section class="end" id="end">
   <div class="end-bg"></div>
@@ -643,6 +699,17 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
     .from('.end h2',{y:44,opacity:0,duration:1},.1)
     .from('.end .sub',{y:20,opacity:0,duration:.85},.35)
     .from('.end .btn',{y:16,opacity:0,duration:.7},.5);
+
+  // ---- VRAI OU FAUX (idées reçues) : clic -> révèle la réponse + fondu d'entrée ----
+  document.querySelectorAll('.myth-card').forEach(function(c){
+    c.addEventListener('click',function(){ c.classList.toggle('on'); });
+  });
+  gsap.from('.myth .kick, .myth h2, .myth-lead',{opacity:0,y:26,duration:.7,ease:'power3.out',stagger:.1,
+    scrollTrigger:{trigger:'.myth',start:'top 78%'}});
+  gsap.utils.toArray('.myth-card').forEach(function(c,i){
+    gsap.from(c,{opacity:0,y:34,duration:.6,ease:'power3.out',delay:(i%2)*.08,
+      scrollTrigger:{trigger:c,start:'top 90%'}});
+  });
 
   // ---- CURSEUR INSTRUMENT (viseur) : point instantané + anneau qui suit en douceur ----
   var fine = matchMedia('(hover:hover) and (pointer:fine)').matches;

@@ -373,6 +373,19 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
   <a href="formules.html"><span class="mnum">04</span>Formules</a>
   <a class="go-m" href="connexion.html"><span class="mnum">→</span>Connexion</a>
 </nav>
+<script>
+/* Maquette localStorage : si un compte est ouvert, « Connexion » -> « Mon espace » (espace.html) —
+   sinon revenir à l'espace obligeait à repasser par le login. Remplacé par Supabase en phase 2. */
+try {
+  if (JSON.parse(localStorage.getItem('ely_user_demo') || 'null')) {
+    document.querySelectorAll('a.go[href="connexion.html"], a.go-m[href="connexion.html"]').forEach(function(a){
+      a.setAttribute('href', 'espace.html');
+      var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
+      a.appendChild(document.createTextNode('Mon espace'));
+    });
+  }
+} catch (e) {}
+</script>
 
 <!-- PLAN DE FOND FIXE : toutes les photos empilées, elles se FONDENT l'une dans l'autre au scroll
      (fondu-enchaîné) au lieu de se remplacer d'un coup. Ordre = ordre des sections. -->

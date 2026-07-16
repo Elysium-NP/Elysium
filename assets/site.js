@@ -104,6 +104,19 @@
     addEventListener('keydown', function(e){ if (e.key === 'Escape') setOpen(false); });
   }
 
+  // ---- nav consciente de la connexion (maquette localStorage) : si un compte est ouvert,
+  //      le CTA « Connexion » devient « Mon espace » -> espace.html (sinon, revenir à l'espace
+  //      obligeait à repasser par le login). Remplacé par Supabase Auth en phase suivante. ----
+  try {
+    if (JSON.parse(localStorage.getItem('ely_user_demo') || 'null')) {
+      document.querySelectorAll('a.go[href="connexion.html"], a.go-m[href="connexion.html"]').forEach(function(a){
+        a.setAttribute('href', 'espace.html');
+        var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
+        a.appendChild(document.createTextNode('Mon espace'));
+      });
+    }
+  } catch (e) {}
+
   // ---- curseur instrument (viseur) : point instantané + anneau qui suit en douceur ----
   var fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
   var cur = document.querySelector('.cur'), dot = document.querySelector('.curdot');

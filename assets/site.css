@@ -228,6 +228,30 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .figures .v small{font-family:var(--mono);font-weight:400;font-size:13px;color:var(--blue);margin-left:3px}
 .figures .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--steel);text-transform:uppercase;margin-top:12px;line-height:1.45;max-width:20ch}
 @media(max-width:640px){.figures{grid-template-columns:1fr 1fr;gap:26px 18px;padding:24px 0}}
+
+/* ---------- page Contact : formulaire (Netlify) + infos ---------- */
+.contact-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:clamp(30px,5vw,64px);align-items:start}
+@media(max-width:820px){.contact-grid{grid-template-columns:1fr;gap:44px}}
+.cform{display:flex;flex-direction:column;gap:18px}
+.cform label{display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+.cform .frow{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:520px){.cform .frow{grid-template-columns:1fr}}
+.cform input,.cform select,.cform textarea{font-family:var(--mono);font-size:14px;letter-spacing:0;text-transform:none;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;width:100%;transition:border-color .3s ease}
+.cform input::placeholder,.cform textarea::placeholder{color:var(--steel)}
+.cform input:focus,.cform select:focus,.cform textarea:focus{outline:none;border-color:var(--blue)}
+.cform textarea{resize:vertical;min-height:130px}
+.cform select{appearance:none;-webkit-appearance:none;cursor:pointer}
+.cform .btn{margin-top:6px;align-self:flex-start;cursor:pointer;background:transparent}
+.cform .hp{position:absolute!important;left:-9999px}
+.cok{border:1px solid var(--blue);background:rgba(46,155,255,.06);padding:30px;font-family:var(--mono);font-size:14px;line-height:1.7;color:var(--gris)}
+.cok b{font-family:var(--disp);font-weight:600;font-size:20px;color:var(--blue);text-transform:uppercase;display:inline-block;margin-bottom:6px}
+.cinfo{display:flex;flex-direction:column;gap:26px;padding-top:4px}
+.cinfo .ci{display:flex;flex-direction:column;gap:6px}
+.cinfo .ci .k{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue)}
+.cinfo .ci a,.cinfo .ci .v{font-family:var(--disp);font-weight:500;font-size:clamp(16px,1.5vw,19px);color:var(--ice);text-decoration:none;word-break:break-word;line-height:1.2}
+.cinfo .ci a{transition:color .3s ease}
+.cinfo .ci a:hover{color:var(--blue)}
+.cinfo .ci p{font-family:var(--mono);font-size:12px;color:var(--gris);line-height:1.55;margin-top:2px}
 .tags-l{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .tags-l span{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--gris);
   border:1px solid var(--line);border-radius:20px;padding:5px 11px}

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELYSIUM — Contact</title>
+<meta name="description" content="Une question, un doute, ou envie de démarrer ton programme ? Écris à Elysium — on répond vite.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-400-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Elysium — Nutrition &amp; Performance">
+<meta property="og:title" content="ELYSIUM — Contact">
+<meta property="og:description" content="Une question ou envie de démarrer ? Écris-nous, on répond vite.">
+<meta property="og:image" content="https://elysium-nutrition.netlify.app/assets/og.jpg">
+<meta property="og:url" content="https://elysium-nutrition.netlify.app/contact.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Aller au contenu</a>
+
+<div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
+<div class="ambscan" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+
+<div class="status">
+  <a class="logo" href="index.html" aria-label="Elysium — Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
+  <span class="mid">Contact · parlons de ton objectif</span>
+  <span class="rt"><span class="dot"></span>Système actif</span>
+</div>
+<nav class="menu">
+  <a href="index.html">Accueil</a>
+  <a href="index.html#methode">Méthode</a>
+  <a href="qui-sommes-nous.html">Coachs</a>
+  <a href="formules.html">Formules</a>
+  <a class="go" href="contact.html" aria-current="page">Contact</a>
+</nav>
+<button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+<nav class="msheet" aria-label="Navigation mobile">
+  <a href="index.html"><span class="mnum">01</span>Accueil</a>
+  <a href="index.html#methode"><span class="mnum">02</span>Méthode</a>
+  <a href="qui-sommes-nous.html"><span class="mnum">03</span>Coachs</a>
+  <a href="formules.html"><span class="mnum">04</span>Formules</a>
+  <a class="go-m" href="contact.html" aria-current="page"><span class="mnum">→</span>Contact</a>
+</nav>
+
+<main id="main">
+
+  <header class="phead">
+    <canvas class="pfield" aria-hidden="true"></canvas>
+    <div class="phead-in">
+      <div class="kick reveal">Contact</div>
+      <h1 class="reveal d1">Parlons de<span class="l2">ton objectif.</span></h1>
+      <p class="sub reveal d2">Une question, un doute, ou l'envie de démarrer ? Écris-nous — on lit tout, et on répond vite.</p>
+    </div>
+  </header>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="contact-grid">
+
+        <!-- FORMULAIRE (Netlify Forms) -->
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contact.html?ok=1" class="cform reveal">
+          <input type="hidden" name="form-name" value="contact">
+          <p class="hp"><label>Ne pas remplir : <input name="bot-field"></label></p>
+          <div class="frow">
+            <label>Prénom &amp; nom<input type="text" name="nom" autocomplete="name" required></label>
+            <label>Email<input type="email" name="email" autocomplete="email" required></label>
+          </div>
+          <label>Ton objectif
+            <select name="objectif">
+              <option>Prise de masse</option>
+              <option>Perte de poids</option>
+              <option>Rééquilibrage</option>
+              <option>Sèche / recomposition</option>
+              <option>Je ne sais pas encore</option>
+            </select>
+          </label>
+          <label>Ton message<textarea name="message" rows="6" placeholder="Dis-nous où tu en es, ce que tu cherches…" required></textarea></label>
+          <button type="submit" class="btn">Envoyer le message</button>
+        </form>
+
+        <!-- INFOS DE CONTACT -->
+        <aside class="cinfo reveal d1">
+          <div class="ci">
+            <span class="k">Par email</span>
+            <a href="mailto:elysium.np.pro@gmail.com">elysium.np.pro@gmail.com</a>
+          </div>
+          <div class="ci">
+            <span class="k">Sur Instagram</span>
+            <a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener">@elysium.nutrition.performance</a>
+          </div>
+          <div class="ci">
+            <span class="k">Délai de réponse</span>
+            <span class="v">Sous 48 h</span>
+            <p>On lit chaque message et on te répond personnellement — pas de robot.</p>
+          </div>
+          <div class="ci">
+            <span class="k">Basés à</span>
+            <span class="v">Villers-Bretonneux (80)</span>
+            <p>Accompagnement 100 % à distance, partout en France.</p>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="logo big"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></div>
+  <div class="foot-links"><a href="index.html">Accueil</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
+  <div class="foot-legal">© 2026 SAS Elysium — Nutrition &amp; Performance · Protocole v.2026</div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+/* accusé de réception inline après envoi (Netlify redirige vers ?ok=1) */
+(function(){
+  if(/[?&]ok=1/.test(location.search)){
+    var f=document.querySelector('.cform');
+    if(f){ var d=document.createElement('div'); d.className='cok reveal in';
+      d.innerHTML='<b>Message envoyé ✓</b><br>Merci — on te répond au plus vite, en général sous 48 h. À très vite !';
+      f.replaceWith(d);
+      history.replaceState(null,'',location.pathname);
+    }
+  }
+})();
+</script>
+</body>
+</html>

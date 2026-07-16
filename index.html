@@ -72,6 +72,7 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;color:var(--ice);text-transform
 .frame .tr{top:var(--edge);right:var(--edge);border-left:0;border-bottom:0}
 .frame .bl{bottom:var(--edge);left:var(--edge);border-right:0;border-top:0}
 .frame .br{bottom:var(--edge);right:var(--edge);border-left:0;border-top:0}
+.frame .tl,.frame .tr{display:none}   /* les coins du haut chevauchaient le logo + le bouton COMMENCER -> retirés */
 @media(max-width:760px){.frame{display:none}}
 
 /* ---------- barre statut (fixe, haut) ---------- */

@@ -52,6 +52,7 @@ a{color:inherit;text-decoration:none}
 .frame .tr{top:var(--edge);right:var(--edge);border-left:0;border-bottom:0}
 .frame .bl{bottom:var(--edge);left:var(--edge);border-right:0;border-top:0}
 .frame .br{bottom:var(--edge);right:var(--edge);border-left:0;border-top:0}
+.frame .tl,.frame .tr{display:none}   /* coins du haut retirés : ils chevauchaient le logo + le bouton CTA de la nav */
 @media(max-width:760px){.frame{display:none}}
 
 .grain{position:fixed;inset:-120px;z-index:41;pointer-events:none;opacity:.055;mix-blend-mode:overlay;will-change:transform;

@@ -1,0 +1,11 @@
+# Fichiers internes / dev — NON déployés sur le site public
+.claude/
+CLAUDE.md
+_fetch_fonts.py
+_adn_ancien.html
+proposition.html
+assets/food/cand/
+
+# Archives / temporaires
+*.zip
+_preview_artifact.html

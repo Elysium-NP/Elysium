@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELYSIUM — Créer mon compte</title>
+<meta name="description" content="Crée ton compte Elysium et accède à ton espace membre.">
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-400-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
+
+<div class="qtop" style="position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;padding:16px var(--edge)">
+  <a class="logo" href="index.html" aria-label="Elysium — Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
+  <a class="back" href="connexion.html" style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none">Se connecter ›</a>
+</div>
+
+<main class="auth-wrap">
+  <div class="auth-card">
+    <div class="kick">Espace membre</div>
+    <h1>Crée ton<span class="l2">compte.</span></h1>
+    <p class="sub">Ton compte gratuit te donne accès à ton espace et à ton suivi. Le programme se débloque quand tu es prêt.</p>
+    <form class="auth-form" id="signup">
+      <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
+      <label>Email<input type="email" name="email" autocomplete="email" required></label>
+      <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="6" required></label>
+      <label>Confirme le mot de passe<input type="password" name="password2" autocomplete="new-password" minlength="6" required></label>
+      <button type="submit" class="btn">Créer mon compte</button>
+    </form>
+    <p class="auth-alt">Déjà inscrit ? <a href="connexion.html">Se connecter</a></p>
+  </div>
+</main>
+
+<div class="demo-banner">⚠︎ Maquette — l'inscription est simulée (aucune donnée envoyée). La vraie auth arrivera avec Supabase.</div>
+
+<script src="assets/site.js"></script>
+<script src="assets/auth-mock.js"></script>
+<script>
+document.getElementById('signup').addEventListener('submit',function(e){
+  e.preventDefault();
+  var f=e.target;
+  if(f.password.value!==f.password2.value){ f.password2.setCustomValidity('Les mots de passe ne correspondent pas.'); f.password2.reportValidity(); return; }
+  f.password2.setCustomValidity('');
+  ElyAuth.signup({prenom:f.prenom.value, email:f.email.value});
+  location.href='espace.html';
+});
+</script>
+</body>
+</html>

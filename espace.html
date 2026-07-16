@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELYSIUM — Mon espace</title>
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-400-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/auth-mock.js"></script>
+<script>ElyAuth.requireAuth('connexion.html');</script>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
+
+<div class="qtop" style="position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;padding:16px var(--edge);background:linear-gradient(var(--void),rgba(6,8,12,0))">
+  <a class="logo" href="index.html" aria-label="Elysium — Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
+  <span style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)">Mon espace</span>
+</div>
+
+<main class="dash">
+  <div class="dash-hd">
+    <h1>Bonjour, <span id="prenom">toi</span>.</h1>
+    <button class="out" id="logout">Déconnexion</button>
+  </div>
+  <div class="dash-sub">
+    <span id="statuspill" class="pill free">Compte gratuit</span>
+    <span>Ton espace évolue avec toi. Plus tu joues le jeu, plus ton suivi est précis.</span>
+  </div>
+
+  <div class="dash-grid">
+
+    <!-- SUIVI : PESÉES -->
+    <div class="card">
+      <div class="ch"><h3>Mon poids</h3><span class="tag">Suivi</span></div>
+      <p>Note ton poids régulièrement — c'est la base d'un ajustement au gramme près.</p>
+      <div class="wrow">
+        <input type="number" id="wval" step="0.1" min="30" max="250" placeholder="Poids du jour (kg)">
+        <button id="wadd">Ajouter</button>
+      </div>
+      <ul class="wlog" id="wlog"></ul>
+    </div>
+
+    <!-- SUIVI : PHOTOS -->
+    <div class="card">
+      <div class="ch"><h3>Mes photos</h3><span class="tag">Suivi</span></div>
+      <p>Une photo toutes les 2 semaines vaut mille pesées. Elles restent 100&nbsp;% privées.</p>
+      <label class="drop" id="drop">Glisse une photo ici, ou clique pour choisir
+        <input type="file" accept="image/*" hidden id="photo">
+      </label>
+      <p id="photomsg" class="mut" style="color:var(--steel);font-size:12px;margin-top:10px"></p>
+    </div>
+
+    <!-- PROGRAMME (paywall) -->
+    <div class="card wide locked" id="progcard">
+      <!-- rempli par JS selon le statut payé / non payé -->
+    </div>
+
+    <!-- PROFIL -->
+    <div class="card">
+      <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
+      <p>Email : <b id="pemail" style="color:var(--ice)">—</b></p>
+      <p style="margin-top:8px">Membre depuis : <b id="pdate" style="color:var(--ice)">—</b></p>
+    </div>
+
+    <!-- DÉMO -->
+    <div class="card">
+      <div class="ch"><h3>Coin démo</h3><span class="tag">Maquette</span></div>
+      <p>Pour visualiser l'espace <b style="color:var(--ice)">une fois le programme débloqué</b> (simulation, en attendant Stripe) :</p>
+      <div class="dashcta">
+        <button class="demolink" id="togglepaid">Basculer le statut « payé »</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="demo-banner">⚠︎ Maquette navigable — données stockées seulement dans ton navigateur, aucune sécurité réelle. Supabase + Stripe câblés en phase suivante.</div>
+
+<script src="assets/site.js"></script>
+<script>
+(function(){
+  var u=ElyAuth.user(); if(!u) return;
+  document.getElementById('prenom').textContent=u.prenom||'toi';
+  document.getElementById('pemail').textContent=u.email||'—';
+  document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):'—';
+
+  // ---- statut + carte programme (paywall) ----
+  function renderProgram(){
+    var paid=!!(ElyAuth.user()||{}).paid;
+    var pill=document.getElementById('statuspill');
+    pill.textContent=paid?'Programme actif':'Compte gratuit';
+    pill.className='pill '+(paid?'paid':'free');
+    var c=document.getElementById('progcard');
+    if(!paid){
+      c.className='card wide locked';
+      c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Verrouillé</span></div>'+
+        '<div class="lockicon">🔒</div>'+
+        '<p>Ton programme sur-mesure — au gramme près, relu par un coach — se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
+        '<a class="btn" href="#" id="unlock">Débloquer mon programme</a>';
+      var ub=document.getElementById('unlock');
+      if(ub) ub.addEventListener('click',function(e){ e.preventDefault();
+        alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » dans le coin démo.'); });
+    } else {
+      c.className='card wide';
+      c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Actif</span></div>'+
+        '<p>C\'est débloqué ! Réponds au questionnaire nutrition et on construit ton programme sur-mesure.</p>'+
+        '<div class="dashcta">'+
+          '<a class="btn" href="questionnaire.html">Remplir le questionnaire</a>'+
+          '<a class="btn" href="#" onclick="alert(\'Ton programme apparaîtra ici (en ligne) + envoi PDF par mail. À venir.\');return false;" style="border-color:var(--line);color:var(--gris)">Voir mon programme</a>'+
+        '</div>';
+    }
+  }
+  renderProgram();
+
+  // ---- pesées (démo localStorage) ----
+  var WK='ely_weights_demo';
+  function weights(){ try{return JSON.parse(localStorage.getItem(WK)||'[]');}catch(e){return [];} }
+  function renderW(){
+    var w=weights(), ul=document.getElementById('wlog');
+    if(!w.length){ ul.innerHTML='<li class="empty">Aucune pesée pour l\'instant — commence aujourd\'hui.</li>'; return; }
+    ul.innerHTML=w.slice().reverse().map(function(e){
+      return '<li><span>'+new Date(e.t).toLocaleDateString('fr-FR')+'</span><b>'+e.v+' kg</b></li>';
+    }).join('');
+  }
+  document.getElementById('wadd').addEventListener('click',function(){
+    var i=document.getElementById('wval'), v=parseFloat(i.value);
+    if(!v||v<30||v>250){ i.focus(); return; }
+    var w=weights(); w.push({v:v,t:Date.now()}); localStorage.setItem(WK,JSON.stringify(w));
+    i.value=''; renderW();
+  });
+  renderW();
+
+  // ---- photo (démo : pas d'upload réel) ----
+  var photo=document.getElementById('photo');
+  document.getElementById('drop').addEventListener('click',function(){ photo.click(); });
+  photo.addEventListener('change',function(){
+    if(photo.files&&photo.files[0]) document.getElementById('photomsg').textContent='« '+photo.files[0].name+' » sélectionnée (l\'upload réel viendra avec Supabase Storage).';
+  });
+
+  // ---- déconnexion + démo paiement ----
+  document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });
+  document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
+})();
+</script>
+</body>
+</html>

@@ -252,6 +252,16 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .cinfo .ci a{transition:color .3s ease}
 .cinfo .ci a:hover{color:var(--blue)}
 .cinfo .ci p{font-family:var(--mono);font-size:12px;color:var(--gris);line-height:1.55;margin-top:2px}
+
+/* ---------- page Méthode : les 4 étapes ---------- */
+.steps{display:flex;flex-direction:column;margin-top:24px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:clamp(22px,4vw,52px);padding:clamp(28px,4vw,38px) 0;border-top:1px solid var(--line)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step .sn{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6vw,68px);color:var(--blue);line-height:.85}
+.step .st h3{font-family:var(--disp);font-weight:600;font-size:clamp(20px,2.4vw,28px);color:var(--ice);text-transform:uppercase;letter-spacing:.005em;margin-bottom:13px}
+.step .st p{font-family:var(--mono);font-size:13.5px;line-height:1.72;color:var(--gris);max-width:64ch}
+.step .st p b{color:var(--ice);font-weight:500}
+@media(max-width:600px){.step{grid-template-columns:1fr;gap:6px;padding:26px 0}.step .sn{font-size:34px}}
 .tags-l{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .tags-l span{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--gris);
   border:1px solid var(--line);border-radius:20px;padding:5px 11px}

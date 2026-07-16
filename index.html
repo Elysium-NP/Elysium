@@ -21,12 +21,7 @@
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-400-normal-latin.woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="preload" as="image" href="assets/real/r09_15352332.jpg" fetchpriority="high"><!-- image LCP hero : chargée tout de suite, sans attendre le parse du CSS -->
-<!-- photos de fond des chapitres : préchargées pour un scroll fluide (sinon elles poppent en retard) -->
-<link rel="preload" as="image" href="assets/real/plat_boeuf.jpg">
-<link rel="preload" as="image" href="assets/real/plat_saumon.jpg">
-<link rel="preload" as="image" href="assets/real/r04_11299745.jpg">
-<link rel="preload" as="image" href="assets/real/r03_34463128.jpg">
+<link rel="preload" as="image" href="assets/real/r09_15352332.jpg" fetchpriority="high"><!-- image LCP hero -->
 <style>
 :root{
   --void:#06080C; --void2:#03050a; --blue:#2E9BFF; --blue-d:#1a5fa8;
@@ -336,11 +331,22 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 .myth-card .verdict{display:inline-block;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:4px 13px;margin-bottom:13px}
 .myth-card .why{display:block;font-family:var(--mono);font-size:13px;line-height:1.62;color:var(--gris)}
 @media(prefers-reduced-motion:reduce){.myth-card,.myth-card .rev{transition:none}}
+
+/* ---------- aperçu méthode (renvoie vers la page dédiée) ---------- */
+.mteaser{position:relative;z-index:1;background:var(--void);padding:clamp(80px,11vh,130px) var(--edge);text-align:center}
+.mteaser-in{max-width:760px;margin:0 auto}
+.mteaser .kick{justify-content:center;margin-bottom:20px}
+.mteaser h2{font-family:var(--disp);font-weight:600;font-size:clamp(38px,5.6vw,72px);color:var(--ice);line-height:.94;text-transform:uppercase;letter-spacing:.005em}
+.mteaser h2 .l2{display:block;color:var(--blue)}
+.mteaser-lead{font-family:var(--serif);font-style:italic;font-size:clamp(17px,2.2vw,23px);color:#cdd6e4;margin:22px auto 30px;max-width:52ch}
+.mteaser-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-bottom:38px}
+.mteaser-steps span{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
+.mteaser-steps b{color:var(--blue);font-weight:400;margin-right:5px}
 </style>
 </head>
 <body>
 
-<a class="skip" href="#methode">Aller au contenu</a>
+<a class="skip" href="methode.html">Aller au contenu</a>
 
 <!-- cadre + statut instrument -->
 <div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
@@ -353,7 +359,7 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
   <span class="rt"><span class="dot"></span>Système actif</span>
 </div>
 <nav class="menu">
-  <a href="#methode">Méthode</a>
+  <a href="methode.html">Méthode</a>
   <a href="qui-sommes-nous.html">Coachs</a>
   <a href="formules.html">Formules</a>
   <a class="go" href="#end">Commencer</a>
@@ -361,7 +367,7 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
 <nav class="msheet" aria-label="Navigation mobile">
   <a href="#top"><span class="mnum">01</span>Accueil</a>
-  <a href="#methode"><span class="mnum">02</span>Méthode</a>
+  <a href="methode.html"><span class="mnum">02</span>Méthode</a>
   <a href="qui-sommes-nous.html"><span class="mnum">03</span>Coachs</a>
   <a href="formules.html"><span class="mnum">04</span>Formules</a>
   <a class="go-m" href="#end"><span class="mnum">→</span>Commencer</a>
@@ -371,10 +377,6 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
      (fondu-enchaîné) au lieu de se remplacer d'un coup. Ordre = ordre des sections. -->
 <div class="stage" aria-hidden="true">
   <div class="sl" style="background-image:url('assets/real/r09_15352332.jpg')"></div>
-  <div class="sl" style="background-image:url('assets/real/plat_boeuf.jpg')"></div>
-  <div class="sl" style="background-image:url('assets/real/r03_34463128.jpg')"></div>
-  <div class="sl" style="background-image:url('assets/real/r04_11299745.jpg')"></div>
-  <div class="sl" style="background-image:url('assets/real/plat_saumon.jpg')"></div>
 </div>
 
 <!-- ===================== HERO ===================== -->
@@ -394,7 +396,7 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
     <p class="sub">Un programme construit, calculé et vérifié — comme un instrument réglé pour un seul organisme : le tien.</p>
     <div class="hero-cta">
       <a class="btn" href="#end">Construire mon programme</a>
-      <a class="link" href="#methode">Voir la méthode</a>
+      <a class="link" href="methode.html">Voir la méthode</a>
     </div>
   </div>
   <aside class="readout" aria-hidden="true">
@@ -409,45 +411,39 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
   <div class="cue"><span>Défiler</span><i></i></div>
 </section>
 
-<!-- ===================== CHAPITRES ===================== -->
-<section class="chap" id="methode">
-  <div class="chap-bg" style="background-image:url('assets/real/plat_boeuf.jpg')"></div>
-  <div class="chap-in">
-    <div class="chap-head"><span class="no">01</span><span class="lbl">Le profil</span></div>
-    <h2>On mesure<br>ce qui compte.</h2>
-    <p>Ton métier, ton rythme, ton appétit, tes goûts, tes contraintes. Chaque réponse est une <b>donnée d'entrée</b> — le point de départ d'un calcul qui n'existe que pour <span class="b">toi</span>.</p>
-  </div>
-</section>
-
-<section class="chap">
-  <div class="chap-bg" style="background-image:url('assets/real/r03_34463128.jpg')"></div>
-  <div class="chap-in">
-    <div class="chap-head"><span class="no">02</span><span class="lbl">Le calcul</span></div>
-    <h2>Calibrage.</h2>
-    <p>Calories et macros ajustées <b>au gramme</b>, selon une méthode issue de deux ans de programmes réels. Pas d'approximation, pas de copier-coller.</p>
-    <div class="data">
-      <div class="d"><div class="v"><span data-count="162">0</span><small>P</small></div><div class="k">Protéines</div></div>
-      <div class="d"><div class="v"><span data-count="205">0</span><small>G</small></div><div class="k">Glucides</div></div>
-      <div class="d"><div class="v"><span data-count="74">0</span><small>L</small></div><div class="k">Lipides</div></div>
+<!-- ===================== VRAI OU FAUX (remonté, en avant) ===================== -->
+<section class="myth" id="idees">
+  <div class="myth-in">
+    <div class="kick">Idées reçues</div>
+    <h2>La diète t'a<span class="l2">menti.</span></h2>
+    <p class="myth-lead">Tape une croyance pour la retourner. Ce qu'on t'a répété n'est pas toujours vrai.</p>
+    <div class="myth-grid">
+      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Les glucides le soir, ça fait grossir. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">C'est le total de ta journée qui compte, pas l'heure de l'assiette. Du riz le soir ne t'a jamais fait grossir.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Pour progresser, il faut se priver. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">On ne tient jamais une diète qu'on déteste. De vrais repas, en quantité, pensés pour durer — c'est ça qui marche.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Un écart, et tout est foutu. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">La gourmandise a sa place : dosée, jamais supprimée. Un carré de chocolat ne ruine pas des semaines de travail.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Manger PLUS peut t'aider à progresser. »</span>
+        <span class="rev"><span class="verdict">Vrai</span><span class="why">En prise de masse, on vise de gros volumes — et c'est justement le plus dur à tenir sans un plan calibré.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
+      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
+        <span class="q">« Le même programme convient à tout le monde. »</span>
+        <span class="rev"><span class="verdict">Faux</span><span class="why">Aucun corps n'a les mêmes besoins. Chaque cible est réglée pour un seul organisme : le tien.</span></span>
+        <span class="tap">Révéler ›</span>
+      </button>
     </div>
-  </div>
-</section>
-
-<section class="chap">
-  <div class="chap-bg" style="background-image:url('assets/real/r04_11299745.jpg')"></div>
-  <div class="chap-in">
-    <div class="chap-head"><span class="no">03</span><span class="lbl">La construction</span></div>
-    <h2>Assemblé<br>plat par plat.</h2>
-    <p>De vrais plats, gourmands et simples à cuisiner, montés autour de tes goûts — jusqu'à ta liste de courses, pensée pour que <span class="b">rien ne se perde</span>.</p>
-  </div>
-</section>
-
-<section class="chap">
-  <div class="chap-bg" style="background-image:url('assets/real/plat_saumon.jpg')"></div>
-  <div class="chap-in">
-    <div class="chap-head"><span class="no">04</span><span class="lbl">La livraison</span></div>
-    <h2>Relu, validé,<br>livré.</h2>
-    <p>Ton protocole complet, <b>vérifié par Damien &amp; Yoann</b>, livré prêt à vivre : menus, quantités précises, liste de courses. Il ne reste qu'à commencer.</p>
   </div>
 </section>
 
@@ -502,39 +498,19 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
   <div class="note"><span>◇</span><span>Visuels d'illustration. Chaque programme est composé selon <b>ton</b> questionnaire.</span></div>
 </section>
 
-<!-- ===================== VRAI OU FAUX ===================== -->
-<section class="myth" id="idees">
-  <div class="myth-in">
-    <div class="kick">Idées reçues</div>
-    <h2>La diète t'a<span class="l2">menti.</span></h2>
-    <p class="myth-lead">Tape une croyance pour la retourner. Ce qu'on t'a répété n'est pas toujours vrai.</p>
-    <div class="myth-grid">
-      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Les glucides le soir, ça fait grossir. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">C'est le total de ta journée qui compte, pas l'heure de l'assiette. Du riz le soir ne t'a jamais fait grossir.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Pour progresser, il faut se priver. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">On ne tient jamais une diète qu'on déteste. De vrais repas, en quantité, pensés pour durer — c'est ça qui marche.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Un écart, et tout est foutu. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">La gourmandise a sa place : dosée, jamais supprimée. Un carré de chocolat ne ruine pas des semaines de travail.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Manger PLUS peut t'aider à progresser. »</span>
-        <span class="rev"><span class="verdict">Vrai</span><span class="why">En prise de masse, on vise de gros volumes — et c'est justement le plus dur à tenir sans un plan calibré.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Le même programme convient à tout le monde. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">Aucun corps n'a les mêmes besoins. Chaque cible est réglée pour un seul organisme : le tien.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
+<!-- ===================== APERÇU MÉTHODE (-> page dédiée) ===================== -->
+<section class="mteaser" id="methode">
+  <div class="mteaser-in">
+    <div class="kick">La méthode</div>
+    <h2>Du profil à<span class="l2">l'assiette.</span></h2>
+    <p class="mteaser-lead">Quatre étapes, une seule cible : toi. On mesure, on calcule au gramme, on construit de vrais plats, un coach relit tout — puis on livre.</p>
+    <div class="mteaser-steps">
+      <span><b>01</b> Le profil</span>
+      <span><b>02</b> Le calcul</span>
+      <span><b>03</b> La construction</span>
+      <span><b>04</b> La livraison</span>
     </div>
+    <a class="btn" href="methode.html">Découvrir la méthode</a>
   </div>
 </section>
 
@@ -553,7 +529,7 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 
 <footer>
   <div class="logo big"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></div>
-  <div class="foot-links"><a href="#top">Accueil</a><a href="#methode">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
+  <div class="foot-links"><a href="#top">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
   <div class="foot-legal">© 2026 SAS Elysium — Nutrition &amp; Performance · Protocole v.2026</div>
 </footer>
 
@@ -689,7 +665,7 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
   // une fois les chapitres finis, le plan de fond N'A PLUS de raison d'être -> il se fond vers le noir
   // en arrivant sur la section philosophie, pour que le bas de page (creed/CTA/footer) reste PROPRE
   // (sinon la dernière photo bavait derrière le footer transparent).
-  var _fadeSec=document.querySelector('.creed')||document.querySelector('.end');
+  var _fadeSec=document.querySelector('.myth')||document.querySelector('.creed')||document.querySelector('.end');
   if(_fadeSec){ gsap.to('.stage',{opacity:0,ease:'none',
     scrollTrigger:{trigger:_fadeSec,start:'top 92%',end:'top 45%',scrub:true}}); }
 

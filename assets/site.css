@@ -220,6 +220,14 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .coach .stats .v{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice)}
 .coach .stats .v small{font-family:var(--mono);font-size:11px;color:var(--blue);margin-left:2px}
 .coach .stats .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--steel);text-transform:uppercase;margin-top:2px}
+
+/* ---------- bande « la méthode en chiffres » (Coachs) : vrais chiffres du corpus/moteur ---------- */
+.figures{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:40px 0 6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 0}
+.figures .fg{position:relative}
+.figures .v{font-family:var(--disp);font-weight:600;font-size:clamp(30px,4vw,46px);color:var(--ice);line-height:1;letter-spacing:.01em}
+.figures .v small{font-family:var(--mono);font-weight:400;font-size:13px;color:var(--blue);margin-left:3px}
+.figures .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--steel);text-transform:uppercase;margin-top:12px;line-height:1.45;max-width:20ch}
+@media(max-width:640px){.figures{grid-template-columns:1fr 1fr;gap:26px 18px;padding:24px 0}}
 .tags-l{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .tags-l span{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--gris);
   border:1px solid var(--line);border-radius:20px;padding:5px 11px}

@@ -13,6 +13,45 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/site.css">
+<style>
+  /* ===== Espace membre v2 — tableau de bord « télémétrie » (styles propres à la page) ===== */
+  .dash-grid .wide{grid-column:1/-1}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--void2);border:1px solid var(--line);padding:15px 17px;position:relative;overflow:hidden}
+  .stat::after{content:"";position:absolute;top:0;left:0;width:26px;height:1px;background:var(--blue);opacity:.7}
+  .stat .sl{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--steel)}
+  .stat .sv{font-family:var(--mono);font-size:27px;color:var(--ice);margin-top:10px;line-height:1;font-variant-numeric:tabular-nums}
+  .stat .sv small{font-size:12px;color:var(--steel);margin-left:3px;letter-spacing:.02em}
+  .stat .sv.accent{color:var(--blue)}
+  .stat.ring{display:flex;align-items:center;gap:13px}
+  .stat.ring::after{display:none}
+  .ring-svg{width:58px;height:58px;flex-shrink:0}
+  .ring-svg .rtrack{fill:none;stroke:var(--line);stroke-width:5}
+  .ring-svg .rprog{fill:none;stroke:var(--blue);stroke-width:5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;filter:drop-shadow(0 0 4px rgba(46,155,255,.5));transition:stroke-dashoffset 1s cubic-bezier(.2,.7,.2,1)}
+  .ring-svg .rtxt{fill:var(--ice);font-family:var(--mono);font-size:13px;text-anchor:middle;font-variant-numeric:tabular-nums}
+  .setgoal{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:none;border:1px solid var(--line);padding:10px 12px;cursor:pointer;transition:border-color .3s;line-height:1.3}
+  .setgoal:hover{border-color:var(--blue)}
+  .ghostb{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);background:none;border:1px solid var(--line);padding:0 15px;cursor:pointer;transition:border-color .3s,color .3s}
+  .ghostb:hover{border-color:var(--blue);color:var(--blue)}
+  .chart{width:100%;margin:4px 0 2px}
+  .chart svg{width:100%;height:auto;display:block;overflow:visible}
+  .chart-empty{padding:44px 10px;text-align:center;font-family:var(--mono);font-size:12.5px;color:var(--steel);border:1px dashed var(--line);line-height:1.6}
+  .cg{stroke:rgba(255,255,255,.05);stroke-width:1}
+  .cgl{fill:var(--steel);font-family:var(--mono);font-size:9px}
+  .cgoal{stroke:rgba(46,155,255,.5);stroke-width:1;stroke-dasharray:4 4}
+  .cgoalt{fill:var(--blue);font-family:var(--mono);font-size:9px;letter-spacing:.06em}
+  .cdate{fill:var(--steel);font-family:var(--mono);font-size:8.5px;text-anchor:middle}
+  .carea{fill:url(#carea)}
+  .cline{fill:none;stroke:var(--blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 1px 5px rgba(46,155,255,.4))}
+  .chart.draw .cline{animation:cdraw 1.2s cubic-bezier(.4,0,.2,1)}
+  @keyframes cdraw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+  .cp{fill:var(--void);stroke:var(--blue);stroke-width:1.5}
+  .cplast{fill:var(--blue);filter:drop-shadow(0 0 6px rgba(46,155,255,.9));animation:cpulse 2.2s ease-in-out infinite}
+  @keyframes cpulse{0%,100%{r:4.5}50%{r:6.4}}
+  .card .foot-note{font-family:var(--mono);font-size:11px;color:var(--steel);margin-top:12px}
+  @media(prefers-reduced-motion:reduce){.chart.draw .cline,.cplast{animation:none}.ring-svg .rprog{transition:none}}
+</style>
 <script src="assets/auth-mock.js"></script>
 <script>ElyAuth.requireAuth('connexion.html');</script>
 </head>
@@ -33,35 +72,36 @@
   </div>
   <div class="dash-sub">
     <span id="statuspill" class="pill free">Compte gratuit</span>
-    <span>Ton espace évolue avec toi. Plus tu joues le jeu, plus ton suivi est précis.</span>
+    <span>Ton suivi, en direct — plus tu pèses régulièrement, plus la courbe parle.</span>
   </div>
+
+  <!-- TUILES DE TÉLÉMÉTRIE -->
+  <div class="stats" id="stats"></div>
 
   <div class="dash-grid">
 
-    <!-- SUIVI : PESÉES -->
-    <div class="card">
-      <div class="ch"><h3>Mon poids</h3><span class="tag">Suivi</span></div>
-      <p>Note ton poids régulièrement — c'est la base d'un ajustement au gramme près.</p>
+    <!-- COURBE DE POIDS -->
+    <div class="card wide">
+      <div class="ch"><h3>Ma courbe</h3><span class="tag">Télémétrie</span></div>
+      <div class="chart" id="chart"></div>
       <div class="wrow">
         <input type="number" id="wval" step="0.1" min="30" max="250" placeholder="Poids du jour (kg)">
-        <button id="wadd">Ajouter</button>
+        <button id="wadd">Enregistrer</button>
+        <button id="wgoal" class="ghostb" type="button">Objectif</button>
       </div>
-      <ul class="wlog" id="wlog"></ul>
     </div>
 
-    <!-- SUIVI : PHOTOS -->
+    <!-- PROGRAMME (paywall) -->
+    <div class="card wide locked" id="progcard"></div>
+
+    <!-- PHOTOS -->
     <div class="card">
       <div class="ch"><h3>Mes photos</h3><span class="tag">Suivi</span></div>
       <p>Une photo toutes les 2 semaines vaut mille pesées. Elles restent 100&nbsp;% privées.</p>
       <label class="drop" id="drop">Glisse une photo ici, ou clique pour choisir
         <input type="file" accept="image/*" hidden id="photo">
       </label>
-      <p id="photomsg" class="mut" style="color:var(--steel);font-size:12px;margin-top:10px"></p>
-    </div>
-
-    <!-- PROGRAMME (paywall) -->
-    <div class="card wide locked" id="progcard">
-      <!-- rempli par JS selon le statut payé / non payé -->
+      <p id="photomsg" class="foot-note"></p>
     </div>
 
     <!-- PROFIL -->
@@ -74,9 +114,10 @@
     <!-- DÉMO -->
     <div class="card">
       <div class="ch"><h3>Coin démo</h3><span class="tag">Maquette</span></div>
-      <p>Pour visualiser l'espace <b style="color:var(--ice)">une fois le programme débloqué</b> (simulation, en attendant Stripe) :</p>
+      <p>Pour visualiser l'espace <b style="color:var(--ice)">plein</b> (simulation, en attendant Stripe &amp; Supabase) :</p>
       <div class="dashcta">
-        <button class="demolink" id="togglepaid">Basculer le statut « payé »</button>
+        <button class="demolink" id="seeddata" type="button">Charger un suivi de démo</button>
+        <button class="demolink" id="togglepaid" type="button">Basculer le statut « payé »</button>
       </div>
     </div>
 
@@ -89,19 +130,87 @@
 <script>
 (function(){
   var u=ElyAuth.user(); if(!u) return;
-  // Questionnaire nutrition = le VRAI Google Form (celui qui alimente le moteur), débloqué après paiement.
   var FORM_URL='https://docs.google.com/forms/d/1vqA-7hDrKcn9HFFSwJgWW824tgrmhLbGwgKcI3FHggs/viewform';
+  var WK='ely_weights_demo', GK='ely_goal_demo';
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
   document.getElementById('prenom').textContent=u.prenom||'toi';
   document.getElementById('pemail').textContent=u.email||'—';
   document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):'—';
 
-  // ---- statut + carte programme (paywall) ----
+  function weights(){ try{ return JSON.parse(localStorage.getItem(WK)||'[]'); }catch(e){ return []; } }
+  function saveW(w){ localStorage.setItem(WK,JSON.stringify(w)); }
+  function goal(){ var g=localStorage.getItem(GK); return g?parseFloat(g):null; }
+  function saveGoal(v){ localStorage.setItem(GK,String(v)); }
+
+  // ---- tuiles stats + anneau ----
+  function ringSVG(pct){
+    var r=22, c=2*Math.PI*r, off=c*(1-Math.max(0,Math.min(100,pct))/100);
+    return '<svg class="ring-svg" viewBox="0 0 58 58" aria-hidden="true">'+
+      '<circle class="rtrack" cx="29" cy="29" r="'+r+'"/>'+
+      '<circle class="rprog" cx="29" cy="29" r="'+r+'" style="stroke-dasharray:'+c.toFixed(1)+';stroke-dashoffset:'+off.toFixed(1)+'"/>'+
+      '<text class="rtxt" x="29" y="33">'+Math.round(pct)+'%</text></svg>';
+  }
+  function tile(l,v,unit,cls){ return '<div class="stat"><div class="sl">'+l+'</div><div class="sv '+(cls||'')+'">'+v+(unit?'<small>'+unit+'</small>':'')+'</div></div>'; }
+  function renderStats(){
+    var w=weights().slice().sort(function(a,b){return a.t-b.t;}), g=goal(), el=document.getElementById('stats');
+    if(!w.length){ el.innerHTML='<div class="stat" style="grid-column:1/-1"><div class="sl">Tableau de bord</div><div class="sv" style="font-size:16px;margin-top:12px">Enregistre ta première pesée pour lancer ton suivi.</div></div>'; return; }
+    var cur=w[w.length-1].v, start=w[0].v, delta=cur-start;
+    var pct=(g!=null && start!==g)?(start-cur)/(start-g)*100:0;
+    var ds=(delta>0?'+':'')+delta.toFixed(1);
+    var ringTile=(g!=null)
+      ? '<div class="stat ring">'+ringSVG(pct)+'<div><div class="sl">Vers l\'objectif</div><div class="sv" style="font-size:20px">'+g+'<small>kg</small></div></div></div>'
+      : '<div class="stat ring"><button class="setgoal" id="setgoal2" type="button">Définir un<br>objectif</button></div>';
+    el.innerHTML=tile('Poids actuel',cur.toFixed(1),'kg')+tile('Départ',start.toFixed(1),'kg')+tile('Évolution',ds,'kg','accent')+ringTile;
+    var sg=document.getElementById('setgoal2'); if(sg) sg.addEventListener('click',askGoal);
+  }
+
+  // ---- courbe SVG (se dessine) ----
+  function renderChart(){
+    var host=document.getElementById('chart');
+    var w=weights().slice().sort(function(a,b){return a.t-b.t;}), g=goal();
+    if(w.length<2){ host.className='chart'; host.innerHTML='<div class="chart-empty">'+(w.length?'Une deuxième pesée et ta courbe démarre.':'Ta courbe apparaîtra ici, dès ta première pesée.')+'</div>'; return; }
+    var W=640,H=230, pl=10,pr=46,pt=16,pb=24, iw=W-pl-pr, ih=H-pt-pb;
+    var vals=w.map(function(d){return d.v;}), lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+    if(g!=null){ lo=Math.min(lo,g); hi=Math.max(hi,g); }
+    var padv=Math.max(0.6,(hi-lo)*0.18); lo-=padv; hi+=padv;
+    function X(i){ return pl+iw*i/(w.length-1); }
+    function Y(v){ return pt+ih*(1-(v-lo)/(hi-lo)); }
+    var grid='',k;
+    for(k=0;k<=3;k++){ var gv=lo+(hi-lo)*(1-k/3), gy=Y(gv);
+      grid+='<line class="cg" x1="'+pl+'" y1="'+gy.toFixed(1)+'" x2="'+(W-pr)+'" y2="'+gy.toFixed(1)+'"/>'+
+            '<text class="cgl" x="'+(W-pr+6)+'" y="'+(gy+3).toFixed(1)+'">'+gv.toFixed(0)+'</text>'; }
+    var goalEl='';
+    if(g!=null){ var gyy=Y(g); goalEl='<line class="cgoal" x1="'+pl+'" y1="'+gyy.toFixed(1)+'" x2="'+(W-pr)+'" y2="'+gyy.toFixed(1)+'"/><text class="cgoalt" x="'+pl+'" y="'+(gyy-6).toFixed(1)+'">Objectif '+g+' kg</text>'; }
+    var dLine=w.map(function(d,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(d.v).toFixed(1);}).join(' ');
+    var dArea='M'+X(0).toFixed(1)+' '+(pt+ih)+' '+w.map(function(d,i){return 'L'+X(i).toFixed(1)+' '+Y(d.v).toFixed(1);}).join(' ')+' L'+X(w.length-1).toFixed(1)+' '+(pt+ih)+' Z';
+    var pts=w.map(function(d,i){ var last=i===w.length-1; return '<circle class="cp'+(last?' cplast':'')+'" cx="'+X(i).toFixed(1)+'" cy="'+Y(d.v).toFixed(1)+'" r="'+(last?4.5:3)+'"/>'; }).join('');
+    var dates='';
+    [0,w.length-1].forEach(function(i){ var x=X(i), dt=new Date(w[i].t); dates+='<text class="cdate" x="'+Math.max(14,Math.min(W-pr-4,x)).toFixed(1)+'" y="'+(H-6)+'">'+dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})+'</text>'; });
+    host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Courbe de poids">'+
+      '<defs><linearGradient id="carea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E9BFF" stop-opacity=".26"/><stop offset="1" stop-color="#2E9BFF" stop-opacity="0"/></linearGradient></defs>'+
+      grid+goalEl+'<path class="carea" d="'+dArea+'"/><path class="cline" d="'+dLine+'"/>'+pts+dates+'</svg>';
+    var line=host.querySelector('.cline');
+    if(line && !reduce){ var len=line.getTotalLength(); host.style.setProperty('--len',len);
+      host.classList.remove('draw'); void host.offsetWidth; host.classList.add('draw'); }
+  }
+
+  function refresh(){ renderStats(); renderChart(); }
+
+  function askGoal(){ var cur=goal(); var v=prompt('Ton objectif de poids (en kg) ?', cur!=null?cur:''); if(v==null)return;
+    v=parseFloat(String(v).replace(',','.')); if(v>=30&&v<=250){ saveGoal(Math.round(v*10)/10); refresh(); } }
+
+  function seedDemo(){
+    var day=86400000, base=Date.now(), seq=[84.2,83.6,83.9,82.7,82.1,81.6,81.9,80.7,80.1,79.5,79.7,78.6,78.1];
+    saveW(seq.map(function(v,i){ return {v:v,t:base-(seq.length-1-i)*7*day}; }));
+    if(goal()==null) saveGoal(75);
+    refresh();
+  }
+
+  // ---- carte programme (paywall) ----
   function renderProgram(){
-    var paid=!!(ElyAuth.user()||{}).paid;
-    var pill=document.getElementById('statuspill');
-    pill.textContent=paid?'Programme actif':'Compte gratuit';
-    pill.className='pill '+(paid?'paid':'free');
-    var c=document.getElementById('progcard');
+    var paid=!!(ElyAuth.user()||{}).paid, pill=document.getElementById('statuspill'), c=document.getElementById('progcard');
+    pill.textContent=paid?'Programme actif':'Compte gratuit'; pill.className='pill '+(paid?'paid':'free');
     if(!paid){
       c.className='card wide locked';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Verrouillé</span></div>'+
@@ -109,8 +218,7 @@
         '<p>Ton programme sur-mesure — au gramme près, relu par un coach — se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
         '<a class="btn" href="#" id="unlock">Débloquer mon programme</a>';
       var ub=document.getElementById('unlock');
-      if(ub) ub.addEventListener('click',function(e){ e.preventDefault();
-        alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » dans le coin démo.'); });
+      if(ub) ub.addEventListener('click',function(e){ e.preventDefault(); alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » dans le coin démo.'); });
     } else {
       c.className='card wide';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Actif</span></div>'+
@@ -121,36 +229,28 @@
         '</div>';
     }
   }
-  renderProgram();
 
-  // ---- pesées (démo localStorage) ----
-  var WK='ely_weights_demo';
-  function weights(){ try{return JSON.parse(localStorage.getItem(WK)||'[]');}catch(e){return [];} }
-  function renderW(){
-    var w=weights(), ul=document.getElementById('wlog');
-    if(!w.length){ ul.innerHTML='<li class="empty">Aucune pesée pour l\'instant — commence aujourd\'hui.</li>'; return; }
-    ul.innerHTML=w.slice().reverse().map(function(e){
-      return '<li><span>'+new Date(e.t).toLocaleDateString('fr-FR')+'</span><b>'+e.v+' kg</b></li>';
-    }).join('');
-  }
+  // ---- pesées ----
   document.getElementById('wadd').addEventListener('click',function(){
-    var i=document.getElementById('wval'), v=parseFloat(i.value);
+    var i=document.getElementById('wval'), v=parseFloat(String(i.value).replace(',','.'));
     if(!v||v<30||v>250){ i.focus(); return; }
-    var w=weights(); w.push({v:v,t:Date.now()}); localStorage.setItem(WK,JSON.stringify(w));
-    i.value=''; renderW();
+    var w=weights(); w.push({v:Math.round(v*10)/10,t:Date.now()}); saveW(w); i.value=''; refresh();
   });
-  renderW();
+  document.getElementById('wval').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('wadd').click(); });
+  document.getElementById('wgoal').addEventListener('click',askGoal);
+  document.getElementById('seeddata').addEventListener('click',seedDemo);
 
-  // ---- photo (démo : pas d'upload réel) ----
+  // ---- photo (démo) ----
   var photo=document.getElementById('photo');
   document.getElementById('drop').addEventListener('click',function(){ photo.click(); });
-  photo.addEventListener('change',function(){
-    if(photo.files&&photo.files[0]) document.getElementById('photomsg').textContent='« '+photo.files[0].name+' » sélectionnée (l\'upload réel viendra avec Supabase Storage).';
-  });
+  photo.addEventListener('change',function(){ if(photo.files&&photo.files[0]) document.getElementById('photomsg').textContent='« '+photo.files[0].name+' » sélectionnée (l\'upload réel viendra avec Supabase Storage).'; });
 
   // ---- déconnexion + démo paiement ----
   document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });
   document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
+
+  renderProgram();
+  refresh();
 })();
 </script>
 </body>

@@ -347,6 +347,31 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 .myth-card .why{display:block;font-family:var(--mono);font-size:13px;line-height:1.62;color:var(--gris)}
 @media(prefers-reduced-motion:reduce){.myth-card,.myth-card .rev{transition:none}}
 
+/* ---------- séquence de démarrage : l'instrument se calibre (overlay, 1re visite/session) ---------- */
+.boot{position:fixed;inset:0;z-index:200;background:var(--void);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.boot.done{opacity:0;transform:scale(1.045);pointer-events:none;transition:opacity .45s ease,transform .6s cubic-bezier(.4,0,.2,1)}
+.boot-in{position:relative;width:min(330px,74vw);height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.boot .bc{position:absolute;width:26px;height:26px;border:1.5px solid var(--blue);opacity:0}
+.boot .bc.tl{top:0;left:0;border-right:0;border-bottom:0}.boot .bc.tr{top:0;right:0;border-left:0;border-bottom:0}
+.boot .bc.bl{bottom:0;left:0;border-right:0;border-top:0}.boot .bc.br{bottom:0;right:0;border-left:0;border-top:0}
+.boot.play .bc{animation:bcin .5s ease forwards}
+.boot.play .bc.tl{animation-delay:.05s}.boot.play .bc.tr{animation-delay:.12s}.boot.play .bc.bl{animation-delay:.19s}.boot.play .bc.br{animation-delay:.26s}
+@keyframes bcin{from{opacity:0;transform:scale(.5)}to{opacity:.9;transform:none}}
+.boot .logo{opacity:0}
+.boot.play .logo{animation:bfade .7s ease .28s forwards}
+@keyframes bfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.boot-bar{width:150px;height:2px;background:rgba(255,255,255,.08);overflow:hidden}
+.boot-bar i{display:block;height:100%;background:var(--blue);box-shadow:0 0 10px rgba(46,155,255,.7);transform:scaleX(0);transform-origin:left}
+.boot.play .boot-bar i{animation:bfill .85s cubic-bezier(.4,0,.2,1) .42s forwards}
+@keyframes bfill{to{transform:scaleX(1)}}
+.boot-cap{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--steel);display:flex;gap:10px;opacity:0}
+.boot-cap b{color:var(--blue);font-weight:400}
+.boot.play .boot-cap{animation:bfade .6s ease .58s forwards}
+.boot-scan{position:absolute;left:0;right:0;top:0;height:2px;opacity:0;background:linear-gradient(90deg,transparent,rgba(46,155,255,.55),transparent)}
+.boot.play .boot-scan{animation:bootscan 1s cubic-bezier(.4,0,.2,1) .2s}
+@keyframes bootscan{0%{opacity:0;top:0}12%{opacity:1}88%{opacity:1}100%{opacity:0;top:100%}}
+@media(prefers-reduced-motion:reduce){.boot{display:none}}
+
 /* ---------- aperçu méthode (renvoie vers la page dédiée) ---------- */
 .mteaser{position:relative;z-index:1;background:linear-gradient(rgba(6,8,12,.72),rgba(6,8,12,.9)),url('assets/real/plat_boeuf.jpg') center/cover no-repeat var(--void);padding:clamp(80px,11vh,130px) var(--edge);text-align:center}
 .mteaser-in{max-width:760px;margin:0 auto}
@@ -362,6 +387,35 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 <body>
 
 <a class="skip" href="methode.html">Aller au contenu</a>
+
+<!-- SÉQUENCE DE DÉMARRAGE : l'instrument se calibre (1re visite par session, coupée si reduced-motion) -->
+<div class="boot" id="boot" aria-hidden="true">
+  <span class="boot-scan"></span>
+  <div class="boot-in">
+    <span class="bc tl"></span><span class="bc tr"></span><span class="bc bl"></span><span class="bc br"></span>
+    <div class="logo big"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></div>
+    <div class="boot-bar"><i></i></div>
+    <div class="boot-cap"><span>Calibration</span><b>Sur-mesure</b></div>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('boot'); if(!b){ window.ELY_BOOTDUR=0.25; return; }
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches, seen=false;
+  try{ seen=sessionStorage.getItem('ely_booted')==='1'; }catch(e){}
+  if(reduce||seen){ if(b.parentNode) b.parentNode.removeChild(b); window.ELY_BOOTDUR=0.25; return; }
+  try{ sessionStorage.setItem('ely_booted','1'); }catch(e){}
+  window.ELY_BOOTDUR=1.15;
+  document.documentElement.style.overflow='hidden';
+  setTimeout(function(){ b.classList.add('play'); },30);
+  var cleared=false;
+  function clear(){ if(cleared||!b) return; cleared=true; b.classList.add('done');
+    document.documentElement.style.overflow='';
+    setTimeout(function(){ if(b&&b.parentNode) b.parentNode.removeChild(b); },650); }
+  setTimeout(clear,1300);
+  addEventListener('load',function(){ setTimeout(clear,2200); });   // failsafe : jamais d'écran bloqué
+})();
+</script>
 
 <!-- cadre + statut instrument -->
 <div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
@@ -597,7 +651,7 @@ try {
   function count(node,end,dur,delay,trig){ var o={v:0}; gsap.to(o,{v:end,duration:dur||1.6,delay:delay||0,ease:'power2.out',
     scrollTrigger:trig?{trigger:trig,start:'top 60%'}:undefined, onUpdate:function(){ node.textContent=Math.round(o.v); }}); }
 
-  var bootDur = 0.25;   // court délai avant l'entrée du hero (boot retiré)
+  var bootDur = (typeof window.ELY_BOOTDUR==='number'?window.ELY_BOOTDUR:0.25);   // synchro avec la séquence de démarrage (overlay #boot)
 
   // ---- HERO : scan + analyse du plat + révélation + readout qui se calibre ----
   gsap.from('.hero-bg',{scale:1.1,duration:2.8,ease:'power2.out',delay:bootDur-0.3});
@@ -622,9 +676,9 @@ try {
     .from('.tags .cl',{scaleX:0,duration:.5,stagger:.2,ease:'power2.out'},1.25)
     .from('.cue',{opacity:0,duration:.6},1.6);
   // readout : compteur kcal + jauges (se calibrent après le scan)
-  var kc=document.querySelector('.readout [data-count]'); if(kc) count(kc,+kc.getAttribute('data-count'),1.6,1.2);
+  var kc=document.querySelector('.readout [data-count]'); if(kc) count(kc,+kc.getAttribute('data-count'),1.6,bootDur+0.95);
   gsap.utils.toArray('.readout [data-fill]').forEach(function(i,idx){
-    gsap.to(i,{scaleX:+i.getAttribute('data-fill'),duration:1.1,delay:1.4+idx*.12,ease:'power2.out'}); });
+    gsap.to(i,{scaleX:+i.getAttribute('data-fill'),duration:1.1,delay:bootDur+1.15+idx*.12,ease:'power2.out'}); });
 
   // ---- CHAPITRES PINNÉS : la section se FIGE, l'image se démasque, le contenu se joue au scroll ----
   gsap.utils.toArray('.chap').forEach(function(ch){

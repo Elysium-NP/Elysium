@@ -89,6 +89,8 @@
 <script>
 (function(){
   var u=ElyAuth.user(); if(!u) return;
+  // Questionnaire nutrition = le VRAI Google Form (celui qui alimente le moteur), débloqué après paiement.
+  var FORM_URL='https://docs.google.com/forms/d/1vqA-7hDrKcn9HFFSwJgWW824tgrmhLbGwgKcI3FHggs/viewform';
   document.getElementById('prenom').textContent=u.prenom||'toi';
   document.getElementById('pemail').textContent=u.email||'—';
   document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):'—';
@@ -114,7 +116,7 @@
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Actif</span></div>'+
         '<p>C\'est débloqué ! Réponds au questionnaire nutrition et on construit ton programme sur-mesure.</p>'+
         '<div class="dashcta">'+
-          '<a class="btn" href="questionnaire.html">Remplir le questionnaire</a>'+
+          '<a class="btn" href="'+FORM_URL+'" target="_blank" rel="noopener">Remplir le questionnaire nutrition</a>'+
           '<a class="btn" href="#" onclick="alert(\'Ton programme apparaîtra ici (en ligne) + envoi PDF par mail. À venir.\');return false;" style="border-color:var(--line);color:var(--gris)">Voir mon programme</a>'+
         '</div>';
     }

@@ -308,6 +308,20 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 .dish:hover .fr{opacity:1}
 @media(hover:hover){.dish:hover .scan{animation:dscan 1.15s cubic-bezier(.4,0,.2,1)}}
 @keyframes dscan{0%{opacity:0;top:0}10%{opacity:1}88%{opacity:1}100%{opacity:0;top:100%}}
+/* relevé macros — se pose au survol (le « au gramme près » matérialisé sur chaque plat, langage HUD du hero) */
+.dish .macro{position:absolute;top:15px;left:16px;z-index:4;display:flex;flex-direction:column;gap:6px;
+  opacity:0;transform:translateY(-7px);pointer-events:none;
+  transition:opacity .5s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+.dish .macro .mk{font-family:var(--mono);font-size:21px;line-height:1;color:var(--ice);letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;text-shadow:0 1px 12px rgba(3,5,10,.9)}
+.dish .macro .mk i{font-style:normal;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-left:6px}
+.dish .macro .mrow{display:flex;gap:9px}
+.dish .macro .mm{font-family:var(--mono);font-size:11px;color:var(--gris);letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;text-shadow:0 1px 8px rgba(3,5,10,.9)}
+.dish .macro .mm b{color:var(--blue);font-weight:400;margin-right:2px}
+@media(hover:hover){.dish:hover .macro{opacity:1;transform:none;transition-delay:.18s}}
+@media(hover:none){.dish .macro{opacity:1;transform:none}}   /* tactile : pas de survol -> toujours lisible */
+@media(prefers-reduced-motion:reduce){.dish .macro{transition:none}}
 .plates .note{max-width:1180px;margin:34px auto 0;font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:var(--steel);display:flex;gap:10px;align-items:baseline}
 .plates .note b{color:var(--gris);font-weight:500}
 .plates .note span:first-child{color:var(--blue)}
@@ -492,21 +506,25 @@ try {
     <article class="dish">
       <img src="assets/food/web/poke.jpg" alt="Poke bowl au saumon, riz et légumes" loading="lazy" decoding="async">
       <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
+      <span class="macro" aria-hidden="true"><span class="mk">590<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>38</span><span class="mm"><b>G</b>56</span><span class="mm"><b>L</b>22</span></span></span>
       <div class="cap"><span class="rf">Signature</span><h3>Poke bowl saumon</h3><p>Riz, saumon, avocat, légumes croquants. Frais, coloré — jamais fade.</p></div>
     </article>
     <article class="dish">
       <img src="assets/food/web/wrap.jpg" alt="Wrap de bœuf grillé coupé en deux" loading="lazy" decoding="async">
       <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
+      <span class="macro" aria-hidden="true"><span class="mk">540<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>34</span><span class="mm"><b>G</b>50</span><span class="mm"><b>L</b>20</span></span></span>
       <div class="cap"><span class="rf">Déjeuner · Dîner</span><h3>Wrap bœuf</h3><p>Protéine, féculent et légumes dans la tortilla. Rassasiant, carré.</p></div>
     </article>
     <article class="dish">
       <img src="assets/food/web/pasta.jpg" alt="Spaghetti sauce bolognaise" loading="lazy" decoding="async">
       <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
+      <span class="macro" aria-hidden="true"><span class="mk">640<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>33</span><span class="mm"><b>G</b>82</span><span class="mm"><b>L</b>18</span></span></span>
       <div class="cap"><span class="rf">Déjeuner · Dîner</span><h3>Spaghetti bolognaise</h3><p>Les glucides sont dosés, pas supprimés. Le confort reste au menu.</p></div>
     </article>
     <article class="dish">
       <img src="assets/food/web/bowl.jpg" alt="Petit-déjeuner gourmand" loading="lazy" decoding="async">
       <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
+      <span class="macro" aria-hidden="true"><span class="mk">470<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>24</span><span class="mm"><b>G</b>60</span><span class="mm"><b>L</b>14</span></span></span>
       <div class="cap"><span class="rf">Petit-déjeuner</span><h3>Petit-déj gourmand</h3><p>On ne se prive pas au réveil. La gourmandise est calibrée, pas sautée.</p></div>
     </article>
   </div>

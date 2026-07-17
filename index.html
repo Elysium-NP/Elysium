@@ -147,15 +147,6 @@ nav.menu a.go:hover{border-color:var(--blue);background:rgba(46,155,255,.08)}
 .chap-bg{background-image:none!important}                            /* photo inline neutralisée -> vient du plan fixe */
 /* champ de données instrument : n'AJOUTE que de la lumière (screen) -> ne masque jamais le plat */
 .hfield{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.6;mix-blend-mode:screen}
-/* viseur : réticule de visée qui suit le curseur sur le hero (derrière le texte) */
-.hero .reticle{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .45s ease}
-.hero.aim .reticle{opacity:1}
-.reticle .rh{position:absolute;left:0;right:0;top:var(--ry,50%);height:1px;background:linear-gradient(90deg,transparent,rgba(46,155,255,.26) 18%,rgba(46,155,255,.26) 82%,transparent)}
-.reticle .rv{position:absolute;top:0;bottom:0;left:var(--rx,50%);width:1px;background:linear-gradient(180deg,transparent,rgba(46,155,255,.26) 18%,rgba(46,155,255,.26) 82%,transparent)}
-.reticle .rd{position:absolute;left:var(--rx,50%);top:var(--ry,50%);width:18px;height:18px;transform:translate(-50%,-50%);border:1px solid rgba(46,155,255,.7);box-shadow:0 0 10px rgba(46,155,255,.35)}
-.reticle .rt{position:absolute;left:var(--rx,50%);top:var(--ry,50%);transform:translate(16px,13px);font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;color:var(--blue);white-space:nowrap;text-shadow:0 1px 6px rgba(3,5,10,.95)}
-@media(hover:none){.hero .reticle{display:none}}
-@media(prefers-reduced-motion:reduce){.hero .reticle{display:none}}
 .hero-in{position:relative;z-index:2;width:100%;max-width:1400px;margin:0 auto}
 .hero .kick{margin-bottom:26px}
 .hero h1{font-size:clamp(64px,12vw,190px);font-weight:600}
@@ -380,6 +371,10 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 .boot.play .boot-scan{animation:bootscan 1s cubic-bezier(.4,0,.2,1) .2s}
 @keyframes bootscan{0%{opacity:0;top:0}12%{opacity:1}88%{opacity:1}100%{opacity:0;top:100%}}
 @media(prefers-reduced-motion:reduce){.boot{display:none}}
+/* transition de section : un scan fin balaie à l'entrée des 2 gros blocs (subtil, pas partout) */
+.xscan{position:fixed;top:0;left:0;right:0;height:2px;z-index:58;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(46,155,255,.5),transparent);box-shadow:0 0 16px 2px rgba(46,155,255,.35)}
+@media(prefers-reduced-motion:reduce){.xscan{display:none}}
 
 /* ---------- aperçu méthode (renvoie vers la page dédiée) ---------- */
 .mteaser{position:relative;z-index:1;background:linear-gradient(rgba(6,8,12,.72),rgba(6,8,12,.9)),url('assets/real/plat_boeuf.jpg') center/cover no-repeat var(--void);padding:clamp(80px,11vh,130px) var(--edge);text-align:center}
@@ -429,6 +424,7 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 <!-- cadre + statut instrument -->
 <div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
 <div class="ambscan" aria-hidden="true"></div>
+<div class="xscan" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
 <div class="status">
@@ -475,7 +471,6 @@ try {
 <section class="hero">
   <div class="hero-bg"></div>
   <canvas class="hfield" aria-hidden="true"></canvas>
-  <div class="reticle" aria-hidden="true"><span class="rh"></span><span class="rv"></span><span class="rd"></span><span class="rt"></span></div>
   <div class="render" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="scan" aria-hidden="true"></div>
   <div class="tags" aria-hidden="true">
@@ -773,6 +768,17 @@ try {
     .from('.end .sub',{y:20,opacity:0,duration:.85},.35)
     .from('.end .btn',{y:16,opacity:0,duration:.7},.5);
 
+  // ---- TRANSITION DE SECTION : un scan fin balaie à l'entrée des 2 blocs majeurs (subtil, pas partout) ----
+  (function(){
+    var xs=document.querySelector('.xscan'); if(!xs) return;
+    function sweep(){ gsap.killTweensOf(xs);
+      gsap.set(xs,{top:'0vh',opacity:1});
+      gsap.to(xs,{top:'100vh',duration:.85,ease:'power1.inOut'});
+      gsap.to(xs,{opacity:0,duration:.28,delay:.58}); }
+    ['.myth','.plates'].forEach(function(sel){ var el=document.querySelector(sel); if(!el) return;
+      ScrollTrigger.create({trigger:el,start:'top 82%',once:true,onEnter:sweep}); });
+  })();
+
   // ---- VRAI OU FAUX (idées reçues) : clic -> révèle la réponse + fondu d'entrée ----
   document.querySelectorAll('.myth-card').forEach(function(c){
     c.addEventListener('click',function(){ c.classList.toggle('on'); });
@@ -858,24 +864,6 @@ try {
       new IntersectionObserver(function(es){ visible=es[0].isIntersecting; }).observe(hero);
     }
   }
-})();
-</script>
-
-<!-- VISEUR : réticule de visée qui suit le curseur sur le hero (desktop, module autonome) -->
-<script>
-(function(){
-  var hero=document.querySelector('.hero'); if(!hero) return;
-  if(!matchMedia('(hover:hover) and (pointer:fine)').matches) return;   // souris uniquement
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-  var ret=hero.querySelector('.reticle'), rt=hero.querySelector('.reticle .rt'); if(!ret) return;
-  hero.addEventListener('pointermove',function(e){
-    var r=hero.getBoundingClientRect(), W=r.width||1, H=r.height||1;
-    var px=e.clientX-r.left, py=e.clientY-r.top;
-    ret.style.setProperty('--rx',px+'px'); ret.style.setProperty('--ry',py+'px');
-    if(rt) rt.textContent='X'+String(Math.round(px/W*100)).padStart(2,'0')+' · Y'+String(Math.round(py/H*100)).padStart(2,'0');
-    hero.classList.add('aim');
-  },{passive:true});
-  hero.addEventListener('pointerleave',function(){ hero.classList.remove('aim'); });
 })();
 </script>
 

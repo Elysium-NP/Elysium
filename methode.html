@@ -21,6 +21,17 @@
 <meta property="og:url" content="https://elysium-nutrition.netlify.app/methode.html">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/site.css">
+<style>
+  /* méthode : colonne de progression (spine) qui se remplit au scroll — cohérent avec le « process » (distinct des effets des autres pages) */
+  .steps{position:relative}
+  .step{position:relative;padding-left:44px}
+  .steps::before{content:"";position:absolute;left:15px;top:0;bottom:0;width:2px;background:var(--line)}
+  .spine-fill{position:absolute;left:15px;top:0;width:2px;height:0;background:var(--blue);box-shadow:0 0 10px rgba(46,155,255,.55);z-index:1}
+  .step::before{content:"";position:absolute;left:16px;top:clamp(30px,4vw,40px);width:12px;height:12px;border-radius:50%;background:var(--void);border:2px solid var(--line);transform:translate(-50%,-50%);z-index:2;transition:border-color .35s ease,background .35s ease,box-shadow .35s ease}
+  .step.on::before{border-color:var(--blue);background:var(--blue);box-shadow:0 0 12px rgba(46,155,255,.8)}
+  @media(max-width:600px){.step{padding-left:34px}.steps::before,.spine-fill{left:10px}.step::before{left:11px}}
+  @media(prefers-reduced-motion:reduce){.step::before{transition:none}}
+</style>
 </head>
 <body>
 
@@ -90,6 +101,7 @@
       </div>
 
       <div class="steps">
+        <span class="spine-fill" aria-hidden="true"></span>
         <div class="step reveal">
           <div class="sn">01</div>
           <div class="st">
@@ -167,5 +179,21 @@
 </footer>
 
 <script src="assets/site.js"></script>
+<script>
+/* spine : le fill monte selon la progression du scroll dans les étapes, chaque nœud s'allume à son passage */
+(function(){
+  var steps=document.querySelector('.steps'); if(!steps) return;
+  var fill=steps.querySelector('.spine-fill'), items=[].slice.call(steps.querySelectorAll('.step'));
+  if(!fill) return;
+  function update(){
+    var r=steps.getBoundingClientRect();
+    var done=Math.max(0,Math.min(steps.offsetHeight, innerHeight*0.55 - r.top));
+    fill.style.height=done+'px';
+    var off=Math.min(40,Math.max(30,innerWidth*0.04));
+    items.forEach(function(it){ it.classList.toggle('on', done >= it.offsetTop+off); });
+  }
+  update(); addEventListener('scroll',update,{passive:true}); addEventListener('resize',update,{passive:true});
+})();
+</script>
 </body>
 </html>

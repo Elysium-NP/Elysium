@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ELYSIUM — Contact</title>
-<link rel="canonical" href="https://elysium-nutrition.netlify.app/contact">
+<link rel="canonical" href="https://elysium-x57.pages.dev/contact">
 <meta name="description" content="Une question, un doute, ou envie de démarrer ton programme ? Écris à Elysium — on répond vite.">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
@@ -17,8 +17,8 @@
 <meta property="og:site_name" content="Elysium — Nutrition &amp; Performance">
 <meta property="og:title" content="ELYSIUM — Contact">
 <meta property="og:description" content="Une question ou envie de démarrer ? Écris-nous, on répond vite.">
-<meta property="og:image" content="https://elysium-nutrition.netlify.app/assets/og.jpg">
-<meta property="og:url" content="https://elysium-nutrition.netlify.app/contact.html">
+<meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
+<meta property="og:url" content="https://elysium-x57.pages.dev/contact.html">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -67,10 +67,13 @@
     <div class="wrap">
       <div class="contact-grid">
 
-        <!-- FORMULAIRE (Netlify Forms) -->
-        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contact.html?ok=1" class="cform reveal">
-          <input type="hidden" name="form-name" value="contact">
-          <p class="hp"><label>Ne pas remplir : <input name="bot-field"></label></p>
+        <!-- FORMULAIRE (Web3Forms — envoi par mail, fonctionne sur tout hébergeur statique) -->
+        <form id="cform" class="cform reveal">
+          <!-- ⚠️ À REMPLACER par la clé d'accès Web3Forms (gratuite sur web3forms.com : entrer son mail -> reçoit la clé) -->
+          <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
+          <input type="hidden" name="subject" value="Nouveau message — site Elysium">
+          <input type="hidden" name="from_name" value="Site Elysium — Contact">
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="frow">
             <label>Prénom &amp; nom<input type="text" name="nom" autocomplete="name" required></label>
             <label>Email<input type="email" name="email" autocomplete="email" required></label>
@@ -85,7 +88,8 @@
             </select>
           </label>
           <label>Ton message<textarea name="message" rows="6" placeholder="Dis-nous où tu en es, ce que tu cherches…" required></textarea></label>
-          <button type="submit" class="btn">Envoyer le message</button>
+          <button type="submit" class="btn" id="csend">Envoyer le message</button>
+          <p class="cerr" id="cerr" hidden style="color:var(--blue);font-family:var(--mono);font-size:12.5px;margin-top:14px"></p>
         </form>
 
         <!-- INFOS DE CONTACT -->
@@ -124,16 +128,29 @@
 
 <script src="assets/site.js"></script>
 <script>
-/* accusé de réception inline après envoi (Netlify redirige vers ?ok=1) */
+/* Contact via Web3Forms : envoi AJAX (JSON) + accusé de réception inline. Host-agnostique. */
 (function(){
-  if(/[?&]ok=1/.test(location.search)){
-    var f=document.querySelector('.cform');
-    if(f){ var d=document.createElement('div'); d.className='cok reveal in';
-      d.innerHTML='<b>Message envoyé ✓</b><br>Merci — on te répond au plus vite, en général sous 48 h. À très vite !';
-      f.replaceWith(d);
-      history.replaceState(null,'',location.pathname);
-    }
-  }
+  var f=document.getElementById('cform'); if(!f) return;
+  var btn=document.getElementById('csend'), err=document.getElementById('cerr');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    err.hidden=true; btn.disabled=true; var lbl=btn.textContent; btn.textContent='Envoi…';
+    var data=Object.fromEntries(new FormData(f).entries());
+    fetch('https://api.web3forms.com/submit',{method:'POST',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        if(j.success){
+          var d=document.createElement('div'); d.className='cok reveal in';
+          d.innerHTML='<b>Message envoyé ✓</b><br>Merci — on te répond au plus vite, en général sous 48 h. À très vite !';
+          f.replaceWith(d);
+        } else { throw new Error(j.message||'refus'); }
+      })
+      .catch(function(){
+        btn.disabled=false; btn.textContent=lbl; err.hidden=false;
+        err.textContent='Envoi impossible pour le moment. Réessaie, ou écris-nous directement à elysium.np.pro@gmail.com.';
+      });
+  });
 })();
 </script>
 </body>

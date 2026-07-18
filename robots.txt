@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://elysium-nutrition.netlify.app/sitemap.xml
+Sitemap: https://elysium-x57.pages.dev/sitemap.xml

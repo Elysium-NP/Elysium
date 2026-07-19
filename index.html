@@ -133,7 +133,7 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;color:var(--ice);text-transform
 
 /* nav minimal */
 nav.menu{position:fixed;top:58px;right:var(--edge);z-index:55;display:flex;gap:26px;align-items:center}
-nav.menu a{font-family:var(--serif);font-size:16px;letter-spacing:.06em;color:var(--steel);text-decoration:none;transition:color .3s}
+nav.menu a{font-family:var(--disp);font-size:13px;letter-spacing:.13em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
 nav.menu a:hover{color:var(--blue)}
 nav.menu a.go{color:var(--ice);border:1px solid var(--line);padding:8px 16px}
 nav.menu a.go:hover{border-color:var(--blue);background:rgba(46,155,255,.08)}
@@ -289,9 +289,9 @@ footer .foot-legal{font-family:var(--disp);font-size:10px;letter-spacing:.12em;c
 .quote blockquote::before{content:"« "}.quote blockquote::after{content:" »"}
 .quote .hl{color:var(--blue)}
 .quote figcaption{font-family:var(--disp);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel);margin-top:16px}
-.partner{margin-top:66px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;padding-top:22px;border-top:1px solid var(--line)}
+.partner{margin-top:66px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding-top:22px;border-top:1px solid var(--line)}
 .partner .pk{font-family:var(--disp);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
-.partner .pn{font-family:var(--disp);font-weight:700;font-size:22px;letter-spacing:.06em;color:var(--ice);text-transform:uppercase}
+.partner .pn-logo{height:30px;width:auto;mix-blend-mode:screen}   /* vrai logo Prozis (blanc/noir) : le noir disparaît sur le fond sombre */
 .partner .pd{font-family:var(--serif);font-weight:500;font-size:15px;color:var(--gris)}
 
 /* ---------- annotations d'analyse (HUD sur le plat) ---------- */
@@ -596,7 +596,7 @@ try {
     </figure>
     <div class="partner">
       <span class="pk">Partenaire nutrition</span>
-      <span class="pn">Prozis</span>
+      <img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="112" height="32">
       <span class="pd">Compléments &amp; produits intégrés directement dans tes plats.</span>
     </div>
   </div>

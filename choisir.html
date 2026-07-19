@@ -58,6 +58,14 @@
   .steps3 p b{color:var(--ice);font-weight:500}
   .chafter .reassure{font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--steel);margin-top:24px;border-top:1px solid var(--line);padding-top:18px}
   .chafter .reassure b{color:#cdd6e4;font-weight:500}
+  /* transition entre les formules et le carré « ce qui se passe ensuite » */
+  .chturn{text-align:center;max-width:560px;margin:48px auto 6px}
+  .chturn p{font-family:var(--mono);font-size:12.5px;line-height:1.7;letter-spacing:.02em;color:var(--steel)}
+  .chturn p .serif{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ice);letter-spacing:0}
+  .chturn .mark{display:block;width:1px;height:46px;margin:20px auto 0;position:relative;background:linear-gradient(var(--blue),rgba(46,155,255,0))}
+  .chturn .mark::after{content:"";position:absolute;left:50%;bottom:-2px;width:6px;height:6px;background:var(--blue);transform:translateX(-50%) rotate(45deg);box-shadow:0 0 9px var(--blue)}
+  @media(prefers-reduced-motion:no-preference){.chturn .mark::after{animation:chpulse 2.4s ease-in-out infinite}}
+  @keyframes chpulse{0%,100%{opacity:.55;box-shadow:0 0 6px var(--blue)}50%{opacity:1;box-shadow:0 0 14px var(--blue)}}
   .chback{display:block;text-align:center;margin-top:26px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
   .chback:hover{color:var(--blue)}
 </style>
@@ -155,6 +163,11 @@
         </div>
       </article>
 
+    </div>
+
+    <div class="chturn reveal in">
+      <p>Ton choix fait, tu passes la main — <span class="serif">à partir d'ici, on s'occupe de tout.</span></p>
+      <span class="mark" aria-hidden="true"></span>
     </div>
 
     <section class="chafter reveal in">

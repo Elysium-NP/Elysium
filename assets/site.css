@@ -247,7 +247,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .cform select{appearance:none;-webkit-appearance:none;cursor:pointer}
 .cform .btn{margin-top:6px;align-self:flex-start;cursor:pointer;background:transparent}
 .cform .hp{position:absolute!important;left:-9999px}
-.cok{border:1px solid var(--blue);background:rgba(46,155,255,.06);padding:30px;font-family:var(--mono);font-size:14px;line-height:1.7;color:var(--gris)}
+.cok{border:1px solid var(--blue);background:rgba(46,155,255,.06);padding:30px;font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.6;color:var(--gris)}
 .cok b{font-family:var(--disp);font-weight:600;font-size:20px;color:var(--blue);text-transform:uppercase;display:inline-block;margin-bottom:6px}
 .cinfo{display:flex;flex-direction:column;gap:26px;padding-top:4px}
 .cinfo .ci{display:flex;flex-direction:column;gap:6px}
@@ -255,7 +255,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .cinfo .ci a,.cinfo .ci .v{font-family:var(--disp);font-weight:500;font-size:clamp(16px,1.5vw,19px);color:var(--ice);text-decoration:none;word-break:break-word;line-height:1.2}
 .cinfo .ci a{transition:color .3s ease}
 .cinfo .ci a:hover{color:var(--blue)}
-.cinfo .ci p{font-family:var(--mono);font-size:12px;color:var(--gris);line-height:1.55;margin-top:2px}
+.cinfo .ci p{font-family:var(--serif);font-weight:500;font-size:15px;color:var(--gris);line-height:1.5;margin-top:2px}
 
 /* ---------- page Méthode : les 4 étapes ---------- */
 .steps{display:flex;flex-direction:column;margin-top:24px}
@@ -263,7 +263,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .step:last-child{border-bottom:1px solid var(--line)}
 .step .sn{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6vw,68px);color:var(--blue);line-height:.85}
 .step .st h3{font-family:var(--disp);font-weight:600;font-size:clamp(20px,2.4vw,28px);color:var(--ice);text-transform:uppercase;letter-spacing:.005em;margin-bottom:13px}
-.step .st p{font-family:var(--mono);font-size:13.5px;line-height:1.72;color:var(--gris);max-width:64ch}
+.step .st p{font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.65;color:var(--gris);max-width:62ch}
 .step .st p b{color:var(--ice);font-weight:500}
 @media(max-width:600px){.step{grid-template-columns:1fr;gap:6px;padding:26px 0}.step .sn{font-size:34px}}
 
@@ -274,13 +274,13 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .auth-card .kick{margin-bottom:18px}
 .auth-card h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,5vw,44px);color:var(--ice);text-transform:uppercase;line-height:1;letter-spacing:.005em;margin-bottom:10px}
 .auth-card h1 .l2{display:block;color:var(--blue)}
-.auth-card .sub{font-family:var(--mono);font-size:12.5px;color:var(--steel);margin-bottom:30px;line-height:1.6}
+.auth-card .sub{font-family:var(--serif);font-weight:500;font-size:15px;color:var(--steel);margin-bottom:30px;line-height:1.55}
 .auth-form{display:flex;flex-direction:column;gap:16px}
 .auth-form label{display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
 .auth-form input{font-family:var(--mono);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;transition:border-color .3s;width:100%}/* 16px = pas de zoom auto iOS au focus */
 .auth-form input:focus{outline:none;border-color:var(--blue)}
 .auth-form .btn{margin-top:8px;cursor:pointer;background:transparent;justify-content:center;text-align:center}
-.auth-alt{font-family:var(--mono);font-size:12.5px;color:var(--steel);margin-top:24px;text-align:center}
+.auth-alt{font-family:var(--serif);font-weight:500;font-size:14.5px;color:var(--steel);margin-top:24px;text-align:center}
 .auth-alt a{color:var(--blue);text-decoration:none}
 .auth-alt a:hover{text-decoration:underline}
 .dash{max-width:1100px;margin:0 auto;padding:110px var(--edge) 90px}
@@ -289,7 +289,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .dash-hd h1 span{color:var(--blue)}
 .dash-hd .out{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:9px 15px;cursor:pointer;transition:border-color .3s,color .3s}
 .dash-hd .out:hover{border-color:var(--blue);color:var(--blue)}
-.dash-sub{font-family:var(--mono);font-size:12.5px;color:var(--gris);margin-bottom:32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dash-sub{font-family:var(--serif);font-weight:500;font-size:15px;color:var(--gris);margin-bottom:32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .dash-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}/* minmax(0,..) : la colonne peut rétrécir sous la largeur d'un enfant large (graphe) -> pas de débordement */
 @media(max-width:760px){.dash-grid{grid-template-columns:minmax(0,1fr)}}
 .card{border:1px solid var(--line);background:var(--void2);padding:26px 24px;position:relative}
@@ -297,7 +297,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .card .ch{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .card .ch h3{font-family:var(--disp);font-weight:600;font-size:18px;color:var(--ice);text-transform:uppercase;letter-spacing:.01em}
 .card .ch .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);border:1px solid var(--line);padding:3px 9px}
-.card>p{font-family:var(--mono);font-size:13px;line-height:1.6;color:var(--gris)}
+.card>p{font-family:var(--serif);font-weight:500;font-size:15px;line-height:1.55;color:var(--gris)}
 .wrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}/* mobile étroit : les boutons passent sous l'input au lieu de déborder */
 .wrow input{flex:1;font-family:var(--mono);font-size:16px;color:var(--ice);background:var(--void);border:1px solid var(--line);padding:11px 12px}/* 16px = pas de zoom auto iOS au focus */
 .wrow input:focus{outline:none;border-color:var(--blue)}

@@ -218,7 +218,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .coach .body{padding:22px 24px 26px}
 .coach .role{font-family:var(--disp);font-size:12px;letter-spacing:.2em;color:var(--blue);text-transform:uppercase}
 .coach h3{font-size:34px;margin:6px 0 12px}
-.coach p{font-size:14px;line-height:1.75;color:var(--gris)}
+.coach p{font-size:16px;line-height:1.7;color:var(--gris)}
 .coach .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:20px 0 16px;border-top:1px solid var(--line);padding-top:16px}
 .coach .stats .v{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice)}
 .coach .stats .v small{font-family:var(--disp);font-size:12px;color:var(--blue);margin-left:2px}
@@ -401,7 +401,7 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
 .legal p{font-size:15px;line-height:1.8;color:var(--gris);margin-bottom:12px;max-width:70ch}
 .legal p b{color:var(--ice);font-weight:500}
 .legal ul{list-style:none;margin:0 0 14px;padding:0;max-width:70ch}
-.legal li{font-size:14px;line-height:1.75;color:var(--gris);padding-left:18px;position:relative;margin-bottom:8px}
+.legal li{font-size:15px;line-height:1.75;color:var(--gris);padding-left:18px;position:relative;margin-bottom:8px}
 .legal li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;background:var(--blue);transform:rotate(45deg)}
 .legal a{color:var(--blue);border-bottom:1px solid var(--line);transition:border-color .3s}
 .legal a:hover{border-color:var(--blue)}

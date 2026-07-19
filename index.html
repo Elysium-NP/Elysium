@@ -289,10 +289,10 @@ footer .foot-legal{font-family:var(--disp);font-size:10px;letter-spacing:.12em;c
 .quote blockquote::before{content:"« "}.quote blockquote::after{content:" »"}
 .quote .hl{color:var(--blue)}
 .quote figcaption{font-family:var(--disp);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel);margin-top:16px}
-.partner{margin-top:66px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding-top:22px;border-top:1px solid var(--line)}
-.partner .pk{font-family:var(--disp);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
-.partner .pn-logo{height:30px;width:auto;mix-blend-mode:screen}   /* vrai logo Prozis (blanc/noir) : le noir disparaît sur le fond sombre */
-.partner .pd{font-family:var(--serif);font-weight:500;font-size:15px;color:var(--gris)}
+.partner{margin-top:64px;display:flex;flex-direction:column;align-items:flex-start;gap:15px;padding-top:34px;border-top:1px solid var(--line)}
+.partner .pk{font-family:var(--disp);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:10px}
+.partner .pk::before{content:"";width:22px;height:1px;background:var(--blue);opacity:.6}
+.partner .pn-logo{height:40px;width:auto;mix-blend-mode:screen}   /* vrai logo Prozis (blanc/noir) : le noir disparaît sur le fond sombre */
 
 /* ---------- annotations d'analyse (HUD sur le plat) ---------- */
 .tags{position:absolute;inset:0;z-index:2;pointer-events:none}
@@ -596,8 +596,7 @@ try {
     </figure>
     <div class="partner">
       <span class="pk">Partenaire nutrition</span>
-      <img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="112" height="32">
-      <span class="pd">Compléments &amp; produits intégrés directement dans tes plats.</span>
+      <img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="150" height="43">
     </div>
   </div>
 </section>

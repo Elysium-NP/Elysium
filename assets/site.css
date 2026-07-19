@@ -255,7 +255,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .cinfo .ci a,.cinfo .ci .v{font-family:var(--disp);font-weight:500;font-size:clamp(16px,1.5vw,19px);color:var(--ice);text-decoration:none;word-break:break-word;line-height:1.2}
 .cinfo .ci a{transition:color .3s ease}
 .cinfo .ci a:hover{color:var(--blue)}
-.cinfo .ci p{font-family:var(--serif);font-weight:500;font-size:16px;color:var(--gris);line-height:1.5;margin-top:2px}
+.cinfo .ci p{font-family:var(--serif);font-weight:500;font-size:17px;color:var(--gris);line-height:1.5;margin-top:2px}
 
 /* ---------- page Méthode : les 4 étapes ---------- */
 .steps{display:flex;flex-direction:column;margin-top:24px}
@@ -263,7 +263,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .step:last-child{border-bottom:1px solid var(--line)}
 .step .sn{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6vw,68px);color:var(--blue);line-height:.85}
 .step .st h3{font-family:var(--disp);font-weight:600;font-size:clamp(20px,2.4vw,28px);color:var(--ice);text-transform:uppercase;letter-spacing:.005em;margin-bottom:13px}
-.step .st p{font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.65;color:var(--gris);max-width:62ch}
+.step .st p{font-family:var(--serif);font-weight:500;font-size:17px;line-height:1.65;color:var(--gris);max-width:62ch}
 .step .st p b{color:var(--ice);font-weight:500}
 @media(max-width:600px){.step{grid-template-columns:1fr;gap:6px;padding:26px 0}.step .sn{font-size:34px}}
 
@@ -297,7 +297,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .card .ch{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .card .ch h3{font-family:var(--disp);font-weight:600;font-size:18px;color:var(--ice);text-transform:uppercase;letter-spacing:.01em}
 .card .ch .tag{font-family:var(--disp);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);border:1px solid var(--line);padding:3px 9px}
-.card>p{font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.55;color:var(--gris)}
+.card>p{font-family:var(--serif);font-weight:500;font-size:17px;line-height:1.55;color:var(--gris)}
 .wrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}/* mobile étroit : les boutons passent sous l'input au lieu de déborder */
 .wrow input{flex:1;font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void);border:1px solid var(--line);padding:11px 12px}/* 16px = pas de zoom auto iOS au focus */
 .wrow input:focus{outline:none;border-color:var(--blue)}
@@ -348,12 +348,12 @@ html.reveal-ready .plan.feat.in::before{transform:translateY(-50%) scale(1);opac
 }
 .plan .pn{font-family:var(--disp);font-size:12px;letter-spacing:.2em;color:var(--blue);text-transform:uppercase}
 .plan h3{font-size:30px;margin:8px 0 4px}
-.plan .desc{font-size:13px;color:var(--steel);min-height:38px}
+.plan .desc{font-size:15px;color:var(--steel);min-height:40px;line-height:1.45}
 .plan .price{font-family:var(--disp);font-weight:600;font-size:52px;color:var(--ice);line-height:1;margin:18px 0 2px}
 .plan .price small{font-family:var(--disp);font-size:12px;color:var(--steel);letter-spacing:.06em;margin-left:4px}
 .plan .per{font-family:var(--disp);font-size:12px;letter-spacing:.1em;color:var(--steel);text-transform:uppercase;margin-bottom:22px}
 .plan ul{list-style:none;display:flex;flex-direction:column;gap:11px;margin:0 0 26px;flex:1}
-.plan li{font-size:13px;line-height:1.5;color:var(--gris);padding-left:22px;position:relative}
+.plan li{font-size:15px;line-height:1.5;color:var(--gris);padding-left:22px;position:relative}
 .plan li::before{content:"";position:absolute;left:0;top:7px;width:9px;height:9px;
   border-left:1px solid var(--blue);border-bottom:1px solid var(--blue);transform:rotate(-45deg)}
 .plan li.off{color:var(--steel);opacity:.6}
@@ -391,14 +391,14 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
 /* ---------- mention partenaire discrète (Prozis) — bas de Méthode & Formules ---------- */
 .partner-strip{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:48px}
 .partner-strip .pk{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--steel)}
-.partner-strip .pn-logo{height:38px;width:auto;mix-blend-mode:screen}
+.partner-strip .pn-logo{height:27px;width:auto;mix-blend-mode:screen}
 
 /* ---------- pages légales / documents : colonne de lecture confortable ---------- */
 .legal{max-width:820px;margin:0 auto}
 .legal .intro{font-size:16px;line-height:1.8;color:var(--gris);margin-bottom:10px;padding-bottom:24px;border-bottom:1px solid var(--line)}
 .legal h3{font-family:var(--disp);font-weight:600;font-size:clamp(18px,2.6vw,23px);color:var(--ice);text-transform:uppercase;letter-spacing:.005em;margin:40px 0 12px;display:flex;align-items:baseline;gap:12px}
 .legal h3 .num{font-family:var(--disp);font-weight:400;font-size:13px;color:var(--blue)}
-.legal p{font-size:14px;line-height:1.85;color:var(--gris);margin-bottom:12px;max-width:70ch}
+.legal p{font-size:15px;line-height:1.8;color:var(--gris);margin-bottom:12px;max-width:70ch}
 .legal p b{color:var(--ice);font-weight:500}
 .legal ul{list-style:none;margin:0 0 14px;padding:0;max-width:70ch}
 .legal li{font-size:14px;line-height:1.75;color:var(--gris);padding-left:18px;position:relative;margin-bottom:8px}

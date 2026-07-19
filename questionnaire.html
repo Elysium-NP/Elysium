@@ -17,16 +17,16 @@
 <style>
   body{overflow-x:hidden}
   .qtop{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px var(--edge);background:linear-gradient(var(--void),rgba(6,8,12,0))}
-  .qtop .back{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
+  .qtop .back{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
   .qtop .back:hover{color:var(--blue)}
   .qprog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue-d),var(--blue));box-shadow:0 0 12px var(--blue);width:0;z-index:60;transition:width .5s cubic-bezier(.4,0,.2,1)}
   .qwrap{max-width:680px;margin:0 auto;padding:120px var(--edge) 80px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
-  .qcount{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:18px}
+  .qcount{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:18px}
   .qstep{display:none;animation:qin .5s cubic-bezier(.2,.7,.2,1)}
   .qstep.active{display:block}
   @keyframes qin{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
   .qstep h2{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4.6vw,46px);color:var(--ice);text-transform:uppercase;line-height:1.02;letter-spacing:.005em;margin-bottom:10px}
-  .qstep .qhint{font-family:var(--mono);font-size:12.5px;color:var(--steel);margin-bottom:30px}
+  .qstep .qhint{font-family:var(--disp);font-size:12.5px;color:var(--steel);margin-bottom:30px}
   .qcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .qcards.one{grid-template-columns:1fr}
   @media(max-width:520px){.qcards{grid-template-columns:1fr}}
@@ -43,15 +43,15 @@
   .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:520px){.qgrid{grid-template-columns:1fr}}
   .qfield{display:flex;flex-direction:column;gap:8px}
-  .qfield label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
-  .qfield input{font-family:var(--mono);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;transition:border-color .3s;width:100%}/* 16px = pas de zoom auto iOS au focus */
+  .qfield label{font-family:var(--disp);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+  .qfield input{font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;transition:border-color .3s;width:100%}/* 16px = pas de zoom auto iOS au focus */
   .qfield input::placeholder{color:var(--steel)}
   .qfield input:focus{outline:none;border-color:var(--blue)}
   .qnav{display:flex;align-items:center;gap:16px;margin-top:36px}
-  .qnav .prev{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);background:none;border:0;cursor:pointer;padding:8px 0;transition:color .3s}
+  .qnav .prev{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);background:none;border:0;cursor:pointer;padding:8px 0;transition:color .3s}
   .qnav .prev:hover{color:var(--ice)}
   .qnav .btn{cursor:pointer;background:transparent;margin-left:auto}
-  .qerr{font-family:var(--mono);font-size:11.5px;color:#e8b04b;margin-top:14px;min-height:16px}
+  .qerr{font-family:var(--disp);font-size:12.5px;color:#e8b04b;margin-top:14px;min-height:16px}
   /* écran de fin */
   #confetti{position:fixed;inset:0;z-index:90;pointer-events:none;display:none}
   .qdone{display:none;position:fixed;inset:0;z-index:80;background:var(--void);align-items:center;justify-content:center;text-align:center;padding:40px var(--edge)}
@@ -59,7 +59,7 @@
   .qdone-in{max-width:560px}
   .qdone .em{font-family:var(--disp);font-weight:600;font-size:clamp(46px,9vw,90px);color:var(--blue);line-height:1;letter-spacing:.02em}
   .qdone h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4vw,42px);color:var(--ice);text-transform:uppercase;margin:16px 0 18px;letter-spacing:.005em}
-  .qdone p{font-family:var(--mono);font-size:14px;line-height:1.7;color:var(--gris);max-width:46ch;margin:0 auto 32px}
+  .qdone p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);max-width:46ch;margin:0 auto 32px}
   .qdone p b{color:var(--ice);font-weight:500}
 </style>
 </head>

@@ -3,21 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06080C">
 <title>ELYSIUM — Protocole nutritionnel de précision</title>
 <link rel="canonical" href="https://elysium-x57.pages.dev/">
-<meta name="description" content="Un programme construit, calculé et vérifié — au gramme près. La nutrition traitée comme un instrument de précision.">
+<meta name="description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. La nutrition traitée comme un instrument de précision.">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Elysium — Nutrition &amp; Performance">
 <meta property="og:title" content="ELYSIUM — La nutrition au gramme près">
-<meta property="og:description" content="Un programme nutritionnel construit, calculé et vérifié — au gramme près. La nutrition traitée comme un instrument de précision.">
+<meta property="og:description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. La nutrition traitée comme un instrument de précision.">
 <meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://elysium-x57.pages.dev/">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://elysium-x57.pages.dev/#org",
+      "name": "Elysium — Nutrition & Performance",
+      "legalName": "SAS Elysium — Nutrition & Performance",
+      "url": "https://elysium-x57.pages.dev/",
+      "logo": "https://elysium-x57.pages.dev/assets/logo.png",
+      "image": "https://elysium-x57.pages.dev/assets/og.jpg",
+      "description": "Coaching nutritionnel sur mesure : un programme façonné à la main par deux coachs pour chaque objectif — perte de poids, prise de masse, rééquilibrage. Accompagnement 100 % à distance, partout en France.",
+      "email": "elysium.np.pro@gmail.com",
+      "areaServed": { "@type": "Country", "name": "France" },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Villers-Bretonneux",
+        "addressCountry": "FR"
+      },
+      "sameAs": ["https://www.instagram.com/elysium.nutrition.performance"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://elysium-x57.pages.dev/#site",
+      "url": "https://elysium-x57.pages.dev/",
+      "name": "Elysium — Nutrition & Performance",
+      "inLanguage": "fr-FR",
+      "publisher": { "@id": "https://elysium-x57.pages.dev/#org" }
+    }
+  ]
+}
+</script>
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-400-normal-latin.woff2" crossorigin>
@@ -91,7 +125,7 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;color:var(--ice);text-transform
 .logo .np .ln.l::before{left:-1px}.logo .np .ln.r::before{right:-1px}
 .logo.big .n{font-size:34px;letter-spacing:.46em;padding-left:.46em}
 .logo.big .np{gap:14px;margin-top:10px}.logo.big .np span{font-size:10px;letter-spacing:.34em;padding-left:.34em}.logo.big .np .ln{width:36px}
-@media(max-width:900px){.logo .n{font-size:19px;letter-spacing:.34em;padding-left:.34em}.logo .np span{font-size:7px}}
+@media(max-width:900px){.logo .n{font-size:19px;letter-spacing:.34em;padding-left:.34em}}
 .status .mid{display:none}
 .status .rt{display:flex;gap:8px;align-items:center;color:var(--gris)}
 .status .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);animation:blink 2.4s steps(1) infinite}
@@ -107,6 +141,7 @@ nav.menu a.go:hover{border-color:var(--blue);background:rgba(46,155,255,.08)}
 
 /* menu mobile (hamburger instrument + panneau plein écran) */
 .burger{display:none;position:fixed;top:36px;right:var(--edge);z-index:70;width:36px;height:26px;background:none;border:0;padding:0;cursor:pointer}
+.burger::after{content:"";position:absolute;inset:-11px -9px}/* zone tactile ~54x48 (>=44px) sans déplacer les barres */
 .burger span{position:absolute;left:4px;right:4px;height:1.5px;background:var(--ice);transition:transform .32s cubic-bezier(.16,1,.3,1),opacity .2s ease}
 .burger span:nth-child(1){top:5px}.burger span:nth-child(2){top:12px}.burger span:nth-child(3){top:19px}
 .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
@@ -121,7 +156,7 @@ nav.menu a.go:hover{border-color:var(--blue);background:rgba(46,155,255,.08)}
 .msheet a:hover{color:var(--blue);padding-left:10px}
 .msheet a .mnum{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--steel);letter-spacing:.1em}
 .msheet a.go-m{color:var(--blue);border-bottom:0;margin-top:20px}
-@media(max-width:900px){nav.menu{display:none}.burger{display:block}}
+@media(max-width:900px){nav.menu{display:none}.burger{display:block}.status .rt{display:none}}
 @media(prefers-reduced-motion:reduce){.msheet,.burger span{transition:none}}
 
 /* ---------- utilitaires ---------- */
@@ -341,8 +376,9 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 .myth-card:hover{border-color:rgba(46,155,255,.42);transform:translateY(-2px)}
 .myth-card .q{display:block;font-family:var(--disp);font-weight:500;font-size:clamp(17px,1.9vw,21px);color:var(--ice);line-height:1.28;text-transform:none}
 .myth-card .tap{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);transition:opacity .3s ease}
-.myth-card .rev{max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s ease,margin-top .5s ease}
-.myth-card.on .rev{max-height:340px;opacity:1;margin-top:18px}
+/* la réponse est un bloc (le span inline ignorait max-height/overflow -> réponse toujours présente = bug mobile). */
+.myth-card .rev{display:block;max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s ease,margin-top .5s ease}
+.myth-card.on .rev{max-height:420px;opacity:1;margin-top:18px}
 .myth-card.on .tap{opacity:0}
 .myth-card .verdict{display:inline-block;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:4px 13px;margin-bottom:13px}
 .myth-card .why{display:block;font-family:var(--mono);font-size:13px;line-height:1.62;color:var(--gris)}
@@ -391,7 +427,7 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 </head>
 <body>
 
-<a class="skip" href="methode.html">Aller au contenu</a>
+<a class="skip" href="#main">Aller au contenu</a>
 
 <!-- SÉQUENCE DE DÉMARRAGE : l'instrument se calibre (1re visite par session, coupée si reduced-motion) -->
 <div class="boot" id="boot" aria-hidden="true">
@@ -428,12 +464,12 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 <div class="xscan" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
-<div class="status">
+<header class="status">
   <a class="logo" href="#top" aria-label="Elysium — Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
   <span class="mid">Protocole nutritionnel · calibré au gramme</span>
   <span class="rt"><span class="dot"></span>Système actif</span>
-</div>
-<nav class="menu">
+</header>
+<nav class="menu" aria-label="Navigation principale">
   <a href="methode.html">Méthode</a>
   <a href="qui-sommes-nous.html">Coachs</a>
   <a href="formules.html">Formules</a>
@@ -453,10 +489,18 @@ footer .foot-legal{font-family:var(--mono);font-size:10px;letter-spacing:.12em;c
 try {
   if (JSON.parse(localStorage.getItem('ely_user_demo') || 'null')) {
     document.querySelectorAll('a.go, a.go-m').forEach(function(a){
-      if (!/connexion/i.test(a.getAttribute('href') || '')) return;   // Netlify réécrit connexion.html -> /connexion
+      if (!/connexion/i.test(a.getAttribute('href') || '')) return;   // clean URLs (Cloudflare Pages) : connexion.html -> /connexion
       a.setAttribute('href', 'espace.html');
       var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
       a.appendChild(document.createTextNode('Mon espace'));
+    });
+    // déjà connecté : le CTA « Construire mon programme » renvoie vers l'espace, pas l'inscription.
+    // (en DOMContentLoaded car ce script tourne avant que le hero/CTA soit parsé)
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('a.btn[href*="inscription"]').forEach(function(a){
+        a.setAttribute('href', 'espace.html');
+        a.textContent = 'Accéder à mon espace';
+      });
     });
   }
 } catch (e) {}
@@ -468,6 +512,7 @@ try {
   <div class="sl" style="background-image:url('assets/real/r09_15352332.jpg')"></div>
 </div>
 
+<main id="main">
 <!-- ===================== HERO ===================== -->
 <section class="hero">
   <div class="hero-bg"></div>
@@ -482,7 +527,7 @@ try {
   <div class="hero-in">
     <div class="kick">Nutrition de précision</div>
     <h1>Au gramme<span class="l2">près.</span></h1>
-    <p class="sub">Un programme construit, calculé et vérifié — comme un instrument réglé pour un seul organisme : le tien.</p>
+    <p class="sub">Un programme façonné à la main, au gramme près — comme un instrument réglé pour un seul organisme : le tien.</p>
     <div class="hero-cta">
       <a class="btn" href="inscription.html">Construire mon programme</a>
       <a class="link" href="methode.html">Voir la méthode</a>
@@ -596,7 +641,7 @@ try {
   <div class="mteaser-in">
     <div class="kick">La méthode</div>
     <h2>Du profil à<span class="l2">l'assiette.</span></h2>
-    <p class="mteaser-lead">Quatre étapes, une seule cible : toi. On mesure, on calcule au gramme, on construit de vrais plats, un coach relit tout — puis on livre.</p>
+    <p class="mteaser-lead">Quatre étapes, une seule cible : toi. Les coachs mesurent, composent de vrais plats et ajustent au gramme, à la main — puis on livre.</p>
     <div class="mteaser-steps">
       <span><b>01</b> Le profil</span>
       <span><b>02</b> Le calcul</span>
@@ -614,15 +659,17 @@ try {
   <div class="end-in">
     <div class="kick" style="justify-content:center">La méthode Elysium</div>
     <h2 style="margin-top:22px">Calibrons<br>ton protocole.</h2>
-    <p class="sub">Construit, calculé, vérifié — pour toi, personne d'autre.</p>
+    <p class="sub">Pensé, pesé, façonné à la main — pour toi, personne d'autre.</p>
     <a class="btn" href="inscription.html">Construire mon programme</a>
     <p style="margin-top:36px;font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;color:var(--steel)">par mail — <a href="mailto:elysium.np.pro@gmail.com" style="color:var(--blue);border-bottom:1px solid rgba(46,155,255,.4);text-decoration:none">elysium.np.pro@gmail.com</a> &nbsp;·&nbsp; sur Insta — <a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" style="color:var(--blue);border-bottom:1px solid rgba(46,155,255,.4);text-decoration:none">@elysium.nutrition.performance</a></p>
   </div>
 </section>
 
+</main>
+
 <footer>
   <div class="logo big"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></div>
-  <div class="foot-links"><a href="#top">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
+  <div class="foot-links"><a href="#top">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
   <div class="foot-legal">© 2026 SAS Elysium — Nutrition &amp; Performance · Protocole v.2026</div>
 </footer>
 
@@ -782,7 +829,8 @@ try {
 
   // ---- VRAI OU FAUX (idées reçues) : clic -> révèle la réponse + fondu d'entrée ----
   document.querySelectorAll('.myth-card').forEach(function(c){
-    c.addEventListener('click',function(){ c.classList.toggle('on'); });
+    c.setAttribute('aria-expanded','false');   // état de départ : réponse repliée (a11y : annoncé au lecteur d'écran)
+    c.addEventListener('click',function(){ c.setAttribute('aria-expanded', c.classList.toggle('on') ? 'true' : 'false'); });
   });
   gsap.from('.myth .kick, .myth h2, .myth-lead',{opacity:0,y:26,duration:.7,ease:'power3.out',stagger:.1,
     scrollTrigger:{trigger:'.myth',start:'top 78%'}});

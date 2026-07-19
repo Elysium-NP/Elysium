@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06080C">
 <title>ELYSIUM — Mon espace</title>
 <meta name="robots" content="noindex">
 <script>document.documentElement.classList.add('js')</script>
@@ -213,10 +214,15 @@
     pill.textContent=paid?'Programme actif':'Compte gratuit'; pill.className='pill '+(paid?'paid':'free');
     if(!paid){
       c.className='card wide locked';
+      var uu=ElyAuth.user()||{}, f=uu.formule, fp=uu.formule_prix;
+      var choiceLine = f
+        ? '<div class="foot-note" style="margin:0 0 14px">Formule choisie&nbsp;: <b style="color:var(--ice)">'+f+'</b>'+(fp?' · '+fp:'')+' &nbsp;·&nbsp; <a href="choisir.html" style="color:var(--blue)">changer</a></div>'
+        : '<div class="foot-note" style="margin:0 0 14px"><a href="choisir.html" style="color:var(--blue)">Choisir ma formule ›</a></div>';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Verrouillé</span></div>'+
         '<div class="lockicon">🔒</div>'+
-        '<p>Ton programme sur-mesure — au gramme près, relu par un coach — se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
-        '<a class="btn" href="#" id="unlock">Débloquer mon programme</a>';
+        choiceLine+
+        '<p>Ton programme sur-mesure — au gramme près, façonné à la main par un coach — se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
+        '<a class="btn" href="#" id="unlock">'+(f ? 'Payer '+(fp||'')+' et débloquer' : 'Débloquer mon programme')+'</a>';
       var ub=document.getElementById('unlock');
       if(ub) ub.addEventListener('click',function(e){ e.preventDefault(); alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » dans le coin démo.'); });
     } else {

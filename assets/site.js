@@ -110,10 +110,16 @@
   try {
     if (JSON.parse(localStorage.getItem('ely_user_demo') || 'null')) {
       document.querySelectorAll('a.go, a.go-m').forEach(function(a){
-        if (!/connexion/i.test(a.getAttribute('href') || '')) return;   // Netlify réécrit connexion.html -> /connexion
+        if (!/connexion/i.test(a.getAttribute('href') || '')) return;   // clean URLs (Cloudflare Pages) : connexion.html -> /connexion
         a.setAttribute('href', 'espace.html');
         var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
         a.appendChild(document.createTextNode('Mon espace'));
+      });
+      // déjà connecté : les CTA d'inscription (« Construire mon programme », « Être accompagné »…)
+      // ne renvoient plus vers l'inscription mais vers l'espace membre
+      document.querySelectorAll('a.btn[href*="inscription"]').forEach(function(a){
+        a.setAttribute('href', 'espace.html');
+        a.textContent = 'Accéder à mon espace';
       });
     }
   } catch (e) {}

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06080C">
 <title>ELYSIUM — Créer mon compte</title>
 <meta name="description" content="Crée ton compte Elysium et accède à ton espace membre.">
 <meta name="robots" content="noindex">
@@ -52,7 +53,7 @@ document.getElementById('signup').addEventListener('submit',function(e){
   if(f.password.value!==f.password2.value){ f.password2.setCustomValidity('Les mots de passe ne correspondent pas.'); f.password2.reportValidity(); return; }
   f.password2.setCustomValidity('');
   ElyAuth.signup({prenom:f.prenom.value, email:f.email.value});
-  location.href='espace.html';
+  location.href='choisir.html';
 });
 </script>
 </body>

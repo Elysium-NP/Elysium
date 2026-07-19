@@ -46,8 +46,18 @@
   .pd .price small{font-size:14px;color:var(--steel);margin-left:3px}
   .pd .per{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--steel);margin:8px 0 16px}
   .pd .btn{width:100%;justify-content:center;cursor:pointer}
-  .chnote{font-family:var(--mono);font-size:11.5px;line-height:1.7;color:var(--steel);text-align:center;max-width:620px;margin:34px auto 0}
-  .chnote b{color:#cdd6e4;font-weight:500}
+  .chafter{position:relative;background:var(--void2);border:1px solid var(--line);padding:clamp(24px,3vw,34px);margin-top:22px}
+  .chafter::before{content:"";position:absolute;top:0;left:0;width:34px;height:1px;background:var(--blue);opacity:.7}
+  .chafter .pn{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
+  .chafter h2{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3vw,30px);color:var(--ice);text-transform:uppercase;margin:8px 0 24px;letter-spacing:.005em}
+  .steps3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.6vw,30px)}
+  @media(max-width:640px){.steps3{grid-template-columns:1fr;gap:16px}}
+  .steps3 > div{border-top:1px solid var(--line);padding-top:14px}
+  .steps3 .sn{font-family:var(--disp);font-weight:700;font-size:22px;color:var(--blue);line-height:1;font-variant-numeric:tabular-nums}
+  .steps3 p{font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#c4ccd8;margin-top:10px}
+  .steps3 p b{color:var(--ice);font-weight:500}
+  .chafter .reassure{font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--steel);margin-top:24px;border-top:1px solid var(--line);padding-top:18px}
+  .chafter .reassure b{color:#cdd6e4;font-weight:500}
   .chback{display:block;text-align:center;margin-top:26px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
   .chback:hover{color:var(--blue)}
 </style>
@@ -147,7 +157,25 @@
 
     </div>
 
-    <p class="chnote">Après ton choix, tu réponds au <b>questionnaire nutrition</b> (quelques minutes) et ton programme est façonné à la main, puis livré <b>sous 10 jours</b> — accès en ligne + PDF par mail. Régime, allergies, aliments détestés, budget : <b>tout est pris en compte</b>. Une hésitation entre deux formules&nbsp;? <a href="contact.html" style="color:var(--blue)">Écris-nous</a>.</p>
+    <section class="chafter reveal in">
+      <span class="pn">Une fois ta formule choisie</span>
+      <h2>Ce qui se passe ensuite</h2>
+      <div class="steps3">
+        <div>
+          <span class="sn">01</span>
+          <p>Tu réponds au <b>questionnaire nutrition</b> — quelques minutes, et c'est fait.</p>
+        </div>
+        <div>
+          <span class="sn">02</span>
+          <p>Damien &amp; Yoann <b>façonnent ton programme à la main</b>, rien que pour toi.</p>
+        </div>
+        <div>
+          <span class="sn">03</span>
+          <p>Livré <b>sous 10 jours</b> — accès en ligne + PDF par mail.</p>
+        </div>
+      </div>
+      <p class="reassure">Régime, allergies, aliments détestés, budget : <b>tout est pris en compte</b>, rien d'interdit ne passe. Une hésitation entre deux formules&nbsp;? <a href="contact.html" style="color:var(--blue)">Écris-nous</a>, on t'oriente.</p>
+    </section>
 
     <a class="chback" href="formules.html">‹ Revoir le comparatif des formules</a>
 

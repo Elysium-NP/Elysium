@@ -1,0 +1,14 @@
+# ============================================================================
+# En-têtes de sécurité — Cloudflare Pages (fichier spécial, non servi au public).
+# S'applique à TOUTES les routes du site. Objectif : durcir contre clickjacking,
+# MIME-sniffing, injection, et forcer HTTPS. Ajouté suite à l'audit sécurité 20/07.
+# ⚠️ Si une page casse après déploiement, le suspect n°1 est la Content-Security-Policy
+#    ci-dessous (assouplir la directive concernée). Tester sur elysium-x57.pages.dev.
+# ============================================================================
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com https://cloudflareinsights.com; form-action 'self' https://api.web3forms.com; upgrade-insecure-requests

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#06080C">
-<title>ELYSIUM — Mon espace</title>
+<title>ELYSIUM · Mon espace</title>
 <meta name="robots" content="noindex">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/site.css">
 <style>
-  /* ===== Espace membre v2 — tableau de bord « télémétrie » (styles propres à la page) ===== */
+  /* ===== Espace membre v2, tableau de bord « télémétrie » (styles propres à la page) ===== */
   .dash-grid .wide{grid-column:1/-1}
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
   @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}}
@@ -61,7 +61,7 @@
 <div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
 
 <div class="qtop" style="position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;padding:16px var(--edge);background:linear-gradient(var(--void),rgba(6,8,12,0))">
-  <a class="logo" href="index.html" aria-label="Elysium — Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
+  <a class="logo" href="index.html" aria-label="Elysium · Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
   <span style="font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)">Mon espace</span>
 </div>
 
@@ -72,7 +72,7 @@
   </div>
   <div class="dash-sub">
     <span id="statuspill" class="pill free">Compte gratuit</span>
-    <span>Ton suivi, en direct — plus tu pèses régulièrement, plus la courbe parle.</span>
+    <span>Ton suivi, en direct, plus tu pèses régulièrement, plus la courbe parle.</span>
   </div>
 
   <!-- TUILES DE TÉLÉMÉTRIE -->
@@ -107,8 +107,8 @@
     <!-- PROFIL -->
     <div class="card">
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
-      <p>Email : <b id="pemail" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
-      <p style="margin-top:8px">Membre depuis : <b id="pdate" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.03em">—</b></p>
+      <p>Email : <b id="pemail" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">, </b></p>
+      <p style="margin-top:8px">Membre depuis : <b id="pdate" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.03em">, </b></p>
     </div>
 
     <!-- DÉMO -->
@@ -124,7 +124,7 @@
   </div>
 </main>
 
-<div class="demo-banner">⚠︎ Maquette navigable — données stockées seulement dans ton navigateur, aucune sécurité réelle. Supabase + Stripe câblés en phase suivante.</div>
+<div class="demo-banner">⚠︎ Maquette navigable, données stockées seulement dans ton navigateur, aucune sécurité réelle. Supabase + Stripe câblés en phase suivante.</div>
 
 <script src="assets/site.js"></script>
 <script>
@@ -135,8 +135,8 @@
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   document.getElementById('prenom').textContent=u.prenom||'toi';
-  document.getElementById('pemail').textContent=u.email||'—';
-  document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):'—';
+  document.getElementById('pemail').textContent=u.email||', ';
+  document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):', ';
 
   function weights(){ try{ return JSON.parse(localStorage.getItem(WK)||'[]'); }catch(e){ return []; } }
   function saveW(w){ localStorage.setItem(WK,JSON.stringify(w)); }
@@ -220,7 +220,7 @@
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Verrouillé</span></div>'+
         '<div class="lockicon">🔒</div>'+
         choiceLine+
-        '<p>Ton programme sur-mesure — au gramme près, façonné à la main par un coach — se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
+        '<p>Ton programme sur-mesure, au gramme près, façonné à la main par un coach, se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
         '<a class="btn" href="#" id="unlock">'+(f ? 'Payer '+(fp||'')+' et débloquer' : 'Débloquer mon programme')+'</a>';
       var ub=document.getElementById('unlock');
       if(ub) ub.addEventListener('click',function(e){ e.preventDefault(); alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » dans le coin démo.'); });

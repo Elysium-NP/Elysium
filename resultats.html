@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06080C">
+<title>ELYSIUM · Résultats & transformations</title>
+<link rel="canonical" href="https://elysium-x57.pages.dev/resultats">
+<!-- Contenu réel, déjà publié sur l'Instagram Elysium. Avant/après = clients ayant consenti à la diffusion (registre Drive) ; visages floutés. Confirmer le consentement AVANT mise en ligne. -->
+<meta name="description" content="Les transformations réelles des clients Elysium : pertes de poids, prises de masse, retours d'expérience en vidéo. Des chiffres, des vraies personnes.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Elysium · Nutrition &amp; Performance">
+<meta property="og:title" content="ELYSIUM · Résultats & transformations">
+<meta property="og:description" content="Pertes de poids, prises de masse, retours vidéo, les transformations réelles de nos clients.">
+<meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
+<meta property="og:url" content="https://elysium-x57.pages.dev/resultats.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* ===== Résultats / transformations, charte « instrument », version compacte ===== */
+  .rstats{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(22px,4.5vw,60px);margin:0 auto 4px;padding:0 var(--edge)}
+  .rstat{text-align:center}
+  .rstat .v{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3vw,40px);color:var(--ice);line-height:1;letter-spacing:.01em}
+  .rstat .k{font-family:var(--disp);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-top:9px}
+
+  .tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.5vw,16px)}
+  @media(max-width:760px){.tgrid{grid-template-columns:minmax(0,1fr)}}
+  .tcard{position:relative;display:flex;flex-direction:column;background:var(--void2);border:1px solid var(--line);overflow:hidden}
+  .tcard.feat{grid-column:1/-1}
+  @media(min-width:761px){
+    .tcard.feat{flex-direction:row}
+    .tcard.feat .tphoto{width:46%;border-bottom:0;border-right:1px solid var(--line)}
+    .tcard.feat .tbody{flex:1;justify-content:center;padding:clamp(22px,2.8vw,40px)}
+  }
+  .tphoto{position:relative;aspect-ratio:1/1;background:var(--void);border-bottom:1px solid var(--line)}
+  .tphoto img{width:100%;height:100%;object-fit:cover;display:block}
+  .tphoto .play{position:absolute;inset:0;margin:auto;width:52px;height:52px;border-radius:50%;background:rgba(6,8,12,.55);border:1.5px solid rgba(255,255,255,.72);backdrop-filter:blur(2px)}
+  .tphoto .play::after{content:"";position:absolute;top:50%;left:53%;transform:translate(-50%,-50%);width:0;height:0;border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #fff}
+  .tphoto .vtag{position:absolute;left:11px;bottom:11px;display:inline-flex;gap:7px;align-items:center;font-family:var(--disp);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);background:rgba(6,8,12,.66);padding:4px 10px}
+  .tphoto .vtag::before{content:"";width:0;height:0;border-style:solid;border-width:4px 0 4px 7px;border-color:transparent transparent transparent var(--blue)}
+  .tbody{padding:18px 20px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .tnum{font-family:var(--disp);font-weight:600;font-size:clamp(23px,2.4vw,31px);line-height:1;color:var(--blue);letter-spacing:.01em}
+  .tnum small{display:block;font-size:12px;font-weight:400;letter-spacing:.05em;color:var(--steel);margin-top:6px}
+  .tquote{font-family:var(--serif);font-style:italic;font-size:clamp(14.5px,1.5vw,17px);line-height:1.5;color:var(--ice);margin:0}
+  .tframe{font-family:var(--serif);font-size:15px;line-height:1.55;color:var(--gris);margin:0}
+  .tfoot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+  .tname{font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ice)}
+  .tname i{display:block;font-style:normal;font-weight:400;font-size:10.5px;letter-spacing:.13em;color:var(--steel);margin-top:4px}
+  .tlink{font-family:var(--disp);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);white-space:nowrap;transition:color .25s}
+  .tlink:hover{color:var(--blue)}
+
+  .cta h2{line-height:1.05}
+
+  .rnote{max-width:60ch;margin:30px auto 0;text-align:center;font-family:var(--disp);font-size:11px;line-height:1.7;letter-spacing:.02em;color:var(--steel)}
+  .rmoreig{text-align:center;margin-top:24px;font-family:var(--disp);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase}
+  .rmoreig a{color:var(--blue);border-bottom:1px solid rgba(46,155,255,.4);padding-bottom:4px;transition:border-color .25s}
+  .rmoreig a:hover{border-color:var(--blue)}
+
+  /* 02, « Ce qu'ils en disent » : cartes-citations texte (pas de screenshots) */
+  .wgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  @media(max-width:860px){.wgrid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.wgrid{grid-template-columns:1fr}}
+  .wcard{position:relative;display:flex;flex-direction:column;gap:16px;padding:30px 28px 26px;border:1px solid var(--line);background:rgba(9,13,20,.4);margin:0}
+  .wcard::before{content:"«";position:absolute;top:10px;left:18px;font-family:var(--serif);font-size:60px;line-height:1;color:rgba(46,155,255,.26)}
+  .wcard .wq{position:relative;z-index:1;margin:14px 0 0;font-family:var(--serif);font-style:italic;font-size:clamp(16.5px,1.15vw,18.5px);line-height:1.62;color:var(--ice)}
+  .wcard .wq b{font-style:normal;font-weight:500;color:#fff}
+  .wcard .wa{margin-top:auto;display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
+  .wcard .wa::before{content:"";width:16px;height:1px;background:var(--blue);opacity:.75}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Aller au contenu</a>
+
+<div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
+<div class="ambscan" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+
+<header class="status">
+  <a class="logo" href="index.html" aria-label="Elysium · Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
+  <span class="mid">Résultats · transformations réelles</span>
+  <span class="rt"><span class="dot"></span>Système actif</span>
+</header>
+<nav class="menu" aria-label="Navigation principale">
+  <a href="index.html">Accueil</a>
+  <a href="methode.html">Méthode</a>
+  <a href="qui-sommes-nous.html">Coachs</a>
+  <a href="resultats.html" aria-current="page">Résultats</a>
+  <a href="formules.html">Formules</a>
+  <a href="faq.html">FAQ</a>
+  <a class="go" href="connexion.html">Connexion</a>
+</nav>
+<button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+<nav class="msheet" aria-label="Navigation mobile">
+  <a href="index.html"><span class="mnum">01</span>Accueil</a>
+  <a href="methode.html"><span class="mnum">02</span>Méthode</a>
+  <a href="qui-sommes-nous.html"><span class="mnum">03</span>Coachs</a>
+  <a href="resultats.html" aria-current="page"><span class="mnum">04</span>Résultats</a>
+  <a href="formules.html"><span class="mnum">05</span>Formules</a>
+  <a href="faq.html"><span class="mnum">06</span>FAQ</a>
+  <a class="go-m" href="connexion.html"><span class="mnum">→</span>Connexion</a>
+</nav>
+
+<main id="main">
+
+  <!-- ===================== HERO DE PAGE ===================== -->
+  <header class="phead">
+    <canvas class="pfield" aria-hidden="true"></canvas>
+    <div class="phead-in">
+      <div class="kick reveal">Résultats</div>
+      <h1 class="reveal d1">Ceux qui s'y<span class="l2">sont tenus.</span></h1>
+      <p class="sub reveal d2">Pas de promesses : des vraies personnes, des vrais chiffres. Perte de poids, prise de masse, rapport à la nourriture. Voici ce que ça donne quand on s'y tient vraiment.</p>
+    </div>
+  </header>
+
+  <!-- ===================== CHIFFRES CLÉS ===================== -->
+  <section class="sec" style="padding-bottom:0">
+    <div class="rstats reveal">
+      <div class="rstat"><div class="v">−39 kg</div><div class="k">plus grosse perte</div></div>
+      <div class="rstat"><div class="v">+15,6 kg</div><div class="k">plus grosse prise de masse</div></div>
+      <div class="rstat"><div class="v">≈400</div><div class="k">clients accompagnés</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== TRANSFORMATIONS ===================== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="no">01</span>
+        <div>
+          <span class="lbl">// Retours d'expérience</span>
+          <h2>Ils ont suivi le protocole</h2>
+        </div>
+      </div>
+
+      <div class="tgrid">
+
+        <!-- FEATURED, Théo, −39 kg -->
+        <article class="tcard feat reveal">
+          <div class="tphoto"><img src="assets/results/theo_124-85.jpg" alt="Avant / après, transformation de Théo, de 124 à 85 kg" loading="lazy" decoding="async"></div>
+          <div class="tbody">
+            <div class="tnum">−39 kg<small>124 → 85 kg</small></div>
+            <p class="tframe">L'une des plus grosses transformations accompagnées par Elysium. Une perte de poids majeure, construite dans la durée, sans régime express ni privation.</p>
+            <div class="tfoot"><span class="tname">Théo<i>Perte de poids</i></span><a class="tlink" href="https://www.instagram.com/p/Da2-DXatC1U/" target="_blank" rel="noopener">Avant/après →</a></div>
+          </div>
+        </article>
+
+        <!-- Homme 46 ans, −25 kg, VIDÉO -->
+        <article class="tcard reveal">
+          <div class="tphoto"><img src="assets/results/h46_-25.jpg" alt="Avant / après, homme de 46 ans, −25 kg" loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span><span class="vtag">Témoignage vidéo</span></div>
+          <div class="tbody">
+            <div class="tnum">−25 kg</div>
+            <p class="tquote">« Pour la première fois, je n'ai pas eu l'impression de subir mon menu. Aucune contrainte, de la variété, et le résultat a suivi. »</p>
+            <div class="tfoot"><span class="tname">Homme, 46 ans<i>Perte de poids · ex-fumeur</i></span><a class="tlink" href="https://www.instagram.com/reel/DZxf7oeNVjh/" target="_blank" rel="noopener">Voir la vidéo →</a></div>
+          </div>
+        </article>
+
+        <!-- Femme 30 ans, −23 kg, VIDÉO -->
+        <article class="tcard reveal">
+          <div class="tphoto"><img src="assets/results/f30_88-65.jpg" alt="Avant / après, femme de 30 ans, de 88 à 65 kg" loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span><span class="vtag">Témoignage vidéo</span></div>
+          <div class="tbody">
+            <div class="tnum">−23 kg<small>88 → 65 kg</small></div>
+            <p class="tquote">« Au-delà de la perte de poids, je suis extrêmement fière de mon parcours. Aujourd'hui, je ne peux plus vivre sans le sport. »</p>
+            <div class="tfoot"><span class="tname">Femme, 30 ans<i>Perte de poids &amp; bien-être</i></span><a class="tlink" href="https://www.instagram.com/reel/Dapjcg8OXMB/" target="_blank" rel="noopener">Voir la vidéo →</a></div>
+          </div>
+        </article>
+
+        <!-- Jules, +15,6 kg, avant/après complet -->
+        <article class="tcard reveal">
+          <div class="tphoto"><img src="assets/results/jules_74-90.jpg" alt="Avant / après, Jules, de 74,4 à 90 kg" loading="lazy" decoding="async"></div>
+          <div class="tbody">
+            <div class="tnum">+15,6 kg<small>74,4 → 90 kg</small></div>
+            <p class="tframe">Une prise de masse nette et sérieuse : le poids monte, la structure se construit, sans partir dans tous les sens.</p>
+            <div class="tfoot"><span class="tname">Jules<i>Prise de masse</i></span><a class="tlink" href="https://www.instagram.com/p/DZ75sPCM4Fl/" target="_blank" rel="noopener">Avant/après →</a></div>
+          </div>
+        </article>
+
+        <!-- 19 ans, +10 kg, VIDÉO -->
+        <article class="tcard reveal">
+          <div class="tphoto"><img src="assets/results/j19_63-73.jpg" alt="Avant / après, jeune homme de 19 ans, de 63 à 73 kg" loading="lazy" decoding="async"><span class="play" aria-hidden="true"></span><span class="vtag">Témoignage vidéo</span></div>
+          <div class="tbody">
+            <div class="tnum">+10 kg<small>63 → 73 kg</small></div>
+            <p class="tquote">« Si tu doutes de ce qu'une diète peut t'apporter, il te suffit de regarder : un gamin de 19 ans qui pesait à peine 63 kg. »</p>
+            <div class="tfoot"><span class="tname">19 ans<i>Prise de masse</i></span><a class="tlink" href="https://www.instagram.com/reel/DaazOpgtrE0/" target="_blank" rel="noopener">Voir la vidéo →</a></div>
+          </div>
+        </article>
+
+        <!-- 80 → 60 kg -->
+        <article class="tcard reveal">
+          <div class="tphoto"><img src="assets/results/x_80-60.jpg" alt="Avant / après, de 80 à 60 kg" loading="lazy" decoding="async"></div>
+          <div class="tbody">
+            <div class="tnum">−20 kg<small>80 → 60 kg</small></div>
+            <p class="tframe">Une silhouette qui change du tout au tout quand le cadre est clair et tenu, semaine après semaine.</p>
+            <div class="tfoot"><span class="tname">Cliente Elysium<i>Perte de poids</i></span><a class="tlink" href="https://www.instagram.com/p/DaN7b1BNnya/" target="_blank" rel="noopener">Avant/après →</a></div>
+          </div>
+        </article>
+
+        <!-- 77 → 66,5 kg -->
+        <article class="tcard reveal">
+          <div class="tphoto"><img src="assets/results/elle_77-665.jpg" alt="Avant / après, de 77 à 66,5 kg" loading="lazy" decoding="async"></div>
+          <div class="tbody">
+            <div class="tnum">−10,5 kg<small>77 → 66,5 kg</small></div>
+            <p class="tframe">« Elle l'a fait » : le résultat d'un cadre précis et d'une alimentation qui tient dans une vraie vie.</p>
+            <div class="tfoot"><span class="tname">Cliente Elysium<i>Perte de poids</i></span><a class="tlink" href="https://www.instagram.com/p/DZiDIbKtekk/" target="_blank" rel="noopener">Avant/après →</a></div>
+          </div>
+        </article>
+
+      </div>
+
+      <p class="rnote">Transformations publiées avec l'accord des clients concernés. Chaque avant/après est visible sur notre compte Instagram.</p>
+      <p class="rmoreig"><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener">Toutes les transformations sur Instagram →</a></p>
+    </div>
+  </section>
+
+  <!-- ===================== CE QU'ILS EN DISENT ===================== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="no">02</span>
+        <div>
+          <span class="lbl">// Dans leurs mots</span>
+          <h2>Ce qu'ils en disent</h2>
+        </div>
+      </div>
+      <div class="wgrid">
+        <blockquote class="wcard reveal">
+          <p class="wq">J'ai terminé le programme avec <b>8 kg perdus</b>. Avec les 4 d'avant, ça fait <b>−12 kg depuis janvier</b>. Je me suis même inscrit à un Hyrox !</p>
+          <span class="wa">Rééquilibrage</span>
+        </blockquote>
+        <blockquote class="wcard reveal d1">
+          <p class="wq">Très content : <b>+1 cm de circonférence musculaire par mois</b> sur tout le corps, avec trois séances par semaine. Hâte d'attaquer le prochain programme.</p>
+          <span class="wa">Prise de masse</span>
+        </blockquote>
+        <blockquote class="wcard reveal d2">
+          <p class="wq">J'avais peur des quantités… au final elles sont <b>grosses</b> ! Je ne me sens pas privée du tout, et j'ai l'impression de <b>mieux dormir</b>.</p>
+          <span class="wa">Perte de poids</span>
+        </blockquote>
+        <blockquote class="wcard reveal">
+          <p class="wq">C'est aussi une <b>transformation psychologique</b> : j'ai retrouvé confiance en moi et je me sens tellement mieux au quotidien. Merci pour tout.</p>
+          <span class="wa">Bien-être</span>
+        </blockquote>
+        <blockquote class="wcard reveal d1">
+          <p class="wq">Bien plus qu'une simple diète : j'ai <b>atteint mon objectif</b> et changé ma façon de vivre. Plus d'énergie, de meilleures habitudes au quotidien.</p>
+          <span class="wa">Perte de poids</span>
+        </blockquote>
+        <blockquote class="wcard reveal d2">
+          <p class="wq">Le programme est vraiment <b>bien pensé et pas contraignant</b>, c'est exactement ce que je cherchais. Merci pour la réactivité et l'accompagnement.</p>
+          <span class="wa">Accompagnement</span>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="cta">
+    <div class="cta-in reveal">
+      <div class="kick" style="justify-content:center;margin-bottom:20px">À ton tour</div>
+      <h2>Le prochain résultat, c'est le tien.</h2>
+      <p class="sub">Même méthode, même exigence. Il ne manque que ta régularité.</p>
+      <a class="btn" href="inscription.html">Construire mon programme</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="logo big"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></div>
+  <div class="foot-links"><a href="index.html">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="resultats.html">Résultats</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
+  <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

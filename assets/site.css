@@ -392,6 +392,8 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
 .partner-strip{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:48px;padding:22px 0;background:var(--void);isolation:isolate}   /* fond noir isolé -> le mix-blend-mode du logo Prozis se cale toujours sur du sombre (plus de boîte pâle selon l'endroit) */
 .partner-strip .pk{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--steel)}
 .partner-strip .pn-logo{height:27px;width:auto;mix-blend-mode:screen}
+.partner .promo,.partner-strip .promo{font-family:var(--disp);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel)}
+.partner .promo b,.partner-strip .promo b{color:var(--blue);font-weight:600;letter-spacing:.13em}
 
 /* ---------- pages légales / documents : colonne de lecture confortable ---------- */
 .legal{max-width:820px;margin:0 auto}

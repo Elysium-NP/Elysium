@@ -26,17 +26,25 @@
 .phd .who h1 span{color:var(--blue)}
 .phd .who .obj{font-family:var(--serif);font-size:15px;color:var(--gris);margin-top:10px}
 .phd .who .obj b{color:var(--ice)}
-.phd .macros{display:flex;align-items:center;gap:18px}
-.donut{position:relative;width:118px;height:118px;flex:none}
+.phd .macros{display:flex;align-items:center;gap:26px}
+.donut{position:relative;width:154px;height:154px;flex:none}
+.donut svg{filter:drop-shadow(0 0 8px rgba(46,155,255,.5));overflow:visible}
+.donut .arc{transition:opacity .3s,filter .3s}
+.donut.dim .arc{opacity:.28}
+.donut.dim .arc.hot{opacity:1;filter:drop-shadow(0 0 6px currentColor)}
 .donut .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.donut .c .v{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice);line-height:1}
-.donut .c .u{font-family:var(--disp);font-size:8px;letter-spacing:.16em;color:var(--steel);text-transform:uppercase;margin-top:3px}
-.mlist{display:flex;flex-direction:column;gap:7px;min-width:120px}
-.mrow{display:flex;align-items:center;gap:9px}
-.mrow .sw{width:9px;height:9px;flex:none}
-.mrow .l{font-family:var(--disp);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);flex:1}
-.mrow .g{font-family:var(--disp);font-weight:600;font-size:14px;color:var(--ice)}
-.mrow .p{font-family:var(--disp);font-size:10px;color:var(--steel);width:30px;text-align:right}
+.donut .c .v{font-family:var(--disp);font-weight:700;font-size:34px;color:var(--ice);line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 0 16px rgba(46,155,255,.35)}
+.donut .c .u{font-family:var(--disp);font-size:8.5px;letter-spacing:.2em;color:var(--steel);text-transform:uppercase;margin-top:4px}
+.mlist{display:flex;flex-direction:column;gap:14px;min-width:200px;flex:1}
+.mrow{display:flex;flex-direction:column;gap:6px;cursor:default}
+.mrow .top{display:flex;align-items:center;gap:9px}
+.mrow .sw{width:10px;height:10px;flex:none;border-radius:2px;box-shadow:0 0 7px currentColor}
+.mrow .l{font-family:var(--disp);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);flex:1}
+.mrow .g{font-family:var(--disp);font-weight:700;font-size:16px;color:var(--ice);font-variant-numeric:tabular-nums}
+.mrow .p{font-family:var(--disp);font-size:11px;color:var(--steel);width:34px;text-align:right}
+.mrow .bar{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.mrow .bar i{display:block;height:100%;width:0;border-radius:3px;box-shadow:0 0 8px currentColor;transition:width 1.15s cubic-bezier(.2,.7,.2,1)}
+@media(prefers-reduced-motion:reduce){.mrow .bar i{transition:none}}
 /* -- onglets (jours / courses / conseils) -- */
 .tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
@@ -64,17 +72,34 @@
 .dayoff{border:1px dashed var(--line);padding:40px 20px;text-align:center;background:rgba(46,155,255,.03)}
 .dayoff .t{font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:.05em;text-transform:uppercase;color:var(--blue)}
 .dayoff .s{font-family:var(--serif);font-size:17px;color:var(--gris);margin-top:12px;line-height:1.6}
-/* -- courses -- */
-.courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px 28px}
-.cat h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:6px}
-.cat .ci{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-family:var(--serif);font-size:16px;color:var(--gris)}
-.cat .ci b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:13px;white-space:nowrap}
-/* -- conseils -- */
-.advice{display:grid;grid-template-columns:1fr 1fr;gap:26px}
-@media(max-width:720px){.advice{grid-template-columns:1fr}}
-.advice h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
-.advice ul{list-style:none;margin:0}
-.advice li{font-family:var(--serif);font-size:16px;color:var(--gris);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4}
+/* -- courses : cartes par catégorie, cases à cocher -- */
+.courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.cat{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:15px 17px 6px;transition:border-color .3s}
+.cat:hover{border-color:rgba(46,155,255,.32)}
+.cat h4{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:4px}
+.cat h4 .n{font-size:10px;color:var(--steel);background:rgba(46,155,255,.1);border:1px solid var(--line);padding:2px 7px;letter-spacing:.05em}
+.cat .ci{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;user-select:none}
+.cat .ci:last-child{border-bottom:0}
+.cat .ci .box{width:16px;height:16px;flex:none;border:1px solid var(--steel);border-radius:3px;position:relative;transition:border-color .2s,background .2s}
+.cat .ci .nm{font-family:var(--serif);font-size:16px;color:var(--gris);flex:1;transition:color .2s}
+.cat .ci b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:13px;white-space:nowrap;transition:color .2s}
+.cat .ci:hover .box{border-color:var(--blue)}
+.cat .ci.done .box{background:var(--blue);border-color:var(--blue)}
+.cat .ci.done .box::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#04060a;font-weight:700}
+.cat .ci.done .nm{color:var(--steel);text-decoration:line-through}
+.cat .ci.done b{color:var(--steel)}
+/* -- conseils : cartes -- */
+.advice{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.acard{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:18px 20px;transition:border-color .3s}
+.acard:hover{border-color:rgba(46,155,255,.3)}
+.acard.span{grid-column:1/-1}
+.acard h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:9px}
+.acard ul{list-style:none;margin:0}
+.acard li{font-family:var(--serif);font-size:16px;color:var(--gris);padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4;transition:color .2s,padding-left .2s}
+.acard li:last-child{border-bottom:0}
+.acard li:hover{color:var(--ice);padding-left:4px}
+.acard .mini{font-family:var(--serif);font-size:15.5px;color:var(--gris);line-height:1.6}
+.suivi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
 .prozis{margin-top:30px;border:1px solid var(--line);padding:18px 22px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center}
 .prozis .pk{font-family:var(--disp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
 .prozis .pm{font-family:var(--disp);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--gris)}
@@ -181,20 +206,35 @@ var PROG = {
   document.getElementById('p-nom').innerHTML=PROG.nom[0]+' <span>'+(PROG.nom[1]||'')+'.</span>';
   document.getElementById('p-obj').innerHTML='Objectif : <b>'+PROG.objectif+'</b> · 6 jours · '+PROG.jours[0].repas.length+' repas/jour · <b style="color:var(--blue)">'+PROG.kcal+' kcal</b>/jour';
 
-  // donut macros
-  var P=PROG.P,G=PROG.G,L=PROG.L, kc=P*4+G*4+L*9;
-  var pp=Math.round(P*4/kc*100), gp=Math.round(G*4/kc*100), lp=Math.round(L*9/kc*100);
-  var R=52, C=2*Math.PI*R, aG=G*4/kc*C, aP=P*4/kc*C, aL=L*9/kc*C;
-  document.getElementById('p-donut').innerHTML=
-    '<svg viewBox="0 0 140 140" width="118" height="118">'+
-    '<circle cx="70" cy="70" r="52" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="15"/>'+
-    '<circle cx="70" cy="70" r="52" fill="none" stroke="#2E9BFF" stroke-width="15" stroke-dasharray="'+aG+' '+(C-aG)+'" transform="rotate(-90 70 70)"/>'+
-    '<circle cx="70" cy="70" r="52" fill="none" stroke="#79C2FF" stroke-width="15" stroke-dasharray="'+aP+' '+(C-aP)+'" stroke-dashoffset="'+(-aG)+'" transform="rotate(-90 70 70)"/>'+
-    '<circle cx="70" cy="70" r="52" fill="none" stroke="#37567E" stroke-width="15" stroke-dasharray="'+aL+' '+(C-aL)+'" stroke-dashoffset="'+(-(aG+aP))+'" transform="rotate(-90 70 70)"/>'+
-    '</svg><div class="c"><div class="v">'+gp+'/'+pp+'/'+lp+'</div><div class="u">G / P / L</div></div>';
-  document.getElementById('p-mlist').innerHTML=
-    row('#2E9BFF','Glucides',G,gp)+row('#79C2FF','Protéines',P,pp)+row('#37567E','Lipides',L,lp);
-  function row(c,l,g,p){ return '<div class="mrow"><span class="sw" style="background:'+c+'"></span><span class="l">'+l+'</span><span class="g">'+g+' g</span><span class="p">'+p+'%</span></div>'; }
+  // ---- macros : donut néon qui se dessine + kcal qui monte + barres + survol ----
+  (function(){
+    var P=PROG.P,G=PROG.G,L=PROG.L, kc=P*4+G*4+L*9;
+    var pp=Math.round(P*4/kc*100), gp=Math.round(G*4/kc*100), lp=Math.round(L*9/kc*100);
+    var R=54, C=2*Math.PI*R;
+    var segs=[['g','#2E9BFF',G*4],['p','#79C2FF',P*4],['l','#37567E',L*9]];
+    var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||/\bstatic\b/.test(location.search);
+    var donut=document.getElementById('p-donut');
+    donut.innerHTML='<svg viewBox="0 0 140 140" width="152" height="152">'+
+      '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="15"/>'+
+      segs.map(function(s){return '<circle class="arc a-'+s[0]+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="'+s[1]+'" color="'+s[1]+'" stroke-width="15" stroke-dasharray="0 '+C.toFixed(1)+'" transform="rotate(-90 70 70)"/>';}).join('')+
+      '</svg><div class="c"><div class="v" id="p-kc">0</div><div class="u">kcal / jour</div></div>';
+    document.getElementById('p-mlist').innerHTML=
+      lrow('g','#2E9BFF','Glucides',G,gp)+lrow('p','#79C2FF','Protéines',P,pp)+lrow('l','#37567E','Lipides',L,lp);
+    function lrow(id,c,l,g,p){ return '<div class="mrow" data-arc="'+id+'"><div class="top"><span class="sw" style="background:'+c+';color:'+c+'"></span><span class="l">'+l+'</span><span class="g">'+g+' g</span><span class="p">'+p+'%</span></div><div class="bar"><i style="background:'+c+';color:'+c+'" data-w="'+p+'"></i></div></div>'; }
+    // survol d'une macro -> les autres se ternissent, celle-ci ressort
+    [].forEach.call(document.querySelectorAll('.mrow'),function(r){
+      r.addEventListener('mouseenter',function(){ donut.classList.add('dim'); var a=donut.querySelector('.a-'+r.dataset.arc); if(a) a.classList.add('hot'); });
+      r.addEventListener('mouseleave',function(){ donut.classList.remove('dim'); [].forEach.call(donut.querySelectorAll('.arc'),function(x){x.classList.remove('hot');}); });
+    });
+    function setArcs(t){ var acc=0; segs.forEach(function(s){ var len=s[2]/kc*C*t, el=donut.querySelector('.a-'+s[0]);
+      el.setAttribute('stroke-dasharray',len.toFixed(1)+' '+(C-len).toFixed(1)); el.setAttribute('stroke-dashoffset',(-acc).toFixed(1)); acc+=len; }); }
+    function fillBars(){ [].forEach.call(document.querySelectorAll('.bar i'),function(i){ i.style.width=i.dataset.w+'%'; }); }
+    if(reduce){ setArcs(1); document.getElementById('p-kc').textContent=PROG.kcal; fillBars(); return; }
+    var t0=null, dur=1050, ease=function(x){return 1-Math.pow(1-x,3);};
+    requestAnimationFrame(function frame(ts){ if(!t0)t0=ts; var t=Math.min(1,(ts-t0)/dur), e=ease(t);
+      setArcs(e); document.getElementById('p-kc').textContent=Math.round(PROG.kcal*e); if(t<1) requestAnimationFrame(frame); });
+    setTimeout(fillBars,140);
+  })();
 
   // onglets : jours + off + courses + conseils
   var tabs=document.getElementById('tabs'), panels=document.getElementById('panels'), items=[];
@@ -226,16 +266,33 @@ var PROG = {
   }
   function coursesHTML(){
     var cats=Object.keys(PROG.courses).map(function(cn){
-      var li=PROG.courses[cn].map(function(x){return '<div class="ci"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>';}).join('');
-      return '<div class="cat"><h4>'+cn+'</h4>'+li+'</div>';
+      var arr=PROG.courses[cn];
+      var li=arr.map(function(x){return '<div class="ci"><span class="box"></span><span class="nm">'+x[0]+'</span><b>'+x[1]+'</b></div>';}).join('');
+      return '<div class="cat"><h4>'+cn+'<span class="n">'+arr.length+'</span></h4>'+li+'</div>';
     }).join('');
     return '<div class="panel" data-p><div class="courses">'+cats+'</div></div>';
   }
   function adviceHTML(){
     var c=PROG.conseils.map(function(x){return '<li>'+x+'</li>';}).join('');
     var v=PROG.modevie.map(function(x){return '<li>'+x+'</li>';}).join('');
-    return '<div class="panel" data-p><div class="advice"><div><h4>📌 Conseils essentiels</h4><ul>'+c+'</ul></div><div><h4>🏃 Mode de vie</h4><ul>'+v+'</ul></div></div></div>';
+    var suivi=[
+      ['📷 Photos avant / après','Prends 3 photos (face, profil, dos) dès maintenant, puis dans 12 semaines. Un repère visuel à coupler avec le poids.'],
+      ['⚖️ Pesée hebdomadaire','1 fois par semaine, le même jour, à jeun après les toilettes. Évite la pesée 1 à 2 jours après le jour off.'],
+      ['📏 Mensurations (optionnel)','1 fois par mois, pour un suivi encore plus complet.']
+    ].map(function(s){return '<div class="acard"><h4>'+s[0]+'</h4><div class="mini">'+s[1]+'</div></div>';}).join('');
+    return '<div class="panel" data-p><div class="advice">'+
+      '<div class="acard"><h4>📌 Conseils essentiels</h4><ul>'+c+'</ul></div>'+
+      '<div class="acard"><h4>🏃 Mode de vie</h4><ul>'+v+'</ul></div></div>'+
+      '<div class="suivi">'+suivi+'</div></div>';
   }
+
+  // cases à cocher de la liste de courses (délégation)
+  document.getElementById('panels').addEventListener('click',function(e){
+    var ci=e.target.closest && e.target.closest('.ci'); if(ci) ci.classList.toggle('done');
+  });
+
+  // lien direct vers un onglet (#courses, #conseils, #j3…)
+  var _h=(location.hash||'').replace('#',''); if(_h && document.getElementById('pan-'+_h)) select(_h);
 })();
 </script>
 <script src="assets/site.js"></script>

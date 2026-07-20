@@ -289,10 +289,13 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
 .quote blockquote::before{content:"« "}.quote blockquote::after{content:" »"}
 .quote .hl{color:var(--blue)}
 .quote figcaption{font-family:var(--disp);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel);margin-top:16px}
-.partner{margin-top:64px;display:flex;flex-direction:column;align-items:flex-start;gap:15px;padding-top:34px;border-top:1px solid var(--line)}
-.partner .pk{font-family:var(--disp);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:10px}
-.partner .pk::before{content:"";width:22px;height:1px;background:var(--blue);opacity:.6}
-.partner .pn-logo{height:40px;width:auto;mix-blend-mode:screen}   /* vrai logo Prozis (blanc/noir) : le noir disparaît sur le fond sombre */
+/* Bloc partenaire (accueil) : panneau bordé compact = UN ENSEMBLE (kicker + logo + code promo alignés) */
+.partner{margin-top:52px;display:inline-flex;align-items:center;gap:clamp(16px,2.4vw,28px);flex-wrap:wrap;padding:15px 26px;border:1px solid var(--line);background:rgba(6,8,12,.55);isolation:isolate}
+.partner .pk{font-family:var(--disp);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--steel);display:inline-flex;align-items:center;gap:10px}
+.partner .pk::before{content:"";width:20px;height:1px;background:var(--blue);opacity:.6}
+.partner .pn-logo{height:30px;width:auto;mix-blend-mode:screen}   /* logo Prozis : le noir disparaît via screen sur le fond sombre du panneau */
+.partner .promo{font-family:var(--disp);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel)}
+.partner .promo b{color:var(--blue);font-weight:600;letter-spacing:.13em}
 /* lien vers la page Résultats (sous la citation client) : soulignement bleu qui se dessine au survol */
 .creed .seemore{margin-top:34px;margin-left:28px}
 /* texte en néon bleu (repère « clique-moi » sans underline), s'intensifie au survol */

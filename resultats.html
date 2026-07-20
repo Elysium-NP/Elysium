@@ -63,10 +63,10 @@
   .rmoreig a:hover{border-color:var(--blue)}
 
   /* 02, « Ce qu'ils en disent » : cartes-citations texte (pas de screenshots) */
-  .wgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-  @media(max-width:860px){.wgrid{grid-template-columns:1fr 1fr}}
-  @media(max-width:560px){.wgrid{grid-template-columns:1fr}}
-  .wcard{position:relative;display:flex;flex-direction:column;gap:16px;padding:30px 28px 26px;border:1px solid var(--line);background:rgba(9,13,20,.4);margin:0}
+  .wgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+  .wcard{position:relative;display:flex;flex-direction:column;gap:16px;padding:30px 28px 26px;border:1px solid var(--line);background:rgba(9,13,20,.4);margin:0;flex:0 1 calc((100% - 30px)/3)}
+  @media(max-width:860px){.wcard{flex-basis:calc((100% - 16px)/2)}}
+  @media(max-width:560px){.wcard{flex-basis:100%}}
   .wcard::before{content:"«";position:absolute;top:10px;left:18px;font-family:var(--serif);font-size:60px;line-height:1;color:rgba(46,155,255,.26)}
   .wcard .wq{position:relative;z-index:1;margin:14px 0 0;font-family:var(--serif);font-style:italic;font-size:clamp(16.5px,1.15vw,18.5px);line-height:1.62;color:var(--ice)}
   .wcard .wq b{font-style:normal;font-weight:500;color:#fff}

@@ -389,7 +389,7 @@ footer .foot-links a:hover{color:var(--blue)}
 footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;color:#4a5364;text-transform:uppercase}
 
 /* ---------- mention partenaire discrète (Prozis) — bas de Méthode & Formules ---------- */
-.partner-strip{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:48px}
+.partner-strip{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:48px;padding:22px 0;background:var(--void);isolation:isolate}   /* fond noir isolé -> le mix-blend-mode du logo Prozis se cale toujours sur du sombre (plus de boîte pâle selon l'endroit) */
 .partner-strip .pk{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--steel)}
 .partner-strip .pn-logo{height:27px;width:auto;mix-blend-mode:screen}
 

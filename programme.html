@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06080C">
+<title>ELYSIUM · Mon programme</title>
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* ===== MON PROGRAMME — V2 en web (espace membre) : lisible & fonctionnel, DA du site ===== */
+.prog{max-width:1080px;margin:0 auto;padding:96px var(--edge) 60px}
+.prog .back{font-family:var(--disp);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:color .3s}
+.prog .back:hover{color:var(--blue)}
+.prog .back::before{content:"‹";font-size:18px;line-height:1}
+/* -- en-tête programme -- */
+.phd{display:flex;flex-wrap:wrap;gap:26px;align-items:center;justify-content:space-between;margin:22px 0 8px;border:1px solid var(--line);background:rgba(10,14,22,.5);padding:22px clamp(18px,3vw,30px)}
+.phd .who .kick{font-family:var(--disp);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:9px}
+.phd .who .kick::before{content:"";width:22px;height:1px;background:var(--blue)}
+.phd .who h1{font-family:var(--disp);font-weight:700;font-size:clamp(26px,5vw,40px);line-height:1;text-transform:uppercase;color:var(--ice);margin-top:8px}
+.phd .who h1 span{color:var(--blue)}
+.phd .who .obj{font-family:var(--serif);font-size:15px;color:var(--gris);margin-top:10px}
+.phd .who .obj b{color:var(--ice)}
+.phd .macros{display:flex;align-items:center;gap:18px}
+.donut{position:relative;width:118px;height:118px;flex:none}
+.donut .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut .c .v{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice);line-height:1}
+.donut .c .u{font-family:var(--disp);font-size:8px;letter-spacing:.16em;color:var(--steel);text-transform:uppercase;margin-top:3px}
+.mlist{display:flex;flex-direction:column;gap:7px;min-width:120px}
+.mrow{display:flex;align-items:center;gap:9px}
+.mrow .sw{width:9px;height:9px;flex:none}
+.mrow .l{font-family:var(--disp);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);flex:1}
+.mrow .g{font-family:var(--disp);font-weight:600;font-size:14px;color:var(--ice)}
+.mrow .p{font-family:var(--disp);font-size:10px;color:var(--steel);width:30px;text-align:right}
+/* -- onglets (jours / courses / conseils) -- */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-family:var(--disp);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:11px 16px;cursor:pointer;white-space:nowrap;transition:border-color .25s,color .25s,background .25s;flex:none}
+.tab:hover{color:var(--gris)}
+.tab.on{color:#04060a;background:var(--blue);border-color:var(--blue);font-weight:600}
+.tab.off{color:var(--steel)}
+/* -- repas du jour -- */
+.panel{display:none;padding-top:20px}
+.panel.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.meals{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.meal{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:16px 17px;display:flex;flex-direction:column}
+.meal .mh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.meal .mt{font-family:var(--disp);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:7px}
+.meal .mk{font-family:var(--disp);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);white-space:nowrap}
+.meal .rec{font-family:var(--disp);font-weight:600;font-size:18px;text-transform:uppercase;color:var(--ice);letter-spacing:.01em;line-height:1.1}
+.meal .ings{list-style:none;margin:12px 0 0;display:flex;flex-direction:column;gap:7px}
+.meal .ings li{font-family:var(--serif);font-size:16px;color:var(--gris);display:flex;gap:10px;line-height:1.35}
+.meal .ings li b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:14px;min-width:52px}
+.meal .mac{margin-top:14px;padding-top:11px;border-top:1px solid rgba(255,255,255,.06);font-family:var(--disp);font-size:11px;letter-spacing:.05em;color:var(--steel);display:flex;gap:14px}
+.meal .mac b{color:var(--gris);font-weight:600}
+.meal .seas{margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--steel)}
+.meal .seas::before{content:"🌿 ";font-style:normal}
+.dayoff{border:1px dashed var(--line);padding:40px 20px;text-align:center;background:rgba(46,155,255,.03)}
+.dayoff .t{font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:.05em;text-transform:uppercase;color:var(--blue)}
+.dayoff .s{font-family:var(--serif);font-size:17px;color:var(--gris);margin-top:12px;line-height:1.6}
+/* -- courses -- */
+.courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px 28px}
+.cat h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:6px}
+.cat .ci{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-family:var(--serif);font-size:16px;color:var(--gris)}
+.cat .ci b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:13px;white-space:nowrap}
+/* -- conseils -- */
+.advice{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:720px){.advice{grid-template-columns:1fr}}
+.advice h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.advice ul{list-style:none;margin:0}
+.advice li{font-family:var(--serif);font-size:16px;color:var(--gris);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4}
+.prozis{margin-top:30px;border:1px solid var(--line);padding:18px 22px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center}
+.prozis .pk{font-family:var(--disp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
+.prozis .pm{font-family:var(--disp);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--gris)}
+.prozis .pm b{color:var(--blue);font-weight:700}
+.pfoot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--disp);font-size:10px;letter-spacing:.04em;color:var(--steel);line-height:1.5}
+@media(max-width:600px){
+  .prog{padding-top:84px}
+  .phd{flex-direction:column;align-items:flex-start;gap:20px}
+  .meal .rec{font-size:17px}
+}
+</style>
+<script src="assets/auth-mock.js"></script>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+
+<div class="qtop" style="position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;padding:16px var(--edge);background:linear-gradient(var(--void),rgba(6,8,12,0))">
+  <a class="logo" href="index.html" aria-label="Elysium · Nutrition & Performance"><span class="n">Elysium</span><span class="np"><i class="ln l"></i><span>Nutrition &amp; Performance</span><i class="ln r"></i></span></a>
+  <span style="font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)">Mon programme</span>
+</div>
+
+<main class="prog">
+  <a class="back" href="espace.html">Retour à mon espace</a>
+
+  <div class="phd">
+    <div class="who">
+      <div class="kick">Programme nutritionnel</div>
+      <h1 id="p-nom">Sophie <span>Martin.</span></h1>
+      <div class="obj" id="p-obj"></div>
+    </div>
+    <div class="macros">
+      <div class="donut" id="p-donut"></div>
+      <div class="mlist" id="p-mlist"></div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+
+  <div class="prozis">
+    <span class="pk">Partenaire nutrition · Prozis</span>
+    <span class="pm">Code <b>ELYSIUM</b> : −10 % + cadeaux sur tout le site</span>
+  </div>
+  <div class="pfoot">© 2026 Elysium Nutrition &amp; Performance · Programme personnel et nominatif. Toute reproduction ou diffusion est interdite.</div>
+</main>
+
+<div class="demo-banner">⚠︎ Aperçu de démonstration (exemple). En vrai, ton programme s'affichera ici automatiquement une fois construit par ton coach.</div>
+
+<script>
+/* Exemple de programme (en prod : chargé depuis l'API du membre). Structure identique au moteur. */
+var PROG = {
+  nom:["Sophie","Martin"],
+  objectif:"Perte de poids / masse grasse uniquement",
+  kcal:1288, P:94, G:168, L:27,
+  jours:[
+    {j:1,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:272,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[25,29,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:504,rec:"Bœuf, pâtes & poivron",seas:"Oignon, ail, cumin, origan",ings:[["115 g","viande hachée 5%"],["80 g","pâtes"],["1/2","poivron"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[25,62,14]},
+      {type:"Dîner",emo:"🌙",kcal:480,rec:"Axoa de bœuf & semoule",seas:"Ail, thym, poivre",ings:[["95 g","viande hachée 5%"],["1","poivron"],["1/2","oignon"],["90 g","semoule"]],m:[30,75,6]}
+    ]},
+    {j:2,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:530,rec:"Thon, pâtes & concombre",seas:"Citron, ail, persil",ings:[["95 g","thon au naturel"],["95 g","pâtes"],["1/2","concombre"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[40,72,9]},
+      {type:"Dîner",emo:"🌙",kcal:525,rec:"Poisson blanc, patate douce & haricots verts",seas:"Citron, persil, ail, thym",ings:[["120 g","poisson blanc"],["300 g","patate douce"],["120 g","haricots verts"],["10 g","huile d'olive"],["15 g","parmesan"]],m:[34,62,15]}
+    ]},
+    {j:3,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:276,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[21,31,7]},
+      {type:"Déjeuner",emo:"🍴",kcal:510,rec:"Poulet, riz & tomates cerises",seas:"Paprika, ail, herbes de Provence",ings:[["125 g","filet de poulet"],["75 g","riz"],["195 g","tomates cerises"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[39,66,9]},
+      {type:"Dîner",emo:"🌙",kcal:518,rec:"Bœuf, riz & maïs (au Saint-Môret)",seas:"Ail, thym, poivre",ings:[["110 g","viande hachée 5%"],["75 g","riz"],["100 g","maïs"],["15 g","Saint-Môret léger 8%"]],m:[32,70,11]}
+    ]},
+    {j:4,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:535,rec:"Pâtes au poulet",seas:"Origan, basilic, ail, poivre",ings:[["90 g","pâtes"],["100 g","filet de poulet"],["150 g","pulpe de tomate"],["15 g","parmesan"]],m:[40,72,8]},
+      {type:"Dîner",emo:"🌙",kcal:502,rec:"Pâtes au poulet, pesto & parmesan",seas:"Basilic, ail, poivre",ings:[["80 g","pâtes"],["85 g","filet de poulet"],["10 g","huile d'olive"],["10 g","parmesan"]],m:[33,58,15]}
+    ]},
+    {j:5,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:256,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["35 g","Saint-Môret léger 8%"]],m:[19,30,6]},
+      {type:"Déjeuner",emo:"🍴",kcal:559,rec:"Steak, riz & poivron",seas:"Poivre, ail, thym",ings:[["140 g","bifteck"],["70 g","riz"],["1","poivron"],["5 g","huile d'olive"]],m:[44,61,14]},
+      {type:"Dîner",emo:"🌙",kcal:521,rec:"Poulet, semoule & ratatouille",seas:"Paprika, herbes de Provence, ail",ings:[["120 g","filet de poulet"],["80 g","semoule"],["200 g","ratatouille"],["10 g","huile d'olive"]],m:[38,58,12]}
+    ]},
+    {j:6,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:279,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[23,36,7]},
+      {type:"Déjeuner",emo:"🍴",kcal:504,rec:"Thon, blé & concombre",seas:"Citron, ail, persil",ings:[["70 g","thon au naturel"],["95 g","blé"],["1/2","concombre"],["10 g","huile d'olive"]],m:[34,63,12]},
+      {type:"Dîner",emo:"🌙",kcal:498,rec:"Thon, pâtes & maïs",seas:"Ail, basilic, poivre",ings:[["125 g","thon au naturel"],["65 g","pâtes"],["100 g","maïs"],["5 g","huile d'olive"]],m:[44,59,9]}
+    ]}
+  ],
+  courses:{
+    "Féculents / céréales":[["Blé","95 g"],["Galettes de riz","12"],["Pain complet","6 tr."],["Patate douce","300 g"],["Pâtes","410 g"],["Riz","285 g"],["Semoule","170 g"]],
+    "Protéines":[["Bifteck","140 g"],["Blanc de poulet","10 tr."],["Filet de poulet","310 g"],["Poisson blanc","120 g"],["Thon au naturel","290 g"],["Viande hachée 5%","320 g"]],
+    "Produits laitiers":[["Parmesan","65 g"],["Saint-Môret léger 8%","270 g"]],
+    "Fruits & légumes":[["Concombre","2"],["Haricots verts","120 g"],["Maïs","200 g"],["Oignon","1"],["Poivrons","5"],["Pulpe de tomate","150 g"],["Ratatouille","200 g"],["Tomates cerises","195 g"]],
+    "Divers":[["Huile d'olive","à volonté"]]
+  },
+  conseils:["🍽️ Repas réguliers (idéal 4 h d'écart)","⚖️ Aliments pesés crus","🍳 Cuisson au spray antiadhésif","🔄 Ne pas changer les plats entre les jours","🌿 Épices & herbes au choix, à volonté (sel modéré)","☕ Café & thé sans sucre","🥤 Pas de soda ni de jus industriel","🎉 Jour off : repas libres (1 cheat meal)"],
+  modevie:["🚶 10 000 pas par jour minimum","😴 8 h de sommeil","💧 ~2,2 L d'eau par jour","🍱 Batch-cooking : cuire protéines & féculents à l'avance","🍽️ Resto : protéine maigre + légumes, modère sauces & féculents"]
+};
+
+(function(){
+  var u=(window.ElyAuth&&ElyAuth.user&&ElyAuth.user())||null;
+  if(u&&u.prenom){ PROG.nom=[u.prenom,(u.nom||"").trim()]; }
+
+  document.getElementById('p-nom').innerHTML=PROG.nom[0]+' <span>'+(PROG.nom[1]||'')+'.</span>';
+  document.getElementById('p-obj').innerHTML='Objectif : <b>'+PROG.objectif+'</b> · 6 jours · '+PROG.jours[0].repas.length+' repas/jour · <b style="color:var(--blue)">'+PROG.kcal+' kcal</b>/jour';
+
+  // donut macros
+  var P=PROG.P,G=PROG.G,L=PROG.L, kc=P*4+G*4+L*9;
+  var pp=Math.round(P*4/kc*100), gp=Math.round(G*4/kc*100), lp=Math.round(L*9/kc*100);
+  var R=52, C=2*Math.PI*R, aG=G*4/kc*C, aP=P*4/kc*C, aL=L*9/kc*C;
+  document.getElementById('p-donut').innerHTML=
+    '<svg viewBox="0 0 140 140" width="118" height="118">'+
+    '<circle cx="70" cy="70" r="52" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="15"/>'+
+    '<circle cx="70" cy="70" r="52" fill="none" stroke="#2E9BFF" stroke-width="15" stroke-dasharray="'+aG+' '+(C-aG)+'" transform="rotate(-90 70 70)"/>'+
+    '<circle cx="70" cy="70" r="52" fill="none" stroke="#79C2FF" stroke-width="15" stroke-dasharray="'+aP+' '+(C-aP)+'" stroke-dashoffset="'+(-aG)+'" transform="rotate(-90 70 70)"/>'+
+    '<circle cx="70" cy="70" r="52" fill="none" stroke="#37567E" stroke-width="15" stroke-dasharray="'+aL+' '+(C-aL)+'" stroke-dashoffset="'+(-(aG+aP))+'" transform="rotate(-90 70 70)"/>'+
+    '</svg><div class="c"><div class="v">'+gp+'/'+pp+'/'+lp+'</div><div class="u">G / P / L</div></div>';
+  document.getElementById('p-mlist').innerHTML=
+    row('#2E9BFF','Glucides',G,gp)+row('#79C2FF','Protéines',P,pp)+row('#37567E','Lipides',L,lp);
+  function row(c,l,g,p){ return '<div class="mrow"><span class="sw" style="background:'+c+'"></span><span class="l">'+l+'</span><span class="g">'+g+' g</span><span class="p">'+p+'%</span></div>'; }
+
+  // onglets : jours + off + courses + conseils
+  var tabs=document.getElementById('tabs'), panels=document.getElementById('panels'), items=[];
+  PROG.jours.forEach(function(d){ items.push({id:'j'+d.j,label:'Jour '+d.j,html:dayHTML(d)}); });
+  items.push({id:'off',label:'Jour off',cls:'off',html:'<div class="panel" data-p><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
+  items.push({id:'courses',label:'Liste de courses',html:coursesHTML()});
+  items.push({id:'conseils',label:'Conseils',html:adviceHTML()});
+
+  items.forEach(function(it,i){
+    var b=document.createElement('button'); b.className='tab'+(it.cls?' '+it.cls:'')+(i===0?' on':''); b.textContent=it.label; b.dataset.t=it.id;
+    b.addEventListener('click',function(){ select(it.id); }); tabs.appendChild(b);
+    var wrap=document.createElement('div'); wrap.innerHTML=it.html; var pan=wrap.firstElementChild; pan.id='pan-'+it.id; if(i===0) pan.classList.add('on'); panels.appendChild(pan);
+  });
+  function select(id){
+    [].forEach.call(tabs.children,function(b){ b.classList.toggle('on',b.dataset.t===id); });
+    [].forEach.call(panels.children,function(p){ p.classList.toggle('on',p.id==='pan-'+id); });
+    window.scrollTo({top:tabs.offsetTop-80,behavior:'smooth'});
+  }
+
+  function dayHTML(d){
+    var m=d.repas.map(function(r){
+      var ings=r.ings.map(function(x){return '<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>';}).join('');
+      return '<div class="meal"><div class="mh"><span class="mt">'+r.emo+' '+r.type+'</span><span class="mk">'+r.kcal+' kcal</span></div>'+
+        '<div class="rec">'+r.rec+'</div><ul class="ings">'+ings+'</ul>'+
+        '<div class="seas">'+r.seas+'</div>'+
+        '<div class="mac"><span>P <b>'+r.m[0]+'</b></span><span>G <b>'+r.m[1]+'</b></span><span>L <b>'+r.m[2]+'</b></span></div></div>';
+    }).join('');
+    return '<div class="panel" data-p><div class="meals">'+m+'</div></div>';
+  }
+  function coursesHTML(){
+    var cats=Object.keys(PROG.courses).map(function(cn){
+      var li=PROG.courses[cn].map(function(x){return '<div class="ci"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>';}).join('');
+      return '<div class="cat"><h4>'+cn+'</h4>'+li+'</div>';
+    }).join('');
+    return '<div class="panel" data-p><div class="courses">'+cats+'</div></div>';
+  }
+  function adviceHTML(){
+    var c=PROG.conseils.map(function(x){return '<li>'+x+'</li>';}).join('');
+    var v=PROG.modevie.map(function(x){return '<li>'+x+'</li>';}).join('');
+    return '<div class="panel" data-p><div class="advice"><div><h4>📌 Conseils essentiels</h4><ul>'+c+'</ul></div><div><h4>🏃 Mode de vie</h4><ul>'+v+'</ul></div></div></div>';
+  }
+})();
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

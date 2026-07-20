@@ -20,7 +20,7 @@
 
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--void);color:var(--gris);font-family:var(--serif);font-size:17px;overflow-x:hidden;
+body{background:var(--void);color:var(--gris);font-family:var(--serif);font-size:18px;overflow-x:hidden;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-kerning:normal}
 ::selection{background:var(--blue);color:#04060a}
 img{display:block;max-width:100%}
@@ -181,7 +181,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 @media(prefers-reduced-motion:reduce){
   .sec-head .trace path{stroke-dashoffset:0;transition:none}.sec-head .trace .tnode{opacity:1;transition:none}
 }
-.sec p.lead{font-size:17px;line-height:1.7;color:var(--gris);max-width:62ch}
+.sec p.lead{font-size:18px;line-height:1.7;color:var(--gris);max-width:62ch}
 .sec p.lead b{color:var(--ice);font-weight:500}
 
 /* ---------- ÉQUIPE (coachs) ---------- */
@@ -218,7 +218,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .coach .body{padding:22px 24px 26px}
 .coach .role{font-family:var(--disp);font-size:12px;letter-spacing:.2em;color:var(--blue);text-transform:uppercase}
 .coach h3{font-size:34px;margin:6px 0 12px}
-.coach p{font-size:16px;line-height:1.7;color:var(--gris)}
+.coach p{font-size:17px;line-height:1.7;color:var(--gris)}
 .coach .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:20px 0 16px;border-top:1px solid var(--line);padding-top:16px}
 .coach .stats .v{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice)}
 .coach .stats .v small{font-family:var(--disp);font-size:12px;color:var(--blue);margin-left:2px}
@@ -263,7 +263,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .step:last-child{border-bottom:1px solid var(--line)}
 .step .sn{font-family:var(--disp);font-weight:600;font-size:clamp(40px,6vw,68px);color:var(--blue);line-height:.85}
 .step .st h3{font-family:var(--disp);font-weight:600;font-size:clamp(20px,2.4vw,28px);color:var(--ice);text-transform:uppercase;letter-spacing:.005em;margin-bottom:13px}
-.step .st p{font-family:var(--serif);font-weight:500;font-size:17px;line-height:1.65;color:var(--gris);max-width:62ch}
+.step .st p{font-family:var(--serif);font-weight:500;font-size:18px;line-height:1.65;color:var(--gris);max-width:62ch}
 .step .st p b{color:var(--ice);font-weight:500}
 @media(max-width:600px){.step{grid-template-columns:1fr;gap:6px;padding:26px 0}.step .sn{font-size:34px}}
 
@@ -348,12 +348,12 @@ html.reveal-ready .plan.feat.in::before{transform:translateY(-50%) scale(1);opac
 }
 .plan .pn{font-family:var(--disp);font-size:12px;letter-spacing:.2em;color:var(--blue);text-transform:uppercase}
 .plan h3{font-size:30px;margin:8px 0 4px}
-.plan .desc{font-size:15px;color:var(--steel);min-height:40px;line-height:1.45}
+.plan .desc{font-size:16px;color:var(--steel);min-height:40px;line-height:1.45}
 .plan .price{font-family:var(--disp);font-weight:600;font-size:52px;color:var(--ice);line-height:1;margin:18px 0 2px}
 .plan .price small{font-family:var(--disp);font-size:12px;color:var(--steel);letter-spacing:.06em;margin-left:4px}
 .plan .per{font-family:var(--disp);font-size:12px;letter-spacing:.1em;color:var(--steel);text-transform:uppercase;margin-bottom:22px}
 .plan ul{list-style:none;display:flex;flex-direction:column;gap:11px;margin:0 0 26px;flex:1}
-.plan li{font-size:15px;line-height:1.5;color:var(--gris);padding-left:22px;position:relative}
+.plan li{font-size:16px;line-height:1.5;color:var(--gris);padding-left:22px;position:relative}
 .plan li::before{content:"";position:absolute;left:0;top:7px;width:9px;height:9px;
   border-left:1px solid var(--blue);border-bottom:1px solid var(--blue);transform:rotate(-45deg)}
 .plan li.off{color:var(--steel);opacity:.6}
@@ -370,7 +370,7 @@ html.reveal-ready .plan.feat.in::before{transform:translateY(-50%) scale(1);opac
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:"+";font-family:var(--disp);font-size:22px;color:var(--blue);transition:transform .3s ease}
 .faq details[open] summary::after{transform:rotate(45deg)}
-.faq p{font-size:16px;line-height:1.75;color:var(--gris);max-width:70ch}
+.faq p{font-size:17px;line-height:1.75;color:var(--gris);max-width:70ch}
 
 /* bandeau CTA de bas de page */
 .cta{position:relative;text-align:center;padding:16vh var(--edge);overflow:hidden;border-top:1px solid var(--line)}

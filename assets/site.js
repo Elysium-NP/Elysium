@@ -108,18 +108,21 @@
   //      le CTA « Connexion » devient « Mon espace » -> espace.html (sinon, revenir à l'espace
   //      obligeait à repasser par le login). Remplacé par Supabase Auth en phase suivante. ----
   try {
-    if (JSON.parse(localStorage.getItem('ely_user_demo') || 'null')) {
+    var _u = JSON.parse(localStorage.getItem('ely_user_demo') || 'null');
+    if (_u) {
       document.querySelectorAll('a.go, a.go-m').forEach(function(a){
         if (!/connexion/i.test(a.getAttribute('href') || '')) return;   // clean URLs (Cloudflare Pages) : connexion.html -> /connexion
         a.setAttribute('href', 'espace.html');
         var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
         a.appendChild(document.createTextNode('Mon espace'));
       });
-      // déjà connecté : les CTA d'inscription (« Construire mon programme », « Être accompagné »…)
-      // ne renvoient plus vers l'inscription mais vers l'espace membre
+      // déjà connecté : les CTA d'inscription ne renvoient plus vers l'inscription.
+      // Payé -> espace membre ; PAS encore payé -> choix de la formule (sinon impasse : « je ne peux plus choisir »).
+      var _dest = _u.paid ? 'espace.html' : 'choisir.html';
+      var _lbl  = _u.paid ? 'Accéder à mon espace' : 'Choisir ma formule';
       document.querySelectorAll('a.btn[href*="inscription"]').forEach(function(a){
-        a.setAttribute('href', 'espace.html');
-        a.textContent = 'Accéder à mon espace';
+        a.setAttribute('href', _dest);
+        a.textContent = _lbl;
       });
     }
   } catch (e) {}

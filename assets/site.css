@@ -20,7 +20,7 @@
 
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--void);color:var(--gris);font-family:var(--serif);font-size:clamp(18px,1rem + 0.55vw,21px);overflow-x:hidden;
+body{background:var(--void);color:var(--gris);font-family:var(--serif);font-size:clamp(19px,1rem + 0.6vw,22px);overflow-x:hidden;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-kerning:normal}
 ::selection{background:var(--blue);color:#04060a}
 img{display:block;max-width:100%}
@@ -181,7 +181,7 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 @media(prefers-reduced-motion:reduce){
   .sec-head .trace path{stroke-dashoffset:0;transition:none}.sec-head .trace .tnode{opacity:1;transition:none}
 }
-.sec p.lead{font-size:clamp(18px,1rem + 0.7vw,22px);line-height:1.7;color:var(--gris);max-width:62ch}
+.sec p.lead{font-size:clamp(19px,1rem + 0.8vw,23px);line-height:1.7;color:var(--gris);max-width:62ch}
 .sec p.lead b{color:var(--ice);font-weight:500}
 
 /* ---------- ÉQUIPE (coachs) ---------- */

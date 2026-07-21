@@ -31,6 +31,8 @@
     logout: function () { localStorage.removeItem(KEY); },
     // démo paywall : bascule le statut "payé"
     setPaid: function (v) { var u = read() || {}; u.paid = !!v; write(u); },
+    // démo gating : bascule "questionnaire rempli" (le programme ne s'affiche que si payé ET rempli)
+    setQuest: function (v) { var u = read() || {}; u.quest = !!v; write(u); },
     // à mettre en haut des pages privées : redirige vers la connexion si non connecté
     requireAuth: function (redirect) {
       if (!read()) { location.replace(redirect || "connexion.html"); return false; }

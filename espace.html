@@ -51,6 +51,123 @@
   @keyframes cpulse{0%,100%{r:4.5}50%{r:6.4}}
   .card .foot-note{font-family:var(--disp);font-size:11px;color:var(--steel);margin-top:12px}
   @media(prefers-reduced-motion:reduce){.chart.draw .cline,.cplast{animation:none}.ring-svg .rprog{transition:none}}
+
+  /* ===== PROGRAMME V2 intégré (affiché si payé + questionnaire rempli) ===== */
+  #progview{margin:6px 0 30px;animation:fade .45s ease}
+  #progview[hidden]{display:none}
+  .phd{display:flex;flex-wrap:wrap;gap:26px;align-items:center;justify-content:space-between;margin:0 0 8px;border:1px solid var(--line);background:rgba(10,14,22,.5);padding:22px clamp(18px,3vw,30px)}
+  .phd .who .kick{font-family:var(--disp);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:9px}
+  .phd .who .kick::before{content:"";width:22px;height:1px;background:var(--blue)}
+  .phd .who h1{font-family:var(--disp);font-weight:700;font-size:clamp(26px,5vw,40px);line-height:1;text-transform:uppercase;color:var(--ice);margin-top:8px}
+  .phd .who h1 span{color:var(--blue)}
+  .phd .who .obj{display:flex;flex-direction:column;gap:5px;margin-top:14px}
+  .obj-lead{font-family:var(--disp);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--steel)}
+  .obj-goal{font-family:var(--disp);font-weight:600;font-size:17px;line-height:1.2;letter-spacing:.005em;color:var(--ice);text-shadow:0 0 14px rgba(46,155,255,.2)}
+  .obj-meta{font-family:var(--disp);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);margin-top:5px}
+  .obj-meta b{color:var(--blue);font-weight:600}
+  .phd .macros{display:flex;align-items:center;gap:26px}
+  .donut{position:relative;width:154px;height:154px;flex:none}
+  .donut svg{filter:drop-shadow(0 0 8px rgba(46,155,255,.5));overflow:visible}
+  .donut .arc{transition:opacity .3s,filter .3s}
+  .donut.dim .arc{opacity:.28}
+  .donut.dim .arc.hot{opacity:1;filter:drop-shadow(0 0 6px currentColor)}
+  .donut .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .donut .c .v{font-family:var(--disp);font-weight:700;font-size:34px;color:var(--ice);line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 0 16px rgba(46,155,255,.35)}
+  .donut .c .u{font-family:var(--disp);font-size:8.5px;letter-spacing:.2em;color:var(--steel);text-transform:uppercase;margin-top:4px}
+  .mlist{display:flex;flex-direction:column;gap:14px;min-width:200px;flex:1}
+  .mrow{display:flex;flex-direction:column;gap:6px;cursor:default}
+  .mrow .top{display:flex;align-items:center;gap:9px}
+  .mrow .sw{width:10px;height:10px;flex:none;border-radius:2px;box-shadow:0 0 7px currentColor}
+  .mrow .l{font-family:var(--disp);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);flex:1}
+  .mrow .g{font-family:var(--disp);font-weight:700;font-size:16px;color:var(--ice);font-variant-numeric:tabular-nums}
+  .mrow .p{font-family:var(--disp);font-size:11px;color:var(--steel);width:34px;text-align:right}
+  .mrow .bar{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+  .mrow .bar i{display:block;height:100%;width:0;border-radius:3px;box-shadow:0 0 8px currentColor;transition:width 1.15s cubic-bezier(.2,.7,.2,1)}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{font-family:var(--disp);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:11px 16px;cursor:pointer;white-space:nowrap;transition:border-color .25s,color .25s,background .25s;flex:none}
+  .tab:hover{color:var(--gris)}
+  .tab.on{color:#04060a;background:var(--blue);border-color:var(--blue);font-weight:600}
+  .panel{display:none;padding-top:20px}
+  .panel.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .meals{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .meal{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:16px 17px;display:flex;flex-direction:column}
+  .meal .mh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+  .meal .mt{font-family:var(--disp);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:7px}
+  .meal .mk{font-family:var(--disp);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);white-space:nowrap}
+  .meal .rec{font-family:var(--disp);font-weight:600;font-size:18px;text-transform:uppercase;color:var(--ice);letter-spacing:.01em;line-height:1.1}
+  .meal .ings{list-style:none;margin:12px 0 0;display:flex;flex-direction:column;gap:7px}
+  .meal .ings li{font-family:var(--serif);font-size:16px;color:var(--gris);display:flex;gap:10px;line-height:1.35}
+  .meal .ings li b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:14px;min-width:52px}
+  .meal .mac{margin-top:14px;padding-top:11px;border-top:1px solid rgba(255,255,255,.06);font-family:var(--disp);font-size:11px;letter-spacing:.05em;color:var(--steel);display:flex;gap:14px}
+  .meal .mac b{color:var(--gris);font-weight:600}
+  .meal .seas{margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--steel)}
+  .meal .seas::before{content:"🌿 ";font-style:normal}
+  .dayoff{border:1px dashed var(--line);padding:40px 20px;text-align:center;background:rgba(46,155,255,.03)}
+  .dayoff .t{font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:.05em;text-transform:uppercase;color:var(--blue)}
+  .dayoff .s{font-family:var(--serif);font-size:17px;color:var(--gris);margin-top:12px;line-height:1.6}
+  .courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+  .cat{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:15px 17px 6px;transition:border-color .3s}
+  .cat:hover{border-color:rgba(46,155,255,.32)}
+  .cat h4{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:4px}
+  .cat h4 .n{font-size:10px;color:var(--steel);background:rgba(46,155,255,.1);border:1px solid var(--line);padding:2px 7px;letter-spacing:.05em}
+  .cat .ci{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+  .cat .ci:last-child{border-bottom:0}
+  .cat .ci input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+  .cat .ci .box{width:18px;height:18px;flex:none;border:1px solid var(--steel);border-radius:3px;position:relative;transition:border-color .2s,background .2s}
+  .cat .ci .nm{font-family:var(--serif);font-size:16px;color:var(--gris);flex:1;transition:color .2s}
+  .cat .ci b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:13px;white-space:nowrap;transition:color .2s}
+  .cat .ci:hover .box{border-color:var(--blue)}
+  .cat .ci input:focus-visible ~ .box{outline:2px solid var(--blue);outline-offset:2px}
+  .cat .ci input:checked ~ .box{background:var(--blue);border-color:var(--blue)}
+  .cat .ci input:checked ~ .box::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#04060a;font-weight:700}
+  .cat .ci input:checked ~ .nm{color:var(--steel);text-decoration:line-through}
+  .cat .ci input:checked ~ b{color:var(--steel)}
+  .advice{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .acard{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:18px 20px;transition:border-color .3s}
+  .acard:hover{border-color:rgba(46,155,255,.3)}
+  .acard.span{grid-column:1/-1}
+  .acard.note{text-align:center;display:flex;flex-direction:column;justify-content:center}
+  .acard.note h4{justify-content:center}
+  .acard.note .mini{font-size:16px;line-height:1.6}
+  .suivi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+  .acard h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:9px}
+  .acard ul{list-style:none;margin:0}
+  .acard li{font-family:var(--serif);font-size:16px;color:var(--gris);padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4;transition:color .2s,padding-left .2s}
+  .acard li:last-child{border-bottom:0}
+  .acard li:hover{color:var(--ice);padding-left:4px}
+  .acard .mini{font-family:var(--serif);font-size:15.5px;color:var(--gris);line-height:1.6}
+  .acard .mini a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(46,155,255,.4)}
+  .partner-strip{margin-top:24px}
+  .pfoot{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--disp);font-size:10px;letter-spacing:.04em;color:var(--steel);line-height:1.5}
+  /* ===== améliorations : progression courses · aujourd'hui · survol · reveal · impression ===== */
+  .tabs .printbtn{margin-left:auto;flex:none}
+  .printbtn{font-family:var(--disp);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:11px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .3s,color .3s;white-space:nowrap}
+  .printbtn:hover{border-color:var(--blue);color:var(--blue)}
+  .printbtn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .courses-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  .clabel{font-family:var(--disp);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);white-space:nowrap}
+  .clabel b{color:var(--ice);font-weight:600;font-variant-numeric:tabular-nums}
+  .cprog{flex:1;min-width:140px;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+  .cprog i{display:block;height:100%;width:0;background:var(--blue);box-shadow:0 0 8px var(--blue);border-radius:3px;transition:width .45s cubic-bezier(.2,.7,.2,1)}
+  .clearbtn{font-family:var(--disp);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:8px 13px;cursor:pointer;transition:border-color .3s,color .3s}
+  .clearbtn:hover{border-color:var(--blue);color:var(--blue)}
+  .cat h4 .n .done{color:var(--blue)}
+  .cat.alldone{border-color:rgba(46,155,255,.3)}
+  .cat.alldone h4 .cn{opacity:.5}
+  .tab{position:relative}
+  .tab.today::after{content:"";position:absolute;top:6px;right:7px;width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 6px var(--blue)}
+  .tab.today.on::after{background:#04060a;box-shadow:none}
+  .meal{transition:border-color .3s,transform .3s,box-shadow .3s}
+  .meal:hover{border-color:rgba(46,155,255,.32);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.2)}100%{transform:scale(1)}}
+  .cat .ci .box.pop{animation:pop .28s ease}
+  .rv{opacity:0;transform:translateY(12px)}
+  .rv.in{opacity:1;transform:none;transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+  @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.cprog i{transition:none}.cat .ci .box.pop{animation:none}}
+  @media(max-width:600px){.phd{flex-direction:column;align-items:flex-start;gap:20px}.meal .rec{font-size:17px}.courses-top{gap:10px}}
+  @media(prefers-reduced-motion:reduce){.mrow .bar i{transition:none}#progview,.panel.on{animation:none}}
 </style>
 <script src="assets/auth-mock.js"></script>
 <script>ElyAuth.requireAuth('connexion.html');</script>
@@ -75,13 +192,16 @@
     <span>Ton suivi, en direct, plus tu pèses régulièrement, plus la courbe parle.</span>
   </div>
 
+  <!-- PROGRAMME V2 intégré : visible seulement si payé + questionnaire rempli -->
+  <section id="progview" hidden></section>
+
   <!-- TUILES DE TÉLÉMÉTRIE -->
   <div class="stats" id="stats"></div>
 
   <div class="dash-grid">
 
     <!-- COURBE DE POIDS -->
-    <div class="card wide">
+    <div class="card wide rv">
       <div class="ch"><h3>Ma courbe</h3><span class="tag">Télémétrie</span></div>
       <div class="chart" id="chart"></div>
       <div class="wrow">
@@ -95,7 +215,7 @@
     <div class="card wide locked" id="progcard"></div>
 
     <!-- PHOTOS -->
-    <div class="card">
+    <div class="card rv">
       <div class="ch"><h3>Mes photos</h3><span class="tag">Suivi</span></div>
       <p>Une photo toutes les 2 semaines vaut mille pesées. Elles restent 100&nbsp;% privées.</p>
       <label class="drop" id="drop">Glisse une photo ici, ou clique pour choisir
@@ -105,19 +225,23 @@
     </div>
 
     <!-- PROFIL -->
-    <div class="card">
+    <div class="card rv">
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
-      <p>Email : <b id="pemail" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">, </b></p>
-      <p style="margin-top:8px">Membre depuis : <b id="pdate" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.03em">, </b></p>
+      <p>Prénom : <b id="pprenom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
+      <p style="margin-top:8px">Nom : <b id="pnom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
+      <p style="margin-top:8px">Email : <b id="pemail" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
+      <p style="margin-top:8px">Membre depuis : <b id="pdate" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.03em">—</b></p>
+      <p class="foot-note" style="margin-top:12px">Âge, objectif et préférences arriveront de ton questionnaire nutrition.</p>
     </div>
 
     <!-- DÉMO -->
-    <div class="card">
+    <div class="card rv">
       <div class="ch"><h3>Coin démo</h3><span class="tag">Maquette</span></div>
-      <p>Pour visualiser l'espace <b style="color:var(--ice)">plein</b> (simulation, en attendant Stripe &amp; Supabase) :</p>
+      <p>Pour visualiser l'espace <b style="color:var(--ice)">plein</b> (simulation, en attendant Stripe &amp; Supabase). Le programme s'affiche seulement si <b style="color:var(--ice)">payé</b> ET <b style="color:var(--ice)">questionnaire rempli</b> :</p>
       <div class="dashcta">
         <button class="demolink" id="seeddata" type="button">Charger un suivi de démo</button>
         <button class="demolink" id="togglepaid" type="button">Basculer le statut « payé »</button>
+        <button class="demolink" id="togglequest" type="button">Basculer « questionnaire rempli »</button>
       </div>
     </div>
 
@@ -128,15 +252,74 @@
 
 <script src="assets/site.js"></script>
 <script>
+/* Exemple de programme (en prod : chargé depuis l'API du membre une fois construit par le coach). Structure identique au moteur. */
+var PROG = {
+  nom:["Sophie","Martin"],
+  objectif:"Perte de poids / masse grasse uniquement",
+  kcal:1288, P:94, G:168, L:27,
+  jours:[
+    {j:1,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:272,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[25,29,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:504,rec:"Bœuf, pâtes & poivron",seas:"Oignon, ail, cumin, origan",ings:[["115 g","viande hachée 5%"],["80 g","pâtes"],["1/2","poivron"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[25,62,14]},
+      {type:"Dîner",emo:"🌙",kcal:480,rec:"Axoa de bœuf & semoule",seas:"Ail, thym, poivre",ings:[["95 g","viande hachée 5%"],["1","poivron"],["1/2","oignon"],["90 g","semoule"]],m:[30,75,6]}
+    ]},
+    {j:2,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:530,rec:"Thon, pâtes & concombre",seas:"Citron, ail, persil",ings:[["95 g","thon au naturel"],["95 g","pâtes"],["1/2","concombre"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[40,72,9]},
+      {type:"Dîner",emo:"🌙",kcal:525,rec:"Poisson blanc, patate douce & haricots verts",seas:"Citron, persil, ail, thym",ings:[["120 g","poisson blanc"],["300 g","patate douce"],["120 g","haricots verts"],["10 g","huile d'olive"],["15 g","parmesan"]],m:[34,62,15]}
+    ]},
+    {j:3,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:276,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[21,31,7]},
+      {type:"Déjeuner",emo:"🍴",kcal:510,rec:"Poulet, riz & tomates cerises",seas:"Paprika, ail, herbes de Provence",ings:[["125 g","filet de poulet"],["75 g","riz"],["195 g","tomates cerises"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[39,66,9]},
+      {type:"Dîner",emo:"🌙",kcal:518,rec:"Bœuf, riz & maïs (au Saint-Môret)",seas:"Ail, thym, poivre",ings:[["110 g","viande hachée 5%"],["75 g","riz"],["100 g","maïs"],["15 g","Saint-Môret léger 8%"]],m:[32,70,11]}
+    ]},
+    {j:4,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:535,rec:"Pâtes au poulet",seas:"Origan, basilic, ail, poivre",ings:[["90 g","pâtes"],["100 g","filet de poulet"],["150 g","pulpe de tomate"],["15 g","parmesan"]],m:[40,72,8]},
+      {type:"Dîner",emo:"🌙",kcal:502,rec:"Pâtes au poulet, pesto & parmesan",seas:"Basilic, ail, poivre",ings:[["80 g","pâtes"],["85 g","filet de poulet"],["10 g","huile d'olive"],["10 g","parmesan"]],m:[33,58,15]}
+    ]},
+    {j:5,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:256,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["35 g","Saint-Môret léger 8%"]],m:[19,30,6]},
+      {type:"Déjeuner",emo:"🍴",kcal:559,rec:"Steak, riz & poivron",seas:"Poivre, ail, thym",ings:[["140 g","bifteck"],["70 g","riz"],["1","poivron"],["5 g","huile d'olive"]],m:[44,61,14]},
+      {type:"Dîner",emo:"🌙",kcal:521,rec:"Poulet, semoule & ratatouille",seas:"Paprika, herbes de Provence, ail",ings:[["120 g","filet de poulet"],["80 g","semoule"],["200 g","ratatouille"],["10 g","huile d'olive"]],m:[38,58,12]}
+    ]},
+    {j:6,repas:[
+      {type:"Petit-déjeuner",emo:"🟠",kcal:279,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[23,36,7]},
+      {type:"Déjeuner",emo:"🍴",kcal:504,rec:"Thon, blé & concombre",seas:"Citron, ail, persil",ings:[["70 g","thon au naturel"],["95 g","blé"],["1/2","concombre"],["10 g","huile d'olive"]],m:[34,63,12]},
+      {type:"Dîner",emo:"🌙",kcal:498,rec:"Thon, pâtes & maïs",seas:"Ail, basilic, poivre",ings:[["125 g","thon au naturel"],["65 g","pâtes"],["100 g","maïs"],["5 g","huile d'olive"]],m:[44,59,9]}
+    ]}
+  ],
+  courses:{
+    "Féculents / céréales":[["Blé","95 g"],["Galettes de riz","12"],["Pain complet","6 tr."],["Patate douce","300 g"],["Pâtes","410 g"],["Riz","285 g"],["Semoule","170 g"]],
+    "Protéines":[["Bifteck","140 g"],["Blanc de poulet","10 tr."],["Filet de poulet","310 g"],["Poisson blanc","120 g"],["Thon au naturel","290 g"],["Viande hachée 5%","320 g"]],
+    "Produits laitiers":[["Parmesan","65 g"],["Saint-Môret léger 8%","270 g"]],
+    "Fruits & légumes":[["Concombre","2"],["Haricots verts","120 g"],["Maïs","200 g"],["Oignon","1"],["Poivrons","5"],["Pulpe de tomate","150 g"],["Ratatouille","200 g"],["Tomates cerises","195 g"]],
+    "Divers":[["Huile d'olive","à volonté"]]
+  },
+  conseils:["🍽️ Fréquence régulière des repas (idéal 4 h)","⚖️ Aliments pesés crus","🍳 Cuisson au spray antiadhésif","🔄 Ne pas changer les plats entre les jours","🌿 Épices / herbes au choix & à volonté (sel modéré)","☕ Café & thé sans sucre","🥤 Pas de soda ni de jus industriel","🌾 Féculents « complets » possibles","🎉 Jour Off : repas libres (1 cheat meal possible)"],
+  modevie:["🚶 10 000 pas par jour minimum","😴 8 h de sommeil","💧 ~2,2 L d'eau / jour (1 L / 25 kg de poids de forme)","🍱 Astuce batch-cooking : cuisiner ses protéines & féculents à l'avance fait gagner du temps dans la semaine","🍽️ Resto / déplacement : protéine maigre + légumes, modère sauces & féculents"]
+};
 (function(){
   var u=ElyAuth.user(); if(!u) return;
   var FORM_URL='https://docs.google.com/forms/d/1vqA-7hDrKcn9HFFSwJgWW824tgrmhLbGwgKcI3FHggs/viewform';
   var WK='ely_weights_demo', GK='ely_goal_demo';
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
+  // apparition au scroll (réutilisable dashboard + programme)
+  var _io=null;
+  function reveal(scope){
+    var off=reduce||/\bstatic\b/.test(location.search)||!('IntersectionObserver' in window);
+    var els=[].slice.call((scope||document).querySelectorAll('.rv:not(.in)'));
+    if(off){ els.forEach(function(e){e.classList.add('in');}); return; }
+    if(!_io) _io=new IntersectionObserver(function(ents){ ents.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); _io.unobserve(en.target); } }); },{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(e){ _io.observe(e); });
+  }
+
   document.getElementById('prenom').textContent=u.prenom||'toi';
-  document.getElementById('pemail').textContent=u.email||', ';
-  document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):', ';
+  document.getElementById('pprenom').textContent=u.prenom||'—';
+  document.getElementById('pnom').textContent=u.nom||'—';
+  document.getElementById('pemail').textContent=u.email||'—';
+  document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):'—';
 
   function weights(){ try{ return JSON.parse(localStorage.getItem(WK)||'[]'); }catch(e){ return []; } }
   function saveW(w){ localStorage.setItem(WK,JSON.stringify(w)); }
@@ -207,31 +390,191 @@
     refresh();
   }
 
-  // ---- carte programme (paywall) ----
+  // ---- programme intégré : construit le visuel V2 dans #progview (une seule fois) ----
+  var progBuilt=false;
+  function buildProgView(){
+    if(progBuilt) return; progBuilt=true;
+    var uu=ElyAuth.user()||{}; if(uu.prenom){ PROG.nom=[uu.prenom,(uu.nom||'').trim()]; }
+    var host=document.getElementById('progview');
+    host.innerHTML=
+      '<div class="phd"><div class="who"><div class="kick">Programme nutritionnel</div>'+
+        '<h1 id="p-nom"></h1><div class="obj" id="p-obj"></div></div>'+
+        '<div class="macros"><div class="donut" id="p-donut"></div><div class="mlist" id="p-mlist"></div></div></div>'+
+      '<div class="tabs" id="tabs"></div><div id="panels"></div>'+
+      '<div class="partner-strip"><span class="pk">Partenaire nutrition</span><img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="120" height="34"><span class="promo">Code <b>ELYSIUM</b> : bénéficie d\'une réduction de 10 % + des cadeaux sur tout le site</span></div>'+
+      '<div class="pfoot">Programme personnel et nominatif. Toute reproduction ou diffusion est interdite.</div>';
+
+    document.getElementById('p-nom').innerHTML=PROG.nom[0]+' <span>'+(PROG.nom[1]||'')+'.</span>';
+    document.getElementById('p-obj').innerHTML=
+      '<span class="obj-lead">Objectif</span>'+
+      '<span class="obj-goal">'+PROG.objectif+'</span>'+
+      '<span class="obj-meta">6 jours · '+PROG.jours[0].repas.length+' repas/jour · <b>'+PROG.kcal+' kcal</b>/jour</span>';
+
+    // -- macros : donut néon qui se dessine + kcal qui monte + barres + survol --
+    (function(){
+      var P=PROG.P,G=PROG.G,L=PROG.L, kc=P*4+G*4+L*9;
+      var pp=Math.round(P*4/kc*100), gp=Math.round(G*4/kc*100), lp=Math.round(L*9/kc*100);
+      var R=54, C=2*Math.PI*R;
+      var segs=[['g','#2E9BFF',G*4],['p','#79C2FF',P*4],['l','#8AA0E0',L*9]];
+      var rmo=matchMedia('(prefers-reduced-motion:reduce)').matches||/\bstatic\b/.test(location.search);
+      var donut=document.getElementById('p-donut');
+      donut.innerHTML='<svg viewBox="0 0 140 140" width="152" height="152">'+
+        '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="15"/>'+
+        segs.map(function(s){return '<circle class="arc a-'+s[0]+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="'+s[1]+'" color="'+s[1]+'" stroke-width="15" stroke-dasharray="0 '+C.toFixed(1)+'" transform="rotate(-90 70 70)"/>';}).join('')+
+        '</svg><div class="c"><div class="v" id="p-kc">0</div><div class="u">kcal / jour</div></div>';
+      document.getElementById('p-mlist').innerHTML=
+        lrow('g','#2E9BFF','Glucides',G,gp)+lrow('p','#79C2FF','Protéines',P,pp)+lrow('l','#8AA0E0','Lipides',L,lp);
+      function lrow(id,cc,l,g,p){ return '<div class="mrow" data-arc="'+id+'"><div class="top"><span class="sw" style="background:'+cc+';color:'+cc+'"></span><span class="l">'+l+'</span><span class="g">'+g+' g</span><span class="p">'+p+'%</span></div><div class="bar"><i style="background:'+cc+';color:'+cc+'" data-w="'+p+'"></i></div></div>'; }
+      [].forEach.call(host.querySelectorAll('.mrow'),function(r){
+        r.addEventListener('mouseenter',function(){ donut.classList.add('dim'); var a=donut.querySelector('.a-'+r.dataset.arc); if(a) a.classList.add('hot'); });
+        r.addEventListener('mouseleave',function(){ donut.classList.remove('dim'); [].forEach.call(donut.querySelectorAll('.arc'),function(x){x.classList.remove('hot');}); });
+      });
+      function setArcs(t){ var acc=0; segs.forEach(function(s){ var len=s[2]/kc*C*t, el=donut.querySelector('.a-'+s[0]);
+        el.setAttribute('stroke-dasharray',len.toFixed(1)+' '+(C-len).toFixed(1)); el.setAttribute('stroke-dashoffset',(-acc).toFixed(1)); acc+=len; }); }
+      function fillBars(){ [].forEach.call(host.querySelectorAll('.bar i'),function(i){ i.style.width=i.dataset.w+'%'; }); }
+      if(rmo){ setArcs(1); document.getElementById('p-kc').textContent=PROG.kcal; fillBars(); }
+      else{
+        var t0=null, dur=1050, ease=function(x){return 1-Math.pow(1-x,3);};
+        requestAnimationFrame(function frame(ts){ if(!t0)t0=ts; var t=Math.min(1,(ts-t0)/dur), e=ease(t);
+          setArcs(e); document.getElementById('p-kc').textContent=Math.round(PROG.kcal*e); if(t<1) requestAnimationFrame(frame); });
+        setTimeout(fillBars,140);
+      }
+    })();
+
+    // -- onglets : jours + off + courses + conseils --
+    var tabs=document.getElementById('tabs'), panels=document.getElementById('panels'), items=[];
+    PROG.jours.forEach(function(d){ items.push({id:'j'+d.j,label:'Jour '+d.j,html:dayHTML(d)}); });
+    items.push({id:'off',label:'Jour off',html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
+    items.push({id:'courses',label:'Liste de courses',html:coursesHTML()});
+    items.push({id:'conseils',label:'Conseils',html:adviceHTML()});
+    var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6
+    var todayId=dow===0?'off':'j'+dow;
+    if(!items.some(function(it){return it.id===todayId;})) todayId=items[0].id;
+    items.forEach(function(it){
+      var on=it.id===todayId;
+      var b=document.createElement('button'); b.className='tab'+(on?' on':'')+(it.id===todayId?' today':''); b.textContent=it.label; b.dataset.t=it.id;
+      if(it.id===todayId) b.title='Aujourd\'hui';
+      b.addEventListener('click',function(){ select(it.id); }); tabs.appendChild(b);
+      var wrap=document.createElement('div'); wrap.innerHTML=it.html; var pan=wrap.firstElementChild; pan.id='pan-'+it.id; if(on) pan.classList.add('on');
+      panels.appendChild(pan);
+    });
+    // bouton Imprimer : au bout de la ligne d'onglets, poussé à droite (pas un onglet)
+    var pbtn=document.createElement('button'); pbtn.type='button'; pbtn.className='printbtn'; pbtn.title='Imprimer mon programme';
+    pbtn.innerHTML='<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>Imprimer';
+    tabs.appendChild(pbtn);
+    function select(id){
+      [].forEach.call(tabs.children,function(b){ b.classList.toggle('on',b.dataset.t===id); });
+      [].forEach.call(panels.children,function(p){ p.classList.toggle('on',p.id==='pan-'+id); });
+      var pan=document.getElementById('pan-'+id); if(pan) [].forEach.call(pan.querySelectorAll('.rv'),function(e){e.classList.add('in');});
+    }
+    function dayHTML(d){
+      var m=d.repas.map(function(r){
+        var ings=r.ings.map(function(x){return '<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>';}).join('');
+        return '<div class="meal rv"><div class="mh"><span class="mt">'+r.emo+' '+r.type+'</span><span class="mk">'+r.kcal+' kcal</span></div>'+
+          '<div class="rec">'+r.rec+'</div><ul class="ings">'+ings+'</ul>'+
+          '<div class="seas">'+r.seas+'</div>'+
+          '<div class="mac"><span>P <b>'+r.m[0]+'</b></span><span>G <b>'+r.m[1]+'</b></span><span>L <b>'+r.m[2]+'</b></span></div></div>';
+      }).join('');
+      return '<div class="panel"><div class="meals">'+m+'</div></div>';
+    }
+    function coursesHTML(){
+      function catEmo(n){ n=n.toLowerCase();
+        if(/oléagineux|oleagineux|divers/.test(n)) return '🥜';
+        if(/protéin|protein/.test(n)) return '🥩';
+        if(/laitier/.test(n)) return '🧀';
+        if(/fruit|légume|legume/.test(n)) return '🥑';
+        if(/féculent|feculent|céréale|cereale/.test(n)) return '🥖';
+        return '🛒'; }
+      var total=0;
+      var cats=Object.keys(PROG.courses).map(function(cn){
+        var arr=PROG.courses[cn]; total+=arr.length;
+        var li=arr.map(function(x){return '<label class="ci" data-k="'+encodeURIComponent(cn+'::'+x[0])+'"><input type="checkbox"><span class="box"></span><span class="nm">'+x[0]+'</span><b>'+x[1]+'</b></label>';}).join('');
+        return '<div class="cat rv"><h4><span class="cn">'+catEmo(cn)+' '+cn+'</span><span class="n"><b class="done">0</b> / '+arr.length+'</span></h4>'+li+'</div>';
+      }).join('');
+      return '<div class="panel">'+
+        '<div class="courses-top"><span class="clabel"><b>0</b> / '+total+' articles</span><div class="cprog"><i></i></div><button type="button" class="clearbtn">Tout décocher</button></div>'+
+        '<div class="courses">'+cats+'</div></div>';
+    }
+    function adviceHTML(){
+      var c=PROG.conseils.map(function(x){return '<li>'+x+'</li>';}).join('');
+      var v=PROG.modevie.map(function(x){return '<li>'+x+'</li>';}).join('');
+      var suivi=[
+        ['📷 Photos avant / après','Prendre 3 photos (face, profil, dos) dès maintenant, puis dans 12 semaines.<br>🎯 Objectif : un retour visuel à coupler avec l\'évolution du poids'],
+        ['⚖️ Pesée hebdomadaire','1 fois par semaine, le même jour<br>À jeun, nu, après les toilettes<br>Éviter la pesée 1 ou 2 jours après le jour off'],
+        ['📏 Mensurations (optionnel)','Prendre les mensurations 1 fois par mois pour un suivi encore plus complet.']
+      ].map(function(s){return '<div class="acard note rv"><h4>'+s[0]+'</h4><div class="mini">'+s[1]+'</div></div>';}).join('');
+      return '<div class="panel"><div class="advice">'+
+        '<div class="acard rv"><h4>📌 Conseils essentiels</h4><ul>'+c+'</ul></div>'+
+        '<div class="acard rv"><h4>🏃 Mode de vie</h4><ul>'+v+'</ul></div></div>'+
+        '<div class="suivi">'+suivi+'</div></div>';
+    }
+    // liste de courses : cases mémorisées + progression + « tout décocher »
+    (function(){
+      var panel=document.getElementById('pan-courses'); if(!panel) return;
+      var CK='ely_courses_demo';
+      var boxes=[].slice.call(panel.querySelectorAll('.ci input'));
+      var saved; try{ saved=JSON.parse(localStorage.getItem(CK)||'[]'); }catch(e){ saved=[]; }
+      function persist(){ var on=[]; boxes.forEach(function(i){ if(i.checked) on.push(i.parentNode.getAttribute('data-k')); }); localStorage.setItem(CK,JSON.stringify(on)); }
+      function counts(){ var done=0;
+        [].forEach.call(panel.querySelectorAll('.cat'),function(cat){ var ins=cat.querySelectorAll('.ci input'), d=0; [].forEach.call(ins,function(i){ if(i.checked) d++; }); done+=d;
+          var b=cat.querySelector('.n .done'); if(b) b.textContent=d; cat.classList.toggle('alldone', d>0 && d===ins.length); });
+        panel.querySelector('.clabel b').textContent=done;
+        panel.querySelector('.cprog i').style.width=(boxes.length?done/boxes.length*100:0)+'%';
+      }
+      boxes.forEach(function(inp){
+        if(saved.indexOf(inp.parentNode.getAttribute('data-k'))>-1) inp.checked=true;
+        inp.addEventListener('change',function(){
+          if(inp.checked){ var bx=inp.parentNode.querySelector('.box'); bx.classList.add('pop'); setTimeout(function(){ bx.classList.remove('pop'); },300); }
+          persist(); counts();
+        });
+      });
+      var clr=panel.querySelector('.clearbtn'); if(clr) clr.addEventListener('click',function(){ boxes.forEach(function(i){ i.checked=false; }); persist(); counts(); });
+      counts();
+    })();
+
+    // Impression : AUCUNE génération ici. En prod, le PDF (versions claire ET sombre) est créé à
+    // l'inscription, en même temps que la version en ligne ; ce bouton va juste chercher le fichier prêt.
+    var pb=host.querySelector('.printbtn'); if(pb) pb.addEventListener('click',function(){
+      alert("Impression\n\nTon programme est déjà en PDF (version claire ET sombre), généré à ton inscription en même temps que ta version en ligne. Ici on récupère juste le fichier prêt, sans rien recalculer.\n\n(Maquette : le PDF n'est pas encore branché au back-end.)");
+    });
+
+    // lien direct vers un onglet (#courses, #conseils, #j3…)
+    var _h=(location.hash||'').replace('#',''); if(_h && document.getElementById('pan-'+_h)) select(_h);
+
+    // apparition au scroll + révèle tout de suite les cartes du jour affiché
+    reveal(host);
+    var act=host.querySelector('.panel.on'); if(act) [].forEach.call(act.querySelectorAll('.rv'),function(e){ e.classList.add('in'); });
+  }
+
+  // ---- carte programme : 3 états (verrou / questionnaire / programme affiché) ----
   function renderProgram(){
-    var paid=!!(ElyAuth.user()||{}).paid, pill=document.getElementById('statuspill'), c=document.getElementById('progcard');
-    pill.textContent=paid?'Programme actif':'Compte gratuit'; pill.className='pill '+(paid?'paid':'free');
+    var uu=ElyAuth.user()||{}, paid=!!uu.paid, quest=!!uu.quest;
+    var pill=document.getElementById('statuspill'), c=document.getElementById('progcard'), pv=document.getElementById('progview');
+    if(paid && quest){
+      pill.textContent='Programme actif'; pill.className='pill paid';
+      c.hidden=true; pv.hidden=false; buildProgView();
+      return;
+    }
+    pv.hidden=true; c.hidden=false;
     if(!paid){
+      pill.textContent='Compte gratuit'; pill.className='pill free';
       c.className='card wide locked';
-      var uu=ElyAuth.user()||{}, f=uu.formule, fp=uu.formule_prix;
+      var f=uu.formule, fp=uu.formule_prix;
       var choiceLine = f
         ? '<div class="foot-note" style="margin:0 0 14px">Formule choisie&nbsp;: <b style="color:var(--ice)">'+f+'</b>'+(fp?' · '+fp:'')+' &nbsp;·&nbsp; <a href="choisir.html" style="color:var(--blue)">changer</a></div>'
         : '<div class="foot-note" style="margin:0 0 14px"><a href="choisir.html" style="color:var(--blue)">Choisir ma formule ›</a></div>';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Verrouillé</span></div>'+
-        '<div class="lockicon">🔒</div>'+
-        choiceLine+
+        '<div class="lockicon">🔒</div>'+ choiceLine+
         '<p>Ton programme sur-mesure, au gramme près, façonné à la main par un coach, se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
         '<a class="btn" href="#" id="unlock">'+(f ? 'Payer '+(fp||'')+' et débloquer' : 'Débloquer mon programme')+'</a>';
       var ub=document.getElementById('unlock');
-      if(ub) ub.addEventListener('click',function(e){ e.preventDefault(); alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » dans le coin démo.'); });
+      if(ub) ub.addEventListener('click',function(e){ e.preventDefault(); alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » puis « Basculer questionnaire rempli » dans le coin démo.'); });
     } else {
+      pill.textContent='Questionnaire à remplir'; pill.className='pill paid';
       c.className='card wide';
-      c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">Actif</span></div>'+
-        '<p>C\'est débloqué ! Réponds au questionnaire nutrition et on construit ton programme sur-mesure.</p>'+
-        '<div class="dashcta">'+
-          '<a class="btn" href="'+FORM_URL+'" target="_blank" rel="noopener">Remplir le questionnaire nutrition</a>'+
-          '<a class="btn" href="programme.html" style="border-color:var(--line);color:var(--gris)">Voir mon programme</a>'+
-        '</div>';
+      c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">À activer</span></div>'+
+        '<p>Paiement validé ✓. Dernière étape : réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et ton coach construit ton programme sur-mesure (il s\'affichera ici, en haut de ton espace, + PDF par mail).</p>'+
+        '<div class="dashcta"><a class="btn" href="'+FORM_URL+'" target="_blank" rel="noopener">Remplir le questionnaire nutrition</a></div>';
     }
   }
 
@@ -253,9 +596,11 @@
   // ---- déconnexion + démo paiement ----
   document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });
   document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
+  document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
 
   renderProgram();
   refresh();
+  reveal(document);
 })();
 </script>
 </body>

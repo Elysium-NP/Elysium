@@ -77,21 +77,10 @@ a{color:inherit;text-decoration:none}
 @media(min-width:900px){.status .mid{display:block}}
 
 /* ---------- LOGO officiel Elysium (wordmark serif + « NUTRITION & PERFORMANCE » entre traits bleus) ---------- */
-.logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none;text-transform:none}
-.logo .n{font-family:var(--serif);font-style:normal;font-weight:500;font-size:22px;letter-spacing:.4em;
-  color:var(--ice);text-transform:uppercase;padding-left:.4em}   /* padding compense l'interlettrage final -> centré */
-.logo .np{display:flex;align-items:center;gap:10px;margin-top:6px}
-.logo .np span{font-family:var(--disp);font-size:9px;letter-spacing:.32em;color:var(--gris);text-transform:uppercase;padding-left:.32em}
-.logo .np .ln{position:relative;width:24px;height:1px;background:var(--blue);opacity:.9}
-.logo .np .ln::before{content:"";position:absolute;top:50%;width:4px;height:4px;background:var(--blue);
-  transform:translateY(-50%) rotate(45deg);box-shadow:0 0 6px var(--blue)}
-.logo .np .ln.l::before{left:-1px}
-.logo .np .ln.r::before{right:-1px}
-.logo.big .n{font-size:34px;letter-spacing:.46em;padding-left:.46em}
-.logo.big .np{gap:14px;margin-top:10px}
-.logo.big .np span{font-size:11px;letter-spacing:.34em;padding-left:.34em}
-.logo.big .np .ln{width:36px}
-@media(max-width:900px){.logo .n{font-size:19px;letter-spacing:.34em;padding-left:.34em}}
+.logo{display:inline-flex;align-items:center;line-height:0;text-decoration:none}
+.logo .logom{height:40px;width:auto;display:block}          /* logo officiel Elysium (image) */
+.logo.big .logom{height:60px}                               /* footer, plus grand */
+@media(max-width:900px){.logo .logom{height:33px}}
 
 nav.menu{position:fixed;top:58px;right:var(--edge);z-index:55;display:flex;gap:26px;align-items:center}
 nav.menu a{font-family:var(--disp);font-size:13px;letter-spacing:.13em;text-transform:uppercase;color:var(--steel);transition:color .3s}

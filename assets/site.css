@@ -394,6 +394,8 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
 .partner-strip .pn-logo{height:27px;width:auto;mix-blend-mode:screen}
 .partner-strip .promo{font-family:var(--disp);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel)}
 .partner-strip .promo b{color:var(--blue);font-weight:600;letter-spacing:.13em}
+/* mobile : empilage centré (le libellé + le logo côte à côte se décalaient et rendaient mal) */
+@media(max-width:600px){.partner-strip{flex-direction:column;gap:13px;text-align:center}.partner-strip .pn-logo{height:30px}}
 
 /* ---------- pages légales / documents : colonne de lecture confortable ---------- */
 .legal{max-width:820px;margin:0 auto}

@@ -141,6 +141,13 @@
   .acard .mini a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(46,155,255,.4)}
   .partner-strip{margin-top:24px}
   .pfoot{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--disp);font-size:10px;letter-spacing:.04em;color:var(--steel);line-height:1.5}
+  /* ===== saisie des mensurations (tableau de bord, à côté des photos) ===== */
+  .mens-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px}
+  .mens-grid label{display:flex;flex-direction:column;gap:5px;font-family:var(--disp);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+  .mens-grid input{font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void);border:1px solid var(--line);padding:10px 11px;width:100%}/* 16px = pas de zoom auto iOS */
+  .mens-grid input:focus{outline:none;border-color:var(--blue)}
+  .mens-btn{margin-top:13px;font-family:var(--disp);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#04060a;background:var(--blue);border:0;padding:11px 20px;cursor:pointer;font-weight:500}
+  .mens-btn:active{transform:translateY(1px)}
   /* ===== améliorations : progression courses · aujourd'hui · survol · reveal · impression ===== */
   .tabs .printbtn{margin-left:auto;flex:none}
   .printbtn{font-family:var(--disp);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:11px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .3s,color .3s;white-space:nowrap}
@@ -166,7 +173,7 @@
   .rv{opacity:0;transform:translateY(12px)}
   .rv.in{opacity:1;transform:none;transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
   @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.cprog i{transition:none}.cat .ci .box.pop{animation:none}}
-  @media(max-width:600px){.phd{flex-direction:column;align-items:flex-start;gap:20px}.meal .rec{font-size:17px}.courses-top{gap:10px}}
+  @media(max-width:600px){.phd{flex-direction:column;align-items:flex-start;gap:20px}.phd .macros{flex-direction:column;align-items:center;gap:18px;width:100%}.mlist{min-width:0;width:100%}.meal .rec{font-size:17px}.courses-top{gap:10px}}
   @media(prefers-reduced-motion:reduce){.mrow .bar i{transition:none}#progview,.panel.on{animation:none}}
 </style>
 <script src="assets/auth-mock.js"></script>
@@ -222,6 +229,21 @@
         <input type="file" accept="image/*" hidden id="photo">
       </label>
       <p id="photomsg" class="foot-note"></p>
+    </div>
+
+    <!-- MENSURATIONS -->
+    <div class="card rv">
+      <div class="ch"><h3>Mes mensurations</h3><span class="tag">Suivi</span></div>
+      <p>Tes tours (taille, hanches, cuisse, bras, poitrine) en cm, une fois par mois. Optionnel, mais ça affine le suivi.</p>
+      <div class="mens-grid">
+        <label>Taille<input type="number" inputmode="decimal" id="m-taille" step="0.5" min="30" max="200" placeholder="cm"></label>
+        <label>Hanches<input type="number" inputmode="decimal" id="m-hanches" step="0.5" min="40" max="200" placeholder="cm"></label>
+        <label>Cuisse<input type="number" inputmode="decimal" id="m-cuisse" step="0.5" min="20" max="120" placeholder="cm"></label>
+        <label>Bras<input type="number" inputmode="decimal" id="m-bras" step="0.5" min="10" max="80" placeholder="cm"></label>
+        <label>Poitrine<input type="number" inputmode="decimal" id="m-poitrine" step="0.5" min="40" max="200" placeholder="cm"></label>
+      </div>
+      <button type="button" id="mens-save" class="mens-btn">Enregistrer</button>
+      <p id="mens-msg" class="foot-note"></p>
     </div>
 
     <!-- PROFIL -->
@@ -501,7 +523,7 @@ var PROG = {
       var suivi=[
         ['📷 Photos avant / après','Prendre 3 photos (face, profil, dos) dès maintenant, puis dans 12 semaines.<br>🎯 Objectif : un retour visuel à coupler avec l\'évolution du poids'],
         ['⚖️ Pesée hebdomadaire','1 fois par semaine, le même jour<br>À jeun, nu, après les toilettes<br>Éviter la pesée 1 ou 2 jours après le jour off'],
-        ['📏 Mensurations (optionnel)','Prendre les mensurations 1 fois par mois pour un suivi encore plus complet.']
+        ['📏 Mensurations (optionnel)','À saisir dans « Mes mensurations », sur ton tableau de bord, 1 fois par mois pour un suivi encore plus complet.']
       ].map(function(s){return '<div class="acard note rv"><h4>'+s[0]+'</h4><div class="mini">'+s[1]+'</div></div>';}).join('');
       return '<div class="panel"><div class="advice">'+
         '<div class="acard rv"><h4>📌 Conseils essentiels</h4><ul>'+c+'</ul></div>'+
@@ -592,6 +614,20 @@ var PROG = {
   var photo=document.getElementById('photo');
   document.getElementById('drop').addEventListener('click',function(){ photo.click(); });
   photo.addEventListener('change',function(){ if(photo.files&&photo.files[0]) document.getElementById('photomsg').textContent='« '+photo.files[0].name+' » sélectionnée (l\'upload réel viendra avec Supabase Storage).'; });
+
+  // ---- mensurations (démo : dernière saisie mémorisée dans le navigateur) ----
+  var MK='ely_mens_demo', mfields=['taille','hanches','cuisse','bras','poitrine'];
+  (function(){ var s; try{ s=JSON.parse(localStorage.getItem(MK)||'null'); }catch(e){ s=null; } if(!s) return;
+    mfields.forEach(function(f){ var el=document.getElementById('m-'+f); if(el&&s[f]!=null) el.value=s[f]; });
+    if(s.t) document.getElementById('mens-msg').textContent='Dernière saisie le '+new Date(s.t).toLocaleDateString('fr-FR')+'.'; })();
+  document.getElementById('mens-save').addEventListener('click',function(){
+    var obj={t:Date.now()}, n=0;
+    mfields.forEach(function(f){ var el=document.getElementById('m-'+f), v=parseFloat(String(el.value).replace(',','.')); if(v>0){ obj[f]=Math.round(v*2)/2; n++; } });
+    var msg=document.getElementById('mens-msg');
+    if(!n){ msg.textContent='Renseigne au moins une mesure.'; return; }
+    localStorage.setItem(MK,JSON.stringify(obj));
+    msg.textContent='Enregistré ('+n+' mesure'+(n>1?'s':'')+') le '+new Date().toLocaleDateString('fr-FR')+'. La sauvegarde réelle viendra avec Supabase.';
+  });
 
   // ---- déconnexion + démo paiement ----
   document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });

@@ -170,4 +170,22 @@
       io.observe(host);
     } else go();
   })();
+
+  // ---- logo : les arcs se re-dessinent au survol ET au clic (on retrouve le plaisir du chargement) ----
+  //      Web Animations API : animation NEUVE à chaque fois -> repart systématiquement, sans collision de noms.
+  if (!reduce) {
+    var elgRedraw = function(l){
+      l.querySelectorAll('.elg-ring path').forEach(function(p){
+        p.animate([
+          { strokeDashoffset: '335', filter: 'drop-shadow(0 0 0 rgba(46,155,255,0)) drop-shadow(0 0 0 rgba(46,155,255,0)) drop-shadow(0 0 0 rgba(46,155,255,0))' },
+          { filter: 'drop-shadow(0 0 4px #2E9BFF) drop-shadow(0 0 16px #2E9BFF) drop-shadow(0 0 34px rgba(46,155,255,.9))', offset: .55 },
+          { strokeDashoffset: '0', filter: 'drop-shadow(0 0 3px #2E9BFF) drop-shadow(0 0 12px #2E9BFF) drop-shadow(0 0 26px rgba(46,155,255,.8))' }
+        ], { duration: 1000, easing: 'cubic-bezier(.5,.05,.15,1)' });
+      });
+    };
+    document.querySelectorAll('.logo').forEach(function(l){
+      l.addEventListener('mouseenter', function(){ elgRedraw(l); });
+      l.addEventListener('click', function(){ elgRedraw(l); });
+    });
+  }
 })();

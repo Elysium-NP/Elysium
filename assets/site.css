@@ -78,9 +78,9 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- LOGO officiel Elysium (wordmark serif + « NUTRITION & PERFORMANCE » entre traits bleus) ---------- */
 .logo{display:inline-flex;align-items:center;line-height:0;text-decoration:none}
-.logo .logom{height:66px;width:auto;display:block}          /* logo officiel Elysium (image) */
-.logo.big .logom{height:78px}                               /* footer, plus grand */
-@media(max-width:900px){.logo .logom{height:48px}}
+.logo .logom{height:96px;width:auto;display:block}          /* logo officiel entier -> assez grand pour lire « Nutrition & Performance » */
+.logo.big .logom{height:96px}                               /* footer */
+@media(max-width:900px){.logo .logom{height:60px}}          /* mobile = rétina, lisible plus petit */
 
 nav.menu{position:fixed;top:58px;right:var(--edge);z-index:55;display:flex;gap:26px;align-items:center}
 nav.menu a{font-family:var(--disp);font-size:13px;letter-spacing:.13em;text-transform:uppercase;color:var(--steel);transition:color .3s}

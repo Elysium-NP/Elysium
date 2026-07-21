@@ -145,7 +145,10 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;color:var(--ice);text-transform
 .logo:hover .elg-ring{transform:translate(-50%,-50%) rotate(12deg)}
 .logo:hover .elg-ring path{filter:drop-shadow(0 0 7px rgba(46,155,255,.85))}
 .logo:hover .elg-name{text-shadow:0 0 22px rgba(46,155,255,.4)}
-@media(prefers-reduced-motion:reduce){.elg-ring path{stroke-dashoffset:0;animation:none}.elg-name,.elg-sub{opacity:1;animation:none}.logo:hover .elg-ring{transform:translate(-50%,-50%)}}
+.elg{transition:transform .22s cubic-bezier(.2,.7,.2,1)}          /* retour au clic (press) */
+.logo:active .elg{transform:scale(.94)}
+.elg.replay .elg-ring path{animation:elgDraw .85s cubic-bezier(.6,.05,.15,1)}   /* re-dessin des arcs au clic */
+@media(prefers-reduced-motion:reduce){.elg-ring path{stroke-dashoffset:0;animation:none}.elg-name,.elg-sub{opacity:1;animation:none}.logo:hover .elg-ring{transform:translate(-50%,-50%)}.logo:active .elg{transform:none}}
 .status .mid{display:none}
 .status .rt{display:flex;gap:8px;align-items:center;color:var(--gris)}
 .status .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);animation:blink 2.4s steps(1) infinite}
@@ -734,6 +737,13 @@ try {
         var id=a.getAttribute('href');
         if(id==='#'||id==='#top'){ e.preventDefault(); lenis.scrollTo(0,{duration:1.1}); return; }
         var el=document.querySelector(id); if(el){ e.preventDefault(); lenis.scrollTo(el,{offset:0,duration:1.1}); }
+      });
+    });
+    // retour visuel au clic du logo : les arcs se re-dessinent (sinon en haut de page rien ne se voit)
+    document.querySelectorAll('.logo').forEach(function(l){
+      l.addEventListener('click', function(){
+        var e=l.querySelector('.elg'); if(!e) return;
+        e.classList.remove('replay'); void e.offsetWidth; e.classList.add('replay');
       });
     });
   }

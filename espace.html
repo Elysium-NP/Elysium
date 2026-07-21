@@ -131,6 +131,15 @@
   .acard.note{text-align:center;display:flex;flex-direction:column;justify-content:center}
   .acard.note h4{justify-content:center}
   .acard.note .mini{font-size:16px;line-height:1.6}
+  /* cartes suivi cliquables : mènent à l'outil correspondant du tableau de bord (les gens cliquent tout) */
+  .acard.note.goto{cursor:pointer;transition:border-color .25s,transform .25s,box-shadow .25s}
+  .acard.note.goto:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .acard.note.goto:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .gohint{margin-top:13px;font-family:var(--disp);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);opacity:.82;transition:opacity .25s}
+  .acard.note.goto:hover .gohint{opacity:1}
+  @keyframes cardflash{0%,100%{box-shadow:0 0 0 0 rgba(46,155,255,0)}28%{box-shadow:0 0 0 2px var(--blue),0 0 22px rgba(46,155,255,.5)}}
+  .card.flash{animation:cardflash 1.4s ease}
+  @media(prefers-reduced-motion:reduce){.card.flash{animation:none}.acard.note.goto:hover{transform:none}}
   .suivi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
   .acard h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:9px}
   .acard ul{list-style:none;margin:0}
@@ -208,7 +217,7 @@
   <div class="dash-grid">
 
     <!-- COURBE DE POIDS -->
-    <div class="card wide rv">
+    <div class="card wide rv" id="c-courbe">
       <div class="ch"><h3>Ma courbe</h3><span class="tag">Télémétrie</span></div>
       <div class="chart" id="chart"></div>
       <div class="wrow">
@@ -222,7 +231,7 @@
     <div class="card wide locked" id="progcard"></div>
 
     <!-- PHOTOS -->
-    <div class="card rv">
+    <div class="card rv" id="c-photos">
       <div class="ch"><h3>Mes photos</h3><span class="tag">Suivi</span></div>
       <p>Une photo toutes les 2 semaines vaut mille pesées. Elles restent 100&nbsp;% privées.</p>
       <label class="drop" id="drop">Glisse une photo ici, ou clique pour choisir
@@ -232,7 +241,7 @@
     </div>
 
     <!-- MENSURATIONS -->
-    <div class="card rv">
+    <div class="card rv" id="c-mens">
       <div class="ch"><h3>Mes mensurations</h3><span class="tag">Suivi</span></div>
       <p>Tes tours (taille, hanches, cuisse, bras, poitrine) en cm, une fois par mois. Optionnel, mais ça affine le suivi.</p>
       <div class="mens-grid">
@@ -521,10 +530,10 @@ var PROG = {
       var c=PROG.conseils.map(function(x){return '<li>'+x+'</li>';}).join('');
       var v=PROG.modevie.map(function(x){return '<li>'+x+'</li>';}).join('');
       var suivi=[
-        ['📷 Photos avant / après','Prendre 3 photos (face, profil, dos) dès maintenant, puis dans 12 semaines.<br>🎯 Objectif : un retour visuel à coupler avec l\'évolution du poids'],
-        ['⚖️ Pesée hebdomadaire','1 fois par semaine, le même jour<br>À jeun, nu, après les toilettes<br>Éviter la pesée 1 ou 2 jours après le jour off'],
-        ['📏 Mensurations (optionnel)','À saisir dans « Mes mensurations », sur ton tableau de bord, 1 fois par mois pour un suivi encore plus complet.']
-      ].map(function(s){return '<div class="acard note rv"><h4>'+s[0]+'</h4><div class="mini">'+s[1]+'</div></div>';}).join('');
+        ['📷 Photos avant / après','Prendre 3 photos (face, profil, dos) dès maintenant, puis dans 12 semaines.<br>🎯 Objectif : un retour visuel à coupler avec l\'évolution du poids','c-photos','Ajouter une photo'],
+        ['⚖️ Pesée hebdomadaire','1 fois par semaine, le même jour<br>À jeun, nu, après les toilettes<br>Éviter la pesée 1 ou 2 jours après le jour off','c-courbe','Enregistrer une pesée'],
+        ['📏 Mensurations (optionnel)','À saisir dans « Mes mensurations », sur ton tableau de bord, 1 fois par mois pour un suivi encore plus complet.','c-mens','Saisir mes mensurations']
+      ].map(function(s){return '<div class="acard note rv goto" data-goto="'+s[2]+'" role="button" tabindex="0"><h4>'+s[0]+'</h4><div class="mini">'+s[1]+'</div><span class="gohint">'+s[3]+' ↓</span></div>';}).join('');
       return '<div class="panel"><div class="advice">'+
         '<div class="acard rv"><h4>📌 Conseils essentiels</h4><ul>'+c+'</ul></div>'+
         '<div class="acard rv"><h4>🏃 Mode de vie</h4><ul>'+v+'</ul></div></div>'+
@@ -628,6 +637,19 @@ var PROG = {
     localStorage.setItem(MK,JSON.stringify(obj));
     msg.textContent='Enregistré ('+n+' mesure'+(n>1?'s':'')+') le '+new Date().toLocaleDateString('fr-FR')+'. La sauvegarde réelle viendra avec Supabase.';
   });
+
+  // ---- cartes suivi cliquables : scroll + flash vers l'outil du tableau de bord ----
+  function gotoCard(id){
+    var t=document.getElementById(id); if(!t) return;
+    var y0=window.scrollY;
+    t.scrollIntoView({behavior:'smooth',block:'center'});
+    // filet : si le smooth n'a rien bougé (vieux navigateur / env sans smooth), scroll instantané garanti
+    setTimeout(function(){ if(window.scrollY===y0) t.scrollIntoView({behavior:'instant',block:'center'}); },450);
+    t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash');
+    var f=t.querySelector('input,button'); if(f) setTimeout(function(){ try{ f.focus({preventScroll:true}); }catch(e){} },700);
+  }
+  document.addEventListener('click',function(e){ var g=e.target.closest&&e.target.closest('.goto'); if(g) gotoCard(g.getAttribute('data-goto')); });
+  document.addEventListener('keydown',function(e){ if(e.key!=='Enter'&&e.key!==' ') return; var g=e.target.closest&&e.target.closest('.goto'); if(g){ e.preventDefault(); gotoCard(g.getAttribute('data-goto')); } });
 
   // ---- déconnexion + démo paiement ----
   document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });

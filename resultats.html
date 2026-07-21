@@ -54,6 +54,14 @@
   .tname i{display:block;font-style:normal;font-weight:400;font-size:10.5px;letter-spacing:.13em;color:var(--steel);margin-top:4px}
   .tlink{font-family:var(--disp);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);white-space:nowrap;transition:color .25s}
   .tlink:hover{color:var(--blue)}
+  /* photo cliquable -> Instagram : les gens cliquent le bouton lecture au milieu, pas le lien en bas */
+  .tphoto{overflow:hidden}
+  .tphoto.clik{cursor:pointer}
+  .tphoto.clik img{transition:transform .45s ease}
+  .tphoto.clik:hover img{transform:scale(1.035)}
+  .tphoto .play{transition:transform .25s,background .25s,border-color .25s}
+  .tphoto.clik:hover .play{background:rgba(46,155,255,.72);border-color:#fff;transform:scale(1.08)}
+  .tphoto.clik:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
 
   .cta h2{line-height:1.05}
 
@@ -273,5 +281,22 @@
 </footer>
 
 <script src="assets/site.js"></script>
+<script>
+/* Chaque photo (surtout celles avec le bouton lecture) mène au même Instagram que
+   son lien « Voir la vidéo / Avant-après » : les gens cliquent au milieu de l'image. */
+(function(){
+  document.querySelectorAll('.tcard').forEach(function(card){
+    var photo=card.querySelector('.tphoto'), link=card.querySelector('.tfoot .tlink');
+    if(!photo||!link) return;
+    photo.classList.add('clik');
+    photo.setAttribute('role','link');
+    photo.setAttribute('tabindex','0');
+    photo.setAttribute('aria-label', card.querySelector('.play') ? 'Voir la vidéo sur Instagram' : 'Voir l\'avant/après sur Instagram');
+    function go(){ window.open(link.href,'_blank','noopener'); }
+    photo.addEventListener('click',go);
+    photo.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+  });
+})();
+</script>
 </body>
 </html>

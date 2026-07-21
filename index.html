@@ -126,10 +126,26 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;color:var(--ice);text-transform
 .logo.big .np{gap:14px;margin-top:10px}.logo.big .np span{font-size:11px;letter-spacing:.34em;padding-left:.34em}.logo.big .np .ln{width:36px}
 @media(max-width:900px){.logo .n{font-size:19px;letter-spacing:.34em;padding-left:.34em}}
 /* logo officiel EN IMAGE (auto-suffisant, ne dépend pas du cache de site.css) */
-.logo .logom{height:96px;width:auto;display:block}
-.logo.big .logom{height:96px;width:auto}
-.boot .logo.big .logom{height:132px}            /* écran de boot = splash plus grand */
-@media(max-width:900px){.logo .logom{height:60px}.boot .logo.big .logom{height:96px}}
+/* ===== LOGO ELYSIUM vectoriel + animé (index est autonome -> composant complet inline) ===== */
+.logo .elg{--h:72px}
+.logo.big .elg{--h:88px}
+.boot .logo.big .elg{--h:132px}
+@media(max-width:900px){.logo .elg{--h:52px}.boot .logo.big .elg{--h:96px}}
+.elg{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;height:var(--h);line-height:1;padding:0 calc(var(--h)*.1)}
+.elg-ring{position:absolute;left:50%;top:50%;width:var(--h);height:var(--h);overflow:visible;pointer-events:none;transform:translate(-50%,-50%);transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.elg-ring path{stroke-dasharray:335;stroke-dashoffset:335;filter:drop-shadow(0 0 2.5px rgba(46,155,255,.45));transition:filter .45s;animation:elgDraw 1.25s cubic-bezier(.6,.05,.15,1) .15s forwards}
+@keyframes elgDraw{to{stroke-dashoffset:0}}
+.elg-name{position:relative;z-index:1;font-family:var(--serif);font-weight:500;font-size:calc(var(--h)*.315);letter-spacing:.17em;padding-left:.17em;color:#fff;text-transform:uppercase;transition:text-shadow .45s;opacity:0;animation:elgFade .6s ease .35s forwards}
+.elg-sub{position:relative;z-index:1;display:flex;align-items:center;gap:.55em;margin-top:calc(var(--h)*.035);font-family:var(--disp);font-weight:500;font-size:calc(var(--h)*.086);letter-spacing:.24em;padding-left:.24em;color:#eaf0fb;text-transform:uppercase;white-space:nowrap;opacity:0;animation:elgFade .7s ease .7s forwards}
+@keyframes elgFade{to{opacity:1}}
+.elg-sub b{color:var(--blue);font-weight:600;text-shadow:0 0 8px rgba(46,155,255,.55)}
+.elg-sub i{width:calc(var(--h)*.13);height:1px;background:var(--blue);position:relative;flex:none;box-shadow:0 0 6px rgba(46,155,255,.6)}
+.elg-sub i::before{content:"";position:absolute;top:50%;width:3px;height:3px;background:var(--blue);transform:translateY(-50%) rotate(45deg)}
+.elg-sub i.l::before{left:-1px}.elg-sub i.r::before{right:-1px}
+.logo:hover .elg-ring{transform:translate(-50%,-50%) rotate(12deg)}
+.logo:hover .elg-ring path{filter:drop-shadow(0 0 7px rgba(46,155,255,.85))}
+.logo:hover .elg-name{text-shadow:0 0 22px rgba(46,155,255,.4)}
+@media(prefers-reduced-motion:reduce){.elg-ring path{stroke-dashoffset:0;animation:none}.elg-name,.elg-sub{opacity:1;animation:none}.logo:hover .elg-ring{transform:translate(-50%,-50%)}}
 .status .mid{display:none}
 .status .rt{display:flex;gap:8px;align-items:center;color:var(--gris)}
 .status .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);animation:blink 2.4s steps(1) infinite}
@@ -453,7 +469,7 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
   <span class="boot-scan"></span>
   <div class="boot-in">
     <span class="bc tl"></span><span class="bc tr"></span><span class="bc bl"></span><span class="bc br"></span>
-    <div class="logo big"><img class="logom" src="assets/logo-officiel.png" alt=""></div>
+    <div class="logo big"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></div>
     <div class="boot-bar"><i></i></div>
     <div class="boot-cap"><span>Calibration</span><b>Sur-mesure</b></div>
   </div>
@@ -484,7 +500,7 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
 <div class="grain" aria-hidden="true"></div>
 <div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
 <header class="status">
-  <a class="logo" href="#top" aria-label="Elysium · Nutrition & Performance"><img class="logom" src="assets/logo-officiel.png" alt=""></a>
+  <a class="logo" href="#top" aria-label="Elysium · Nutrition & Performance"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></a>
   <span class="mid">Protocole nutritionnel · calibré au gramme</span>
   <span class="rt"><span class="dot"></span>Système actif</span>
 </header>
@@ -690,7 +706,7 @@ try {
 </main>
 
 <footer>
-  <div class="logo big"><img class="logom" src="assets/logo-officiel.png" alt=""></div>
+  <div class="logo big"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></div>
   <div class="foot-links"><a href="#top">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
   <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
 </footer>

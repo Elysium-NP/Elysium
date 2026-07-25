@@ -45,6 +45,22 @@
 }
 </script>
 <link rel="stylesheet" href="assets/site.css">
+<style>
+  /* ===== Formule 01 — hiérarchie de prix commerciale (Dimitri 25/07) ===== */
+  .plan01 .price01{margin:16px 0 0;line-height:1}
+  .plan01 .old{font-family:var(--disp);color:var(--steel);opacity:.8;text-decoration:line-through;
+    text-decoration-color:rgba(120,132,148,.6);white-space:nowrap;display:inline-block}
+  .plan01 .old .o1{font-size:27px;font-weight:600;letter-spacing:.01em}
+  .plan01 .old .o2{font-size:14px;font-weight:500;vertical-align:.5em;margin-left:1px}
+  .plan01 .now{display:flex;align-items:flex-start;font-family:var(--disp);color:var(--ice);margin-top:6px}
+  .plan01 .now .n1{font-size:74px;font-weight:700;letter-spacing:-.015em;line-height:.82;
+    text-shadow:0 0 24px rgba(46,155,255,.16)}
+  .plan01 .now .cur{font-size:29px;font-weight:600;margin:7px 0 0 5px}
+  .plan01 .now .n2{font-size:25px;font-weight:600;margin:7px 0 0 1px;letter-spacing:.01em}
+  .plan01 .pterm{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--blue);margin-top:12px}
+  .plan01 .pfine{font-family:var(--disp);font-size:12.5px;line-height:1.5;color:var(--steel);margin:6px 0 22px}
+</style>
 </head>
 <body>
 
@@ -105,22 +121,27 @@
 
       <div class="plans">
 
-        <!-- FORMULE 1 : programmation nutritionnelle -->
-        <article class="plan reveal">
+        <!-- FORMULE 1 : programmation nutritionnelle (carte prix commerciale — Dimitri 25/07) -->
+        <article class="plan plan01 reveal">
           <span class="pn">Formule 01</span>
           <h3>Programmation nutritionnelle</h3>
           <p class="desc">Ton programme alimentaire sur-mesure, prêt à suivre.</p>
-          <div class="price">69,90 <small>€</small></div>
-          <div class="per">Programme · une fois</div>
+          <div class="price01">
+            <span class="old"><span class="o1">79</span><span class="o2">€99</span></span>
+            <div class="now"><span class="n1">59</span><span class="cur">€</span><span class="n2">99</span></div>
+          </div>
+          <div class="pterm">Programme&nbsp;•&nbsp;8 semaines</div>
+          <p class="pfine">59,99 € pour 8 semaines, puis à partir de 14,99 € toutes les 4 semaines.</p>
           <ul>
-            <li>Répartition sur plusieurs repas, plats élaborés</li>
+            <li>Programmation alimentaire 100 % personnalisée</li>
+            <li>Repas adaptés à ton objectif, tes préférences et tes contraintes</li>
+            <li>Réajustable chaque semaine, toutes les 2 ou toutes les 4 semaines</li>
+            <li>Suivi du poids directement dans l'application</li>
+            <li>Suivi des mensurations</li>
+            <li>Liste de courses regroupée automatiquement</li>
             <li>Tableau des apports en grammes &amp; calories</li>
-            <li>Liste de courses regroupée</li>
-            <li>Conseils hydratation, sommeil &amp; activité</li>
-            <li class="off">Programme d'entraînement</li>
-            <li class="off">Suivi &amp; ajustements</li>
           </ul>
-          <a class="btn" href="inscription.html">Construire mon programme</a>
+          <a class="btn" href="espace.html">Accéder à mon espace</a>
         </article>
 
         <!-- FORMULE 2 : le pack (recommandée, -15%) -->

@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Elysium · Nutrition &amp; Performance">
 <meta property="og:title" content="ELYSIUM · Les formules">
-<meta property="og:description" content="Programmation nutritionnelle, pack nutrition + sport ou coaching complet, choisis ton accompagnement.">
+<meta property="og:description" content="Ta programmation nutritionnelle sur-mesure, construite à partir de ton questionnaire par les coachs Elysium. 59,99 € pour 8 semaines.">
 <meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
 <meta property="og:url" content="https://elysium-x57.pages.dev/formules.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -24,24 +24,16 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "serviceType": "Coaching nutritionnel et sportif personnalisé",
-  "name": "Accompagnement Elysium",
+  "serviceType": "Programmation nutritionnelle personnalisée",
+  "name": "Programmation nutritionnelle Elysium",
   "provider": {
     "@type": "Organization",
     "name": "Elysium · Nutrition & Performance",
     "url": "https://elysium-x57.pages.dev/"
   },
   "areaServed": { "@type": "Country", "name": "France" },
-  "description": "Programmation nutritionnelle et sportive personnalisée, à distance, construite sur-mesure par les coachs Elysium à partir d'un questionnaire.",
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Formules Elysium",
-    "itemListElement": [
-      { "@type": "Offer", "priceCurrency": "EUR", "price": "69.90", "itemOffered": { "@type": "Service", "name": "Programmation nutritionnelle" } },
-      { "@type": "Offer", "priceCurrency": "EUR", "price": "118.83", "itemOffered": { "@type": "Service", "name": "Pack nutrition + sport" } },
-      { "@type": "Offer", "priceCurrency": "EUR", "price": "99.90", "itemOffered": { "@type": "Service", "name": "Coaching complet (période de 4 semaines)" } }
-    ]
-  }
+  "description": "Programmation nutritionnelle personnalisée, à distance, construite sur-mesure par les coachs Elysium à partir d'un questionnaire.",
+  "offers": { "@type": "Offer", "priceCurrency": "EUR", "price": "59.99", "itemOffered": { "@type": "Service", "name": "Programmation nutritionnelle (8 semaines)" } }
 }
 </script>
 <link rel="stylesheet" href="assets/site.css">
@@ -60,6 +52,8 @@
   .plan01 .pterm{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.16em;
     text-transform:uppercase;color:var(--blue);margin-top:12px}
   .plan01 .pfine{font-family:var(--disp);font-size:12.5px;line-height:1.5;color:var(--steel);margin:6px 0 22px}
+  /* une seule formule pour l'instant -> carte centrée et mise en avant (Dimitri 25/07) */
+  .plans.solo{grid-template-columns:1fr;max-width:432px;margin:0 auto}
 </style>
 </head>
 <body>
@@ -102,9 +96,9 @@
   <header class="phead">
     <canvas class="pfield" aria-hidden="true"></canvas>
     <div class="phead-in">
-      <div class="kick reveal">Les formules</div>
-      <h1 class="reveal d1">Choisis ton<span class="l2">accompagnement.</span></h1>
-      <p class="sub reveal d2">Du programme seul au suivi rapproché. Même précision derrière chaque formule ; ce qui change, c'est à quel point les coachs t'accompagnent.</p>
+      <div class="kick reveal">La formule</div>
+      <h1 class="reveal d1">Ta programmation<span class="l2">nutritionnelle.</span></h1>
+      <p class="sub reveal d2">Ton programme alimentaire sur-mesure, construit à partir de ton questionnaire. Au gramme près, prêt à suivre.</p>
     </div>
   </header>
 
@@ -114,12 +108,12 @@
       <div class="sec-head reveal">
         <span class="no">01</span>
         <div>
-          <span class="lbl">// Nos formules</span>
-          <h2>Une formule par besoin</h2>
+          <span class="lbl">// La formule</span>
+          <h2>Ta programmation nutritionnelle</h2>
         </div>
       </div>
 
-      <div class="plans">
+      <div class="plans solo">
 
         <!-- FORMULE 1 : programmation nutritionnelle (carte prix commerciale — Dimitri 25/07) -->
         <article class="plan plan01 reveal">
@@ -141,45 +135,11 @@
             <li>Liste de courses regroupée automatiquement</li>
             <li>Tableau des apports en grammes &amp; calories</li>
           </ul>
-          <a class="btn" href="espace.html">Accéder à mon espace</a>
-        </article>
-
-        <!-- FORMULE 2 : le pack (recommandée, -15%) -->
-        <article class="plan feat reveal d1">
-          <span class="pn">Formule 02 · −15 %</span>
-          <h3>Le Pack nutrition + sport</h3>
-          <p class="desc">Les deux programmations réunies, la formule la plus complète, en une fois.</p>
-          <div class="price">118,83 <small>€</small></div>
-          <div class="per">Les deux programmes · une fois</div>
-          <ul>
-            <li>Ta programmation nutritionnelle complète</li>
-            <li>Ta programmation sportive personnalisée</li>
-            <li>Force, renforcement, recomposition, masse ou perte de poids</li>
-            <li>Remise de 15 % sur les deux programmes</li>
-            <li class="off">Suivi hebdomadaire &amp; échanges</li>
-          </ul>
-          <a class="btn" href="inscription.html">Construire mon programme</a>
-        </article>
-
-        <!-- FORMULE 3 : coaching complet -->
-        <article class="plan reveal d2">
-          <span class="pn">Formule 03</span>
-          <h3>Coaching complet</h3>
-          <p class="desc">Nutrition, entraînement et suivi rapproché, sur 4 semaines.</p>
-          <div class="price">99,90 <small>€</small></div>
-          <div class="per">par période de 4 semaines</div>
-          <ul>
-            <li>Programmation nutritionnelle &amp; sportive</li>
-            <li>Suivi des résultats &amp; ajustements hebdomadaires</li>
-            <li>Disponibilité à distance 7 j/7 pour tes questions</li>
-            <li>Correction de mouvements à distance (vidéos)</li>
-            <li>Renouvelable sans engagement</li>
-          </ul>
-          <a class="btn" href="inscription.html">Être accompagné</a>
+          <a class="btn" href="connexion.html">Accéder à mon espace</a>
         </article>
 
       </div>
-      <p class="lead reveal" style="margin-top:26px;color:var(--steel);font-size:15px;line-height:1.7"><b style="color:var(--gris)">Programmation sportive seule</b> : 69,90 €. Un supplément de <b style="color:var(--gris)">+20 €</b> s'applique en cas de restrictions alimentaires spécifiques, contraintes importantes ou adaptations complexes. Prix nets, TVA non applicable (article 293 B du CGI). Voir les <a href="cgv.html" style="color:var(--blue)">conditions générales de vente</a>.</p>
+      <p class="lead reveal" style="margin-top:26px;color:var(--steel);font-size:15px;line-height:1.7">Un supplément de <b style="color:var(--gris)">+20 €</b> s'applique en cas de restrictions alimentaires spécifiques, contraintes importantes ou adaptations complexes. Prix nets, TVA non applicable (article 293 B du CGI). Voir les <a href="cgv.html" style="color:var(--blue)">conditions générales de vente</a>.</p>
       <div class="partner-strip"><span class="pk">Partenaire nutrition</span><img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="120" height="34"><span class="promo">Code <b>ELYSIUM</b> : bénéficie d'une réduction de 10 % + des cadeaux sur tout le site</span></div>
     </div>
   </section>

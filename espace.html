@@ -208,10 +208,14 @@
     <span>Ton suivi, en direct, plus tu pèses régulièrement, plus la courbe parle.</span>
   </div>
 
+  <!-- ===== SECTION 1 · QUESTIONNAIRE & PROGRAMMATION (Dimitri 25/07) ===== -->
   <!-- PROGRAMME V2 intégré : visible seulement si payé + questionnaire rempli -->
   <section id="progview" hidden></section>
+  <!-- Carte programme (verrou / CTA questionnaire) — mutuellement exclusive avec #progview -->
+  <div class="card wide locked" id="progcard" style="margin-bottom:16px"></div>
 
-  <!-- TUILES DE TÉLÉMÉTRIE -->
+  <!-- ===== SECTION 2 · POIDS & MENSURATIONS (suivi physique) ===== -->
+  <!-- TUILES DE TÉLÉMÉTRIE (poids) -->
   <div class="stats" id="stats"></div>
 
   <div class="dash-grid">
@@ -227,10 +231,23 @@
       </div>
     </div>
 
-    <!-- PROGRAMME (paywall) -->
-    <div class="card wide locked" id="progcard"></div>
+    <!-- MENSURATIONS (regroupé avec le poids — suivi physique) -->
+    <div class="card rv" id="c-mens">
+      <div class="ch"><h3>Mes mensurations</h3><span class="tag">Suivi</span></div>
+      <p>Tes tours (épaules, poitrine, taille, hanches, cuisse, bras) en cm, une fois par mois. Optionnel, mais ça affine le suivi.</p>
+      <div class="mens-grid">
+        <label>Épaules<input type="number" inputmode="decimal" id="m-epaules" step="0.5" min="60" max="160" placeholder="cm"></label>
+        <label>Poitrine<input type="number" inputmode="decimal" id="m-poitrine" step="0.5" min="40" max="200" placeholder="cm"></label>
+        <label>Taille<input type="number" inputmode="decimal" id="m-taille" step="0.5" min="30" max="200" placeholder="cm"></label>
+        <label>Hanches<input type="number" inputmode="decimal" id="m-hanches" step="0.5" min="40" max="200" placeholder="cm"></label>
+        <label>Cuisse<input type="number" inputmode="decimal" id="m-cuisse" step="0.5" min="20" max="120" placeholder="cm"></label>
+        <label>Bras<input type="number" inputmode="decimal" id="m-bras" step="0.5" min="10" max="80" placeholder="cm"></label>
+      </div>
+      <button type="button" id="mens-save" class="mens-btn">Enregistrer</button>
+      <p id="mens-msg" class="foot-note"></p>
+    </div>
 
-    <!-- PHOTOS -->
+    <!-- PHOTOS (suivi physique) -->
     <div class="card rv" id="c-photos">
       <div class="ch"><h3>Mes photos</h3><span class="tag">Suivi</span></div>
       <p>Une photo toutes les 2 semaines vaut mille pesées. Elles restent 100&nbsp;% privées.</p>
@@ -238,21 +255,6 @@
         <input type="file" accept="image/*" hidden id="photo">
       </label>
       <p id="photomsg" class="foot-note"></p>
-    </div>
-
-    <!-- MENSURATIONS -->
-    <div class="card rv" id="c-mens">
-      <div class="ch"><h3>Mes mensurations</h3><span class="tag">Suivi</span></div>
-      <p>Tes tours (taille, hanches, cuisse, bras, poitrine) en cm, une fois par mois. Optionnel, mais ça affine le suivi.</p>
-      <div class="mens-grid">
-        <label>Taille<input type="number" inputmode="decimal" id="m-taille" step="0.5" min="30" max="200" placeholder="cm"></label>
-        <label>Hanches<input type="number" inputmode="decimal" id="m-hanches" step="0.5" min="40" max="200" placeholder="cm"></label>
-        <label>Cuisse<input type="number" inputmode="decimal" id="m-cuisse" step="0.5" min="20" max="120" placeholder="cm"></label>
-        <label>Bras<input type="number" inputmode="decimal" id="m-bras" step="0.5" min="10" max="80" placeholder="cm"></label>
-        <label>Poitrine<input type="number" inputmode="decimal" id="m-poitrine" step="0.5" min="40" max="200" placeholder="cm"></label>
-      </div>
-      <button type="button" id="mens-save" class="mens-btn">Enregistrer</button>
-      <p id="mens-msg" class="foot-note"></p>
     </div>
 
     <!-- PROFIL -->
@@ -438,7 +440,7 @@ var PROG = {
     document.getElementById('p-nom').innerHTML=PROG.nom[0]+' <span>'+(PROG.nom[1]||'')+'.</span>';
     document.getElementById('p-obj').innerHTML=
       '<span class="obj-lead">Objectif</span>'+
-      '<span class="obj-goal">'+PROG.objectif+'</span>'+
+      '<span class="obj-goal">'+(PROG.objectif||'').replace(/\s*uniquement\.?\s*$/i,'').trim()+'</span>'+   /* espace perso : sans « uniquement » (Dimitri 25/07) — le questionnaire garde la formulation complète */
       '<span class="obj-meta">6 jours · '+PROG.jours[0].repas.length+' repas/jour · <b>'+PROG.kcal+' kcal</b>/jour</span>';
 
     // -- macros : donut néon qui se dessine + kcal qui monte + barres + survol --
@@ -625,7 +627,7 @@ var PROG = {
   photo.addEventListener('change',function(){ if(photo.files&&photo.files[0]) document.getElementById('photomsg').textContent='« '+photo.files[0].name+' » sélectionnée (l\'upload réel viendra avec Supabase Storage).'; });
 
   // ---- mensurations (démo : dernière saisie mémorisée dans le navigateur) ----
-  var MK='ely_mens_demo', mfields=['taille','hanches','cuisse','bras','poitrine'];
+  var MK='ely_mens_demo', mfields=['epaules','poitrine','taille','hanches','cuisse','bras'];
   (function(){ var s; try{ s=JSON.parse(localStorage.getItem(MK)||'null'); }catch(e){ s=null; } if(!s) return;
     mfields.forEach(function(f){ var el=document.getElementById('m-'+f); if(el&&s[f]!=null) el.value=s[f]; });
     if(s.t) document.getElementById('mens-msg').textContent='Dernière saisie le '+new Date(s.t).toLocaleDateString('fr-FR')+'.'; })();

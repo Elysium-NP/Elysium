@@ -15,9 +15,21 @@
   function write(u) { localStorage.setItem(KEY, JSON.stringify(u)); }
 
   window.ElyAuth = {
-    // "inscription" : mémorise un utilisateur de démo
+    // "inscription" : mémorise un utilisateur de démo. Champs d'IDENTITÉ (nom, prénom, naissance,
+    // sexe, taille) fournis à la création -> serviront à la programmation et seront VERROUILLÉS
+    // ensuite (anti-fraude, Yoann). L'âge est calculé depuis la date de naissance.
     signup: function (data) {
-      write({ prenom: (data.prenom || "").trim(), email: (data.email || "").trim(), paid: false, created: Date.now() });
+      var dob = (data.naissance || "").trim(), age = null;
+      if (dob) {
+        var d = new Date(dob), n = new Date();
+        age = n.getFullYear() - d.getFullYear() - ((n.getMonth() < d.getMonth() || (n.getMonth() === d.getMonth() && n.getDate() < d.getDate())) ? 1 : 0);
+      }
+      write({
+        prenom: (data.prenom || "").trim(), nom: (data.nom || "").trim(),
+        email: (data.email || "").trim(), naissance: dob, age: age,
+        sexe: (data.sexe || "").trim(), taille: data.taille ? parseInt(data.taille, 10) : null,
+        paid: false, created: Date.now()
+      });
       return this.user();
     },
     // "connexion" : réutilise l'utilisateur existant ou en crée un minimal

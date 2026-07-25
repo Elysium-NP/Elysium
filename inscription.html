@@ -14,6 +14,14 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/site.css">
+<style>
+  /* champs identité (Dimitri 25/07) : lignes 2 colonnes + select/date raccord DA */
+  .frow{display:flex;gap:12px;flex-wrap:wrap}
+  .frow>label{flex:1 1 140px}
+  .auth-form select,.auth-form input[type=date]{color-scheme:dark;font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;width:100%;transition:border-color .3s}
+  .auth-form select:focus,.auth-form input[type=date]:focus{outline:none;border-color:var(--blue)}
+  .auth-note{font-family:var(--disp);font-size:11.5px;line-height:1.6;color:var(--steel);margin:0}
+</style>
 </head>
 <body>
 
@@ -29,12 +37,25 @@
   <div class="auth-card">
     <div class="kick">Espace membre</div>
     <h1>Crée ton<span class="l2">compte.</span></h1>
-    <p class="sub">Ton compte gratuit te donne accès à ton espace et à ton suivi. Le programme se débloque quand tu es prêt.</p>
+    <p class="sub">Ton compte gratuit te donne accès à ton espace et à ton suivi. Ces informations servent à construire ta programmation.</p>
     <form class="auth-form" id="signup">
-      <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
+      <div class="frow">
+        <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
+        <label>Nom<input type="text" name="nom" autocomplete="family-name" required></label>
+      </div>
+      <label>Date de naissance<input type="date" name="naissance" required></label>
+      <div class="frow">
+        <label>Sexe<select name="sexe" required>
+          <option value="" disabled selected>Choisir…</option>
+          <option value="Homme">Homme</option>
+          <option value="Femme">Femme</option>
+        </select></label>
+        <label>Taille (cm)<input type="number" name="taille" min="120" max="230" step="1" inputmode="numeric" required></label>
+      </div>
       <label>Email<input type="email" name="email" autocomplete="email" required></label>
       <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="6" required></label>
       <label>Confirme le mot de passe<input type="password" name="password2" autocomplete="new-password" minlength="6" required></label>
+      <p class="auth-note">Nom, prénom, date de naissance, sexe et taille ne seront plus modifiables ensuite (hors correction exceptionnelle). Seul ton poids évolue au fil du suivi.</p>
       <button type="submit" class="btn">Créer mon compte</button>
     </form>
     <p class="auth-alt">Déjà inscrit ? <a href="connexion.html">Se connecter</a></p>
@@ -46,14 +67,23 @@
 <script src="assets/site.js"></script>
 <script src="assets/auth-mock.js"></script>
 <script>
-document.getElementById('signup').addEventListener('submit',function(e){
-  e.preventDefault();
-  var f=e.target;
-  if(f.password.value!==f.password2.value){ f.password2.setCustomValidity('Les mots de passe ne correspondent pas.'); f.password2.reportValidity(); return; }
-  f.password2.setCustomValidity('');
-  ElyAuth.signup({prenom:f.prenom.value, email:f.email.value});
-  location.href='choisir.html';
-});
+(function(){
+  var f=document.getElementById('signup');
+  // programmations réservées aux majeurs -> borne la date de naissance à il y a 18 ans
+  var d=new Date(); d.setFullYear(d.getFullYear()-18);
+  f.naissance.max=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(f.password.value!==f.password2.value){ f.password2.setCustomValidity('Les mots de passe ne correspondent pas.'); f.password2.reportValidity(); return; }
+    f.password2.setCustomValidity('');
+    var dob=new Date(f.naissance.value), n=new Date();
+    var age=n.getFullYear()-dob.getFullYear()-((n.getMonth()<dob.getMonth()||(n.getMonth()===dob.getMonth()&&n.getDate()<dob.getDate()))?1:0);
+    if(!(age>=18)){ f.naissance.setCustomValidity('Les programmations sont réservées aux personnes majeures.'); f.naissance.reportValidity(); return; }
+    f.naissance.setCustomValidity('');
+    ElyAuth.signup({prenom:f.prenom.value, nom:f.nom.value, email:f.email.value, naissance:f.naissance.value, sexe:f.sexe.value, taille:f.taille.value});
+    location.href='choisir.html';
+  });
+})();
 </script>
 </body>
 </html>

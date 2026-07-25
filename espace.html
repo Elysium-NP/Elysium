@@ -270,9 +270,12 @@
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
       <p>Prénom : <b id="pprenom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
       <p style="margin-top:8px">Nom : <b id="pnom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
+      <p style="margin-top:8px">Sexe : <b id="psexe" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
+      <p style="margin-top:8px">Naissance : <b id="pnais" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
+      <p style="margin-top:8px">Taille : <b id="ptaille" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
       <p style="margin-top:8px">Email : <b id="pemail" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
       <p style="margin-top:8px">Membre depuis : <b id="pdate" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.03em">—</b></p>
-      <p class="foot-note" style="margin-top:12px">Âge, objectif et préférences arriveront de ton questionnaire nutrition.</p>
+      <p class="foot-note" style="margin-top:12px">Ces informations, définies à l'inscription, sont fixes (hors correction exceptionnelle). Ton objectif et tes préférences viennent de ton questionnaire nutrition.</p>
     </div>
 
     <!-- DÉMO -->
@@ -359,6 +362,9 @@ var PROG = {
   document.getElementById('prenom').textContent=u.prenom||'toi';
   document.getElementById('pprenom').textContent=u.prenom||'—';
   document.getElementById('pnom').textContent=u.nom||'—';
+  document.getElementById('psexe').textContent=u.sexe||'—';
+  document.getElementById('pnais').textContent=u.naissance?(new Date(u.naissance).toLocaleDateString('fr-FR')+(u.age!=null?' · '+u.age+' ans':'')):'—';
+  document.getElementById('ptaille').textContent=u.taille?(u.taille+' cm'):'—';
   document.getElementById('pemail').textContent=u.email||'—';
   document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):'—';
 

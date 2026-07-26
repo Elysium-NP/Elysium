@@ -58,14 +58,14 @@
       <p class="auth-note">Nom, prénom, date de naissance, sexe et taille ne seront plus modifiables ensuite (hors correction exceptionnelle). Seul ton poids évolue au fil du suivi.</p>
       <button type="submit" class="btn">Créer mon compte</button>
     </form>
+    <p class="auth-msg" id="msg" role="alert"></p>
     <p class="auth-alt">Déjà inscrit ? <a href="connexion.html">Se connecter</a></p>
   </div>
 </main>
 
-<div class="demo-banner">⚠︎ Maquette, l'inscription est simulée (aucune donnée envoyée). La vraie auth arrivera avec Supabase.</div>
-
 <script src="assets/site.js"></script>
-<script src="assets/auth-mock.js"></script>
+<script src="assets/vendor/supabase.min.js"></script>
+<script src="assets/ely-auth.js"></script>
 <script>
 (function(){
   var f=document.getElementById('signup');
@@ -80,8 +80,34 @@
     var age=n.getFullYear()-dob.getFullYear()-((n.getMonth()<dob.getMonth()||(n.getMonth()===dob.getMonth()&&n.getDate()<dob.getDate()))?1:0);
     if(!(age>=18)){ f.naissance.setCustomValidity('Les programmations sont réservées aux personnes majeures.'); f.naissance.reportValidity(); return; }
     f.naissance.setCustomValidity('');
-    ElyAuth.signup({prenom:f.prenom.value, nom:f.nom.value, email:f.email.value, naissance:f.naissance.value, sexe:f.sexe.value, taille:f.taille.value});
-    location.href='choisir.html';
+    var msg=document.getElementById('msg'), btn=f.querySelector('button[type=submit]'), label=btn.textContent;
+    function say(txt,kind){ msg.textContent=txt; msg.className='auth-msg on '+(kind||'err'); }
+
+    function human(err){
+      var m=((err&&err.message)||'').toLowerCase();
+      if(m.indexOf('already registered')>-1||m.indexOf('already exists')>-1||m.indexOf('user already')>-1)
+        return "Un compte existe déjà avec cette adresse. Essaie plutôt de te connecter.";
+      if(m.indexOf('password')>-1&&m.indexOf('6')>-1) return "Le mot de passe doit faire au moins 6 caractères.";
+      if(m.indexOf('invalid')>-1&&m.indexOf('email')>-1) return "Cette adresse e-mail n'est pas valide.";
+      if(m.indexOf('rate limit')>-1||m.indexOf('too many')>-1) return "Trop de tentatives. Réessaie dans quelques minutes.";
+      if(m.indexOf('failed to fetch')>-1||m.indexOf('network')>-1) return "Connexion au serveur impossible. Vérifie ta connexion internet.";
+      return "Création du compte impossible pour le moment. Réessaie dans un instant.";
+    }
+
+    msg.className='auth-msg';
+    btn.disabled=true; btn.textContent='Création…';
+    ElyAuth.signup({prenom:f.prenom.value, nom:f.nom.value, email:f.email.value, password:f.password.value,
+                    naissance:f.naissance.value, sexe:f.sexe.value, taille:f.taille.value})
+      .then(function(res){
+        if(res.needsEmailConfirm){
+          // Confirmation d'adresse activée : pas de session tant que le lien n'est pas cliqué.
+          f.style.display='none';
+          say("Compte créé. Ouvre ta boîte mail et clique sur le lien de confirmation, puis reviens te connecter.","ok");
+          return;
+        }
+        location.href='choisir.html';
+      })
+      .catch(function(err){ say(human(err)); btn.disabled=false; btn.textContent=label; });
   });
 })();
 </script>

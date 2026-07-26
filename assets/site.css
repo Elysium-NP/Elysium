@@ -291,6 +291,11 @@ html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
 .auth-form input:focus{outline:none;border-color:var(--blue)}
 .auth-form .btn{margin-top:8px;cursor:pointer;background:transparent;justify-content:center;text-align:center}
 .auth-alt{font-family:var(--serif);font-weight:500;font-size:14.5px;color:var(--steel);margin-top:24px;text-align:center}
+/* messages d'authentification (erreur serveur / confirmation) — sobres, jamais criards */
+.auth-msg{display:none;font-family:var(--disp);font-size:13.5px;line-height:1.55;margin-top:18px;padding:12px 14px;border:1px solid}
+.auth-msg.on{display:block}
+.auth-msg.err{color:#f0b9b9;border-color:rgba(214,120,120,.5);background:rgba(214,120,120,.08)}
+.auth-msg.ok{color:#c3daf7;border-color:rgba(46,155,255,.5);background:rgba(46,155,255,.08)}
 .auth-alt a{color:var(--blue);text-decoration:none}
 .auth-alt a:hover{text-decoration:underline}
 .dash{max-width:1100px;margin:0 auto;padding:110px var(--edge) 90px}

@@ -261,7 +261,8 @@
   <div>
     <h2>Accès réservé</h2>
     <p>Cet espace est réservé à Damien &amp; Yoann. Si tu es coach et que tu vois ce message, préviens Dimitri&nbsp;: ton compte doit être ajouté à la liste.</p>
-    <a class="btn" href="espace.html">Retour à mon espace</a>
+    <p class="soon" id="gate-diag" style="text-align:left;display:inline-block;max-width:44ch"></p>
+    <div style="margin-top:22px"><a class="btn" href="espace.html">Retour à mon espace</a></div>
   </div>
 </div>
 
@@ -446,7 +447,15 @@
     // Le contrôle d'accès est fait CÔTÉ SERVEUR : un non-coach ne voit rien
     // remonter, quoi qu'il tente dans son navigateur.
     return sb.from('admins').select('user_id,nom').eq('user_id',u.id).maybeSingle().then(function(r){
-      if(!r.data){ $('gate').classList.add('on'); return; }
+      if(!r.data){
+        // On explique POURQUOI : sans ça, impossible de savoir si c'est le mauvais
+        // compte, un compte non ajouté, ou un souci d'accès à la base.
+        var d=$('gate-diag');
+        if(d) d.innerHTML = 'Compte connecté&nbsp;: <b>'+esc(u.email||'?')+'</b>'+
+          (u.prenom?' ('+esc(u.prenom)+' '+esc(u.nom||'')+')':'')+
+          (r.error ? '<br>Détail technique&nbsp;: '+esc(r.error.message) : '<br>Ce compte n\'est pas dans la liste des coachs.');
+        $('gate').classList.add('on'); return;
+      }
       $('coachname').textContent=r.data.nom||u.prenom||'Coach';
       $('app').hidden=false;
       return Promise.all([

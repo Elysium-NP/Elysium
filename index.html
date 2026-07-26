@@ -463,6 +463,17 @@ footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;c
 .mteaser-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-bottom:38px}
 .mteaser-steps span{font-family:var(--disp);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
 .mteaser-steps b{color:var(--blue);font-weight:400;margin-right:5px}
+/* ===== Bande « suivi évolutif » — accompagnement dans la durée (Dimitri 26/07) ===== */
+.follow{position:relative;z-index:1;background:var(--void);padding:clamp(64px,9vh,104px) var(--edge);text-align:center;border-top:1px solid var(--line)}
+.follow-in{max-width:740px;margin:0 auto}
+.follow .kick{justify-content:center;margin-bottom:20px}
+.follow h2{font-family:var(--disp);font-weight:600;font-size:clamp(30px,4.4vw,54px);color:var(--ice);line-height:.98;text-transform:uppercase;letter-spacing:.005em}
+.follow h2 .l2{color:var(--blue)}
+.follow-lead{font-size:clamp(15px,1.9vw,18px);line-height:1.66;color:var(--gris);margin:22px auto 0;max-width:56ch}
+.follow-lead b{color:var(--ice);font-weight:600}
+.follow-sub{font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,20px);color:#cdd6e4;margin:16px auto 28px;max-width:50ch}
+.follow-link{font-family:var(--disp);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(46,155,255,.4);padding-bottom:3px}
+.follow-link:hover{color:var(--ice)}
 </style>
 </head>
 <body>
@@ -692,6 +703,17 @@ try {
       <span><b>04</b> La livraison</span>
     </div>
     <a class="btn" href="methode.html">Découvrir la méthode</a>
+  </div>
+</section>
+
+<!-- ===================== SUIVI ÉVOLUTIF (bande courte — Dimitri 26/07) ===================== -->
+<section class="follow" id="suivi">
+  <div class="follow-in">
+    <div class="kick">Un accompagnement, pas un menu</div>
+    <h2>Ton programme<span class="l2"> évolue avec toi.</span></h2>
+    <p class="follow-lead">Pour de vrais résultats, on recommande <b>au minimum 12 semaines</b>. Ensuite, ton programme est <b>renouvelé toutes les 4 semaines</b> et recalculé selon ton poids et ta progression — tu continues aussi longtemps que tu veux, avec un menu régulièrement renouvelé.</p>
+    <p class="follow-sub">Tu changes d'objectif quand tu veux. Nous, on s'occupe de la réflexion&nbsp;; toi, tu fais tes courses, tu cuisines et tu profites.</p>
+    <a class="follow-link" href="formules.html">La formule &amp; le suivi</a>
   </div>
 </section>
 

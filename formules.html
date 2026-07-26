@@ -40,20 +40,41 @@
 <style>
   /* ===== Formule 01 — hiérarchie de prix commerciale (Dimitri 25/07) ===== */
   .plan01 .price01{margin:16px 0 0;line-height:1}
-  .plan01 .old{font-family:var(--disp);color:var(--steel);opacity:.8;text-decoration:line-through;
-    text-decoration-color:rgba(120,132,148,.6);white-space:nowrap;display:inline-block}
-  .plan01 .old .o1{font-size:27px;font-weight:600;letter-spacing:.01em}
-  .plan01 .old .o2{font-size:14px;font-weight:500;vertical-align:.5em;margin-left:1px}
+  /* ancien prix : barré FRANC et visible (Dimitri 26/07 : « davantage barré ») */
+  .plan01 .old{font-family:var(--disp);color:var(--steel);opacity:.92;text-decoration:line-through;
+    text-decoration-color:#c8d0dc;text-decoration-thickness:3px;white-space:nowrap;display:inline-block}
+  .plan01 .old .o1{font-size:29px;font-weight:600;letter-spacing:.01em}
+  .plan01 .old .o2{font-size:15px;font-weight:500;vertical-align:.5em;margin-left:1px}
+  /* prix courant : « 59€99 » — le € est le séparateur, bien visible (Dimitri 26/07) */
   .plan01 .now{display:flex;align-items:flex-start;font-family:var(--disp);color:var(--ice);margin-top:6px}
-  .plan01 .now .n1{font-size:74px;font-weight:700;letter-spacing:-.015em;line-height:.82;
+  .plan01 .now .n1{font-size:76px;font-weight:700;letter-spacing:-.015em;line-height:.82;
     text-shadow:0 0 24px rgba(46,155,255,.16)}
-  .plan01 .now .cur{font-size:29px;font-weight:600;margin:7px 0 0 5px}
-  .plan01 .now .n2{font-size:25px;font-weight:600;margin:7px 0 0 1px;letter-spacing:.01em}
+  .plan01 .now .cur{font-size:38px;font-weight:700;margin:4px 1px 0 3px;color:var(--blue)}
+  .plan01 .now .n2{font-size:30px;font-weight:700;margin:6px 0 0 1px;letter-spacing:.01em}
   .plan01 .pterm{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.16em;
     text-transform:uppercase;color:var(--blue);margin-top:12px}
   .plan01 .pfine{font-family:var(--disp);font-size:12.5px;line-height:1.5;color:var(--steel);margin:6px 0 22px}
   /* une seule formule pour l'instant -> carte centrée et mise en avant (Dimitri 25/07) */
   .plans.solo{grid-template-columns:1fr;max-width:432px;margin:0 auto}
+  /* bandeau « durée recommandée » sous la carte prix (Dimitri 26/07) */
+  .plan01 .reco{margin:2px 0 20px;padding:12px 14px;border:1px solid rgba(46,155,255,.28);
+    border-radius:12px;background:rgba(46,155,255,.06)}
+  .plan01 .reco b{font-family:var(--disp);text-transform:uppercase;letter-spacing:.04em;color:var(--ice)}
+  .plan01 .reco span{display:block;margin-top:5px;font-size:13px;line-height:1.55;color:var(--steel)}
+  .plan01 ul li b{color:var(--ice);font-weight:600}
+  .plan01 li.opt-reco{color:var(--blue)}
+  .plan01 li.opt-reco b{color:var(--blue)}
+  /* ===== Section « Le suivi » : accompagnement évolutif (Dimitri 26/07) ===== */
+  .evol{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:30px}
+  .evol .ev{padding:22px 20px;border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))}
+  .evol .ev .evn{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--blue)}
+  .evol .ev h3{font-family:var(--disp);text-transform:uppercase;font-weight:600;letter-spacing:.01em;
+    font-size:20px;color:var(--ice);margin:10px 0 8px;line-height:1.08}
+  .evol .ev p{font-size:14px;line-height:1.62;color:var(--steel);margin:0}
+  .evol .ev p b{color:var(--ice);font-weight:600}
+  .evol .ev.wide{grid-column:1 / -1}
+  @media(max-width:640px){ .evol{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -125,21 +146,52 @@
             <div class="now"><span class="n1">59</span><span class="cur">€</span><span class="n2">99</span></div>
           </div>
           <div class="pterm">Programme&nbsp;•&nbsp;8 semaines</div>
-          <p class="pfine">59,99 € pour 8 semaines, puis à partir de 14,99 € toutes les 4 semaines.</p>
+          <p class="pfine">59€99 pour tes 8 premières semaines. Ensuite, tant que tu es accompagné, ton programme continue d'être renouvelé et recalculé selon ta progression, sans surcoût.</p>
+          <div class="reco"><b>Recommandé : au minimum 12 semaines</b><span>C'est la régularité qui installe les vrais résultats. Ensuite, tu continues aussi longtemps que tu veux, avec un menu régulièrement renouvelé.</span></div>
           <ul>
-            <li>Programmation alimentaire 100 % personnalisée</li>
-            <li>Repas adaptés à ton objectif, tes préférences et tes contraintes</li>
-            <li>Réajustable chaque semaine, toutes les 2 ou toutes les 4 semaines</li>
-            <li>Suivi du poids directement dans l'application</li>
-            <li>Suivi des mensurations</li>
-            <li>Liste de courses regroupée automatiquement</li>
-            <li>Tableau des apports en grammes &amp; calories</li>
+            <li><b>Programmation alimentaire 100 % personnalisée</b></li>
+            <li>Repas adaptés à ton <b>objectif</b>, tes <b>préférences</b> et tes <b>contraintes</b></li>
+            <li><b>Renouvelé au minimum toutes les 4 semaines</b> — recalculé selon ton poids et ta progression, inclus tant que tu es abonné</li>
+            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
+            <li><b>Liste de courses</b> regroupée automatiquement</li>
+            <li>Tableau des <b>apports en grammes &amp; calories</b></li>
+            <li class="opt-reco"><b>En option — les recettes détaillées</b> de chaque plat, pour encore plus de gourmandise et de simplicité</li>
           </ul>
           <a class="btn" href="connexion.html">Accéder à mon espace</a>
         </article>
 
       </div>
       <div class="partner-strip"><span class="pk">Partenaire nutrition</span><img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="120" height="34"><span class="promo">Code <b>ELYSIUM</b> : bénéficie d'une réduction de 10 % + des cadeaux sur tout le site</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== LE SUIVI (accompagnement évolutif — Dimitri 26/07) ===================== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="no">02</span>
+        <div>
+          <span class="lbl">// Le suivi</span>
+          <h2>Un accompagnement qui évolue avec toi</h2>
+        </div>
+      </div>
+      <div class="evol">
+        <div class="ev reveal">
+          <div class="evn">01</div>
+          <h3>Ton programme évolue avec toi</h3>
+          <p>À chaque renouvellement — <b>au minimum toutes les 4 semaines</b>, sans surcoût — on recalcule tes besoins selon ton <b>nouveau poids</b> et ta progression. Pas un menu figé : un accompagnement qui s'ajuste, tant que tu es abonné.</p>
+        </div>
+        <div class="ev reveal">
+          <div class="evn">02</div>
+          <h3>Change d'objectif quand tu veux</h3>
+          <p>Perdre du poids, passer en <b>prise de masse</b>, maintenir pour ne pas reprendre, t'adapter à une nouvelle vie : ton objectif change, ta programmation suit. Un vrai <b>outil sur la durée</b>.</p>
+        </div>
+        <div class="ev reveal wide">
+          <div class="evn">03</div>
+          <h3>Tu n'as plus rien à calculer</h3>
+          <p>On s'occupe de <b>toute la réflexion</b>. Toi, tu fais tes courses, tu cuisines, et tu profites de tes repas. On te vend la <b>tranquillité d'esprit</b> autant que les résultats.</p>
+        </div>
+      </div>
     </div>
   </section>
 

@@ -123,17 +123,17 @@
           <h2>Programmation nutritionnelle</h2>
           <p class="lede">Ton programme alimentaire sur-mesure, façonné à la main d'après ton questionnaire, objectif, mode de vie, goûts, contraintes. Prêt à suivre, sans y penser.</p>
           <ul>
-            <li>Programmation alimentaire 100 % personnalisée</li>
-            <li>Repas adaptés à ton objectif, tes préférences et tes contraintes</li>
-            <li>Réajustable chaque semaine, toutes les 2 ou toutes les 4 semaines</li>
-            <li>Suivi du poids &amp; des mensurations dans ton espace</li>
-            <li>Liste de courses regroupée automatiquement</li>
-            <li>Tableau des apports en grammes &amp; calories</li>
+            <li><b>Programmation alimentaire 100 % personnalisée</b></li>
+            <li>Repas adaptés à ton <b>objectif</b>, tes <b>préférences</b> et tes <b>contraintes</b></li>
+            <li><b>Renouvelé au minimum toutes les 4 semaines</b>, recalculé selon ta progression — sans surcoût</li>
+            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
+            <li><b>Liste de courses</b> regroupée automatiquement</li>
+            <li>Tableau des <b>apports en grammes &amp; calories</b></li>
           </ul>
           <p class="whom"><b>Pour qui&nbsp;:</b> tu veux un cap alimentaire clair, précis et suivi, à ton rythme.</p>
         </div>
         <div class="buy">
-          <div class="price">59,99 <small>€</small></div>
+          <div class="price">59<small>€</small>99</div>
           <div class="per">Programme + 8 semaines · toutes options incluses</div>
         </div>
       </article>
@@ -171,7 +171,7 @@
       </label>
 
       <div class="optrecap">
-        <div class="recline"><span>Aujourd'hui</span><b id="rnow">59,99 €</b></div>
+        <div class="recline"><span>Aujourd'hui</span><b id="rnow">59€99</b></div>
         <div class="recsub">Programme + 8 premières semaines, toutes options incluses</div>
         <div class="recline" style="margin-top:14px"><span>À partir de la 9ᵉ semaine</span><b id="rthen">Inclus</b></div>
       </div>
@@ -244,7 +244,7 @@
       var cad = document.querySelector('input[name=cadence]:checked');
       var cp = cad ? parseInt(cad.getAttribute('data-p'),10) : 0;
       uu.formule = 'Programmation nutritionnelle';
-      uu.formule_prix = '59,99 €';
+      uu.formule_prix = '59€99';
       uu.cadence = cad ? cad.value : '4sem';
       uu.confort = document.getElementById('confort').checked;
       uu.abo_apres = cp + (uu.confort ? 5 : 0);   // € / 4 semaines après les 8 premières

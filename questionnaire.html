@@ -25,12 +25,12 @@
   .qstep{display:none;animation:qin .5s cubic-bezier(.2,.7,.2,1)}
   .qstep.active{display:block}
   @keyframes qin{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-  .qstep h2{font-family:var(--disp);font-weight:600;font-size:clamp(28px,4.6vw,46px);color:var(--ice);text-transform:uppercase;line-height:1.02;letter-spacing:.005em;margin-bottom:10px}
-  .qstep .qhint{font-family:var(--disp);font-size:12.5px;color:var(--steel);margin-bottom:30px}
+  .qstep h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4.2vw,42px);color:var(--ice);text-transform:uppercase;line-height:1.04;letter-spacing:.005em;margin-bottom:10px}
+  .qstep .qhint{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--steel);margin-bottom:28px}
   .qcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .qcards.one{grid-template-columns:1fr}
   @media(max-width:520px){.qcards{grid-template-columns:1fr}}
-  .qcard{position:relative;display:flex;align-items:center;gap:12px;padding:18px 18px;border:1px solid var(--line);background:var(--void2);cursor:pointer;transition:border-color .3s,background .3s}
+  .qcard{position:relative;display:flex;align-items:center;gap:12px;padding:17px 18px;border:1px solid var(--line);background:var(--void2);cursor:pointer;transition:border-color .3s,background .3s}
   .qcard:hover{border-color:rgba(46,155,255,.5)}
   .qcard input{position:absolute;opacity:0;pointer-events:none}
   .qcard .dot{width:16px;height:16px;border:1px solid var(--steel);border-radius:50%;flex:none;transition:border-color .3s;position:relative}
@@ -43,24 +43,52 @@
   .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:520px){.qgrid{grid-template-columns:1fr}}
   .qfield{display:flex;flex-direction:column;gap:8px}
+  .qfield.full{grid-column:1 / -1}
   .qfield label{font-family:var(--disp);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
-  .qfield input{font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;transition:border-color .3s;width:100%}/* 16px = pas de zoom auto iOS au focus */
-  .qfield input::placeholder{color:var(--steel)}
-  .qfield input:focus{outline:none;border-color:var(--blue)}
-  .qnav{display:flex;align-items:center;gap:16px;margin-top:36px}
+  .qfield input,.qfield textarea,.qfield select{font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;transition:border-color .3s;width:100%}
+  .qfield textarea{min-height:104px;resize:vertical;line-height:1.6}
+  .qfield input::placeholder,.qfield textarea::placeholder{color:var(--steel)}
+  .qfield input:focus,.qfield textarea:focus,.qfield select:focus{outline:none;border-color:var(--blue)}
+  .qfield select{color-scheme:dark;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--steel) 50%),linear-gradient(135deg,var(--steel) 50%,transparent 50%);background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px;background-repeat:no-repeat}
+  /* note 1-10 */
+  .qrange{display:flex;align-items:center;gap:16px}
+  .qrange input[type=range]{flex:1;accent-color:var(--blue);height:26px}
+  .qrange .val{font-family:var(--disp);font-weight:700;font-size:34px;color:var(--blue);min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+  /* avertissement dans une étape sensible */
+  .qwarn{margin-top:16px;padding:13px 15px;border:1px solid rgba(232,176,75,.35);background:rgba(232,176,75,.06);font-family:var(--disp);font-size:12.5px;line-height:1.65;color:#d8c08a}
+  .qwarn b{color:#f0dcae}
+  .qnav{display:flex;align-items:center;gap:16px;margin-top:34px}
   .qnav .prev{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);background:none;border:0;cursor:pointer;padding:8px 0;transition:color .3s}
   .qnav .prev:hover{color:var(--ice)}
   .qnav .btn{cursor:pointer;background:transparent;margin-left:auto}
   .qerr{font-family:var(--disp);font-size:12.5px;color:#e8b04b;margin-top:14px;min-height:16px}
-  /* écran de fin */
+  .qsave{font-family:var(--disp);font-size:11px;letter-spacing:.1em;color:var(--steel);margin-top:10px;min-height:14px;opacity:0;transition:opacity .3s}
+  .qsave.on{opacity:1}
+  /* récapitulatif de fin */
+  .qrecap{border:1px solid var(--line);background:var(--void2);padding:4px 18px;max-height:340px;overflow-y:auto;margin-bottom:8px}
+  .qrecap dl{margin:0}
+  .qrecap dt{font-family:var(--disp);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-top:15px}
+  .qrecap dd{font-family:var(--disp);font-size:15px;color:var(--ice);margin:5px 0 0;padding-bottom:13px;border-bottom:1px solid rgba(46,155,255,.1)}
+  /* fenêtre de confirmation (double sécurité avant verrouillage) */
+  .qmodal{display:none;position:fixed;inset:0;z-index:95;background:rgba(3,5,10,.82);align-items:center;justify-content:center;padding:24px}
+  .qmodal.on{display:flex}
+  .qmodal-in{max-width:460px;background:var(--void2);border:1px solid rgba(46,155,255,.4);padding:32px 28px;text-align:center}
+  .qmodal h3{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice);text-transform:uppercase;margin:0 0 14px}
+  .qmodal p{font-family:var(--disp);font-size:14px;line-height:1.65;color:var(--gris);margin:0 0 24px}
+  .qmodal p b{color:var(--ice)}
+  .qmodal .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .qmodal .btn{cursor:pointer;background:transparent}
+  .qmodal .no{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);background:none;border:0;cursor:pointer;padding:14px 10px}
+  .qmodal .no:hover{color:var(--ice)}
+  /* écrans pleins : chargement, verrou, fin */
   #confetti{position:fixed;inset:0;z-index:90;pointer-events:none;display:none}
-  .qdone{display:none;position:fixed;inset:0;z-index:80;background:var(--void);align-items:center;justify-content:center;text-align:center;padding:40px var(--edge)}
-  .qdone.on{display:flex;animation:qin .6s ease}
-  .qdone-in{max-width:560px}
-  .qdone .em{font-family:var(--disp);font-weight:600;font-size:clamp(46px,9vw,90px);color:var(--blue);line-height:1;letter-spacing:.02em}
-  .qdone h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4vw,42px);color:var(--ice);text-transform:uppercase;margin:16px 0 18px;letter-spacing:.005em}
-  .qdone p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);max-width:46ch;margin:0 auto 32px}
-  .qdone p b{color:var(--ice);font-weight:500}
+  .qfull{display:none;position:fixed;inset:0;z-index:80;background:var(--void);align-items:center;justify-content:center;text-align:center;padding:40px var(--edge)}
+  .qfull.on{display:flex;animation:qin .6s ease}
+  .qfull-in{max-width:560px}
+  .qfull .em{font-family:var(--disp);font-weight:600;font-size:clamp(40px,8vw,78px);color:var(--blue);line-height:1;letter-spacing:.02em}
+  .qfull h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4vw,42px);color:var(--ice);text-transform:uppercase;margin:16px 0 18px;letter-spacing:.005em}
+  .qfull p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);max-width:46ch;margin:0 auto 32px}
+  .qfull p b{color:var(--ice);font-weight:500}
 </style>
 </head>
 <body>
@@ -73,173 +101,478 @@
 
 <div class="qtop">
   <a class="logo" href="index.html" aria-label="Elysium · Nutrition & Performance"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></a>
-  <a class="back" href="index.html">✕ Quitter</a>
+  <a class="back" href="espace.html">✕ Quitter</a>
 </div>
 
 <main>
   <div class="qwrap">
-    <form name="questionnaire" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="qform">
-      <input type="hidden" name="form-name" value="questionnaire">
-      <p style="position:absolute;left:-9999px" aria-hidden="true"><label>Ne pas remplir : <input name="bot-field"></label></p>
-      <div class="qcount" id="count">Étape 1 / 5</div>
+    <form id="qform" autocomplete="off">
+      <div class="qcount" id="count">Étape 1</div>
 
-      <!-- 1 -->
-      <div class="qstep active" data-step="1">
+      <!-- 01 · OBJECTIF -->
+      <div class="qstep active">
         <h2>Ton objectif ?</h2>
         <p class="qhint">Le point de départ de tout le reste.</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="objectif" value="Prise de masse" required><span class="dot"></span><span class="tx">Prise de masse</span></label>
-          <label class="qcard"><input type="radio" name="objectif" value="Perte de poids"><span class="dot"></span><span class="tx">Perte de poids</span></label>
-          <label class="qcard"><input type="radio" name="objectif" value="Rééquilibrage"><span class="dot"></span><span class="tx">Rééquilibrage</span></label>
-          <label class="qcard"><input type="radio" name="objectif" value="Sèche / recomposition"><span class="dot"></span><span class="tx">Sèche / recompo</span></label>
-          <label class="qcard"><input type="radio" name="objectif" value="Je ne sais pas encore"><span class="dot"></span><span class="tx">Je ne sais pas encore</span></label>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Perte de poids" required><span class="dot"></span><span class="tx">Perte de poids</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Prise de masse musculaire"><span class="dot"></span><span class="tx">Prise de masse musculaire</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Prise de muscle ET perte de masse grasse"><span class="dot"></span><span class="tx">Prise de muscle ET perte de masse grasse</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Rééquilibrage"><span class="dot"></span><span class="tx">Rééquilibrage alimentaire</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Maintien de poids"><span class="dot"></span><span class="tx">Maintien de poids</span></label>
+        </div>
+        <div class="qgrid" style="margin-top:16px">
+          <div class="qfield full"><label>Si le poids compte pour toi, ton idéal dans un premier temps&nbsp;?</label>
+            <input type="text" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" placeholder="Ex. 72 kg, ou « perdre 8 kg » — laisse vide si non concerné"></div>
         </div>
       </div>
 
-      <!-- 2 -->
-      <div class="qstep" data-step="2">
-        <h2>Parle-nous de toi.</h2>
-        <p class="qhint">Les bases pour calculer ta cible.</p>
-        <div class="qcards" style="margin-bottom:16px">
-          <label class="qcard"><input type="radio" name="sexe" value="Homme" required><span class="dot"></span><span class="tx">Homme</span></label>
-          <label class="qcard"><input type="radio" name="sexe" value="Femme"><span class="dot"></span><span class="tx">Femme</span></label>
-        </div>
+      <!-- 02 · POIDS + TÉLÉPHONE -->
+      <div class="qstep">
+        <h2>Où en es-tu aujourd'hui&nbsp;?</h2>
+        <p class="qhint">Ton nom, ton sexe, ton âge et ta taille sont déjà enregistrés à ton compte : on ne te les redemande pas.</p>
         <div class="qgrid">
-          <div class="qfield"><label>Âge</label><input type="number" name="age" min="14" max="99" placeholder="ans" required></div>
-          <div class="qfield"><label>Poids (kg)</label><input type="number" name="poids" min="35" max="250" placeholder="kg" required></div>
-          <div class="qfield"><label>Taille (cm)</label><input type="number" name="taille" min="130" max="220" placeholder="cm" required></div>
+          <div class="qfield"><label>Poids actuel (kg)</label><input type="number" name="poids" data-q="Poids (en kg)" min="35" max="250" step="0.1" placeholder="kg" required></div>
+          <div class="qfield"><label>Téléphone</label><input type="tel" name="telephone" data-q="Numéro de téléphone" placeholder="06 12 34 56 78" required></div>
         </div>
       </div>
 
-      <!-- 3 -->
-      <div class="qstep" data-step="3">
-        <h2>Ton quotidien.</h2>
-        <p class="qhint">Ton niveau d'activité affine le calcul.</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="activite" value="Sédentaire" required><span class="dot"></span><span class="tx">Plutôt sédentaire</span></label>
-          <label class="qcard"><input type="radio" name="activite" value="Actif"><span class="dot"></span><span class="tx">Actif au quotidien</span></label>
-          <label class="qcard"><input type="radio" name="activite" value="Sportif"><span class="dot"></span><span class="tx">Sportif régulier</span></label>
-          <label class="qcard"><input type="radio" name="activite" value="Très sportif"><span class="dot"></span><span class="tx">Très sportif</span></label>
-        </div>
-        <div class="qfield" style="margin-top:16px"><label>Quels sports / à quelle fréquence ? (optionnel)</label><input type="text" name="sport" placeholder="ex. muscu 3×/sem, foot le week-end…"></div>
-      </div>
-
-      <!-- 4 -->
-      <div class="qstep" data-step="4">
-        <h2>Tes préférences.</h2>
-        <p class="qhint">On ne t'imposera jamais un aliment interdit ou détesté.</p>
-        <div class="qfield" style="margin-bottom:16px"><label>Petit-déjeuner : plutôt…</label></div>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="petit_dej" value="Sucré" required><span class="dot"></span><span class="tx">Sucré</span></label>
-          <label class="qcard"><input type="radio" name="petit_dej" value="Salé"><span class="dot"></span><span class="tx">Salé</span></label>
-          <label class="qcard"><input type="radio" name="petit_dej" value="Les deux / peu importe"><span class="dot"></span><span class="tx">Les deux / peu importe</span></label>
-        </div>
-        <div class="qfield" style="margin-top:22px"><label>Régime ou contrainte ? (coche ce qui s'applique)</label></div>
-        <div class="qcards">
-          <label class="qcard"><input type="checkbox" name="regimes" value="Végétarien"><span class="dot"></span><span class="tx">Végétarien</span></label>
-          <label class="qcard"><input type="checkbox" name="regimes" value="Sans gluten"><span class="dot"></span><span class="tx">Sans gluten</span></label>
-          <label class="qcard"><input type="checkbox" name="regimes" value="Sans lactose"><span class="dot"></span><span class="tx">Sans lactose</span></label>
-          <label class="qcard"><input type="checkbox" name="regimes" value="Halal"><span class="dot"></span><span class="tx">Halal</span></label>
-        </div>
-        <div class="qfield" style="margin-top:16px"><label>Aliments que tu détestes / allergies (optionnel)</label><input type="text" name="detestes" placeholder="ex. poisson, brocoli, allergie aux fruits à coque…"></div>
-      </div>
-
-      <!-- 5 -->
-      <div class="qstep" data-step="5">
-        <h2>On te recontacte où ?</h2>
-        <p class="qhint">On construit ton programme et on t'écrit. Zéro spam.</p>
+      <!-- 03 · MÉTIER -->
+      <div class="qstep">
+        <h2>Ton travail.</h2>
+        <p class="qhint">Une journée assise et une journée debout ne consomment pas pareil.</p>
         <div class="qgrid">
-          <div class="qfield"><label>Prénom</label><input type="text" name="prenom" autocomplete="given-name" required></div>
-          <div class="qfield"><label>Nom</label><input type="text" name="nom" autocomplete="family-name" required></div>
+          <div class="qfield full"><label>Ton activité professionnelle</label>
+            <input type="text" name="profession" data-q="Quelle est ton activité professionnelle ?" placeholder="Ex. infirmière, développeur, artisan, étudiant…" required></div>
         </div>
-        <div class="qfield" style="margin-top:16px"><label>Email</label><input type="email" name="email" autocomplete="email" placeholder="ton@email.com" required></div>
-        <div class="qfield" style="margin-top:16px"><label>Téléphone (optionnel)</label><input type="tel" name="telephone" autocomplete="tel" placeholder="06…"></div>
+        <p class="qhint" style="margin:22px 0 12px">Ton métier t'amène plutôt à&nbsp;:</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Bureau" required><span class="dot"></span><span class="tx">Rester assis (bureau)</span></label>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Terrain"><span class="dot"></span><span class="tx">Être debout / bouger</span></label>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Ça varie"><span class="dot"></span><span class="tx">Ça varie</span></label>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Travail physique"><span class="dot"></span><span class="tx">Travail physique / port de charges</span></label>
+        </div>
+        <div class="qgrid" style="margin-top:16px">
+          <div class="qfield full"><label>Horaires particuliers ? (optionnel)</label>
+            <input type="text" name="horaires" data-q="Horaires ou rythme de travail" placeholder="Ex. 3×8, nuit, 7h-16h45…"></div>
+        </div>
       </div>
 
-      <div class="qnav">
-        <button type="button" class="prev" id="prev" style="visibility:hidden">‹ Retour</button>
-        <button type="button" class="btn" id="next">Continuer ›</button>
+      <!-- 04 · NIVEAU D'ACTIVITÉ -->
+      <div class="qstep">
+        <h2>Ton niveau d'activité.</h2>
+        <p class="qhint">Quotidien + sport + travail, tout compris.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Sédentaire" required><span class="dot"></span><span class="tx">Sédentaire — peu de mouvement</span></label>
+          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Légèrement actif"><span class="dot"></span><span class="tx">Légèrement actif</span></label>
+          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Actif"><span class="dot"></span><span class="tx">Actif</span></label>
+          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Très actif"><span class="dot"></span><span class="tx">Très actif</span></label>
+        </div>
+        <div class="qgrid" style="margin-top:16px">
+          <div class="qfield full"><label>Nombre de pas par jour (optionnel)</label>
+            <input type="text" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" placeholder="Ex. 8 000 — ou « aucune idée »"></div>
+        </div>
       </div>
+
+      <!-- 05 · SPORT -->
+      <div class="qstep">
+        <h2>Ton sport.</h2>
+        <p class="qhint">Ce que tu pratiques, ou ce que tu vas pratiquer pendant la programmation.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Quels types d'activités&nbsp;?</label>
+            <textarea name="sports" data-q="Quels types d’activités physiques pratiques-tu ? (ou vas-tu pratiquer lors de ta programmation)" placeholder="Ex. musculation en salle, course à pied, natation… ou « aucune pour l'instant »" required></textarea></div>
+          <div class="qfield"><label>Séances par semaine</label>
+            <input type="text" name="seances" data-q="Combien de séances de sport fais-tu (ou feras-tu) par semaine ?" placeholder="Ex. 3 à 4" required></div>
+          <div class="qfield"><label>Durée d'une séance</label>
+            <input type="text" name="duree" data-q="Quelle est, ou quelle sera la durée des séances ?" placeholder="Ex. 1h15" required></div>
+        </div>
+      </div>
+
+      <!-- 06 · PETIT-DÉJEUNER -->
+      <div class="qstep">
+        <h2>Petit-déjeuner&nbsp;: sucré ou salé&nbsp;?</h2>
+        <p class="qhint">Tu peux cocher les deux si tu alternes.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="checkbox" name="pdj" value="Sucré"><span class="dot"></span><span class="tx">Sucré</span></label>
+          <label class="qcard"><input type="checkbox" name="pdj" value="Salé"><span class="dot"></span><span class="tx">Salé</span></label>
+        </div>
+      </div>
+
+      <!-- 07 · APPÉTIT -->
+      <div class="qstep">
+        <h2>Ton appétit.</h2>
+        <p class="qhint">Ça décide du volume dans l'assiette — c'est plus important qu'on ne croit.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="appetit" data-q="Comment décrirais-tu ton appétit ?" value="Petit" required><span class="dot"></span><span class="tx">Petit</span></label>
+          <label class="qcard"><input type="radio" name="appetit" data-q="Comment décrirais-tu ton appétit ?" value="Normal"><span class="dot"></span><span class="tx">Normal</span></label>
+          <label class="qcard"><input type="radio" name="appetit" data-q="Comment décrirais-tu ton appétit ?" value="Gros"><span class="dot"></span><span class="tx">Gros</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">As-tu du mal à finir tes repas / es-tu vite rassasié(e)&nbsp;?</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="rassasie" data-q="As-tu du mal à finir tes repas / es-tu vite rassasié(e) ?" value="Non" required><span class="dot"></span><span class="tx">Non</span></label>
+          <label class="qcard"><input type="radio" name="rassasie" data-q="As-tu du mal à finir tes repas / es-tu vite rassasié(e) ?" value="Un peu"><span class="dot"></span><span class="tx">Un peu</span></label>
+          <label class="qcard"><input type="radio" name="rassasie" data-q="As-tu du mal à finir tes repas / es-tu vite rassasié(e) ?" value="Oui"><span class="dot"></span><span class="tx">Oui</span></label>
+        </div>
+      </div>
+
+      <!-- 08 · RESSENTI -->
+      <div class="qstep">
+        <h2>Comment tu te sens&nbsp;?</h2>
+        <p class="qhint">Ton ressenti, pas un jugement.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En sous-poids" required><span class="dot"></span><span class="tx">Plutôt en sous-poids</span></label>
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="À ton poids"><span class="dot"></span><span class="tx">Plutôt à mon poids</span></label>
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En surpoids"><span class="dot"></span><span class="tx">Plutôt en surpoids</span></label>
+        </div>
+      </div>
+
+      <!-- 09 · QUALITÉ ALIMENTATION -->
+      <div class="qstep">
+        <h2>Ton alimentation aujourd'hui.</h2>
+        <p class="qhint">Note-la honnêtement, de 1 (à revoir entièrement) à 10 (déjà très propre). Personne ne juge.</p>
+        <div class="qrange">
+          <input type="range" name="qualite" data-q="Note la qualité de ton alimentation actuelle" min="1" max="10" step="1" value="5">
+          <span class="val" id="qualval">5</span>
+        </div>
+      </div>
+
+      <!-- 10 · CUISINE -->
+      <div class="qstep">
+        <h2>En cuisine.</h2>
+        <p class="qhint">On adapte les plats à ton temps et à ton envie.</p>
+        <p class="qhint" style="margin-bottom:12px">Combien de temps peux-tu y consacrer&nbsp;?</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="cuisine" data-q="Combien de temps peux-tu consacrer à cuisiner ?" value="Le moins possible / rapide" required><span class="dot"></span><span class="tx">Le moins possible / rapide</span></label>
+          <label class="qcard"><input type="radio" name="cuisine" data-q="Combien de temps peux-tu consacrer à cuisiner ?" value="Modéré"><span class="dot"></span><span class="tx">Modéré</span></label>
+          <label class="qcard"><input type="radio" name="cuisine" data-q="Combien de temps peux-tu consacrer à cuisiner ?" value="J'aime cuisiner"><span class="dot"></span><span class="tx">J'aime cuisiner</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Variété ou repas simples et répétitifs&nbsp;?</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="variete" data-q="Préfères-tu de la variété ou des repas simples et répétitifs ?" value="Variété" required><span class="dot"></span><span class="tx">Variété</span></label>
+          <label class="qcard"><input type="radio" name="variete" data-q="Préfères-tu de la variété ou des repas simples et répétitifs ?" value="Répétitif/simple"><span class="dot"></span><span class="tx">Simple / répétitif</span></label>
+          <label class="qcard"><input type="radio" name="variete" data-q="Préfères-tu de la variété ou des repas simples et répétitifs ?" value="Équilibré"><span class="dot"></span><span class="tx">Un peu des deux</span></label>
+        </div>
+      </div>
+
+      <!-- 11 · RÉGIME -->
+      <div class="qstep">
+        <h2>Un régime particulier&nbsp;?</h2>
+        <p class="qhint">Alimentaire, religieux ou éthique.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Aucun" required><span class="dot"></span><span class="tx">Aucun</span></label>
+          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Végétarien"><span class="dot"></span><span class="tx">Végétarien</span></label>
+          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Végan"><span class="dot"></span><span class="tx">Végan</span></label>
+          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Sans porc"><span class="dot"></span><span class="tx">Sans porc</span></label>
+          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Sans lactose"><span class="dot"></span><span class="tx">Sans lactose</span></label>
+          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Sans gluten"><span class="dot"></span><span class="tx">Sans gluten</span></label>
+        </div>
+        <div class="qgrid" style="margin-top:16px">
+          <div class="qfield full"><label>Autre régime à préciser (optionnel)</label>
+            <input type="text" name="regime_autre" data-q="Autre régime particulier à préciser" placeholder="Ex. halal, casher, sans FODMAP…"></div>
+        </div>
+      </div>
+
+      <!-- 12 · ALIMENTS À CONSERVER -->
+      <div class="qstep">
+        <h2>Ce que tu veux garder.</h2>
+        <p class="qhint">Les aliments auxquels tu tiens : on construit autour d'eux plutôt que contre eux.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Aliments à conserver absolument</label>
+            <textarea name="conserver" data-q="Y a-t-il des aliments que tu souhaites absolument conserver dans ton alimentation ?" placeholder="Ex. pâtes, fromage, chocolat noir, pain le matin… ou « rien de particulier »" required></textarea></div>
+        </div>
+      </div>
+
+      <!-- 13 · ALIMENTS REFUSÉS -->
+      <div class="qstep">
+        <h2>Ce que tu ne mangeras pas.</h2>
+        <p class="qhint">La question la plus importante du questionnaire. Prends ton temps.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Aliments refusés, détestés, écœurants</label>
+            <textarea name="refuses" data-q="Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses ou éthiques ? (Intolérances, écœurements, goûts...)" placeholder="Ex. poisson, courgette, fromage de chèvre, champignons… Sois exhaustif." required></textarea></div>
+        </div>
+        <div class="qwarn"><b>N'oublie rien.</b> Tout ce que tu ne cites pas ici peut se retrouver dans ton programme. C'est la première cause d'un menu qu'on n'a pas envie de suivre.</div>
+      </div>
+
+      <!-- 14 · ALLERGIES / SANTÉ -->
+      <div class="qstep">
+        <h2>Allergies &amp; santé.</h2>
+        <p class="qhint">Allergies, intolérances ou pathologies à nous signaler.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>À signaler</label>
+            <textarea name="allergies" data-q="Allergies, intolérances ou pathologies à signaler ?" placeholder="Ex. allergie aux fruits à coque, intolérance au lactose, diabète… ou « aucune »" required></textarea></div>
+        </div>
+        <div class="qwarn">En cas de <b>pathologie lourde ou nécessitant une prise en charge particulière</b>, nous évaluons la situation au cas par cas. Si elle dépasse notre cadre de compétences, nous t'orienterons vers un professionnel de santé et ne pourrons pas assurer la programmation.</div>
+      </div>
+
+      <!-- 15 · CONTRAINTES -->
+      <div class="qstep">
+        <h2>Tes contraintes.</h2>
+        <p class="qhint">Ce qui pèse sur ton alimentation au quotidien.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Contraintes ou obligations</label>
+            <textarea name="contraintes" data-q="As-tu des des contraintes ou obligations qui influencent ton alimentation ?" placeholder="Ex. budget serré, repas à emporter, cantine, famille à gérer, peu de temps le midi… ou « aucune »" required></textarea></div>
+        </div>
+      </div>
+
+      <!-- 16 · POINTS PARTICULIERS -->
+      <div class="qstep">
+        <h2>Autre chose&nbsp;?</h2>
+        <p class="qhint">Ton vécu, tes attentes, ce qui a marché ou raté avant. C'est ici que ça se dit.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>À partager (optionnel)</label>
+            <textarea name="points" data-q="Y a-t-il des points particuliers que tu souhaites préciser ou partager sur ton alimentation, ton vécu ou tes attentes ?" placeholder="Écris librement…"></textarea></div>
+        </div>
+      </div>
+
+      <!-- 17 · ENTRAÎNEMENT -->
+      <div class="qstep">
+        <h2>Et l'entraînement&nbsp;?</h2>
+        <p class="qhint">Nous réalisons aussi des programmes d'entraînement.</p>
+        <p class="qhint" style="margin-bottom:12px">Le savais-tu&nbsp;?</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d'entraînement ?" value="Oui" required><span class="dot"></span><span class="tx">Oui</span></label>
+          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d'entraînement ?" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Ça t'intéresserait&nbsp;?</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="Oui" required><span class="dot"></span><span class="tx">Oui</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="Peut-être plus tard"><span class="dot"></span><span class="tx">Peut-être plus tard</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="J'ai déjà pris le pack complet"><span class="dot"></span><span class="tx">J'ai déjà pris le pack complet</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
+        </div>
+      </div>
+
+      <!-- 18 · PROVENANCE -->
+      <div class="qstep">
+        <h2>Comment nous as-tu connus&nbsp;?</h2>
+        <p class="qhint">Ça nous aide à savoir où on est utile.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Instagram" required><span class="dot"></span><span class="tx">Instagram</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Bouche-à-oreille / recommandation d'un proche"><span class="dot"></span><span class="tx">Bouche-à-oreille</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="À la salle de sport"><span class="dot"></span><span class="tx">À la salle de sport</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Partenariat / Entreprise / CSE"><span class="dot"></span><span class="tx">Partenariat / Entreprise / CSE</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Autre"><span class="dot"></span><span class="tx">Autre</span></label>
+        </div>
+        <div class="qgrid" style="margin-top:16px">
+          <div class="qfield full"><label>Si partenariat / entreprise / CSE, précise (optionnel)</label>
+            <input type="text" name="entreprise" data-q="Si vous avez sélectionné &quot;Partenariat / Entreprise / CSE&quot; à la question précédente, merci d'indiquer le nom de votre entreprise ou de votre CSE." placeholder="Nom de l'entreprise ou du CSE"></div>
+        </div>
+      </div>
+
+      <!-- 19 · RÉCAPITULATIF + VALIDATION -->
+      <div class="qstep">
+        <h2>Relis-toi.</h2>
+        <p class="qhint">Vérifie bien tes réponses avant de valider.</p>
+        <div class="qrecap" id="recap"></div>
+        <div class="qwarn"><b>Une fois validé, tu ne pourras plus modifier ce questionnaire.</b> C'est sur ces réponses que ton programme sera construit. Si tu dois corriger quelque chose, c'est maintenant — utilise « Retour ». En cas d'erreur découverte plus tard, écris-nous à elysium.np.pro@gmail.com.</div>
+      </div>
+
       <div class="qerr" id="err" role="alert"></div>
+      <div class="qsave" id="save">Brouillon enregistré</div>
+      <div class="qnav">
+        <button type="button" class="prev" id="prev">‹ Retour</button>
+        <button type="submit" class="btn" id="next">Continuer ›</button>
+      </div>
     </form>
   </div>
 </main>
 
-<!-- écran de fin -->
-<div class="qdone" id="done" role="status" aria-live="polite">
-  <div class="qdone-in">
-    <div class="em">C'est parti !</div>
-    <h2>Bienvenue chez Elysium.</h2>
-    <p>On a bien reçu ton profil. <b>Damien &amp; Yoann façonnent ton programme sur-mesure</b>, entièrement à la main, et on te l'envoie <b>sous 48h</b>, dispo sur ton espace (mail de confirmation). On revient vite vers toi !</p>
-    <a class="btn" href="index.html">Retour à l'accueil</a>
+<!-- confirmation avant verrouillage définitif -->
+<div class="qmodal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="qmodal-in">
+    <h3 id="mtitle">Tu es sûr ?</h3>
+    <p>Après validation, <b>tes réponses ne seront plus modifiables</b>. Ton programme sera construit à partir de ce que tu viens de relire.</p>
+    <div class="row">
+      <button type="button" class="no" id="mno">Non, je relis</button>
+      <button type="button" class="btn" id="myes">Oui, je valide</button>
+    </div>
   </div>
 </div>
 
-<script src="assets/site.js"></script>
+<!-- écran : chargement -->
+<div class="qfull on" id="scr-load"><div class="qfull-in"><div class="em">·</div><h2>Un instant</h2><p>On récupère ton questionnaire…</p></div></div>
+
+<!-- écran : accès verrouillé (pas encore payé) -->
+<div class="qfull" id="scr-lock"><div class="qfull-in">
+  <div class="em">◆</div><h2>Programme à activer</h2>
+  <p>Le questionnaire s'ouvre une fois ta formule choisie. C'est lui qui sert à construire ta programmation sur-mesure.</p>
+  <a class="btn" href="choisir.html">Choisir ma formule</a>
+</div></div>
+
+<!-- écran : déjà validé -->
+<div class="qfull" id="scr-done2"><div class="qfull-in">
+  <div class="em">✓</div><h2>Questionnaire validé</h2>
+  <p>Tes réponses sont enregistrées et <b>ne sont plus modifiables</b>. Damien &amp; Yoann construisent ta programmation. Une erreur à signaler&nbsp;? Écris-nous à <b>elysium.np.pro@gmail.com</b>.</p>
+  <a class="btn" href="espace.html">Retour à mon espace</a>
+</div></div>
+
+<!-- écran : merci (juste après validation) -->
+<div class="qfull" id="scr-thanks"><div class="qfull-in">
+  <div class="em">✓</div><h2>C'est envoyé.</h2>
+  <p>Merci. Damien &amp; Yoann prennent le relais et construisent ta programmation <b>à la main, au gramme près</b>. Tu la retrouveras dans ton espace.</p>
+  <a class="btn" href="espace.html">Retour à mon espace</a>
+</div></div>
+
+<script src="assets/vendor/supabase.min.js"></script>
+<script src="assets/ely-auth.js"></script>
 <script>
 (function(){
-  var form=document.getElementById('qform'), steps=[].slice.call(form.querySelectorAll('.qstep'));
+  "use strict";
+  var form=document.getElementById('qform');
+  var steps=[].slice.call(form.querySelectorAll('.qstep'));
   var i=0, total=steps.length;
   var prog=document.getElementById('prog'), count=document.getElementById('count');
-  var prev=document.getElementById('prev'), next=document.getElementById('next'), err=document.getElementById('err');
+  var prev=document.getElementById('prev'), next=document.getElementById('next');
+  var err=document.getElementById('err'), saveTag=document.getElementById('save');
+  var modal=document.getElementById('modal');
+  var scr={load:'scr-load',lock:'scr-lock',done2:'scr-done2',thanks:'scr-thanks'};
+  function show(id){ Object.keys(scr).forEach(function(k){ document.getElementById(scr[k]).classList.toggle('on', scr[k]===id); }); }
 
+  /* ---------- lecture / écriture des réponses (clé = LIBELLÉ EXACT du formulaire
+     historique, pour que le moteur les retrouve sans modification) ---------- */
+  function collect(){
+    var out={};
+    form.querySelectorAll('[data-q]').forEach(function(el){
+      var q=el.getAttribute('data-q');
+      if(el.type==='radio'){ if(el.checked) out[q]=el.value; }
+      else if(el.value!=='') out[q]=el.value;
+    });
+    // petit-déj : cases à cocher -> « Sucré », « Salé » ou « Sucré, Salé »
+    var pdj=[].slice.call(form.querySelectorAll('input[name=pdj]:checked')).map(function(c){return c.value;});
+    if(pdj.length) out["Es-tu plutôt team sucré ou salé au petit-déjeuner ?"]=pdj.join(', ');
+    return out;
+  }
+  function restore(rep){
+    if(!rep) return;
+    form.querySelectorAll('[data-q]').forEach(function(el){
+      var v=rep[el.getAttribute('data-q')];
+      if(v===undefined||v===null) return;
+      if(el.type==='radio') el.checked=(el.value===v);
+      else el.value=v;
+    });
+    var pdj=rep["Es-tu plutôt team sucré ou salé au petit-déjeuner ?"]||'';
+    form.querySelectorAll('input[name=pdj]').forEach(function(c){ c.checked=pdj.indexOf(c.value)>-1; });
+    var qv=document.getElementById('qualval'), r=form.querySelector('input[name=qualite]');
+    if(qv&&r) qv.textContent=r.value;
+  }
+
+  /* ---------- navigation ---------- */
   function render(){
     steps.forEach(function(s,k){ s.classList.toggle('active',k===i); });
     count.textContent='Étape '+(i+1)+' / '+total;
-    prog.style.width=((i)/(total-1)*100)+'%';
-    prev.style.visibility = i===0 ? 'hidden':'visible';
-    next.textContent = i===total-1 ? 'Envoyer mon profil' : 'Continuer ›';
+    prog.style.width=(i/(total-1)*100)+'%';
+    prev.style.visibility = i===0 ? 'hidden' : 'visible';
+    next.textContent = i===total-1 ? 'Valider définitivement' : 'Continuer ›';
     err.textContent='';
-    var f=steps[i].querySelector('input:not([type=hidden]),select'); if(f && f.type!=='radio' && f.type!=='checkbox'){ setTimeout(function(){f.focus();},60); }
+    if(i===total-1) buildRecap();
+    var f=steps[i].querySelector('input:not([type=radio]):not([type=checkbox]):not([type=range]),textarea');
+    if(f) setTimeout(function(){ try{f.focus();}catch(e){} },60);
   }
   function valid(){
     var reqs=steps[i].querySelectorAll('[required]');
-    for(var k=0;k<reqs.length;k++){ if(!reqs[k].checkValidity()){ reqs[k].reportValidity(); return false; } }
-    // groupe radio requis
-    var radios=steps[i].querySelectorAll('input[type=radio][required]');
-    if(radios.length){ var nm=radios[0].name; if(!form.querySelector('input[name="'+nm+'"]:checked')){ err.textContent='Choisis une option pour continuer.'; return false; } }
+    for(var k=0;k<reqs.length;k++){
+      var el=reqs[k];
+      if(el.type==='radio'){
+        if(!form.querySelector('input[name="'+el.name+'"]:checked')){ err.textContent='Choisis une option pour continuer.'; return false; }
+      } else if(!el.checkValidity()){ el.reportValidity(); return false; }
+    }
+    // le petit-déj n'a pas d'attribut required (cases à cocher) -> contrôle manuel
+    if(steps[i].querySelector('input[name=pdj]') && !form.querySelector('input[name=pdj]:checked')){
+      err.textContent='Coche au moins une option (tu peux cocher les deux).'; return false;
+    }
     return true;
   }
-  next.addEventListener('click',function(){
+  function buildRecap(){
+    var rep=collect(), dl=document.createElement('dl');
+    form.querySelectorAll('[data-q]').forEach(function(el){
+      var q=el.getAttribute('data-q');
+      if(dl.querySelector('[data-k="'+CSS.escape(q)+'"]')) return;
+      var v=rep[q]; if(!v) return;
+      var dt=document.createElement('dt'); dt.setAttribute('data-k',q); dt.textContent=q.replace(/\s*\(.*?\)\s*$/,'');
+      var dd=document.createElement('dd'); dd.textContent=v;
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+    var pdj=rep["Es-tu plutôt team sucré ou salé au petit-déjeuner ?"];
+    if(pdj){ var a=document.createElement('dt'); a.textContent='Petit-déjeuner'; var b=document.createElement('dd'); b.textContent=pdj; dl.appendChild(a); dl.appendChild(b); }
+    var box=document.getElementById('recap'); box.innerHTML=''; box.appendChild(dl);
+  }
+
+  /* ---------- sauvegarde automatique ---------- */
+  var sb=null, uid=null, tmr=null;
+  function flash(txt){ saveTag.textContent=txt; saveTag.classList.add('on'); clearTimeout(flash._t); flash._t=setTimeout(function(){ saveTag.classList.remove('on'); },1800); }
+  function saveDraft(){
+    if(!sb||!uid) return Promise.resolve();
+    return sb.from('questionnaires').upsert({
+      user_id:uid, type:'nutrition', reponses:collect(), etape:i, statut:'brouillon'
+    },{onConflict:'user_id,type'}).then(function(r){
+      if(!r.error) flash('Brouillon enregistré');
+    });
+  }
+  function queueSave(){ clearTimeout(tmr); tmr=setTimeout(saveDraft,800); }
+  form.addEventListener('input',function(e){
+    if(e.target.name==='qualite'){ document.getElementById('qualval').textContent=e.target.value; }
+    queueSave();
+  });
+  form.addEventListener('change',queueSave);
+
+  /* ---------- validation définitive ---------- */
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
     if(!valid()) return;
-    if(i<total-1){ i++; render(); window.scrollTo(0,0); }
-    else submit();
+    if(i<total-1){ i++; render(); saveDraft(); window.scrollTo(0,0); return; }
+    modal.classList.add('on');                       // dernière étape -> double confirmation
   });
   prev.addEventListener('click',function(){ if(i>0){ i--; render(); window.scrollTo(0,0); } });
-  form.addEventListener('keydown',function(e){ if(e.key==='Enter' && e.target.tagName!=='TEXTAREA'){ e.preventDefault(); next.click(); } });
+  document.getElementById('mno').addEventListener('click',function(){ modal.classList.remove('on'); });
+  document.getElementById('myes').addEventListener('click',function(){
+    var b=this; b.disabled=true; b.textContent='Envoi…';
+    sb.from('questionnaires').upsert({
+      user_id:uid, type:'nutrition', reponses:collect(), etape:i, statut:'valide'
+    },{onConflict:'user_id,type'}).then(function(r){
+      if(r.error){ b.disabled=false; b.textContent='Oui, je valide'; err.textContent="Envoi impossible pour le moment. Réessaie dans un instant."; modal.classList.remove('on'); return; }
+      modal.classList.remove('on'); show('scr-thanks'); confetti();
+      try{ ElyAuth.setQuest(true); }catch(e){}
+    });
+  });
 
-  function submit(){
-    next.disabled=true; next.textContent='Envoi…';
-    var body=new URLSearchParams(new FormData(form)).toString();
-    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
-      .then(done).catch(done);
-  }
-  function done(){
-    document.getElementById('done').classList.add('on');
-    confetti();
-  }
+  /* ---------- démarrage ---------- */
+  if(!ElyAuth.requireAuth('connexion.html')) return;
+  ElyAuth.ready.then(function(u){
+    if(!u) return;                                   // requireAuth redirige déjà
+    sb=ElyAuth.client; uid=u.id;
+    if(!u.paid){ show('scr-lock'); return; }          // paiement d'abord (Stripe remplacera ce drapeau)
+    return sb.from('questionnaires').select('*').eq('user_id',uid).eq('type','nutrition').maybeSingle()
+      .then(function(r){
+        var row=r&&r.data;
+        if(row&&row.statut==='valide'){ show('scr-done2'); return; }
+        if(row){ restore(row.reponses); i=Math.min(row.etape||0,total-1); }
+        // pré-remplir le poids avec la dernière pesée connue
+        return sb.from('poids').select('kg').eq('user_id',uid).order('date',{ascending:false}).limit(1)
+          .then(function(p){
+            var w=p&&p.data&&p.data[0]; var el=form.querySelector('input[name=poids]');
+            if(w&&el&&!el.value) el.value=w.kg;
+            show(''); render();
+          });
+      });
+  }).catch(function(){ show(''); render(); });
 
-  // ---- confettis (canvas, zéro dépendance) ----
+  /* ---------- confettis (canvas, zéro dépendance) ---------- */
   function confetti(){
     if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
     var cv=document.getElementById('confetti'); cv.style.display='block';
-    var ctx=cv.getContext('2d'), W=cv.width=innerWidth, H=cv.height=innerHeight;
-    var cols=['#2E9BFF','#EAF2FF','#8fc6ff','#e8c56b','#ffffff'], P=[];
-    for(var n=0;n<150;n++){ P.push({x:W/2+(Math.random()-.5)*W*.35, y:H*.32+(Math.random()-.5)*70,
-      vx:(Math.random()-.5)*12, vy:Math.random()*-14-3, g:.30+Math.random()*.18, s:5+Math.random()*7,
-      r:Math.random()*6.28, vr:(Math.random()-.5)*.34, c:cols[n%cols.length], a:1}); }
+    var ctx=cv.getContext('2d'); cv.width=innerWidth; cv.height=innerHeight;
+    var P=[],C=['#2E9BFF','#EAF2FF','#7ea6df'];
+    for(var k=0;k<90;k++) P.push({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*.5,
+      w:4+Math.random()*5,h:6+Math.random()*8,vy:1.6+Math.random()*2.4,vx:-1+Math.random()*2,
+      a:Math.random()*6.28,va:-.1+Math.random()*.2,c:C[(Math.random()*C.length)|0]});
     var t0=Date.now();
     (function loop(){
-      ctx.clearRect(0,0,W,H); var alive=false;
-      for(var k=0;k<P.length;k++){ var p=P[k]; p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; p.vx*=.99;
-        if(Date.now()-t0>1500) p.a-=.028; if(p.a<=0) continue; alive=true;
-        ctx.save(); ctx.globalAlpha=Math.max(0,p.a); ctx.translate(p.x,p.y); ctx.rotate(p.r);
-        ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.62); ctx.restore(); }
-      if(alive) requestAnimationFrame(loop); else cv.style.display='none';
+      ctx.clearRect(0,0,cv.width,cv.height);
+      P.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.a+=p.va;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillStyle=p.c;
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); });
+      if(Date.now()-t0<4200) requestAnimationFrame(loop); else cv.style.display='none';
     })();
   }
-
-  render();
 })();
 </script>
 </body>

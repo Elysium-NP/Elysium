@@ -346,7 +346,9 @@ var PROG = {
 };
 (function(){
   var u=ElyAuth.user(); if(!u) return;
-  var FORM_URL='https://docs.google.com/forms/d/1vqA-7hDrKcn9HFFSwJgWW824tgrmhLbGwgKcI3FHggs/viewform';
+  // Questionnaire INTERNE (Supabase) — on s'est séparé de Google Forms : les réponses
+  // alimentent directement la base, donc le moteur et le futur espace coachs.
+  var FORM_URL='questionnaire.html';
   var WK='ely_weights_demo', GK='ely_goal_demo';
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
@@ -622,7 +624,7 @@ var PROG = {
       c.className='card wide';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">À activer</span></div>'+
         '<p>Paiement validé ✓. Dernière étape : réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et ton coach construit ton programme sur-mesure (il s\'affichera ici, en haut de ton espace, + PDF par mail).</p>'+
-        '<div class="dashcta"><a class="btn" href="'+FORM_URL+'" target="_blank" rel="noopener">Remplir le questionnaire nutrition</a></div>';
+        '<div class="dashcta"><a class="btn" href="'+FORM_URL+'">Remplir le questionnaire nutrition</a></div>';
     }
   }
 

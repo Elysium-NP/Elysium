@@ -120,19 +120,21 @@
           <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Rééquilibrage"><span class="dot"></span><span class="tx">Rééquilibrage alimentaire</span></label>
           <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Maintien de poids"><span class="dot"></span><span class="tx">Maintien de poids</span></label>
         </div>
-        <div class="qgrid" style="margin-top:16px">
-          <div class="qfield full"><label>Si le poids compte pour toi, ton idéal dans un premier temps&nbsp;?</label>
-            <input type="text" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" placeholder="Ex. 72 kg, ou « perdre 8 kg » — laisse vide si non concerné"></div>
-        </div>
       </div>
 
-      <!-- 02 · POIDS + TÉLÉPHONE -->
+      <!-- 02 · POIDS + OBJECTIF DE POIDS + TÉLÉPHONE
+           ⚠️ ORDRE CRITIQUE : « Poids (en kg) » DOIT rester AVANT la question sur le
+           poids idéal. Le moteur retient la 1re colonne dont l'intitulé contient
+           « poids » — si l'idéal passe devant, il prend l'objectif pour le poids
+           actuel et tout le calcul est faux (bug attrapé au test de bout en bout). -->
       <div class="qstep">
         <h2>Où en es-tu aujourd'hui&nbsp;?</h2>
         <p class="qhint">Ton nom, ton sexe, ton âge et ta taille sont déjà enregistrés à ton compte : on ne te les redemande pas.</p>
         <div class="qgrid">
           <div class="qfield"><label>Poids actuel (kg)</label><input type="number" name="poids" data-q="Poids (en kg)" min="35" max="250" step="0.1" placeholder="kg" required></div>
           <div class="qfield"><label>Téléphone</label><input type="tel" name="telephone" data-q="Numéro de téléphone" placeholder="06 12 34 56 78" required></div>
+          <div class="qfield full"><label>Si le poids compte pour toi, ton idéal dans un premier temps&nbsp;?</label>
+            <input type="text" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" placeholder="Ex. 72 kg, ou « perdre 8 kg » — laisse vide si non concerné"></div>
         </div>
       </div>
 

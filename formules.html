@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#06080C">
 <title>ELYSIUM · Les formules</title>
 <link rel="canonical" href="https://elysium-x57.pages.dev/formules">
-<meta name="description" content="Trois niveaux d'accompagnement Elysium : du programme sur-mesure au suivi rapproché. Choisis le tien.">
+<meta name="description" content="Les formules Elysium : programmation nutritionnelle, programme d'entraînement, ou le pack des deux. Sur-mesure, construit par les coachs.">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Elysium · Nutrition &amp; Performance">
 <meta property="og:title" content="ELYSIUM · Les formules">
-<meta property="og:description" content="Ta programmation nutritionnelle sur-mesure, construite à partir de ton questionnaire par les coachs Elysium. 59,99 € pour 8 semaines.">
+<meta property="og:description" content="Nutrition, entraînement ou les deux : des programmations sur-mesure construites par les coachs Elysium à partir de ton questionnaire. À partir de 59,90 €.">
 <meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
 <meta property="og:url" content="https://elysium-x57.pages.dev/formules.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -24,7 +24,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "serviceType": "Programmation nutritionnelle personnalisée",
+  "serviceType": "Programmation nutritionnelle et sportive personnalisée",
   "name": "Programmation nutritionnelle Elysium",
   "provider": {
     "@type": "Organization",
@@ -32,38 +32,43 @@
     "url": "https://elysium-x57.pages.dev/"
   },
   "areaServed": { "@type": "Country", "name": "France" },
-  "description": "Programmation nutritionnelle personnalisée, à distance, construite sur-mesure par les coachs Elysium à partir d'un questionnaire.",
-  "offers": { "@type": "Offer", "priceCurrency": "EUR", "price": "59.99", "itemOffered": { "@type": "Service", "name": "Programmation nutritionnelle (8 semaines)" } }
+  "description": "Programmations nutritionnelle et sportive personnalisées, à distance, construites sur-mesure par les coachs Elysium à partir d'un questionnaire.",
+  "offers": [
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "59.90", "itemOffered": { "@type": "Service", "name": "Programmation nutritionnelle (8 semaines)" } },
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "69.90", "itemOffered": { "@type": "Service", "name": "Programme d'entraînement" } },
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "119.80", "itemOffered": { "@type": "Service", "name": "Pack nutrition & entraînement" } }
+  ]
 }
 </script>
 <link rel="stylesheet" href="assets/site.css">
 <style>
-  /* ===== Formule 01 — hiérarchie de prix commerciale (Dimitri 25/07) ===== */
-  .plan01 .price01{margin:16px 0 0;line-height:1}
-  /* ancien prix : barré FRANC et visible (Dimitri 26/07 : « davantage barré ») */
-  .plan01 .old{font-family:var(--disp);color:var(--steel);opacity:.92;text-decoration:line-through;
-    text-decoration-color:#c8d0dc;text-decoration-thickness:3px;white-space:nowrap;display:inline-block}
-  .plan01 .old .o1{font-size:29px;font-weight:600;letter-spacing:.01em}
-  .plan01 .old .o2{font-size:15px;font-weight:500;vertical-align:.5em;margin-left:1px}
-  /* prix courant : « 59€99 » — le € est le séparateur, bien visible (Dimitri 26/07) */
-  .plan01 .now{display:flex;align-items:flex-start;font-family:var(--disp);color:var(--ice);margin-top:6px}
-  .plan01 .now .n1{font-size:76px;font-weight:700;letter-spacing:-.015em;line-height:.82;
+  /* ===== PRIX DES FORMULES (Damien & Yoann 27/07) — retour à un affichage SIMPLE :
+     le prix principal, puis les précisions de paiement dessous. PLUS d'ancien prix
+     barré sur la nutrition. Le barré ne sert QUE sur le pack, pour montrer la remise. */
+  .plan .price01{margin:14px 0 0;line-height:1}
+  .plan .now{display:flex;align-items:flex-start;font-family:var(--disp);color:var(--ice)}
+  .plan .now .n1{font-size:58px;font-weight:700;letter-spacing:-.015em;line-height:.85;
     text-shadow:0 0 24px rgba(46,155,255,.16)}
-  .plan01 .now .eur{font-size:38px;font-weight:700;margin:4px 1px 0 3px;color:var(--blue)}
-  .plan01 .now .n2{font-size:30px;font-weight:700;margin:6px 0 0 1px;letter-spacing:.01em}
-  .plan01 .pterm{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.16em;
+  .plan .now .eur{font-size:29px;font-weight:700;margin:3px 1px 0 3px;color:var(--blue)}
+  .plan .now .n2{font-size:23px;font-weight:700;margin:4px 0 0 1px;letter-spacing:.01em}
+  .plan .pterm{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.16em;
     text-transform:uppercase;color:var(--blue);margin-top:12px}
-  .plan01 .pfine{font-family:var(--disp);font-size:12.5px;line-height:1.5;color:var(--steel);margin:6px 0 22px}
-  /* une seule formule pour l'instant -> carte centrée et mise en avant (Dimitri 25/07) */
-  .plans.solo{grid-template-columns:1fr;max-width:432px;margin:0 auto}
+  .plan .pfine{font-family:var(--disp);font-size:12.5px;line-height:1.5;color:var(--steel);margin:6px 0 20px}
+  /* PACK : total des deux prestations barré + pastille de remise */
+  .plan .packold{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--steel);
+    text-decoration:line-through;text-decoration-color:#c8d0dc;text-decoration-thickness:2px}
+  .plan .packsave{display:inline-block;margin-left:9px;font-family:var(--disp);font-size:11px;
+    font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);
+    border:1px solid rgba(46,155,255,.45);padding:3px 8px;vertical-align:2px}
   /* bandeau « durée recommandée » sous la carte prix (Dimitri 26/07) */
-  .plan01 .reco{margin:2px 0 20px;padding:12px 14px;border:1px solid rgba(46,155,255,.28);
+  .plan .reco{margin:2px 0 20px;padding:12px 14px;border:1px solid rgba(46,155,255,.28);
     border-radius:12px;background:rgba(46,155,255,.06)}
-  .plan01 .reco b{font-family:var(--disp);text-transform:uppercase;letter-spacing:.04em;color:var(--ice)}
-  .plan01 .reco span{display:block;margin-top:5px;font-size:13px;line-height:1.55;color:var(--steel)}
-  .plan01 ul li b{color:var(--ice);font-weight:600}
-  .plan01 li.opt-reco{color:var(--blue)}
-  .plan01 li.opt-reco b{color:var(--blue)}
+  .plan .reco b{font-family:var(--disp);text-transform:uppercase;letter-spacing:.04em;color:var(--ice)}
+  .plan .reco span{display:block;margin-top:5px;font-size:13px;line-height:1.55;color:var(--steel)}
+  .plan ul li b{color:var(--ice);font-weight:600}
+  .plan li.opt-reco{color:var(--blue)}
+  .plan li.opt-reco b{color:var(--blue)}
+  @media(max-width:900px){ .plans{grid-template-columns:1fr;max-width:460px;margin:0 auto} }
   /* ===== Section « Le suivi » : accompagnement évolutif (Dimitri 26/07) ===== */
   .evol{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:30px}
   .evol .ev{padding:22px 20px;border:1px solid var(--line);border-radius:14px;
@@ -117,9 +122,9 @@
   <header class="phead">
     <canvas class="pfield" aria-hidden="true"></canvas>
     <div class="phead-in">
-      <div class="kick reveal">La formule</div>
-      <h1 class="reveal d1">Ta programmation<span class="l2">nutritionnelle.</span></h1>
-      <p class="sub reveal d2">Ton programme alimentaire sur-mesure, construit à partir de ton questionnaire. Au gramme près, prêt à suivre.</p>
+      <div class="kick reveal">Les formules</div>
+      <h1 class="reveal d1">Ta programmation<span class="l2">sur-mesure.</span></h1>
+      <p class="sub reveal d2">L'assiette, l'entraînement, ou les deux. Construit à partir de ton questionnaire, au gramme près, prêt à suivre.</p>
     </div>
   </header>
 
@@ -129,33 +134,71 @@
       <div class="sec-head reveal">
         <span class="no">01</span>
         <div>
-          <span class="lbl">// La formule</span>
-          <h2>Ta programmation nutritionnelle</h2>
+          <span class="lbl">// Les formules</span>
+          <h2>Nutrition, entraînement, ou les deux</h2>
         </div>
       </div>
 
-      <div class="plans solo">
+      <div class="plans">
 
-        <!-- FORMULE 1 : programmation nutritionnelle (carte prix commerciale — Dimitri 25/07) -->
-        <article class="plan plan01 reveal">
+        <!-- FORMULE 01 : NUTRITION — 59,90 € puis 14,90 €/4 sem dès la 8e semaine -->
+        <article class="plan reveal">
           <span class="pn">Formule 01</span>
           <h3>Programmation nutritionnelle</h3>
           <p class="desc">Ton programme alimentaire sur-mesure, prêt à suivre.</p>
           <div class="price01">
-            <span class="old"><span class="o1">79</span><span class="o2">€99</span></span>
-            <div class="now"><span class="n1">59</span><span class="eur">€</span><span class="n2">99</span></div>
+            <div class="now"><span class="n1">59</span><span class="eur">€</span><span class="n2">90</span></div>
           </div>
           <div class="pterm">Programme&nbsp;•&nbsp;8 semaines</div>
-          <p class="pfine">59€99 pour tes 8 premières semaines, puis 14,99 € toutes les 4 semaines (hors options). Le renouvellement de ton menu et le recalcul de tes besoins sont compris.</p>
+          <p class="pfine">Puis <b>14,90 €</b> toutes les 4 semaines, à partir de la 8<sup>e</sup> semaine. Le renouvellement de ton menu et le recalcul de tes besoins sont compris.</p>
           <div class="reco"><b>Recommandé : au minimum 12 semaines</b><span>C'est la régularité qui installe les vrais résultats. Ensuite, tu continues aussi longtemps que tu veux, avec un menu régulièrement renouvelé.</span></div>
           <ul>
             <li><b>Programmation alimentaire 100 % personnalisée</b></li>
             <li>Repas adaptés à ton <b>objectif</b>, tes <b>préférences</b> et tes <b>contraintes</b></li>
-            <li><b>Renouvelé au minimum toutes les 4 semaines</b> — recalculé selon ton poids et ta progression, inclus tant que tu es abonné</li>
+            <li><b>Renouvelé au minimum toutes les 4 semaines</b> — recalculé selon ton poids et ta progression</li>
             <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
             <li><b>Liste de courses</b> regroupée automatiquement</li>
             <li>Tableau des <b>apports en grammes &amp; calories</b></li>
             <li class="opt-reco"><b>En option — les recettes détaillées</b> de chaque plat, pour encore plus de gourmandise et de simplicité</li>
+          </ul>
+          <a class="btn" href="connexion.html">Accéder à mon espace</a>
+        </article>
+
+        <!-- FORMULE 02 : ENTRAÎNEMENT — 69,90 € -->
+        <article class="plan reveal d1">
+          <span class="pn">Formule 02</span>
+          <h3>Programme d'entraînement</h3>
+          <p class="desc">Ton plan d'entraînement personnalisé, construit sur ton niveau.</p>
+          <div class="price01">
+            <div class="now"><span class="n1">69</span><span class="eur">€</span><span class="n2">90</span></div>
+          </div>
+          <div class="pterm">Programme d'entraînement</div>
+          <p class="pfine">Construit à partir de ton questionnaire : niveau, matériel disponible, temps et fréquence de tes séances.</p>
+          <ul>
+            <li><b>Programme d'entraînement 100 % personnalisé</b></li>
+            <li>Adapté à ton <b>objectif</b> : force, renforcement, recomposition, prise de masse ou perte de poids</li>
+            <li>Calé sur ton <b>nombre de séances</b> et leur <b>durée</b></li>
+            <li>Pensé pour ton <b>niveau</b> et ton <b>matériel</b></li>
+          </ul>
+          <a class="btn" href="connexion.html">Accéder à mon espace</a>
+        </article>
+
+        <!-- FORMULE 03 : PACK — 129,80 € - 10 € = 119,80 € -->
+        <article class="plan feat reveal d2">
+          <span class="pn">Formule 03</span>
+          <h3>Pack nutrition &amp; entraînement</h3>
+          <p class="desc">Les deux programmations, pensées ensemble.</p>
+          <div class="price01">
+            <div><span class="packold">129,80 €</span><span class="packsave">− 10 €</span></div>
+            <div class="now" style="margin-top:8px"><span class="n1">119</span><span class="eur">€</span><span class="n2">80</span></div>
+          </div>
+          <div class="pterm">Les deux programmes</div>
+          <p class="pfine">L'assiette et l'entraînement construits <b>en cohérence</b>, par les mêmes coachs. Le renouvellement de la nutrition suit les mêmes conditions que la Formule 01.</p>
+          <ul>
+            <li><b>Tout</b> ce que contient la <b>Formule 01</b></li>
+            <li><b>Tout</b> ce que contient la <b>Formule 02</b></li>
+            <li>Les deux programmes <b>alignés sur le même objectif</b></li>
+            <li><b>10 € d'économie</b> par rapport aux deux pris séparément</li>
           </ul>
           <a class="btn" href="connexion.html">Accéder à mon espace</a>
         </article>

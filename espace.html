@@ -364,7 +364,14 @@ var PROG = {
   // Questionnaire INTERNE (Supabase) — on s'est séparé de Google Forms : les réponses
   // alimentent directement la base, donc le moteur et le futur espace coachs.
   var FORM_URL='questionnaire.html';
-  var WK='ely_weights_demo', GK='ely_goal_demo';
+  // ⚠️ CLOISONNEMENT PAR COMPTE (27/07). Ces clés étaient GLOBALES : sur un même
+  // navigateur, tous les comptes partageaient les mêmes pesées, objectif, mensurations et
+  // liste de courses. Damien voyait donc les données de Dimitri. Sur un poste partagé, un
+  // client verrait celles d'un autre — ce sont des données de santé.
+  // (Le stockage définitif est Supabase : les tables `poids` et `mensurations` existent
+  //  déjà avec leurs protections d'accès. Ce suffixe est le correctif immédiat.)
+  var UID = '_' + String((ElyAuth.user()||{}).id || 'anon').slice(0, 8);
+  var WK='ely_weights'+UID, GK='ely_goal'+UID;
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   // apparition au scroll (réutilisable dashboard + programme)
@@ -576,7 +583,7 @@ var PROG = {
     // liste de courses : cases mémorisées + progression + « tout décocher »
     (function(){
       var panel=document.getElementById('pan-courses'); if(!panel) return;
-      var CK='ely_courses_demo';
+      var CK='ely_courses'+UID;     // cloisonné par compte (cf. plus haut)
       var boxes=[].slice.call(panel.querySelectorAll('.ci input'));
       var saved; try{ saved=JSON.parse(localStorage.getItem(CK)||'[]'); }catch(e){ saved=[]; }
       function persist(){ var on=[]; boxes.forEach(function(i){ if(i.checked) on.push(i.parentNode.getAttribute('data-k')); }); localStorage.setItem(CK,JSON.stringify(on)); }
@@ -664,7 +671,7 @@ var PROG = {
   photo.addEventListener('change',function(){ if(photo.files&&photo.files[0]) document.getElementById('photomsg').textContent='« '+photo.files[0].name+' » sélectionnée (l\'upload réel viendra avec Supabase Storage).'; });
 
   // ---- mensurations (démo : dernière saisie mémorisée dans le navigateur) ----
-  var MK='ely_mens_demo', mfields=['epaules','poitrine','taille','hanches','cuisse','bras'];
+  var MK='ely_mens'+UID, mfields=['epaules','poitrine','taille','hanches','cuisse','bras'];
   (function(){ var s; try{ s=JSON.parse(localStorage.getItem(MK)||'null'); }catch(e){ s=null; } if(!s) return;
     mfields.forEach(function(f){ var el=document.getElementById('m-'+f); if(el&&s[f]!=null) el.value=s[f]; });
     if(s.t) document.getElementById('mens-msg').textContent='Dernière saisie le '+new Date(s.t).toLocaleDateString('fr-FR')+'.'; })();

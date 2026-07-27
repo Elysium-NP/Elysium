@@ -689,15 +689,15 @@ var PROG = {
   // ---- déconnexion + démo paiement ----
   document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });
 
-  // ---- raccourci « Espace coachs » : n'apparaît QUE pour un vrai coach ----
-  // Le lien est masqué par défaut. On interroge la table `admins` : grâce au RLS,
-  // un client n'y lit RIEN, donc le lien ne peut pas apparaître par erreur. Ce
-  // n'est de toute façon qu'un raccourci — la page /coach refait le contrôle
-  // côté serveur, quelqu'un qui devinerait l'adresse n'y verrait rien.
-  try {
-    ElyAuth.client.from('admins').select('user_id').eq('user_id',u.id).maybeSingle()
-      .then(function(r){ if(r && r.data) document.getElementById('coachlink').hidden=false; });
-  } catch(e) {}
+  // ---- aiguillage selon le TYPE DE COMPTE (voir ElyAuth.acces) ----
+  //  · "coach" (Damien, Yoann) : cette page ne les concerne pas — on les renvoie
+  //    sur leur dashboard, même s'ils arrivent ici en tapant l'adresse.
+  //  · "mixte" (Dimitri) : espace client + raccourci vers /coach.
+  //  · "client" : rien de spécial.
+  ElyAuth.acces().then(function(a){
+    if(a==='coach'){ location.replace('coach.html'); return; }
+    if(a==='mixte'){ document.getElementById('coachlink').hidden=false; }
+  });
   document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
   document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
 

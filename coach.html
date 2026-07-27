@@ -163,7 +163,11 @@
 <header class="chead">
   <a class="logo" href="index.html" aria-label="Elysium"><span class="elg" style="--h:52px"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span></span></a>
   <span class="ctag">Espace coachs</span>
-  <span class="who"><b id="coachname">—</b><button class="out" id="logout" type="button">Déconnexion</button></span>
+  <span class="who"><b id="coachname">—</b>
+    <!-- Retour vers l'espace client : réservé au compte « mixte » (Dimitri).
+         Un coach pur n'a rien à faire dans l'espace client, le lien reste caché. -->
+    <a class="out" id="mespace" href="espace.html" style="text-decoration:none" hidden>Mon espace</a>
+    <button class="out" id="logout" type="button">Déconnexion</button></span>
 </header>
 
 <div class="cwrap" id="app" hidden>
@@ -473,6 +477,9 @@
   }).catch(function(){ $('gate').classList.add('on'); });
 
   $('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });
+
+  // Seul le compte « mixte » (Dimitri) garde un pied dans l'espace client.
+  ElyAuth.acces().then(function(a){ if(a==='mixte') $('mespace').hidden=false; });
 })();
 </script>
 </body>

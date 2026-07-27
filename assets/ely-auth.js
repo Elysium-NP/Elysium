@@ -146,6 +146,40 @@
       return true;
     },
 
+    /* ------------------------------------------------------------------ */
+    /* TYPE DE COMPTE — il y en a TROIS (décision Dimitri 27/07) :
+         "client" -> espace perso classique
+         "coach"  -> Damien & Yoann : ils arrivent DIRECTEMENT sur /coach et ne
+                     voient jamais l'espace client (ni paiement, ni
+                     questionnaire — ça ne les concerne pas)
+         "mixte"  -> le compte de Dimitri : espace client + raccourci coach,
+                     pour garder la vision d'ensemble. Temporaire.
+       La source de vérité est la table `admins` (colonne `acces`) : le RLS fait
+       qu'un client n'y lit rien, donc il ne peut pas se hisser en coach depuis
+       son navigateur. Ce n'est de toute façon qu'un AIGUILLAGE d'affichage —
+       chaque page refait son propre contrôle côté serveur.
+       Renvoie une Promesse. Volontairement PAS mémorisé : sur la page de
+       connexion, `ready` s'est résolu AVANT le login (personne n'était connecté
+       à l'ouverture) — un résultat mis en cache figerait « client » et enverrait
+       les coachs au mauvais endroit. On relit donc le miroir, que `login` vient
+       de rafraîchir. C'est une lecture par clé primaire, elle ne coûte rien. */
+    acces: function () {
+      return ready.catch(function () {}).then(function () {
+        var u = readMirror();
+        if (!u || !u.id || !sb) return "client";
+        return sb.from("admins").select("acces").eq("user_id", u.id).maybeSingle()
+          .then(function (r) { return (r && r.data && r.data.acces) || "client"; })
+          .catch(function () { return "client"; });
+      });
+    },
+
+    /* Où envoyer ce compte après connexion / à l'ouverture d'une page privée. */
+    accueil: function () {
+      return this.acces().then(function (a) {
+        return a === "coach" ? "coach.html" : "espace.html";
+      });
+    },
+
     /* Démo/transition : gardés en local tant que Stripe et le questionnaire
        ne sont pas câblés côté serveur (ils deviendront des colonnes en base). */
     setPaid: function (v) { var u = readMirror() || {}; u.paid = !!v; writeMirror(u); },

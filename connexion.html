@@ -67,7 +67,10 @@
     e.preventDefault(); clear();
     btn.disabled=true; btn.textContent='Connexion…';
     ElyAuth.login(f.email.value, f.password.value)
-      .then(function(){ location.href='espace.html'; })
+      // Un coach (Damien, Yoann) va DIRECTEMENT sur son dashboard : l'espace
+      // client ne le concerne pas. Tout le monde d'autre va sur espace.html.
+      .then(function(){ return ElyAuth.accueil(); })
+      .then(function(dest){ location.href=dest; })
       .catch(function(err){ say(human(err)); btn.disabled=false; btn.textContent=label; });
   });
 

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06080C">
+<title>ELYSIUM · Bienvenue</title>
+<meta name="description" content="Ton adresse est confirmée. Bienvenue chez Elysium.">
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* Page d'arrivée après le clic sur le lien de confirmation reçu par e-mail.
+     Avant (relevé Dimitri 27/07), Supabase renvoyait sur la racine du site SANS
+     aucun message : le client ne savait même pas si la confirmation avait marché. */
+  .bv{max-width:640px;margin:0 auto;padding:150px var(--edge) 90px;text-align:center}
+  .bv .mark{width:66px;height:66px;margin:0 auto 30px;border:1px solid var(--blue);
+    display:flex;align-items:center;justify-content:center;position:relative}
+  .bv .mark::before,.bv .mark::after{content:"";position:absolute;background:var(--blue);
+    box-shadow:0 0 10px var(--blue)}
+  .bv .mark::before{width:2px;height:15px;transform:rotate(-45deg) translate(-7px,7px)}
+  .bv .mark::after{width:2px;height:29px;transform:rotate(38deg) translate(6px,-2px)}
+  .bv h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,6vw,52px);
+    color:var(--ice);text-transform:uppercase;line-height:1.03;letter-spacing:.005em;margin:0 0 18px}
+  .bv h1 span{color:var(--blue)}
+  .bv .sub{font-family:var(--disp);font-size:15.5px;line-height:1.7;color:var(--gris);
+    max-width:46ch;margin:0 auto 14px}
+  .bv .sub b{color:var(--ice);font-weight:500}
+  .bv .who{font-family:var(--disp);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--steel);margin-bottom:34px}
+  .bv .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:44px}
+  .bv .cta .btn{cursor:pointer;background:transparent}
+  /* étapes suivantes — le client doit savoir ce qui l'attend */
+  .steps{text-align:left;border-top:1px solid var(--line);padding-top:30px}
+  .steps .t{font-family:var(--disp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--blue);margin-bottom:20px}
+  .steps ol{list-style:none;margin:0;padding:0;counter-reset:s}
+  .steps li{counter-increment:s;position:relative;padding-left:42px;margin-bottom:20px;
+    font-family:var(--disp);font-size:14.5px;line-height:1.65;color:var(--gris)}
+  .steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;
+    font-size:11px;letter-spacing:.14em;color:var(--blue)}
+  .steps li b{color:var(--ice);font-weight:500}
+  .steps li.done{color:var(--steel)}
+  .steps li.done b{color:var(--gris)}
+  .steps li.done::before{color:var(--steel)}
+  /* message d'erreur si le lien est expiré / déjà utilisé */
+  .bv-err{display:none;font-family:var(--disp);font-size:14px;line-height:1.6;
+    border:1px solid rgba(232,176,75,.4);background:rgba(232,176,75,.06);
+    color:#d8c08a;padding:15px 18px;margin:0 auto 30px;max-width:46ch;text-align:left}
+  .bv-err.on{display:block}
+  .bv-err b{color:#f0dcae}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+
+<div class="qtop" style="position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;padding:16px var(--edge)">
+  <a class="logo" href="index.html" aria-label="Elysium · Nutrition &amp; Performance"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></a>
+</div>
+
+<main class="bv">
+  <div class="mark" aria-hidden="true"></div>
+  <h1>Adresse<span> confirmée.</span></h1>
+  <p class="who" id="qui"></p>
+  <p class="sub">Ton compte est actif. <b>Damien &amp; Yoann</b> prendront le relais dès que ton
+     questionnaire sera rempli — c'est lui qui sert à construire ta programmation.</p>
+
+  <p class="bv-err" id="err"></p>
+
+  <div class="cta">
+    <a class="btn" href="espace.html" id="go">Accéder à mon espace</a>
+  </div>
+
+  <div class="steps">
+    <div class="t">La suite</div>
+    <ol>
+      <li class="done"><b>Ton compte est créé</b> et ton adresse vérifiée.</li>
+      <li><b>Choisis ta formule</b> — c'est elle qui ouvre l'accès au questionnaire.</li>
+      <li><b>Remplis le questionnaire</b> en une fois ou en plusieurs : il s'enregistre tout seul
+          au fur et à mesure. Prends ton temps, rien n'est définitif tant que tu n'as pas validé.</li>
+      <li><b>On construit ta programmation</b>, à la main, au gramme près. Tu la retrouves dans
+          ton espace.</li>
+    </ol>
+  </div>
+</main>
+
+<script src="assets/site.js"></script>
+<script src="assets/vendor/supabase.min.js"></script>
+<script src="assets/ely-auth.js"></script>
+<script>
+(function(){
+  "use strict";
+  // Le lien de confirmation ouvre une session : on affiche le prénom pour que le client
+  // voie NOIR SUR BLANC que c'est bien SON compte qui vient d'être activé.
+  ElyAuth.ready.then(function(u){
+    if (u && u.prenom) {
+      document.getElementById('qui').textContent = 'Bienvenue, ' + u.prenom;
+      return;
+    }
+    // Pas de session : lien expiré, déjà utilisé, ou ouvert sur un autre appareil.
+    // On ne laisse PAS le client devant une page qui affirme « confirmée » sans preuve.
+    var e = document.getElementById('err');
+    e.innerHTML = "<b>Ton lien n'a pas pu ouvrir de session.</b> C'est normal s'il a déjà servi, " +
+                  "s'il a expiré, ou si tu l'ouvres sur un autre appareil que celui de l'inscription. " +
+                  "Connecte-toi simplement avec ton adresse et ton mot de passe.";
+    e.className = 'bv-err on';
+    var go = document.getElementById('go');
+    go.textContent = 'Me connecter';
+    go.setAttribute('href', 'connexion.html');
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>

@@ -98,6 +98,10 @@
         email: (data.email || "").trim(),
         password: data.password,
         options: {
+          // Où atterrit le client APRÈS avoir cliqué le lien de confirmation. Sans ça,
+          // Supabase le renvoyait sur la racine du site SANS aucun message — il ne savait
+          // même pas si ça avait marché (relevé par Dimitri le 27/07).
+          emailRedirectTo: location.origin + "/bienvenue",
           data: {
             prenom: (data.prenom || "").trim(),
             nom: (data.nom || "").trim(),

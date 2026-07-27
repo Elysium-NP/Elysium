@@ -190,6 +190,11 @@
   @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.cprog i{transition:none}.cat .ci .box.pop{animation:none}}
   @media(max-width:600px){.phd{flex-direction:column;align-items:flex-start;gap:20px}.phd .macros{flex-direction:column;align-items:center;gap:18px;width:100%}.mlist{min-width:0;width:100%}.meal .rec{font-size:17px}.courses-top{gap:10px}}
   @media(prefers-reduced-motion:reduce){.mrow .bar i{transition:none}#progview,.panel.on{animation:none}}
+  /* en-tête : groupe d'actions (raccourci coachs + déconnexion) */
+  .hd-act{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .dash-hd .coachlink{text-decoration:none;color:var(--blue);border-color:rgba(46,155,255,.45)}
+  .dash-hd .coachlink:hover{background:rgba(46,155,255,.1);color:#fff}
+  .dash-hd .coachlink[hidden]{display:none}
 </style>
 <script src="assets/vendor/supabase.min.js"></script>
 <script src="assets/ely-auth.js"></script>
@@ -208,7 +213,13 @@
 <main class="dash">
   <div class="dash-hd">
     <h1>Bonjour, <span id="prenom">toi</span>.</h1>
-    <button class="out" id="logout">Déconnexion</button>
+    <div class="hd-act">
+      <!-- Raccourci vers l'espace coachs. Masqué par défaut : il n'apparaît que si
+           le compte est réellement dans la table `admins` (vérifié côté serveur,
+           cf. plus bas). Sans lui, un coach devait taper /coach à la main. -->
+      <a class="out coachlink" id="coachlink" href="coach.html" hidden>◆ Espace coachs</a>
+      <button class="out" id="logout">Déconnexion</button>
+    </div>
   </div>
   <div class="dash-sub">
     <span id="statuspill" class="pill free">Compte gratuit</span>
@@ -677,6 +688,16 @@ var PROG = {
 
   // ---- déconnexion + démo paiement ----
   document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });
+
+  // ---- raccourci « Espace coachs » : n'apparaît QUE pour un vrai coach ----
+  // Le lien est masqué par défaut. On interroge la table `admins` : grâce au RLS,
+  // un client n'y lit RIEN, donc le lien ne peut pas apparaître par erreur. Ce
+  // n'est de toute façon qu'un raccourci — la page /coach refait le contrôle
+  // côté serveur, quelqu'un qui devinerait l'adresse n'y verrait rien.
+  try {
+    ElyAuth.client.from('admins').select('user_id').eq('user_id',u.id).maybeSingle()
+      .then(function(r){ if(r && r.data) document.getElementById('coachlink').hidden=false; });
+  } catch(e) {}
   document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
   document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
 

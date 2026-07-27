@@ -153,6 +153,17 @@
   .gate.on{display:flex}
   .gate h2{font-family:var(--disp);font-weight:600;font-size:34px;color:var(--ice);text-transform:uppercase;margin:0 0 14px}
   .gate p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);max-width:44ch;margin:0 auto 26px}
+  /* « À interpréter » : mots écrits par le client, absents de la base. Doit se voir
+     sans crier — c'est une demande de jugement, pas une erreur. */
+  .ainterp{border:1px solid rgba(232,176,75,.4);background:rgba(232,176,75,.055);padding:14px 16px;margin-bottom:16px}
+  .ai-t{font-family:var(--disp);font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:#e8b04b;margin-bottom:11px}
+  .ai-l{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:8px}
+  .ai-k{font-family:var(--disp);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);min-width:112px}
+  .ai-w{font-family:var(--disp);font-size:14px;color:var(--ice);border:1px solid var(--line);padding:4px 10px}
+  .ai-l.fort .ai-w{color:#f0dcae;border-color:rgba(232,176,75,.45)}
+  .ai-n{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--gris);margin:11px 0 0}
+  .ai-n b{color:#f0dcae}
+  @media(max-width:600px){.ai-k{min-width:0;width:100%}}
 </style>
 </head>
 <body>
@@ -341,6 +352,26 @@
     var m=c.menu, d=c.diagnostic||{};
     $('progn').textContent='v'+(c.version||1)+(d.jours_ok!=null?' · '+d.jours_ok+'/6 jours':'');
     var h='';
+
+    // ---- CE QUE LE CLIENT A ÉCRIT ET QUI N'EST PAS DANS LA BASE ----
+    // Ces mots n'ont PAS été exclus du menu : ils demandent une lecture humaine
+    // (« pamplemousse » -> peut-être aucun agrume ; « banane » -> une source à
+    // remplacer). Avant, ils disparaissaient sans que personne ne le sache.
+    var ai=d.a_interpreter||{};
+    var blocs=[['Refusé',ai.refuses,'grave'],['Allergie / santé',ai.allergies,'grave'],
+               ['À conserver',ai.conserver,'doux']];
+    var interp='';
+    blocs.forEach(function(b){
+      if(!b[1]||!b[1].length) return;
+      interp+='<div class="ai-l'+(b[2]==='grave'?' fort':'')+'"><span class="ai-k">'+b[0]+'</span>'+
+              b[1].map(function(x){ return '<span class="ai-w">'+esc(x)+'</span>'; }).join('')+'</div>';
+    });
+    if(interp){
+      h+='<div class="ainterp"><div class="ai-t">À interpréter — mots absents de la base</div>'+interp+
+         '<p class="ai-n">Le moteur ne les a <b>pas</b> exclus du menu : il ne les connaît pas. '+
+         'À toi de juger ce que ça implique (une famille entière&nbsp;? une source à remplacer&nbsp;?) '+
+         'et de le signaler si le menu doit changer.</p></div>';
+    }
     (m.jours||[]).forEach(function(j){
       if(j.off) return;
       h+='<div class="jour"><div class="jh">Jour '+j.jour+'</div>';

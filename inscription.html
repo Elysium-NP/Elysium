@@ -21,6 +21,9 @@
   .auth-form select,.auth-form input[type=date]{color-scheme:dark;font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;width:100%;transition:border-color .3s}
   .auth-form select:focus,.auth-form input[type=date]:focus{outline:none;border-color:var(--blue)}
   .auth-note{font-family:var(--disp);font-size:11.5px;line-height:1.6;color:var(--steel);margin:0}
+  /* aide sous un champ — texte normal (pas de capitales : le <label> parent les impose) */
+  .auth-form .fhint{font-family:var(--disp);font-size:11.5px;line-height:1.55;color:var(--steel);
+    letter-spacing:0;text-transform:none;margin-top:-2px}
 </style>
 </head>
 <body>
@@ -53,8 +56,12 @@
         <label>Taille (cm)<input type="number" name="taille" min="120" max="230" step="1" inputmode="numeric" required></label>
       </div>
       <label>Email<input type="email" name="email" autocomplete="email" required></label>
-      <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="6" required></label>
-      <label>Confirme le mot de passe<input type="password" name="password2" autocomplete="new-password" minlength="6" required></label>
+      <!-- ⚠️ minlength DOIT rester identique au « Minimum password length » réglé dans
+           Supabase (Authentication -> Sign In / Providers -> Email). Sinon le formulaire
+           accepte un mot de passe que le serveur refuse ensuite = erreur incompréhensible. -->
+      <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="10" required>
+        <span class="fhint">10 caractères minimum. Une phrase courte est plus sûre et plus facile à retenir qu'un mot compliqué.</span></label>
+      <label>Confirme le mot de passe<input type="password" name="password2" autocomplete="new-password" minlength="10" required></label>
       <p class="auth-note">Nom, prénom, date de naissance, sexe et taille ne seront plus modifiables ensuite (hors correction exceptionnelle). Seul ton poids évolue au fil du suivi.</p>
       <button type="submit" class="btn">Créer mon compte</button>
     </form>

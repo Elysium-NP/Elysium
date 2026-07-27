@@ -20,13 +20,26 @@
   .qtop .back{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
   .qtop .back:hover{color:var(--blue)}
   .qprog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue-d),var(--blue));box-shadow:0 0 12px var(--blue);width:0;z-index:60;transition:width .5s cubic-bezier(.4,0,.2,1)}
-  .qwrap{max-width:680px;margin:0 auto;padding:120px var(--edge) 80px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
-  .qcount{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:18px}
-  .qstep{display:none;animation:qin .5s cubic-bezier(.2,.7,.2,1)}
-  .qstep.active{display:block}
-  @keyframes qin{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-  .qstep h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4.2vw,42px);color:var(--ice);text-transform:uppercase;line-height:1.04;letter-spacing:.005em;margin-bottom:10px}
-  .qstep .qhint{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--steel);margin-bottom:28px}
+  .qwrap{max-width:680px;margin:0 auto;padding:120px var(--edge) 80px}
+  /* En-tête de page (remplace l'ancien compteur « Étape 1 / 19 ») */
+  .qintro{margin-bottom:8px}
+  .qintro .kick{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+  .qintro h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,5.4vw,52px);color:var(--ice);text-transform:uppercase;line-height:1.02;letter-spacing:.005em;margin:0 0 14px}
+  .qintro p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);margin:0}
+  .qintro p b{color:var(--ice);font-weight:500}
+
+  /* PAGE UNIQUE : toutes les questions sont affichées, on descend simplement.
+     (Avant : 19 étapes masquées. Abandonné — tant que ce n'est pas validé, le
+     client peut tout modifier, donc découper n'apportait rien et décourageait.) */
+  .qstep{display:block;counter-increment:qs;padding-top:44px;margin-top:44px;border-top:1px solid var(--line)}
+  #qform{counter-reset:qs}
+  .qstep h2{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3.4vw,32px);color:var(--ice);text-transform:uppercase;line-height:1.08;letter-spacing:.005em;margin-bottom:10px}
+  /* numéro de section : repère de progression, sans enfermer dans un parcours */
+  .qstep h2::before{content:counter(qs,decimal-leading-zero);display:block;font-family:var(--disp);font-size:11px;font-weight:500;
+    letter-spacing:.24em;color:var(--blue);margin-bottom:9px}
+  .qstep .qhint{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--steel);margin-bottom:24px}
+  /* champ obligatoire non rempli au moment de valider */
+  .qstep.miss{border-left:2px solid #e8b04b;margin-left:-16px;padding-left:14px}
   .qcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .qcards.one{grid-template-columns:1fr}
   @media(max-width:520px){.qcards{grid-template-columns:1fr}}
@@ -57,18 +70,17 @@
   /* avertissement dans une étape sensible */
   .qwarn{margin-top:16px;padding:13px 15px;border:1px solid rgba(232,176,75,.35);background:rgba(232,176,75,.06);font-family:var(--disp);font-size:12.5px;line-height:1.65;color:#d8c08a}
   .qwarn b{color:#f0dcae}
-  .qnav{display:flex;align-items:center;gap:16px;margin-top:34px}
-  .qnav .prev{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);background:none;border:0;cursor:pointer;padding:8px 0;transition:color .3s}
-  .qnav .prev:hover{color:var(--ice)}
-  .qnav .btn{cursor:pointer;background:transparent;margin-left:auto}
-  .qerr{font-family:var(--disp);font-size:12.5px;color:#e8b04b;margin-top:14px;min-height:16px}
-  .qsave{font-family:var(--disp);font-size:11px;letter-spacing:.1em;color:var(--steel);margin-top:10px;min-height:14px;opacity:0;transition:opacity .3s}
-  .qsave.on{opacity:1}
-  /* récapitulatif de fin */
-  .qrecap{border:1px solid var(--line);background:var(--void2);padding:4px 18px;max-height:340px;overflow-y:auto;margin-bottom:8px}
-  .qrecap dl{margin:0}
-  .qrecap dt{font-family:var(--disp);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-top:15px}
-  .qrecap dd{font-family:var(--disp);font-size:15px;color:var(--ice);margin:5px 0 0;padding-bottom:13px;border-bottom:1px solid rgba(46,155,255,.1)}
+  /* bloc de fin : avertissement + bouton de validation */
+  .qend{margin-top:44px;padding-top:44px;border-top:1px solid var(--line)}
+  .qnav{display:flex;justify-content:center;margin-top:26px}
+  .qnav .btn{cursor:pointer;background:transparent;padding:18px 42px;font-size:13px}
+  .qerr{font-family:var(--disp);font-size:13px;line-height:1.6;color:#e8b04b;margin-top:16px;min-height:16px;text-align:center}
+  /* état d'enregistrement : fixe en bas d'écran, visible pendant tout le remplissage */
+  .qsave{position:fixed;right:var(--edge);bottom:18px;z-index:58;font-family:var(--disp);font-size:11px;letter-spacing:.1em;
+    color:var(--steel);background:rgba(6,8,12,.9);border:1px solid var(--line);padding:8px 13px;
+    opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;pointer-events:none}
+  .qsave.on{opacity:1;transform:none}
+  @media(max-width:520px){.qsave{left:var(--edge);right:var(--edge);text-align:center}}
   /* fenêtre de confirmation (double sécurité avant verrouillage) */
   .qmodal{display:none;position:fixed;inset:0;z-index:95;background:rgba(3,5,10,.82);align-items:center;justify-content:center;padding:24px}
   .qmodal.on{display:flex}
@@ -107,7 +119,13 @@
 <main>
   <div class="qwrap">
     <form id="qform" autocomplete="off">
-      <div class="qcount" id="count">Étape 1</div>
+      <div class="qintro">
+        <div class="kick">Construire mon programme</div>
+        <h1>Parle-nous de toi.</h1>
+        <p>Prends le temps, <b>rien n'est définitif tant que tu n'as pas validé en bas de page</b>.
+           Tes réponses s'enregistrent toutes seules&nbsp;: tu peux fermer et revenir plus tard,
+           tu retrouveras tout.</p>
+      </div>
 
       <!-- 01 · OBJECTIF -->
       <div class="qstep active">
@@ -360,20 +378,17 @@
         </div>
       </div>
 
-      <!-- 19 · RÉCAPITULATIF + VALIDATION -->
-      <div class="qstep">
-        <h2>Relis-toi.</h2>
-        <p class="qhint">Vérifie bien tes réponses avant de valider.</p>
-        <div class="qrecap" id="recap"></div>
-        <div class="qwarn"><b>Une fois validé, tu ne pourras plus modifier ce questionnaire.</b> C'est sur ces réponses que ton programme sera construit. Si tu dois corriger quelque chose, c'est maintenant — utilise « Retour ». En cas d'erreur découverte plus tard, écris-nous à elysium.np.pro@gmail.com.</div>
+      <!-- FIN · VALIDATION
+           Le récapitulatif d'antan n'a plus lieu d'être : sur une page unique, le
+           client relit ses réponses en remontant simplement la page. -->
+      <div class="qend">
+        <div class="qwarn"><b>Une fois validé, tu ne pourras plus modifier ce questionnaire.</b> C'est sur ces réponses que ton programme sera construit. Si tu dois corriger quelque chose, c'est maintenant — remonte la page et relis-toi. En cas d'erreur découverte plus tard, écris-nous à elysium.np.pro@gmail.com.</div>
+        <div class="qnav">
+          <button type="submit" class="btn" id="next">Valider définitivement</button>
+        </div>
+        <div class="qerr" id="err" role="alert"></div>
       </div>
-
-      <div class="qerr" id="err" role="alert"></div>
       <div class="qsave" id="save">Brouillon enregistré</div>
-      <div class="qnav">
-        <button type="button" class="prev" id="prev">‹ Retour</button>
-        <button type="submit" class="btn" id="next">Continuer ›</button>
-      </div>
     </form>
   </div>
 </main>
@@ -421,10 +436,7 @@
 (function(){
   "use strict";
   var form=document.getElementById('qform');
-  var steps=[].slice.call(form.querySelectorAll('.qstep'));
-  var i=0, total=steps.length;
-  var prog=document.getElementById('prog'), count=document.getElementById('count');
-  var prev=document.getElementById('prev'), next=document.getElementById('next');
+  var prog=document.getElementById('prog');
   var err=document.getElementById('err'), saveTag=document.getElementById('save');
   var modal=document.getElementById('modal');
   var scr={load:'scr-load',lock:'scr-lock',done2:'scr-done2',thanks:'scr-thanks'};
@@ -458,45 +470,32 @@
     if(qv&&r) qv.textContent=r.value;
   }
 
-  /* ---------- navigation ---------- */
-  function render(){
-    steps.forEach(function(s,k){ s.classList.toggle('active',k===i); });
-    count.textContent='Étape '+(i+1)+' / '+total;
-    prog.style.width=(i/(total-1)*100)+'%';
-    prev.style.visibility = i===0 ? 'hidden' : 'visible';
-    next.textContent = i===total-1 ? 'Valider définitivement' : 'Continuer ›';
-    err.textContent='';
-    if(i===total-1) buildRecap();
-    var f=steps[i].querySelector('input:not([type=radio]):not([type=checkbox]):not([type=range]),textarea');
-    if(f) setTimeout(function(){ try{f.focus();}catch(e){} },60);
-  }
-  function valid(){
-    var reqs=steps[i].querySelectorAll('[required]');
-    for(var k=0;k<reqs.length;k++){
-      var el=reqs[k];
+  /* ---------- avancement + contrôle des réponses manquantes ----------
+     Chaque question obligatoire compte pour une part de la barre du haut : elle
+     mesure ce qui est RÉPONDU, pas la position dans la page (on peut remplir
+     dans le désordre). */
+  function eachRequired(fn){
+    var vus={};
+    form.querySelectorAll('[required]').forEach(function(el){
       if(el.type==='radio'){
-        if(!form.querySelector('input[name="'+el.name+'"]:checked')){ err.textContent='Choisis une option pour continuer.'; return false; }
-      } else if(!el.checkValidity()){ el.reportValidity(); return false; }
-    }
-    // le petit-déj n'a pas d'attribut required (cases à cocher) -> contrôle manuel
-    if(steps[i].querySelector('input[name=pdj]') && !form.querySelector('input[name=pdj]:checked')){
-      err.textContent='Coche au moins une option (tu peux cocher les deux).'; return false;
-    }
-    return true;
-  }
-  function buildRecap(){
-    var rep=collect(), dl=document.createElement('dl');
-    form.querySelectorAll('[data-q]').forEach(function(el){
-      var q=el.getAttribute('data-q');
-      if(dl.querySelector('[data-k="'+CSS.escape(q)+'"]')) return;
-      var v=rep[q]; if(!v) return;
-      var dt=document.createElement('dt'); dt.setAttribute('data-k',q); dt.textContent=q.replace(/\s*\(.*?\)\s*$/,'');
-      var dd=document.createElement('dd'); dd.textContent=v;
-      dl.appendChild(dt); dl.appendChild(dd);
+        if(vus[el.name]) return;                       // un groupe de boutons = UNE question
+        vus[el.name]=1;
+        fn(el, !!form.querySelector('input[name="'+el.name+'"]:checked'));
+      } else fn(el, el.value.trim()!=='' && el.checkValidity());
     });
-    var pdj=rep["Es-tu plutôt team sucré ou salé au petit-déjeuner ?"];
-    if(pdj){ var a=document.createElement('dt'); a.textContent='Petit-déjeuner'; var b=document.createElement('dd'); b.textContent=pdj; dl.appendChild(a); dl.appendChild(b); }
-    var box=document.getElementById('recap'); box.innerHTML=''; box.appendChild(dl);
+    // le petit-déj est en cases à cocher : pas d'attribut « required » possible
+    var pdj=form.querySelector('input[name=pdj]');
+    if(pdj) fn(pdj, !!form.querySelector('input[name=pdj]:checked'));
+  }
+  function progress(){
+    var tot=0, done=0;
+    eachRequired(function(el,ok){ tot++; if(ok) done++; });
+    prog.style.width=(tot ? done/tot*100 : 0)+'%';
+  }
+  function firstMissing(){
+    var bad=null;
+    eachRequired(function(el,ok){ if(!ok && !bad) bad=el; });
+    return bad;
   }
 
   /* ---------- sauvegarde automatique ---------- */
@@ -505,7 +504,7 @@
   function saveDraft(){
     if(!sb||!uid) return Promise.resolve();
     return sb.from('questionnaires').upsert({
-      user_id:uid, type:'nutrition', reponses:collect(), etape:i, statut:'brouillon'
+      user_id:uid, type:'nutrition', reponses:collect(), etape:0, statut:'brouillon'
     },{onConflict:'user_id,type'}).then(function(r){
       if(!r.error) flash('Brouillon enregistré');
     });
@@ -513,23 +512,38 @@
   function queueSave(){ clearTimeout(tmr); tmr=setTimeout(saveDraft,800); }
   form.addEventListener('input',function(e){
     if(e.target.name==='qualite'){ document.getElementById('qualval').textContent=e.target.value; }
-    queueSave();
+    progress(); queueSave();
   });
-  form.addEventListener('change',queueSave);
+  form.addEventListener('change',function(){ progress(); queueSave(); });
 
-  /* ---------- validation définitive ---------- */
+  /* ---------- validation définitive ----------
+     ⚠️ Le bouton est un `type="submit"`. Quand les 19 étapes étaient MASQUÉES,
+     le navigateur bloquait l'envoi à cause des champs obligatoires cachés qu'il
+     ne pouvait ni afficher ni signaler : le bouton paraissait mort, sans aucun
+     message. Tout étant visible désormais, on peut emmener le client sur la
+     question manquante et la lui montrer. NE PAS remasquer de section. */
   form.addEventListener('submit',function(e){
     e.preventDefault();
-    if(!valid()) return;
-    if(i<total-1){ i++; render(); saveDraft(); window.scrollTo(0,0); return; }
-    modal.classList.add('on');                       // dernière étape -> double confirmation
+    err.textContent='';
+    form.querySelectorAll('.qstep.miss').forEach(function(s){ s.classList.remove('miss'); });
+    var bad=firstMissing();
+    if(bad){
+      var sec=bad.closest('.qstep');
+      if(sec) sec.classList.add('miss');
+      err.textContent='Il manque une réponse — on t’a emmené dessus, elle est signalée en jaune.';
+      (sec||bad).scrollIntoView({behavior:'smooth',block:'center'});
+      if(bad.type!=='radio' && bad.type!=='checkbox'){
+        setTimeout(function(){ try{ bad.focus(); bad.reportValidity(); }catch(e){} },500);
+      }
+      return;
+    }
+    modal.classList.add('on');                       // tout est rempli -> double confirmation
   });
-  prev.addEventListener('click',function(){ if(i>0){ i--; render(); window.scrollTo(0,0); } });
   document.getElementById('mno').addEventListener('click',function(){ modal.classList.remove('on'); });
   document.getElementById('myes').addEventListener('click',function(){
     var b=this; b.disabled=true; b.textContent='Envoi…';
     sb.from('questionnaires').upsert({
-      user_id:uid, type:'nutrition', reponses:collect(), etape:i, statut:'valide'
+      user_id:uid, type:'nutrition', reponses:collect(), etape:0, statut:'valide'
     },{onConflict:'user_id,type'}).then(function(r){
       if(r.error){ b.disabled=false; b.textContent='Oui, je valide'; err.textContent="Envoi impossible pour le moment. Réessaie dans un instant."; modal.classList.remove('on'); return; }
       modal.classList.remove('on'); show('scr-thanks'); confetti();
@@ -547,16 +561,16 @@
       .then(function(r){
         var row=r&&r.data;
         if(row&&row.statut==='valide'){ show('scr-done2'); return; }
-        if(row){ restore(row.reponses); i=Math.min(row.etape||0,total-1); }
+        if(row) restore(row.reponses);
         // pré-remplir le poids avec la dernière pesée connue
         return sb.from('poids').select('kg').eq('user_id',uid).order('date',{ascending:false}).limit(1)
           .then(function(p){
             var w=p&&p.data&&p.data[0]; var el=form.querySelector('input[name=poids]');
             if(w&&el&&!el.value) el.value=w.kg;
-            show(''); render();
+            show(''); progress();
           });
       });
-  }).catch(function(){ show(''); render(); });
+  }).catch(function(){ show(''); progress(); });
 
   /* ---------- confettis (canvas, zéro dépendance) ---------- */
   function confetti(){

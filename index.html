@@ -574,7 +574,7 @@
     e.addEventListener('transitionend',function f(){ e.removeEventListener('transitionend',f);
       e.classList.remove('rv','in'); e.style.transitionDelay=''; }); }   // rend ses propres transitions (survol) à l'élément
   // le trait bleu sous chaque titre de section, comme sur les autres pages (site.css « .trace »)
-  document.querySelectorAll('main section:not(.hero) h2').forEach(function(h){
+  document.querySelectorAll('main section:not(.hero):not(.end) h2').forEach(function(h){
     h.insertAdjacentHTML('afterend','<svg class="trace" viewBox="0 0 170 20" aria-hidden="true"><path d="M2 14 H120 l16 -9" pathLength="1"/><circle class="tnode" cx="136" cy="5" r="2.4"/></svg>'); });
   var hero=prepare(H), reste=prepare(S);
   var jour=document.querySelector('.day'); if(jour) jour.classList.add('attente');

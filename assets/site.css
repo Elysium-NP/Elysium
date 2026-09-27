@@ -641,3 +641,12 @@ html[data-theme="obscur"] img[src*="prozis"]{filter:invert(1) hue-rotate(180deg)
 .theme-btn:hover{border-color:var(--blue)}
 .theme-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .msheet .theme-btn{margin-top:18px;width:auto;height:auto;border-radius:999px;padding:10px 16px;gap:10px;font:15px/1 var(--texte)}
+/* accueil en version obscure : les blocs pastel écrits en dur dans index.html */
+html[data-theme="obscur"] .day .meal{background:var(--void2)}
+html[data-theme="obscur"] .day-hd{background:#0d0b08}
+html[data-theme="obscur"] .myths details[open]{background:var(--p-jaune)}
+html[data-theme="obscur"] .faux{background:#3a1d1d;color:#f3a9a9} html[data-theme="obscur"] .vrai{color:#b6dea2}
+html[data-theme="obscur"] blockquote{background:var(--p-violet)}
+html[data-theme="obscur"] .evo{background:var(--p-vert)}
+html[data-theme="obscur"] .end{background:var(--p-bleu)}
+html[data-theme="obscur"] .btn.line:hover{color:var(--fond)}

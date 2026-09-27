@@ -695,7 +695,7 @@ html[data-theme="obscur"] .day .meal{background:var(--void2)}
 html[data-theme="obscur"] .day-hd{background:#000}
 html[data-theme="obscur"] .myths details[open]{background:var(--p-jaune)}
 html[data-theme="obscur"] .faux{background:#2a0d12;color:#f3a9a9} html[data-theme="obscur"] .vrai{color:#b6dea2}
-html[data-theme="obscur"] .two > blockquote{background:var(--p-violet)}   /* la citation de l'accueil seulement */
+html[data-theme="obscur"] .two > blockquote{background:var(--void2)}   /* la citation de l'accueil seulement */
 html[data-theme="obscur"] .evo{background:var(--p-vert)}
 html[data-theme="obscur"] .end{background:var(--p-bleu)}
 html[data-theme="obscur"] .btn.line:hover{color:var(--fond)}

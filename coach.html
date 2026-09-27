@@ -34,7 +34,17 @@
   .cwrap{padding:22px var(--edge) 60px;max-width:1680px;margin:0 auto}
 
   /* ---- bandeau de chiffres ---- */
-  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:22px}
+  /* suivi du client (pesées + mensurations) dans sa fiche */
+  .suivi{border:1px solid var(--line);background:var(--void2);padding:14px 16px;margin:0 0 16px}
+  .suivi h4{font:600 11px/1 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin:0 0 10px}
+  .suivi .chiffres{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--gris)}
+  .suivi .chiffres b{color:var(--ice)}
+  .suivi .retard{color:#b45309;font-weight:600}
+  .suivi svg{display:block;width:100%;height:90px;margin:10px 0 4px}
+  .suivi svg path{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
+  .suivi svg circle{fill:var(--blue)}
+  .suivi .mens{font-size:13px;color:var(--steel);margin-top:8px}
   @media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}}
   .kpi{position:relative;border:1px solid var(--line);background:linear-gradient(180deg,rgba(46,155,255,.05),rgba(60,45,20,0));
     padding:16px 18px;overflow:hidden}
@@ -189,6 +199,7 @@
     <div class="kpi"><div class="k">À générer</div><div class="v" id="k-gen">0</div><div class="s">questionnaires validés</div></div>
     <div class="kpi"><div class="k">Validés</div><div class="v" id="k-val">0</div><div class="s">envoyés au client</div></div>
     <div class="kpi"><div class="k">Clients</div><div class="v" id="k-cli">0</div><div class="s">comptes créés</div></div>
+    <div class="kpi"><div class="k">Pesées en retard</div><div class="v" id="k-pesee">—</div><div class="s">clients sans pesée depuis 7 jours</div></div>
     <div class="kpi"><div class="k">Chiffre d'affaires</div><div class="v" id="k-ca">—</div><div class="s" id="k-ca-s">en attente de Stripe</div></div>
   </div>
 
@@ -338,11 +349,58 @@
     var h='<div class="idcard"><h3>'+esc(c.prenom)+' '+esc(c.nom)+'</h3>'+
       '<span class="idmeta">'+(c.sexe==='HOMME'?'Homme':'Femme')+' · <b>'+age+' ans</b> · <b>'+
       (c.dernier_poids||c.reponses['Poids (en kg)']||'?')+' kg</b> · '+(c.taille_cm||'?')+' cm</span></div>';
+    h+='<div class="suivi" id="suivi"><h4>Suivi</h4><div class="chiffres">Chargement des pesées…</div></div>';
     var rep=c.reponses||{}, vus={};
     PRIO.forEach(function(p){ Object.keys(rep).forEach(function(k){
       if(!vus[k] && rep[k] && k.indexOf(p)===0){ vus[k]=1; h+=qa(k,rep[k]); } }); });
     Object.keys(rep).forEach(function(k){ if(!vus[k] && rep[k]) h+=qa(k,rep[k]); });
     box.innerHTML=h;
+    renderSuivi(c.user_id);
+  }
+  /* ---------- suivi : pesées (table poids) + dernières mensurations ----------
+     C'est la pesée qui fait évoluer la diète : le coach la voit ici, à côté du questionnaire. */
+  var JOUR=86400000;
+  function fr(n,d){ return (+n).toFixed(d==null?1:d).replace('.',','); }
+  function renderSuivi(uid){
+    Promise.all([
+      sb.from('poids').select('date,kg').eq('user_id',uid).order('date'),
+      sb.from('mensurations').select('*').eq('user_id',uid).order('date',{ascending:false}).limit(1)
+    ]).then(function(r){
+      var el=$('suivi'); if(!el||!file[sel]||file[sel].user_id!==uid) return;   // on a changé de client entre-temps
+      var w=(r[0].data||[]).map(function(x){ return {v:+x.kg,t:new Date(x.date+'T12:00:00').getTime()}; });
+      var m=(r[1].data||[])[0], h='<h4>Suivi</h4>';
+      if(!w.length){ h+='<div class="chiffres"><span class="retard">Aucune pesée enregistrée</span></div>'; }
+      else {
+        var der=w[w.length-1], dep=w[0], jours=Math.floor((Date.now()-der.t)/JOUR), ev=der.v-dep.v;
+        var recent=w.filter(function(x){ return x.t>=der.t-28*JOUR; }), rythme='';
+        if(recent.length>=2){ var sem=(der.t-recent[0].t)/(7*JOUR); if(sem>=5/7) rythme=((der.v-recent[0].v)/sem>0?'+':'')+fr((der.v-recent[0].v)/sem)+' kg / sem.'; }
+        h+='<div class="chiffres"><span>Dernière pesée : <b>'+fr(der.v)+' kg</b> le '+new Date(der.t).toLocaleDateString('fr-FR')+
+          (jours>=7?' · <span class="retard">il y a '+jours+' jours</span>':'')+'</span>'+
+          '<span>Départ : <b>'+fr(dep.v)+' kg</b> ('+new Date(dep.t).toLocaleDateString('fr-FR')+')</span>'+
+          '<span>Évolution : <b>'+(ev>0?'+':'')+fr(ev)+' kg</b></span>'+(rythme?'<span>Rythme sur 4 semaines : <b>'+rythme+'</b></span>':'')+
+          '<span>'+w.length+' pesée'+(w.length>1?'s':'')+'</span></div>';
+        if(w.length>=2){
+          var lo=Math.min.apply(null,w.map(function(x){return x.v;}))-.5, hi=Math.max.apply(null,w.map(function(x){return x.v;}))+.5,
+            t0=w[0].t, t1=der.t, X=function(t){ return 4+392*(t-t0)/(t1-t0); }, Y=function(v){ return 6+78*(1-(v-lo)/(hi-lo)); };
+          h+='<svg viewBox="0 0 400 90" preserveAspectRatio="none" role="img" aria-label="Courbe de poids"><path d="'+
+            w.map(function(x,i){ return (i?'L':'M')+X(x.t).toFixed(1)+' '+Y(x.v).toFixed(1); }).join(' ')+'"/></svg>';
+        }
+      }
+      if(m){ var L={epaules:'Épaules',poitrine:'Poitrine',taille:'Taille',hanches:'Hanches',cuisse:'Cuisse',bras:'Bras'};
+        var t=Object.keys(L).filter(function(k){ return m[k]!=null; }).map(function(k){ return L[k]+' '+fr(m[k])+' cm'; });
+        if(t.length) h+='<div class="mens">Mensurations du '+new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR')+' : '+t.join(' · ')+'</div>'; }
+      el.innerHTML=h;
+    }).catch(function(){ var el=$('suivi'); if(el) el.innerHTML='<h4>Suivi</h4><div class="chiffres">Pesées indisponibles pour le moment.</div>'; });
+  }
+  // compteur : clients de la file dont la dernière pesée a 7 jours ou plus (ou aucune pesée)
+  function compterRetards(){
+    // ponytail: lit toutes les pesées ; passer par une vue « dernière pesée par client » au-delà de quelques milliers de lignes
+    sb.from('poids').select('user_id,date').then(function(r){
+      if(r.error) return;
+      var der={}; (r.data||[]).forEach(function(x){ if(!der[x.user_id]||x.date>der[x.user_id]) der[x.user_id]=x.date; });
+      var n=file.filter(function(c){ var d=der[c.user_id]; return !d || Date.now()-new Date(d+'T12:00:00').getTime()>=7*JOUR; }).length;
+      $('k-pesee').textContent=n;
+    });
   }
   function qa(k,v){
     var flag=ALERTE.some(function(a){return k.indexOf(a)===0;});
@@ -507,7 +565,7 @@
         sb.from('v_stats_mensuelles').select('*').limit(24),
         sb.from('profiles').select('id')
       ]).then(function(res){
-        file=(res[0].data)||[]; renderFile(); recount();
+        file=(res[0].data)||[]; renderFile(); recount(); compterRetards();
         renderStats((res[1].data)||[], ((res[2].data)||[]).length);
         if(file.length){ sel=0; renderFile(); renderClient(); renderProg(); }
         requestAnimationFrame(function(){ document.querySelectorAll('.bf').forEach(function(b){ b.style.width=b.style.width; }); });

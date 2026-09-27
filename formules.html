@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#06080C">
 <title>ELYSIUM · Les formules</title>
 <link rel="canonical" href="https://elysium-x57.pages.dev/formules">
-<meta name="description" content="Les formules Elysium : programmation nutritionnelle, programme d'entraînement, ou le pack des deux. Sur-mesure, construit par les coachs.">
+<meta name="description" content="Les formules Elysium : trois programmations nutritionnelles sur-mesure, construites par les coachs, de 19,90 € à 29,90 € toutes les 4 semaines.">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Elysium · Nutrition &amp; Performance">
 <meta property="og:title" content="ELYSIUM · Les formules">
-<meta property="og:description" content="Nutrition, entraînement ou les deux : des programmations sur-mesure construites par les coachs Elysium à partir de ton questionnaire. À partir de 59,90 €.">
+<meta property="og:description" content="Des programmations nutritionnelles sur-mesure, construites par les coachs Elysium à partir de ton questionnaire. À partir de 19,90 € toutes les 4 semaines.">
 <meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
 <meta property="og:url" content="https://elysium-x57.pages.dev/formules.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -34,9 +34,9 @@
   "areaServed": { "@type": "Country", "name": "France" },
   "description": "Programmations nutritionnelle et sportive personnalisées, à distance, construites sur-mesure par les coachs Elysium à partir d'un questionnaire.",
   "offers": [
-    { "@type": "Offer", "priceCurrency": "EUR", "price": "59.90", "itemOffered": { "@type": "Service", "name": "Programmation nutritionnelle (8 semaines)" } },
-    { "@type": "Offer", "priceCurrency": "EUR", "price": "69.90", "itemOffered": { "@type": "Service", "name": "Programme d'entraînement" } },
-    { "@type": "Offer", "priceCurrency": "EUR", "price": "119.80", "itemOffered": { "@type": "Service", "name": "Pack nutrition & entraînement" } }
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "19.90", "itemOffered": { "@type": "Service", "name": "Formule 01 · menu unique (4 semaines)" } },
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "25.90", "itemOffered": { "@type": "Service", "name": "Formule 02 · nouveau menu chaque mois (4 semaines)" } },
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "29.90", "itemOffered": { "@type": "Service", "name": "Formule 03 · menu mensuel + recettes (4 semaines)" } }
   ]
 }
 </script>
@@ -68,6 +68,7 @@
   .plan ul li b{color:var(--ice);font-weight:600}
   .plan li.opt-reco{color:var(--blue)}
   .plan li.opt-reco b{color:var(--blue)}
+  .plan.feat::before{content:"Le plus choisi"}
   @media(max-width:900px){ .plans{grid-template-columns:1fr;max-width:460px;margin:0 auto} }
   /* ===== Section « Le suivi » : accompagnement évolutif (Dimitri 26/07) ===== */
   .evol{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:30px}
@@ -124,7 +125,7 @@
     <div class="phead-in">
       <div class="kick reveal">Les formules</div>
       <h1 class="reveal d1">Ta programmation<span class="l2">sur-mesure.</span></h1>
-      <p class="sub reveal d2">L'assiette, l'entraînement, ou les deux. Construit à partir de ton questionnaire, au gramme près, prêt à suivre.</p>
+      <p class="sub reveal d2">Ton assiette, construite à partir de ton questionnaire, au gramme près, prête à suivre.</p>
     </div>
   </header>
 
@@ -135,72 +136,65 @@
         <span class="no">01</span>
         <div>
           <span class="lbl">// Les formules</span>
-          <h2>Nutrition, entraînement, ou les deux</h2>
+          <h2>Trois formules, un programme sur-mesure</h2>
         </div>
       </div>
 
       <div class="plans">
 
-        <!-- FORMULE 01 : NUTRITION — 59,90 € puis 14,90 €/4 sem dès la 8e semaine -->
+        <!-- Formules du 27/09 (Dimitri) : 19,90 / 25,90 / 29,90 € toutes les 4 semaines -->
         <article class="plan reveal">
           <span class="pn">Formule 01</span>
-          <h3>Programmation nutritionnelle</h3>
-          <p class="desc">Ton programme alimentaire sur-mesure, prêt à suivre.</p>
+          <h3>Menu unique</h3>
+          <p class="desc">Un menu sur-mesure, qui suit ta progression.</p>
           <div class="price01">
-            <div class="now"><span class="n1">59</span><span class="eur">€</span><span class="n2">90</span></div>
+            <div class="now"><span class="n1">19</span><span class="eur">€</span><span class="n2">90</span></div>
           </div>
-          <div class="pterm">Programme&nbsp;•&nbsp;8 semaines</div>
-          <p class="pfine">Puis <b>14,90 €</b> toutes les 4 semaines, à partir de la 8<sup>e</sup> semaine. Le renouvellement de ton menu et le recalcul de tes besoins sont compris.</p>
-          <div class="reco"><b>Recommandé : au minimum 12 semaines</b><span>C'est la régularité qui installe les vrais résultats. Ensuite, tu continues aussi longtemps que tu veux, avec un menu régulièrement renouvelé.</span></div>
+          <div class="pterm">Toutes les 4 semaines</div>
           <ul>
-            <li><b>Programmation alimentaire 100 % personnalisée</b></li>
-            <li>Repas adaptés à ton <b>objectif</b>, tes <b>préférences</b> et tes <b>contraintes</b></li>
-            <li><b>Renouvelé au minimum toutes les 4 semaines</b> — recalculé selon ton poids et ta progression</li>
+            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li><b>Menu unique</b></li>
+            <li><b>Quantités réajustées chaque mois</b></li>
             <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
-            <li><b>Liste de courses</b> regroupée automatiquement</li>
-            <li>Tableau des <b>apports en grammes &amp; calories</b></li>
-            <li class="opt-reco"><b>En option — les recettes détaillées</b> de chaque plat, pour encore plus de gourmandise et de simplicité</li>
           </ul>
-          <a class="btn" href="connexion.html">Accéder à mon espace</a>
+          <a class="btn" href="inscription.html">Construire mon programme</a>
         </article>
 
-        <!-- FORMULE 02 : ENTRAÎNEMENT — 69,90 € -->
-        <article class="plan reveal d1">
+        <article class="plan feat reveal d1">
           <span class="pn">Formule 02</span>
-          <h3>Programme d'entraînement</h3>
-          <p class="desc">Ton plan d'entraînement personnalisé, construit sur ton niveau.</p>
+          <h3>Menu mensuel</h3>
+          <p class="desc">Un nouveau menu chaque mois, et les courses déjà faites sur le papier.</p>
           <div class="price01">
-            <div class="now"><span class="n1">69</span><span class="eur">€</span><span class="n2">90</span></div>
+            <div class="now"><span class="n1">25</span><span class="eur">€</span><span class="n2">90</span></div>
           </div>
-          <div class="pterm">Programme d'entraînement</div>
-          <p class="pfine">Construit à partir de ton questionnaire : niveau, matériel disponible, temps et fréquence de tes séances.</p>
+          <div class="pterm">Toutes les 4 semaines</div>
           <ul>
-            <li><b>Programme d'entraînement 100 % personnalisé</b></li>
-            <li>Adapté à ton <b>objectif</b> : force, renforcement, recomposition, prise de masse ou perte de poids</li>
-            <li>Calé sur ton <b>nombre de séances</b> et leur <b>durée</b></li>
-            <li>Pensé pour ton <b>niveau</b> et ton <b>matériel</b></li>
+            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li><b>Nouveau menu chaque mois</b></li>
+            <li><b>Quantités réajustées</b> à chaque changement de menu</li>
+            <li><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
+            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
           </ul>
-          <a class="btn" href="connexion.html">Accéder à mon espace</a>
+          <a class="btn" href="inscription.html">Construire mon programme</a>
         </article>
 
-        <!-- FORMULE 03 : PACK — 129,80 € - 10 € = 119,80 € -->
-        <article class="plan feat reveal d2">
+        <article class="plan reveal d2">
           <span class="pn">Formule 03</span>
-          <h3>Pack nutrition &amp; entraînement</h3>
-          <p class="desc">Les deux programmations, pensées ensemble.</p>
+          <h3>Menu mensuel &amp; recettes</h3>
+          <p class="desc">Le suivi le plus serré, avec les recettes de chaque plat.</p>
           <div class="price01">
-            <div><span class="packold">129,80 €</span><span class="packsave">− 10 €</span></div>
-            <div class="now" style="margin-top:8px"><span class="n1">119</span><span class="eur">€</span><span class="n2">80</span></div>
+            <div class="now"><span class="n1">29</span><span class="eur">€</span><span class="n2">90</span></div>
           </div>
-          <div class="pterm">Les deux programmes</div>
-          <p class="pfine">L'assiette et l'entraînement construits <b>en cohérence</b>, par les mêmes coachs. Le renouvellement de la nutrition suit les mêmes conditions que la Formule 01.</p>
+          <div class="pterm">Toutes les 4 semaines</div>
           <ul>
-            <li><b>Tout</b> ce que contient la <b>Formule 01</b></li>
-            <li><b>Tout</b> ce que contient la <b>Formule 02</b></li>
-            <li>Les deux programmes <b>alignés sur le même objectif</b></li>
-            <li><b>10 € d'économie</b> par rapport aux deux pris séparément</li>
+            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li><b>Nouveau menu chaque mois</b></li>
+            <li><b>Quantités réajustées chaque semaine</b></li>
+            <li><b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise</li>
+            <li><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
+            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
           </ul>
-          <a class="btn" href="connexion.html">Accéder à mon espace</a>
+          <a class="btn" href="inscription.html">Construire mon programme</a>
         </article>
 
       </div>

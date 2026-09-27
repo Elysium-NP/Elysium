@@ -109,75 +109,37 @@
     <div class="chhead">
       <div class="kick reveal in">Bienvenue dans la boucle</div>
       <h1 class="reveal in" id="welcome">Ton compte<span class="l2">est créé.</span></h1>
-      <p class="sub reveal in">Tu n'es plus spectateur. Ta programmation nutritionnelle, et les options qui vont avec. Configure, valide, Damien &amp; Yoann s'occupent du reste.</p>
+      <p class="sub reveal in">Tu n'es plus spectateur. Choisis ta formule, valide, Damien &amp; Yoann s'occupent du reste.</p>
     </div>
 
     <div class="chstep">Étape <b>2</b> / 3 &nbsp;·&nbsp; compte créé → <b>choix de la formule</b> → programme</div>
 
-    <div class="plans-d">
-
-      <!-- 01 · Programmation nutritionnelle (formule unique) -->
-      <article class="pd reveal in">
-        <div>
-          <span class="pn">Formule 01</span>
-          <h2>Programmation nutritionnelle</h2>
-          <p class="lede">Ton programme alimentaire sur-mesure, façonné à la main d'après ton questionnaire, objectif, mode de vie, goûts, contraintes. Prêt à suivre, sans y penser.</p>
-          <ul>
-            <li><b>Programmation alimentaire 100 % personnalisée</b></li>
-            <li>Repas adaptés à ton <b>objectif</b>, tes <b>préférences</b> et tes <b>contraintes</b></li>
-            <li><b>Renouvelé au minimum toutes les 4 semaines</b>, recalculé selon ta progression — sans surcoût</li>
-            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
-            <li><b>Liste de courses</b> regroupée automatiquement</li>
-            <li>Tableau des <b>apports en grammes &amp; calories</b></li>
-          </ul>
-          <p class="whom"><b>Pour qui&nbsp;:</b> tu veux un cap alimentaire clair, précis et suivi, à ton rythme.</p>
-        </div>
-        <div class="buy">
-          <div class="price">59<small>€</small>99</div>
-          <div class="per">Programme + 8 semaines · toutes options incluses</div>
-        </div>
-      </article>
-
-    </div>
-
-    <!-- OPTIONS D'ABONNEMENT (après les 8 semaines) -->
+    <!-- LES 3 FORMULES (27/09) : 19,90 / 25,90 / 29,90 € toutes les 4 semaines -->
     <section class="chopt reveal in">
-      <span class="pn">Après tes 8 semaines</span>
-      <h2>Configure ton abonnement</h2>
-      <p class="optlede">Pendant 8 semaines, tout est inclus. Ensuite, tu choisis à quelle fréquence on renouvelle ton menu — c'est ce qui fixe ton tarif. Modifiable à tout moment dans ton espace.</p>
-
-      <div class="optgroup" role="radiogroup" aria-label="Fréquence de renouvellement du menu">
+      <span class="pn">Ta formule</span>
+      <h2>Choisis ta formule</h2>
+      <p class="optlede">Toutes construites à la main d'après ton questionnaire, au gramme près. Elles diffèrent par la fréquence des nouveaux menus, l'ajustement des quantités, la liste de courses et les recettes. <a href="formules.html" style="color:var(--blue)">Voir le détail</a>.</p>
+      <div class="optgroup" role="radiogroup" aria-label="Formule">
         <label class="opt">
-          <input type="radio" name="cadence" value="4sem" data-p="0" checked>
-          <span class="optbody"><b>Toutes les 4 semaines</b><small>Un nouveau menu chaque mois</small></span>
-          <span class="optprice">Inclus</span>
+          <input type="radio" name="formule" value="f1" data-nom="Menu unique" data-prix="19,90 €">
+          <span class="optbody"><b>Formule 01 · Menu unique</b><small>Quantités réajustées chaque mois</small></span>
+          <span class="optprice">19,90 €<i> / 4 sem</i></span>
         </label>
         <label class="opt">
-          <input type="radio" name="cadence" value="2sem" data-p="5">
-          <span class="optbody"><b>Toutes les 2 semaines</b><small>Un nouveau menu tous les 15 jours</small></span>
-          <span class="optprice">5 €<i> / 4 sem</i></span>
+          <input type="radio" name="formule" value="f2" data-nom="Menu mensuel" data-prix="25,90 €" checked>
+          <span class="optbody"><b>Formule 02 · Menu mensuel <span style="color:var(--blue)">· le plus choisi</span></b><small>Nouveau menu chaque mois · quantités réajustées à chaque menu · liste de courses de chaque semaine</small></span>
+          <span class="optprice">25,90 €<i> / 4 sem</i></span>
         </label>
         <label class="opt">
-          <input type="radio" name="cadence" value="hebdo" data-p="10">
-          <span class="optbody"><b>Chaque semaine</b><small>Un nouveau menu toutes les semaines</small></span>
-          <span class="optprice">10 €<i> / 4 sem</i></span>
+          <input type="radio" name="formule" value="f3" data-nom="Menu mensuel &amp; recettes" data-prix="29,90 €">
+          <span class="optbody"><b>Formule 03 · Menu mensuel &amp; recettes</b><small>Nouveau menu chaque mois · quantités réajustées chaque semaine · recettes des coachs · liste de courses de chaque semaine</small></span>
+          <span class="optprice">29,90 €<i> / 4 sem</i></span>
         </label>
       </div>
-
-      <label class="opt optcheck">
-        <input type="checkbox" id="confort" data-p="5">
-        <span class="optbody"><b>Option confort — recettes de chaque plat</b><small>La recette détaillée de chaque plat de ton programme</small></span>
-        <span class="optprice">+5 €<i> / 4 sem</i></span>
-      </label>
-
       <div class="optrecap">
-        <div class="recline"><span>Aujourd'hui</span><b id="rnow">59€90</b></div>
-        <div class="recsub">Programme + 8 premières semaines, toutes options incluses</div>
-        <div class="recline" style="margin-top:14px"><span>À partir de la 9ᵉ semaine</span><b id="rthen">Inclus</b></div>
+        <div class="recline"><span>Toutes les 4 semaines</span><b id="rnow">25,90 €</b></div>
       </div>
-
       <button class="btn" id="confirm" type="button">Valider ma formule</button>
-      <p class="optnote">Tu pourras changer de fréquence ou activer / désactiver l'option confort quand tu veux, depuis ton espace.</p>
     </section>
 
     <div class="chturn reveal in">
@@ -205,7 +167,7 @@
       <p class="reassure">Régime, allergies, aliments détestés, budget : <b>tout est pris en compte</b>, rien d'interdit ne passe. Une hésitation entre deux formules&nbsp;? <a href="contact.html" style="color:var(--blue)">Écris-nous</a>, on t'oriente.</p>
     </section>
 
-    <a class="chback" href="formules.html">‹ Voir le détail de la formule</a>
+    <a class="chback" href="formules.html">‹ Voir le détail des formules</a>
 
   </div>
 </main>
@@ -227,28 +189,18 @@
   }
   // déjà payé : on ne repropose pas de choisir, on renvoie vers l'espace
   if (u.paid) { location.replace('espace.html'); return; }
-  // récap prix LIVE : ce qu'on prélève à partir de la 9e semaine (cadence + option confort)
-  function recompute(){
-    var cad = document.querySelector('input[name=cadence]:checked');
-    var cp = cad ? parseInt(cad.getAttribute('data-p'),10) : 0;
-    var conf = document.getElementById('confort').checked ? 5 : 0;
-    var then = cp + conf;
-    document.getElementById('rthen').textContent = then === 0 ? 'Inclus' : (then + ' € / 4 sem');
-  }
-  document.querySelectorAll('input[name=cadence], #confort').forEach(function(el){ el.addEventListener('change', recompute); });
-  recompute();
+  function sel(){ return document.querySelector('input[name=formule]:checked'); }
+  document.querySelectorAll('input[name=formule]').forEach(function(el){
+    el.addEventListener('change', function(){ document.getElementById('rnow').textContent = sel().getAttribute('data-prix'); });
+  });
 
   // validation -> mémorise la formule + les choix d'abonnement + direction espace (paiement simulé)
   document.getElementById('confirm').addEventListener('click', function(){
     try {
       var uu = ElyAuth.user() || {};
-      var cad = document.querySelector('input[name=cadence]:checked');
-      var cp = cad ? parseInt(cad.getAttribute('data-p'),10) : 0;
-      uu.formule = 'Programmation nutritionnelle';
-      uu.formule_prix = '59€90';
-      uu.cadence = cad ? cad.value : '4sem';
-      uu.confort = document.getElementById('confort').checked;
-      uu.abo_apres = cp + (uu.confort ? 5 : 0);   // € / 4 semaines après les 8 premières
+      var f = sel();
+      uu.formule = 'Formule ' + f.value.slice(1) + ' · ' + f.getAttribute('data-nom').replace('&amp;','&');
+      uu.formule_prix = f.getAttribute('data-prix') + ' / 4 sem';
       localStorage.setItem('ely_user_demo', JSON.stringify(uu));
     } catch(e){}
     location.href = 'espace.html';

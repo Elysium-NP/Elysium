@@ -396,7 +396,7 @@ html.reveal-ready .plan.feat.in::before{transform:translateY(-50%) scale(1);opac
 .plan li.off{color:var(--steel);opacity:.6}
 .plan li.off::before{border-color:var(--steel);transform:none;top:9px;width:9px;height:1px;border-left:0;border-bottom:1px solid var(--steel)}
 .plan .btn{width:100%;text-align:center}
-@media(max-width:900px){.plans{grid-template-columns:1fr}.plan.feat{order:-1}}
+@media(max-width:900px){.plans{grid-template-columns:1fr}}   /* ordre 1, 2, 3 aussi sur mobile (demande Dimitri 27/09) */
 
 /* comparatif / faq */
 .faq{max-width:820px;margin:0 auto}

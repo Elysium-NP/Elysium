@@ -37,7 +37,7 @@
   .chart{width:100%;margin:4px 0 2px}
   .chart svg{width:100%;height:auto;display:block;overflow:visible}
   .chart-empty{padding:44px 10px;text-align:center;font-family:var(--disp);font-size:12.5px;color:var(--steel);border:1px dashed var(--line);line-height:1.6}
-  .cg{stroke:rgba(255,255,255,.05);stroke-width:1}
+  .cg{stroke:rgba(60,45,20,.05);stroke-width:1}
   .cgl{fill:var(--steel);font-family:var(--disp);font-size:9px}
   .cgoal{stroke:rgba(46,155,255,.5);stroke-width:1;stroke-dasharray:4 4}
   .cgoalt{fill:var(--blue);font-family:var(--disp);font-size:9px;letter-spacing:.06em}
@@ -81,7 +81,7 @@
   .mrow .l{font-family:var(--disp);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);flex:1}
   .mrow .g{font-family:var(--disp);font-weight:700;font-size:16px;color:var(--ice);font-variant-numeric:tabular-nums}
   .mrow .p{font-family:var(--disp);font-size:11px;color:var(--steel);width:34px;text-align:right}
-  .mrow .bar{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+  .mrow .bar{height:5px;background:rgba(60,45,20,.06);border-radius:3px;overflow:hidden}
   .mrow .bar i{display:block;height:100%;width:0;border-radius:3px;box-shadow:0 0 8px currentColor;transition:width 1.15s cubic-bezier(.2,.7,.2,1)}
   .tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .tabs::-webkit-scrollbar{display:none}
@@ -100,7 +100,7 @@
   .meal .ings{list-style:none;margin:12px 0 0;display:flex;flex-direction:column;gap:7px}
   .meal .ings li{font-family:var(--serif);font-size:16px;color:var(--gris);display:flex;gap:10px;line-height:1.35}
   .meal .ings li b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:14px;min-width:52px}
-  .meal .mac{margin-top:14px;padding-top:11px;border-top:1px solid rgba(255,255,255,.06);font-family:var(--disp);font-size:11px;letter-spacing:.05em;color:var(--steel);display:flex;gap:14px}
+  .meal .mac{margin-top:14px;padding-top:11px;border-top:1px solid rgba(60,45,20,.06);font-family:var(--disp);font-size:11px;letter-spacing:.05em;color:var(--steel);display:flex;gap:14px}
   .meal .mac b{color:var(--gris);font-weight:600}
   .meal .seas{margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--steel)}
   .meal .seas::before{content:"🌿 ";font-style:normal}
@@ -112,7 +112,7 @@
   .cat:hover{border-color:rgba(46,155,255,.32)}
   .cat h4{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:4px}
   .cat h4 .n{font-size:10px;color:var(--steel);background:rgba(46,155,255,.1);border:1px solid var(--line);padding:2px 7px;letter-spacing:.05em}
-  .cat .ci{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+  .cat .ci{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid rgba(60,45,20,.04);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
   .cat .ci:last-child{border-bottom:0}
   .cat .ci input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
   .cat .ci .box{width:18px;height:18px;flex:none;border:1px solid var(--steel);border-radius:3px;position:relative;transition:border-color .2s,background .2s}
@@ -133,7 +133,7 @@
   .acard.note .mini{font-size:16px;line-height:1.6}
   /* cartes suivi cliquables : mènent à l'outil correspondant du tableau de bord (les gens cliquent tout) */
   .acard.note.goto{cursor:pointer;transition:border-color .25s,transform .25s,box-shadow .25s}
-  .acard.note.goto:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .acard.note.goto:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(60,45,20,.18)}
   .acard.note.goto:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .gohint{margin-top:13px;font-family:var(--disp);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);opacity:.82;transition:opacity .25s}
   .acard.note.goto:hover .gohint{opacity:1}
@@ -143,7 +143,7 @@
   .suivi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
   .acard h4{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:9px}
   .acard ul{list-style:none;margin:0}
-  .acard li{font-family:var(--serif);font-size:16px;color:var(--gris);padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4;transition:color .2s,padding-left .2s}
+  .acard li{font-family:var(--serif);font-size:16px;color:var(--gris);padding:9px 0;border-bottom:1px solid rgba(60,45,20,.05);line-height:1.4;transition:color .2s,padding-left .2s}
   .acard li:last-child{border-bottom:0}
   .acard li:hover{color:var(--ice);padding-left:4px}
   .acard .mini{font-family:var(--serif);font-size:15.5px;color:var(--gris);line-height:1.6}
@@ -171,7 +171,7 @@
   .courses-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
   .clabel{font-family:var(--disp);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);white-space:nowrap}
   .clabel b{color:var(--ice);font-weight:600;font-variant-numeric:tabular-nums}
-  .cprog{flex:1;min-width:140px;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+  .cprog{flex:1;min-width:140px;height:6px;background:rgba(60,45,20,.06);border-radius:3px;overflow:hidden}
   .cprog i{display:block;height:100%;width:0;background:var(--blue);box-shadow:0 0 8px var(--blue);border-radius:3px;transition:width .45s cubic-bezier(.2,.7,.2,1)}
   .clearbtn{font-family:var(--disp);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:8px 13px;cursor:pointer;transition:border-color .3s,color .3s}
   .clearbtn:hover{border-color:var(--blue);color:var(--blue)}
@@ -182,7 +182,7 @@
   .tab.today::after{content:"";position:absolute;top:6px;right:7px;width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 6px var(--blue)}
   .tab.today.on::after{background:#04060a;box-shadow:none}
   .meal{transition:border-color .3s,transform .3s,box-shadow .3s}
-  .meal:hover{border-color:rgba(46,155,255,.32);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .meal:hover{border-color:rgba(46,155,255,.32);transform:translateY(-2px);box-shadow:0 8px 24px rgba(60,45,20,.18)}
   @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.2)}100%{transform:scale(1)}}
   .cat .ci .box.pop{animation:pop .28s ease}
   .rv{opacity:0;transform:translateY(12px)}
@@ -193,7 +193,7 @@
   /* en-tête : groupe d'actions (raccourci coachs + déconnexion) */
   .hd-act{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .dash-hd .coachlink{text-decoration:none;color:var(--blue);border-color:rgba(46,155,255,.45)}
-  .dash-hd .coachlink:hover{background:rgba(46,155,255,.1);color:#fff}
+  .dash-hd .coachlink:hover{background:rgba(46,155,255,.1);color:var(--ice)}
   .dash-hd .coachlink[hidden]{display:none}
 </style>
 <script src="assets/vendor/supabase.min.js"></script>

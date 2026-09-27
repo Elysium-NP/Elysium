@@ -39,7 +39,7 @@
     letter-spacing:.24em;color:var(--blue);margin-bottom:9px}
   .qstep .qhint{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--steel);margin-bottom:24px}
   /* champ obligatoire non rempli au moment de valider */
-  .qstep.miss{border-left:2px solid #e8b04b;margin-left:-16px;padding-left:14px}
+  .qstep.miss{border-left:2px solid #8a5a00;margin-left:-16px;padding-left:14px}
   .qcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .qcards.one{grid-template-columns:1fr}
   @media(max-width:520px){.qcards{grid-template-columns:1fr}}
@@ -68,13 +68,13 @@
   .qrange input[type=range]{flex:1;accent-color:var(--blue);height:26px}
   .qrange .val{font-family:var(--disp);font-weight:700;font-size:34px;color:var(--blue);min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
   /* avertissement dans une étape sensible */
-  .qwarn{margin-top:16px;padding:13px 15px;border:1px solid rgba(232,176,75,.35);background:rgba(232,176,75,.06);font-family:var(--disp);font-size:12.5px;line-height:1.65;color:#d8c08a}
-  .qwarn b{color:#f0dcae}
+  .qwarn{margin-top:16px;padding:13px 15px;border:1px solid rgba(232,176,75,.35);background:rgba(232,176,75,.06);font-family:var(--disp);font-size:12.5px;line-height:1.65;color:#6b4a00}
+  .qwarn b{color:#6b4a00}
   /* bloc de fin : avertissement + bouton de validation */
   .qend{margin-top:44px;padding-top:44px;border-top:1px solid var(--line)}
   .qnav{display:flex;justify-content:center;margin-top:26px}
   .qnav .btn{cursor:pointer;background:transparent;padding:18px 42px;font-size:13px}
-  .qerr{font-family:var(--disp);font-size:13px;line-height:1.6;color:#e8b04b;margin-top:16px;min-height:16px;text-align:center}
+  .qerr{font-family:var(--disp);font-size:13px;line-height:1.6;color:#8a5a00;margin-top:16px;min-height:16px;text-align:center}
   /* état d'enregistrement : fixe en bas d'écran, visible pendant tout le remplissage */
   .qsave{position:fixed;right:var(--edge);bottom:18px;z-index:58;font-family:var(--disp);font-size:11px;letter-spacing:.1em;
     color:var(--steel);background:rgba(6,8,12,.9);border:1px solid var(--line);padding:8px 13px;
@@ -82,7 +82,7 @@
   .qsave.on{opacity:1;transform:none}
   @media(max-width:520px){.qsave{left:var(--edge);right:var(--edge);text-align:center}}
   /* fenêtre de confirmation (double sécurité avant verrouillage) */
-  .qmodal{display:none;position:fixed;inset:0;z-index:95;background:rgba(3,5,10,.82);align-items:center;justify-content:center;padding:24px}
+  .qmodal{display:none;position:fixed;inset:0;z-index:95;background:rgba(40,32,20,.45);align-items:center;justify-content:center;padding:24px}
   .qmodal.on{display:flex}
   .qmodal-in{max-width:460px;background:var(--void2);border:1px solid rgba(46,155,255,.4);padding:32px 28px;text-align:center}
   .qmodal h3{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice);text-transform:uppercase;margin:0 0 14px}

@@ -7,22 +7,32 @@
    ========================================================================== */
 
 :root{
-  --void:#06080C; --void2:#03050a; --blue:#2E9BFF; --blue-d:#1a5fa8;
-  --ice:#EAF2FF; --gris:#AEB6C4; --steel:#79839a; --line:rgba(46,155,255,.16);
-  --disp:'Oswald','Arial Narrow',sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Consolas,monospace;
-  --serif:'Cormorant Garamond',Georgia,serif;
+  /* ── IDENTITÉ CRÈME (validée par Damien & Yoann le 27/09) ──
+     Les noms de tokens de l'ancienne charte sombre sont GARDÉS (toutes les pages s'en
+     servent) mais leurs valeurs sont celles de la charte claire :
+       --void  = fond de page crème          --void2 = surfaces / cartes, un cran plus clair
+       --ice   = texte fort (noir)           --gris  = texte courant   --steel = texte discret
+       --blue  = bleu Elysium FONCÉ, pour le texte et les filets (AA sur crème)
+       --brand = bleu Elysium #2E9BFF, pour les fonds, boutons, pastilles
+     Ancienne charte : tag git `site-sombre-27-09`. */
+  --void:#F5F1E8; --void2:#FBF8F2; --cream2:#EDE6D8;
+  --blue:#1466b8; --blue-d:#0f4f8f; --brand:#2E9BFF;
+  --ice:#111111; --gris:#4d463c; --steel:#6b6358; --line:#E3DACB;
+  /* pastels : les couleurs des repas de leurs diètes, adoucies dans la crème */
+  --p-jaune:#F8EBC4; --p-vert:#DDE8D2; --p-violet:#E2DCEA; --p-bleu:#DCE8F4;
+  --b-jaune:#ffd966; --b-vert:#93c47d; --b-violet:#8e7cc3; --b-bleu:#6fa8dc;
+  --disp:"Segoe UI",Arial,Helvetica,system-ui,sans-serif;
+  --mono:"Segoe UI",Arial,Helvetica,system-ui,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --wordmark:"Cormorant Garamond",Georgia,serif;
   --edge:clamp(18px,4vw,54px);
-}
-@supports (color:color(display-p3 1 1 1)){
-  :root{ --blue:color(display-p3 0.16 0.60 1); --blue-d:color(display-p3 0.10 0.37 0.66); }
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--void);color:var(--gris);font-family:var(--serif);font-size:clamp(19px,1rem + 0.6vw,22px);overflow-x:hidden;
+body{background:var(--void);color:var(--gris);font-family:var(--disp);font-size:17px;line-height:1.6;overflow-x:hidden;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-kerning:normal}
-::selection{background:var(--blue);color:#04060a}
+::selection{background:var(--brand);color:#111}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
@@ -444,3 +454,89 @@ html.reveal-ready .reveal.in{opacity:1;transform:none}
   html.reveal-ready .reveal{opacity:1;transform:none;transition:none}
   html{scroll-behavior:auto}
 }
+
+
+/* ============================================================================
+   COUCHE CRÈME (27/09) — neutralise ce qui n'existait que pour le noir :
+   curseur viseur, grain, balayage, cadre, néons, dégradés sombres, capitales
+   condensées. Placée en fin de fichier pour gagner sur les règles ci-dessus.
+   ========================================================================== */
+.cur,.curdot,.grain,.ambscan,.frame,.phead .pfield{display:none!important}
+html.js,html.js *{cursor:auto}
+html.js a,html.js button,html.js summary,html.js label,html.js [role=button]{cursor:pointer}
+
+/* titres : Georgia, casse normale (comme leurs fiches) — même dans les styles propres aux pages */
+h1,h2,h3{font-family:var(--serif)!important;font-weight:400!important;text-transform:none!important;letter-spacing:-.01em!important;line-height:1.1!important;color:var(--ice)}
+
+/* en-tête : bande crème, marque ELYSIUM en Cormorant, menu aligné dessus */
+.status{align-items:center;height:64px;padding:0 var(--edge);background:rgba(245,241,232,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.status .mid,.status .rt{display:none!important}
+nav.menu{top:0;height:64px}
+nav.menu a{font-size:14px;letter-spacing:0;text-transform:none;color:var(--gris)}
+nav.menu a:hover{color:var(--ice)}
+nav.menu a[aria-current="page"]{color:var(--ice);font-weight:600}
+nav.menu a[aria-current="page"]::after{background:var(--brand);height:2px;border-radius:2px}
+nav.menu a.go{color:var(--ice);border:1px solid var(--ice);border-radius:999px;padding:8px 16px}
+nav.menu a.go:hover{background:var(--ice);color:#fff}
+.burger{top:19px}
+.msheet{background:rgba(245,241,232,.98)}
+.msheet a{font-family:var(--serif);font-weight:400;text-transform:none}
+.msheet a .mnum{font-family:var(--disp)}
+.logo .elg,.logo.big .elg,.elg{--h:auto;height:auto;padding:0}
+.elg-ring,.elg-sub{display:none!important}
+.elg-name{font-family:var(--wordmark);font-weight:500;font-size:25px;letter-spacing:.42em;padding-left:.42em;color:var(--ice);opacity:1;animation:none;text-shadow:none!important}
+.logo:hover .elg-name{color:var(--blue)}
+
+/* boutons : pilule bleu Elysium, texte noir (6,5:1) */
+.btn{font-size:15px;font-weight:600;letter-spacing:0;text-transform:none;color:#111;background:var(--brand);border:1px solid var(--brand);border-radius:999px;padding:14px 28px}
+.btn:hover{background:#5ab1ff;border-color:#5ab1ff;color:#111;box-shadow:0 10px 24px -14px rgba(20,102,184,.6)}
+.link{letter-spacing:.06em;color:var(--blue);border-color:currentColor}
+.kick::before{height:2px;border-radius:2px;background:var(--brand)}
+.kick{letter-spacing:.14em;font-weight:600}
+
+/* en-tête de page : un voile pastel au lieu du halo sombre */
+.phead::before{background:radial-gradient(700px 420px at 82% 10%,var(--p-bleu),transparent 65%),radial-gradient(520px 360px at 12% 90%,var(--p-jaune),transparent 70%)}
+.phead::after{display:none}
+.phead h1 .l2,.auth-card h1 .l2,.dash-hd h1 span{color:var(--brand)}
+.phead .sub,.cta .sub{font-family:var(--serif);color:var(--gris)}
+.sec-head .no{-webkit-text-stroke:1px rgba(46,155,255,.55)}
+.sec-head .trace path{stroke:var(--brand);filter:none}
+.sec-head .trace .tnode{fill:var(--brand);filter:none}
+
+/* cartes et surfaces */
+.coach{background:var(--void2)}
+.coach .ph::before{display:none}
+.coach .ph::after{background:linear-gradient(0deg,rgba(245,241,232,.55),transparent 45%)}
+.coach .ph .tagph{background:rgba(251,248,242,.85);color:var(--gris)}
+.coach .ph .scanline{display:none}
+.coach:hover,.plan:hover{box-shadow:0 20px 44px -30px rgba(60,45,20,.45)}
+.card,.plan{background:var(--void2);border-radius:14px}
+.plan.feat{border-color:var(--brand)}
+html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,.35),0 24px 50px -34px rgba(20,102,184,.55)}
+.plan.feat::before{color:#111;background:var(--brand);border-radius:999px}
+.plan li::before{border-color:var(--brand)}
+.card .ch .tag,.pill{border-radius:999px}
+.wrow button{background:var(--brand);color:#111;border-radius:8px}
+.cform input,.cform select,.cform textarea,.auth-form input,.wrow input{background:#fff;border-radius:8px}
+.faq details{border-color:var(--line)}
+.faq summary{font-family:var(--serif);font-weight:400;text-transform:none;font-size:20px}
+.quote{border-left-color:var(--brand)}
+.fill{background:var(--p-bleu)}
+
+/* bandeau d'appel de fin de page : bleu pastel */
+.cta::before{background:#E3EEF8}
+footer .foot-links{letter-spacing:.04em;text-transform:none;font-size:14px}
+footer .foot-legal{color:var(--steel);letter-spacing:.04em;text-transform:none}
+footer .logo{margin-bottom:18px}
+
+/* partenaire : logo posé tel quel (plus de fusion « écran » pensée pour le noir) */
+.partner-strip{background:transparent}
+.partner-strip .pn-logo{mix-blend-mode:normal;border-radius:4px}
+.partner-strip .promo b{color:var(--blue)}
+
+/* messages */
+.demo-banner{background:#FCF1D3;border-top:1px solid var(--b-jaune);color:#5a4a10}
+.auth-msg{border-radius:8px}
+.auth-msg.err{color:#8a1c1c;border-color:#e3a3a3;background:#f9e3e3}
+.auth-msg.ok{color:#0f4f8f;border-color:#9cc3ea;background:#E3EEF8}
+.cok{background:var(--p-bleu);border-radius:12px}

@@ -1,19 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#06080C">
+<meta name="theme-color" content="#F5F1E8">
 <title>ELYSIUM · Protocole nutritionnel de précision</title>
 <link rel="canonical" href="https://elysium-x57.pages.dev/">
-<meta name="description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. La nutrition traitée comme un instrument de précision.">
+<meta name="description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. Pensé pour toi, suivi dans la durée.">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Elysium · Nutrition &amp; Performance">
 <meta property="og:title" content="ELYSIUM · La nutrition au gramme près">
-<meta property="og:description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. La nutrition traitée comme un instrument de précision.">
+<meta property="og:description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. Pensé pour toi, suivi dans la durée.">
 <meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -52,1009 +52,393 @@
   ]
 }
 </script>
-<script>document.documentElement.classList.add('js')</script>
-<link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts.css">
-<link rel="preload" as="image" href="assets/real/plat_saumon.jpg" fetchpriority="high"><!-- image LCP hero -->
 <style>
-:root{
-  --void:#06080C; --void2:#03050a; --blue:#2E9BFF; --blue-d:#1a5fa8;
-  --ice:#EAF2FF; --gris:#AEB6C4; --steel:#79839a; --line:rgba(46,155,255,.16);
-  --disp:'Oswald','Arial Narrow',sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Consolas,monospace;
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --edge:clamp(18px,4vw,54px);
-}
-/* bleu accent en gamut large (display-p3) : plus vif sur écrans récents, fallback hex sinon */
-@supports (color:color(display-p3 1 1 1)){
-  :root{ --blue:color(display-p3 0.16 0.60 1); --blue-d:color(display-p3 0.10 0.37 0.66); }
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
-body{background:var(--void);color:var(--gris);font-family:var(--serif);font-size:17px;overflow-x:hidden;-webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;font-kerning:normal}
-html.js body{opacity:0}
-::selection{background:var(--blue);color:#04060a}
-img{display:block;max-width:100%}
-/* focus clavier visible, indispensable : on masque le curseur natif (cursor:none) */
-:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-:focus:not(:focus-visible){outline:none}
-/* skip link (accessibilité clavier) */
-.skip{position:fixed;top:-64px;left:var(--edge);z-index:120;background:var(--void2);color:var(--ice);
-  border:1px solid var(--blue);padding:10px 18px;font-family:var(--disp);font-size:12px;letter-spacing:.14em;
-  text-transform:uppercase;text-decoration:none;transition:top .2s ease}
-.skip:focus{top:14px}
+  @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;
+    src:url(assets/fonts/cormorant-garamond-500-normal-latin.woff2) format("woff2")}
 
-/* ---------- curseur instrument (viseur carré) ---------- */
-@media (hover:hover) and (pointer:fine){
-  html.js, html.js *{cursor:none}
-  .cur{position:fixed;left:0;top:0;z-index:100;pointer-events:none;width:26px;height:26px;margin:-13px 0 0 -13px;
-    border:1px solid rgba(46,155,255,.75);will-change:transform;
-    transition:width .22s ease,height .22s ease,margin .22s ease,background .22s ease,border-color .22s ease}
-  .curdot{position:fixed;left:0;top:0;z-index:100;pointer-events:none;width:3px;height:3px;margin:-1.5px 0 0 -1.5px;
-    background:var(--blue);box-shadow:0 0 7px var(--blue);will-change:transform}
-  .cur.hot{width:54px;height:54px;margin:-27px 0 0 -27px;background:rgba(46,155,255,.08);border-color:var(--blue)}
-}
-@media (hover:none){.cur,.curdot{display:none}}
-.mono{font-family:var(--disp)}
-h1,h2,h3{font-family:var(--disp);font-weight:600;color:var(--ice);text-transform:uppercase;line-height:.92;letter-spacing:.005em}
+  /* ── La DA des fiches client (build_pdf_sheet.py), transposée au web ── */
+  :root{
+    /* crème : fond de page, surfaces un cran plus claires, filets accordés (aucun gris froid) */
+    --paper:#F5F1E8; --surface:#FBF8F2; --ink:#111111; --ink2:#4d463c; --mute:#6b6358;
+    --rule:#E3DACB; --card:#F0E9DC;
+    --blue:#2E9BFF;                     /* bleu Elysium : touches, fonds, pastilles */
+    --blue-ink:#1466b8;                 /* le même bleu, foncé pour le TEXTE (lisible sur blanc) */
+    --soft:#EDE6D8;                     /* crème plus soutenu des sections alternées */
+    /* repas : fond clair / bordure — identiques aux fiches */
+    --pdj-bg:#fff2cc; --pdj:#ffd966;
+    --dej-bg:#d9ead3; --dej:#93c47d;
+    --col-bg:#d9d2e9; --col:#8e7cc3;
+    --din-bg:#cfe2f3; --din:#6fa8dc;
+    /* macros */
+    --mG:#3d85c6; --mP:#cc0000; --mL:#f1c232;
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:"Segoe UI",Arial,Helvetica,system-ui,sans-serif;
+    --brand:"Cormorant Garamond",Georgia,serif;
+    --r:14px; --edge:clamp(16px,4vw,40px);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 var(--edge)}
+  h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ink);margin:0;letter-spacing:-.01em}
+  h2{font-size:clamp(28px,4.2vw,42px);line-height:1.12}
+  .eyebrow{display:flex;align-items:center;gap:10px;font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--blue-ink);margin:0 0 16px}
+  .eyebrow::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--blue)}
+  .end .eyebrow{justify-content:center}
+  .lede{font-size:clamp(16px,1.8vw,18px);line-height:1.7;color:var(--ink2);max-width:58ch;margin:18px 0 0}
+  .lede b{color:var(--ink);font-weight:600}
+  section{padding:clamp(64px,10vw,120px) 0;border-top:1px solid var(--rule)}
 
-/* ---------- cadre instrument (fixe) ---------- */
-.frame{position:fixed;inset:0;z-index:60;pointer-events:none}
-.frame .cnr{position:absolute;width:26px;height:26px;border:1px solid var(--blue);opacity:.55}
-.frame .tl{top:var(--edge);left:var(--edge);border-right:0;border-bottom:0}
-.frame .tr{top:var(--edge);right:var(--edge);border-left:0;border-bottom:0}
-.frame .bl{bottom:var(--edge);left:var(--edge);border-right:0;border-top:0}
-.frame .br{bottom:var(--edge);right:var(--edge);border-left:0;border-top:0}
-.frame .tl,.frame .tr{display:none}   /* les coins du haut chevauchaient le logo + le bouton COMMENCER -> retirés */
-@media(max-width:760px){.frame{display:none}}
+  /* boutons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 24px;
+    border-radius:999px;font:600 15px/1 var(--sans);text-decoration:none;transition:background .2s,color .2s,border-color .2s}
+  .btn.main{background:var(--blue);color:#0a0d12}
+  .btn.main:hover{background:#5ab1ff}
+  .btn.line{border:1px solid var(--ink);color:var(--ink)}
+  .btn.line:hover{background:var(--ink);color:#fff}
+  .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .more{display:inline-block;margin-top:24px;font-weight:600;color:var(--blue-ink);text-decoration:none;border-bottom:1px solid currentColor}
 
-/* ---------- barre statut (fixe, haut) ---------- */
-.status{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:flex-start;justify-content:space-between;
-  padding:16px var(--edge);font-family:var(--disp);font-size:12px;letter-spacing:.14em;color:var(--steel);
-  text-transform:uppercase;background:linear-gradient(180deg,rgba(4,6,10,.82),transparent)}
-.status .brand{font-family:var(--serif);font-style:italic;font-size:20px;letter-spacing:.18em;color:var(--ice);text-transform:none}
-/* LOGO officiel Elysium (wordmark serif + « NUTRITION & PERFORMANCE » entre traits bleus) */
-.logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none;text-transform:none}
-.logo .n{font-family:var(--serif);font-style:normal;font-weight:500;font-size:22px;letter-spacing:.4em;color:var(--ice);text-transform:uppercase;padding-left:.4em}
-.logo .np{display:flex;align-items:center;gap:10px;margin-top:6px}
-.logo .np span{font-family:var(--disp);font-size:9px;letter-spacing:.32em;color:var(--gris);text-transform:uppercase;padding-left:.32em}
-.logo .np .ln{position:relative;width:24px;height:1px;background:var(--blue);opacity:.9}
-.logo .np .ln::before{content:"";position:absolute;top:50%;width:4px;height:4px;background:var(--blue);transform:translateY(-50%) rotate(45deg);box-shadow:0 0 6px var(--blue)}
-.logo .np .ln.l::before{left:-1px}.logo .np .ln.r::before{right:-1px}
-.logo.big .n{font-size:34px;letter-spacing:.46em;padding-left:.46em}
-.logo.big .np{gap:14px;margin-top:10px}.logo.big .np span{font-size:11px;letter-spacing:.34em;padding-left:.34em}.logo.big .np .ln{width:36px}
-@media(max-width:900px){.logo .n{font-size:19px;letter-spacing:.34em;padding-left:.34em}}
-/* logo officiel EN IMAGE (auto-suffisant, ne dépend pas du cache de site.css) */
-/* ===== LOGO ELYSIUM vectoriel + animé (index est autonome -> composant complet inline) ===== */
-.logo .elg{--h:96px}                              /* accueil immersif = logo bien présent */
-.logo.big .elg{--h:104px}
-.boot .logo.big .elg{--h:150px}
-@media(max-width:900px){.logo .elg{--h:60px}.boot .logo.big .elg{--h:104px}}
-.elg{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;height:var(--h);line-height:1;padding:0 calc(var(--h)*.1)}
-.elg-ring{position:absolute;left:50%;top:50%;width:var(--h);height:var(--h);overflow:visible;pointer-events:none;transform:translate(-50%,-50%);transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
-.elg-ring path{stroke-dasharray:335;stroke-dashoffset:0;filter:drop-shadow(0 0 2px rgba(46,155,255,.5)) drop-shadow(0 0 5px rgba(46,155,255,.28)) drop-shadow(0 0 0 rgba(46,155,255,0));transition:filter .3s,stroke-width .3s;animation:elgDraw 1.25s cubic-bezier(.6,.05,.15,1) .15s backwards}   /* halo de base en TRIPLE couche (faible) -> la transition vers le halo :hover monte proprement en puissance ; backwards = ne fige pas le filtre au repos */
-@keyframes elgDraw{0%{stroke-dashoffset:335;filter:drop-shadow(0 0 0 rgba(46,155,255,0)) drop-shadow(0 0 0 rgba(46,155,255,0)) drop-shadow(0 0 0 rgba(46,155,255,0))}55%{filter:drop-shadow(0 0 3px #2E9BFF) drop-shadow(0 0 13px #2E9BFF) drop-shadow(0 0 28px rgba(46,155,255,.75))}100%{stroke-dashoffset:0;filter:drop-shadow(0 0 2px rgba(46,155,255,.5)) drop-shadow(0 0 5px rgba(46,155,255,.28)) drop-shadow(0 0 0 rgba(46,155,255,0))}}
-.elg-name{position:relative;z-index:1;font-family:var(--serif);font-weight:500;font-size:calc(var(--h)*.315);letter-spacing:.17em;padding-left:.17em;color:#fff;text-transform:uppercase;transition:text-shadow .45s;opacity:0;animation:elgFade .6s ease .35s forwards}
-.elg-sub{position:relative;z-index:1;display:flex;align-items:center;gap:.55em;margin-top:calc(var(--h)*.035);font-family:var(--disp);font-weight:500;font-size:calc(var(--h)*.086);letter-spacing:.24em;padding-left:.24em;color:#eaf0fb;text-transform:uppercase;white-space:nowrap;opacity:0;animation:elgFade .7s ease .7s forwards}
-@keyframes elgFade{to{opacity:1}}
-.elg-sub b{color:var(--blue);font-weight:600;text-shadow:0 0 8px rgba(46,155,255,.55)}
-.elg-sub i{width:calc(var(--h)*.13);height:1px;background:var(--blue);position:relative;flex:none;box-shadow:0 0 6px rgba(46,155,255,.6)}
-.elg-sub i::before{content:"";position:absolute;top:50%;width:3px;height:3px;background:var(--blue);transform:translateY(-50%) rotate(45deg)}
-.elg-sub i.l::before{left:-1px}.elg-sub i.r::before{right:-1px}
-/* survol : halo néon soutenu sur les arcs + ELYSIUM/accents qui s'illuminent (le re-tracé est piloté en JS, mouseenter) */
-.logo:hover .elg-ring path{stroke-width:3.3;filter:drop-shadow(0 0 3px #2E9BFF) drop-shadow(0 0 12px #2E9BFF) drop-shadow(0 0 26px rgba(46,155,255,.8))}
-.logo:hover .elg-name{text-shadow:0 0 4px rgba(46,155,255,.7),0 0 13px rgba(46,155,255,.85),0 0 28px rgba(46,155,255,.5)}   /* voile bleu VISIBLE (couche serrée qui colle aux lettres) mais ELYSIUM reste blanc */
-.logo:hover .elg-sub b{color:#5db4ff;text-shadow:0 0 14px rgba(46,155,255,1)}
-.logo:hover .elg-sub i{background:#5db4ff;box-shadow:0 0 13px rgba(46,155,255,1)}
-.elg{transition:transform .22s cubic-bezier(.2,.7,.2,1)}          /* retour au clic (press) */
-.logo:active .elg{transform:scale(.94)}
-/* le re-tracé des arcs (survol + clic) est joué en JS via Web Animations API -> repart neuf à chaque fois */
-@media(prefers-reduced-motion:reduce){.elg-ring path{stroke-dashoffset:0;animation:none}.elg-name,.elg-sub{opacity:1;animation:none}.logo:active .elg{transform:none}}
-.status .mid{display:none}
-.status .rt{display:flex;gap:8px;align-items:center;color:var(--gris)}
-.status .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);animation:blink 2.4s steps(1) infinite}
-@keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.25}}
-@media(min-width:900px){.status .mid{display:block}}
+  /* ── EN-TÊTE : blanc, la marque en Cormorant comme sur les fiches ── */
+  .band{position:sticky;top:0;z-index:20;background:rgba(245,241,232,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+  .band .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:62px}
+  .brand{font-family:var(--brand);font-weight:500;font-size:25px;letter-spacing:.42em;text-decoration:none;color:var(--ink);padding-left:.42em}
+  .nav{display:flex;gap:26px;align-items:center}
+  .nav a{font-size:14px;text-decoration:none;color:var(--ink2)}
+  .nav a:hover{color:var(--ink)}
+  .nav .acc{color:var(--ink);border:1px solid var(--ink);border-radius:999px;padding:8px 16px}
+  @media(max-width:860px){.nav a:not(.acc){display:none}}
 
-/* nav minimal */
-nav.menu{position:fixed;top:58px;right:var(--edge);z-index:55;display:flex;gap:26px;align-items:center}
-nav.menu a{font-family:var(--disp);font-size:13px;letter-spacing:.13em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
-nav.menu a:hover{color:var(--blue)}
-nav.menu a.go{color:var(--ice);border:1px solid var(--line);padding:8px 16px}
-nav.menu a.go:hover{border-color:var(--blue);background:rgba(46,155,255,.08)}
+  /* ── HERO ── */
+  .hero{padding:clamp(40px,7vw,88px) 0 clamp(56px,8vw,96px);border-top:0}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,80px);align-items:center}
+  @media(max-width:900px){.hero .wrap{grid-template-columns:1fr}}
+  .hero h1{font-size:clamp(46px,8vw,86px);line-height:1;letter-spacing:-.02em}
+  .hero h1 em{font-style:italic;color:var(--blue)}
+  .sign{margin-top:22px;font-size:14px;color:var(--mute)}
+  .sign b{color:var(--ink);font-weight:600}
+  .sign{display:flex;align-items:center;gap:10px}
+  .dots{display:inline-flex}
+  .dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--paper);margin-left:-4px}
+  .dots i:first-child{margin-left:0}
 
-/* menu mobile (hamburger instrument + panneau plein écran) */
-.burger{display:none;position:fixed;top:36px;right:var(--edge);z-index:70;width:36px;height:26px;background:none;border:0;padding:0;cursor:pointer}
-.burger::after{content:"";position:absolute;inset:-11px -9px}/* zone tactile ~54x48 (>=44px) sans déplacer les barres */
-.burger span{position:absolute;left:4px;right:4px;height:1.5px;background:var(--ice);transition:transform .32s cubic-bezier(.16,1,.3,1),opacity .2s ease}
-.burger span:nth-child(1){top:5px}.burger span:nth-child(2){top:12px}.burger span:nth-child(3){top:19px}
-.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
-.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.msheet{position:fixed;inset:0;z-index:65;background:rgba(4,6,10,.975);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
-  display:flex;flex-direction:column;justify-content:center;padding:0 var(--edge);opacity:0;visibility:hidden;transition:opacity .34s ease,visibility .34s ease}
-.msheet.open{opacity:1;visibility:visible}
-.msheet a{display:flex;align-items:baseline;gap:16px;font-family:var(--disp);font-weight:600;font-size:clamp(30px,9vw,54px);
-  color:var(--ice);text-transform:uppercase;letter-spacing:.01em;padding:15px 0;border-bottom:1px solid var(--line);
-  text-decoration:none;transition:color .3s ease,padding-left .3s ease}
-.msheet a:hover{color:var(--blue);padding-left:10px}
-.msheet a .mnum{font-family:var(--disp);font-weight:400;font-size:12px;color:var(--steel);letter-spacing:.1em}
-.msheet a.go-m{color:var(--blue);border-bottom:0;margin-top:20px}
-@media(max-width:900px){nav.menu{display:none}.burger{display:block}.status .rt{display:none}}
-@media(prefers-reduced-motion:reduce){.msheet,.burger span{transition:none}}
+  /* ── SIGNATURE : une colonne « Jour » de leurs fiches ── */
+  .dayzone{position:relative;isolation:isolate}
+  .dayzone::before{content:"";position:absolute;inset:6% -4% 2%;z-index:-1;border-radius:40px;filter:blur(38px);opacity:.55;
+    background:radial-gradient(40% 45% at 20% 20%,var(--pdj),transparent 70%),radial-gradient(40% 45% at 85% 35%,var(--din),transparent 70%),radial-gradient(45% 45% at 30% 90%,var(--dej),transparent 70%),radial-gradient(40% 40% at 85% 85%,var(--col),transparent 70%)}
+  .day{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:22px;box-shadow:0 24px 60px -34px rgba(17,17,17,.35);overflow:hidden;max-width:440px;justify-self:center;width:100%}
+  .day-hd{display:flex;justify-content:space-between;align-items:baseline;padding:14px 18px;background:var(--ink);color:#fff}
+  .day-hd b{font-family:var(--serif);font-weight:400;font-size:19px}
+  .day-hd span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#c9ced5}
+  .day-body{padding:12px;display:flex;flex-direction:column;gap:10px}
+  .meal{border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+  .meal-hd{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;font-size:13px;font-weight:600;border-bottom:1px solid}
+  .meal-hd i{font-style:normal;font-weight:700;font-size:12px}
+  .pdj .meal-hd{background:var(--pdj-bg);border-color:var(--pdj)}
+  .dej .meal-hd{background:var(--dej-bg);border-color:var(--dej)}
+  .col .meal-hd{background:var(--col-bg);border-color:var(--col)}
+  .din .meal-hd{background:var(--din-bg);border-color:var(--din)}
+  .meal-in{padding:9px 12px 10px}
+  .meal-in h3{font:700 14px/1.3 var(--sans);margin-bottom:3px}
+  .meal-in p{margin:0;font-size:13px;line-height:1.5;color:var(--ink2)}
+  .mac{display:flex;gap:14px;margin-top:6px;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .mac span{display:inline-flex;align-items:center;gap:5px}
+  .mac span::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+  .p{--c:var(--mP)} .g{--c:var(--mG)} .l{--c:var(--mL)}
+  .day-ft{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 18px;background:var(--card);font-size:13px}
+  .day-ft b{font-family:var(--serif);font-weight:400;font-size:20px}
+  .day-note{font-size:12px;color:var(--mute);text-align:center;margin:12px 0 0}
+  @media(prefers-reduced-motion:no-preference){
+    .day .meal{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+    .day .meal:nth-child(2){animation-delay:.12s} .day .meal:nth-child(3){animation-delay:.24s} .day .meal:nth-child(4){animation-delay:.36s}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}}
+  }
 
-/* ---------- utilitaires ---------- */
-.kick{font-family:var(--disp);font-size:12px;letter-spacing:.24em;color:var(--blue);text-transform:uppercase;display:inline-flex;gap:10px;align-items:center}
-.kick::before{content:"";width:22px;height:1px;background:var(--blue)}
-.chapno{font-family:var(--disp);font-size:12px;letter-spacing:.2em;color:var(--steel)}
-.serif{font-family:var(--serif);font-style:italic;color:var(--gris)}
+  /* ── IDÉES REÇUES : repli natif ── */
+  .myths{margin-top:34px;display:grid;gap:12px;max-width:820px}
+  .myths details{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);transition:background .2s}
+  .myths details[open]{background:#FCF1D3;border-color:var(--pdj)}
+  .myths summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 20px;font-family:var(--serif);font-size:clamp(18px,2.2vw,21px)}
+  .myths summary::-webkit-details-marker{display:none}
+  .myths summary::after{content:"+";flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--rule);display:grid;place-items:center;font:400 18px/1 var(--sans);color:var(--blue-ink);background:var(--surface);transition:transform .2s}
+  .myths details[open] summary::after{transform:rotate(45deg)}
+  .myths .ans{padding:0 20px 18px;margin:0;color:var(--ink2);max-width:60ch}
+  .verdict{display:inline-block;font:700 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:6px;margin-right:8px;vertical-align:1px}
+  .faux{background:#f7dada;color:#9b0000} .vrai{background:var(--dej-bg);color:#2f6b1a}
 
-/* ---------- HERO ---------- */
-.hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding:0 var(--edge) 12vh;overflow:hidden}
-/* PLAN DE FOND FIXE (fondu-enchaîné) : les photos vivent ici, empilées, et se fondent au scroll */
-.stage{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--void)}
-.stage .sl{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;will-change:opacity}
-.stage .sl:first-child{opacity:1}                                   /* photo du hero visible au départ */
-/* vignette FIXE (ne bouge jamais -> aucune bande) : assombrit légèrement haut & bas, profondeur ciné */
-.stage::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(6,8,12,.6),transparent 16%,transparent 84%,rgba(6,8,12,.7))}
-/* les sections ne portent plus la photo (transparentes) -> le plan fixe la fournit ; elles gardent
-   juste leurs DÉGRADÉS pour la lisibilité du texte */
-.hero-bg{position:absolute;top:-8%;left:0;right:0;height:116%;z-index:0;background:transparent;will-change:transform}
-.hero-bg::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(6,8,12,.96),rgba(6,8,12,.55) 46%,rgba(6,8,12,.05) 72%,rgba(6,8,12,.4)),
-             linear-gradient(0deg,rgba(3,5,10,.95),transparent 52%)}
-.chap-bg{background-image:none!important}                            /* photo inline neutralisée -> vient du plan fixe */
-/* champ de données instrument : n'AJOUTE que de la lumière (screen) -> ne masque jamais le plat */
-.hfield{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.6;mix-blend-mode:screen}
-/* mobile/tactile : pas de souris -> les points ne « ressortent » jamais au survol, on masque la grille
-   (sinon elle reste visible en fond, retour Damien 20/07). Sur desktop (hover) l'effet est conservé. */
-@media (hover:none){.hfield{display:none}}
-.hero-in{position:relative;z-index:2;width:100%;max-width:1400px;margin:0 auto}
-.hero .kick{margin-bottom:26px}
-.hero h1{font-size:clamp(64px,12vw,190px);font-weight:600}
-.hero h1 .l2{display:block;color:var(--blue)}
-.hero .sub{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.1vw,26px);color:#cdd6e4;margin-top:26px;max-width:34ch}
-.hero-cta{display:flex;gap:22px;align-items:center;margin-top:38px;flex-wrap:wrap}
-.btn{font-family:var(--disp);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--ice);
-  text-decoration:none;border:1px solid var(--blue);padding:15px 32px;position:relative;
-  transition:background .35s ease,box-shadow .35s ease,color .35s ease;
-  box-shadow:inset 0 0 0 0 rgba(46,155,255,.14),0 0 0 rgba(46,155,255,0)}
-.btn:hover{background:rgba(46,155,255,.12);color:#fff;
-  box-shadow:0 0 0 1px rgba(46,155,255,.55),0 0 14px rgba(46,155,255,.34),0 0 46px rgba(46,155,255,.20),inset 0 0 22px rgba(46,155,255,.10)}
-.link{font-family:var(--disp);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gris);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:5px;transition:color .3s ease,border-color .3s ease}
-.link:hover{color:var(--blue);border-color:var(--blue)}
+  /* ── PAS UN RÉGIME ── */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,6vw,80px);align-items:center}
+  @media(max-width:860px){.two{grid-template-columns:1fr}}
+  blockquote{margin:0;padding:clamp(24px,4vw,40px);background:#ECE6F2;border-left:4px solid var(--col);border-radius:var(--r)}
+  blockquote p{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(24px,3.2vw,34px);line-height:1.25}
+  blockquote footer{margin-top:14px;font-size:14px;color:var(--mute)}
+  .partner{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:40px;padding-top:24px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink2)}
+  .partner img{height:30px;width:auto;border-radius:4px}
+  .partner b{color:var(--ink)}
 
-/* ligne de scan */
-.scan{position:absolute;left:0;right:0;top:0;height:2px;z-index:1;pointer-events:none;
-  background:linear-gradient(90deg,transparent,var(--blue),transparent);box-shadow:0 0 22px 3px rgba(46,155,255,.55);opacity:0}
-/* scan global permanent (instrument « en lecture ») + fine trame de balayage fixe */
-.ambscan{position:fixed;left:0;right:0;top:0;height:180px;z-index:40;pointer-events:none;opacity:.32;
-  background:linear-gradient(180deg,transparent,rgba(46,155,255,.04) 44%,rgba(46,155,255,.13) 50%,rgba(46,155,255,.04) 56%,transparent);
-  animation:ambscan 8s linear infinite;will-change:transform}
-@keyframes ambscan{0%{transform:translateY(-180px)}100%{transform:translateY(100vh)}}
-@media(prefers-reduced-motion:reduce){.ambscan{display:none}}
+  /* ── DANS L'ASSIETTE ── */
+  .plates{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:40px}
+  @media(max-width:980px){.plates{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.plates{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:40px calc(-1*var(--edge)) 0;padding:0 var(--edge) 8px;gap:14px}
+    .plates .plate{flex:0 0 78%;scroll-snap-align:start}}
+  .plate{border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;background:var(--surface);transition:transform .25s,box-shadow .25s}
+  .plate:hover{transform:translateY(-4px);box-shadow:0 18px 40px -26px rgba(60,45,20,.45)}
+  .plate img{aspect-ratio:4/3;object-fit:cover;width:100%;height:auto}
+  .plate-in{padding:14px 16px 16px}
+  .tag{display:inline-block;font:700 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:6px;border:1px solid}
+  .tag.pdj{background:var(--pdj-bg);border-color:var(--pdj)} .tag.dej{background:var(--dej-bg);border-color:var(--dej)}
+  .tag.sig{background:var(--blue);border-color:var(--blue);color:#0a0d12}
+  .plate h3{font-size:21px;margin:10px 0 6px}
+  .plate p{margin:0;font-size:14px;color:var(--ink2)}
+  .plate .mac{margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
+  .plate .kc{margin-left:auto;color:var(--ink)}
+  .plate .kc::before{display:none}
+  .fine{font-size:13px;color:var(--mute);margin-top:18px}
 
-/* readout instrument (hero, bas-droite) */
-.readout{position:absolute;right:var(--edge);bottom:12vh;z-index:2;width:280px;max-width:42vw;
-  border:1px solid var(--line);background:rgba(5,8,13,.62);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
-  box-shadow:0 24px 60px -24px rgba(0,0,0,.78),0 0 0 1px rgba(46,155,255,.05),inset 0 1px 0 rgba(46,155,255,.10)}
-.readout .rhd{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);
-  font-family:var(--disp);font-size:11px;letter-spacing:.16em;color:var(--steel);text-transform:uppercase}
-.readout .rhd b{color:var(--blue);font-weight:500}
-.readout .rbody{padding:14px}
-.readout .big{font-family:var(--disp);font-weight:600;font-size:40px;color:var(--ice);line-height:1}
-.readout .big small{font-family:var(--disp);font-size:12px;color:var(--steel);margin-left:6px;letter-spacing:.1em}
-.mrow{margin-top:12px}
-.mrow .t{display:flex;justify-content:space-between;font-family:var(--disp);font-size:11px;color:var(--gris);letter-spacing:.08em;margin-bottom:4px}
-.mrow .track{height:2px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
-.mrow .track i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--blue),var(--blue-d))}
-@media(max-width:760px){.readout{display:none}}
+  /* ── LA MÉTHODE : une vraie séquence ── */
+  .steps{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s}
+  @media(max-width:860px){.steps{grid-template-columns:1fr 1fr;row-gap:28px}}
+  @media(max-width:480px){.steps{grid-template-columns:1fr}}
+  .steps li{counter-increment:s;padding:0 22px 0 0;position:relative}
+  .steps li::before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--c);color:var(--ink);font:400 18px/1 var(--serif);margin-bottom:14px}
+  .steps li:nth-child(1){--c:var(--pdj)} .steps li:nth-child(2){--c:var(--dej)} .steps li:nth-child(3){--c:var(--col)} .steps li:nth-child(4){--c:var(--din)}
+  .steps li:not(:last-child)::after{content:"";position:absolute;top:20px;left:52px;right:12px;height:1px;background:var(--rule)}
+  @media(max-width:860px){.steps li::after{display:none}}
+  .steps h3{font-size:20px;margin-bottom:6px}
+  .steps p{margin:0;font-size:15px;color:var(--ink2)}
 
-.cue{position:absolute;left:var(--edge);bottom:5vh;z-index:2;font-family:var(--disp);font-size:11px;letter-spacing:.3em;color:var(--steel);text-transform:uppercase;display:flex;flex-direction:column;gap:8px}
-.cue i{width:1px;height:38px;background:linear-gradient(180deg,var(--blue),transparent);animation:cue 2.2s ease infinite}
-@keyframes cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+  /* ── ACCOMPAGNEMENT ── */
+  .evo{background:#E8F0DF;border-radius:22px;padding:clamp(28px,5vw,56px)}
+  .evo .lede{max-width:64ch}
 
-/* ---------- CHAPITRES ---------- */
-.chap{position:relative;min-height:100vh;display:flex;align-items:center;padding:14vh var(--edge);overflow:hidden}
-.chap-bg{position:absolute;top:-9%;left:0;right:0;height:118%;z-index:0;background-size:cover;background-position:center;will-change:transform}
-/* (l'ancien dégradé vertical PAR SECTION est retiré : il bougeait sur la photo fixe et créait une
-   « bande noire fantomatique ». Le fondu-enchaîné gère la transition ; la vignette est fixe -> .stage::after) */
-.chap-in{position:relative;z-index:2;max-width:600px}
-.chap:nth-of-type(even) .chap-in{margin-left:auto;text-align:right}
-.chap-head{display:flex;align-items:baseline;gap:16px;margin-bottom:22px}
-.chap:nth-of-type(even) .chap-head{flex-direction:row-reverse}
-.chap-head .no{font-family:var(--disp);font-weight:700;font-size:clamp(48px,6vw,88px);color:transparent;-webkit-text-stroke:1px rgba(46,155,255,.32);line-height:.8}
-.chap-head .lbl{font-family:var(--disp);font-size:12px;letter-spacing:.18em;color:var(--blue);text-transform:uppercase}
-.chap h2{font-size:clamp(40px,5.4vw,76px);margin-bottom:20px}
-/* trait néon qui se trace (signature instrument) : le « stylo » mène la ligne sous l'en-tête */
-.chap .trace{display:block;width:min(210px,48%);height:12px;margin:20px 0 6px;overflow:visible}
-.chap:nth-of-type(even) .trace{margin-left:auto;transform:scaleX(-1)}
-.chap .trace path{stroke:var(--blue);stroke-width:1.4;fill:none;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(46,155,255,.75))}
-.chap .trace .tnode{fill:#eaf4ff;filter:drop-shadow(0 0 6px var(--blue)) drop-shadow(0 0 2px var(--blue))}
-.chap p{font-size:17px;line-height:1.75;color:var(--gris);font-family:var(--serif);font-weight:500;letter-spacing:normal}
-.chap p b{color:var(--ice);font-weight:500}
-.chap p .b{color:var(--blue)}
-.chap:nth-of-type(odd) .chap-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,11,.95),rgba(4,6,11,.6) 44%,rgba(4,6,11,.1) 82%)}
-.chap:nth-of-type(even) .chap-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(270deg,rgba(4,6,11,.95),rgba(4,6,11,.6) 44%,rgba(4,6,11,.1) 82%)}
+  /* ── FIN : un bleu très doux ── */
+  .end{background:#E3EEF8;border-top:0;text-align:center}
+  .end h2{font-size:clamp(32px,5vw,54px)}
+  .end .lede{margin:16px auto 0}
+  .end .ctas{justify-content:center}
+  .contact{margin-top:26px;font-size:14px;color:var(--ink2)}
+  .contact a{color:var(--ink)}
+  section.soft{background:var(--soft)}
+  .foot{padding:28px 0 calc(28px + env(safe-area-inset-bottom));font-size:13px;color:var(--mute);border-top:1px solid var(--rule)}
+  .foot .wrap{display:flex;flex-wrap:wrap;gap:12px 22px;justify-content:space-between}
+  .foot nav{display:flex;flex-wrap:wrap;gap:8px 18px}
+  .foot a{text-decoration:none}
+  .foot a:hover{color:var(--ink)}
 
-/* bloc data (calibrage) */
-.data{margin-top:28px;border-top:1px solid var(--line);padding-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:440px}
-.chap:nth-of-type(even) .data{margin-left:auto}
-.data .d .v{font-family:var(--disp);font-weight:600;font-size:30px;color:var(--ice)}
-.data .d .v small{font-family:var(--disp);font-size:12px;color:var(--blue);margin-left:3px}
-.data .d .k{font-family:var(--disp);font-size:11px;letter-spacing:.14em;color:var(--steel);text-transform:uppercase;margin-top:3px}
-
-/* ---------- FINAL ---------- */
-.end{position:relative;min-height:96vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 var(--edge);overflow:hidden}
-.end-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 42%,#0b1322,#05070c 72%)}
-.wgl{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block}      /* champ de données WebGL (moment WOW) */
-.end .end-in{text-shadow:0 2px 30px rgba(3,5,10,.6)}                                 /* lisibilité du CTA sur le shader */
-.end-in{position:relative;z-index:2;max-width:800px}
-.end h2{font-size:clamp(46px,7vw,104px)}
-.end .sub{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2vw,25px);color:#cdd6e4;margin:20px 0 40px}
-
-footer{position:relative;z-index:2;text-align:center;padding:64px var(--edge) 48px;border-top:1px solid var(--line);background:var(--void)}
-footer .logo{margin-bottom:24px}
-footer .foot-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 28px;margin-bottom:22px;font-family:var(--disp);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
-footer .foot-links a{color:var(--steel);text-decoration:none;transition:color .3s ease}
-footer .foot-links a:hover{color:var(--blue)}
-footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;color:#4a5364;text-transform:uppercase}
-
-/* ---------- MANGER À SA FAIM (philosophie + témoignage + partenaire) ---------- */
-.creed{position:relative;padding:16vh var(--edge);background:linear-gradient(rgba(6,8,12,.62),rgba(6,8,12,.9)),url('assets/real/r09_15352332.jpg') center/cover no-repeat #080B11;
-  border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden}
-.creed::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(900px 520px at 18% 26%,rgba(46,155,255,.07),transparent 62%)}
-.creed-in{position:relative;max-width:1040px;margin:0 auto}
-.creed .kick{margin-bottom:26px}
-.creed-h{font-family:var(--disp);font-weight:600;font-size:clamp(40px,7.2vw,98px);line-height:.94;color:var(--ice);text-transform:uppercase;letter-spacing:.005em}
-.creed-h .l2{display:block;color:var(--blue)}
-.creed-sub{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.3vw,27px);color:#cdd6e4;margin-top:28px;max-width:42ch}
-.creed-sub b{font-style:normal;color:var(--ice);font-weight:500}
-.quote{margin-top:60px;padding-left:26px;border-left:2px solid var(--blue);max-width:36ch}
-.quote blockquote{font-family:var(--disp);font-weight:500;font-size:clamp(24px,3.6vw,42px);color:var(--ice);line-height:1.12;text-transform:uppercase}
-.quote blockquote::before{content:"« "}.quote blockquote::after{content:" »"}
-.quote .hl{color:var(--blue)}
-.quote figcaption{font-family:var(--disp);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel);margin-top:16px}
-.partner{margin-top:64px;display:flex;flex-direction:column;align-items:flex-start;gap:15px;padding-top:34px;border-top:1px solid var(--line)}
-.partner .pk{font-family:var(--disp);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:10px}
-.partner .pk::before{content:"";width:22px;height:1px;background:var(--blue);opacity:.6}
-.partner .pn-logo{height:40px;width:auto;mix-blend-mode:screen}   /* vrai logo Prozis (blanc/noir) : le noir disparaît sur le fond sombre */
-/* lien vers la page Résultats (sous la citation client) : soulignement bleu qui se dessine au survol */
-.creed .seemore{margin-top:34px;margin-left:28px}
-/* texte en néon bleu (repère « clique-moi » sans underline), s'intensifie au survol */
-.creed .seemore a{position:relative;display:inline-block;font-family:var(--disp);font-weight:500;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#eef5ff;text-decoration:none;padding-bottom:11px;text-shadow:0 0 3px rgba(210,232,255,.6),0 0 9px rgba(46,155,255,.5),0 0 18px rgba(46,155,255,.28);transition:color .3s ease,text-shadow .3s ease,transform .4s cubic-bezier(.22,1,.36,1)}
-/* trait bleu qui balaie au survol (le mouvement que tu aimes) */
-.creed .seemore a::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:linear-gradient(90deg,var(--blue),rgba(46,155,255,.3));box-shadow:0 0 9px rgba(46,155,255,.65);transform:scaleX(.28);transform-origin:left;transition:transform .4s cubic-bezier(.22,1,.36,1)}
-.creed .seemore a:hover{color:#fff;text-shadow:0 0 4px rgba(230,242,255,.85),0 0 11px rgba(46,155,255,.75),0 0 24px rgba(46,155,255,.48),0 0 40px rgba(46,155,255,.26);transform:translateX(9px)}
-.creed .seemore a:hover::after{transform:scaleX(1)}
-@media(prefers-reduced-motion:reduce){.creed .seemore a{transition:color .3s ease,text-shadow .3s ease}.creed .seemore a:hover{transform:none}}
-@media(max-width:600px){.creed .seemore{margin-left:0}}
-
-/* ---------- annotations d'analyse (HUD sur le plat) ---------- */
-.tags{position:absolute;inset:0;z-index:2;pointer-events:none}
-.tg{position:absolute;display:flex;align-items:center;gap:0;opacity:0;font-family:var(--disp);
-  font-size:11px;letter-spacing:.08em;color:var(--ice);white-space:nowrap}
-.tg .pt{width:7px;height:7px;border:1px solid var(--blue);border-radius:50%;box-shadow:0 0 8px var(--blue);flex:none}
-.tg .cl{height:1px;width:36px;background:linear-gradient(90deg,var(--blue),rgba(46,155,255,.35));transform-origin:left}
-.tg .bx{border:1px solid rgba(46,155,255,.4);background:rgba(6,9,14,.62);padding:5px 10px}
-.tg .bx b{color:var(--blue);font-weight:500}
-@media(max-width:900px){.tags{display:none}}
-
-/* ---------- grain cinématique (film grain, tue le look « flat ») ---------- */
-.grain{position:fixed;inset:-120px;z-index:41;pointer-events:none;opacity:.055;mix-blend-mode:overlay;will-change:transform;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain .5s steps(4) infinite}
-@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-4%,3%)}50%{transform:translate(3%,-4%)}75%{transform:translate(-3%,-2%)}100%{transform:translate(2%,4%)}}
-
-/* ---------- révélation « rendu instrument » : stores qui se rétractent (plat scanné bande par bande) ---------- */
-.render{position:absolute;inset:0;z-index:1;pointer-events:none;display:flex;flex-direction:column}
-.render i{flex:1;background:var(--void2);transform-origin:left;will-change:transform}
-
-@media(prefers-reduced-motion:reduce){.scan,.cue i,.status .dot,.ambscan,.grain{animation:none!important}.render{display:none}}
-/* écran court (vieux moniteurs) : l'indice « Défiler » peut chevaucher le CTA -> on le masque */
-@media(max-height:760px){.cue{display:none}}
-
-/* ---------- galerie « Dans l'assiette » : de vrais plats, cadrés comme des relevés ---------- */
-.plates{padding:clamp(92px,13vh,152px) var(--edge) clamp(70px,10vh,118px);position:relative;z-index:1;background:var(--void)}
-.plates .phd{max-width:820px;margin:0 auto 52px}
-.plates .kick{margin-bottom:20px}
-.plates h2{font-size:clamp(38px,5.6vw,74px);color:var(--ice);line-height:.94;margin-bottom:22px}
-.plates h2 .l2{display:block;color:var(--blue)}
-.plates .lead{font-family:var(--serif);font-style:italic;font-size:clamp(17px,2.1vw,24px);color:#cdd6e4;max-width:44ch}
-.plates .lead b{font-style:normal;color:var(--ice);font-weight:500}
-.dishes{max-width:1200px;margin:0 auto;display:grid;gap:clamp(13px,1.4vw,20px);grid-template-columns:repeat(4,1fr)}
-@media(max-width:900px){.dishes{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.dishes{grid-template-columns:1fr}}
-.dish{position:relative;aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line);background:var(--void2);isolation:isolate;transition:border-color .5s ease}
-.dish img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.96) contrast(1.02);transform:scale(1.03);transition:transform 1.1s cubic-bezier(.2,.7,.2,1);will-change:transform}
-.dish::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(6,8,12,.14) 0%,transparent 34%,transparent 50%,rgba(3,5,10,.74) 100%)}
-.dish .fr{position:absolute;width:20px;height:20px;z-index:3;border:1px solid var(--blue);opacity:.5;transition:opacity .5s ease}
-.dish .fr.tl{top:10px;left:10px;border-right:0;border-bottom:0}
-.dish .fr.br{bottom:10px;right:10px;border-left:0;border-top:0}
-.dish .scan{position:absolute;left:0;right:0;top:0;height:2px;z-index:3;opacity:0;pointer-events:none;background:linear-gradient(90deg,transparent,var(--blue),transparent);box-shadow:0 0 16px 2px rgba(46,155,255,.6)}
-.dish .cap{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:18px 18px 16px}
-.dish .cap .rf{font-family:var(--disp);font-size:11px;letter-spacing:.2em;color:var(--blue);text-transform:uppercase}
-.dish .cap h3{font-family:var(--disp);font-weight:600;font-size:clamp(19px,1.6vw,23px);color:var(--ice);text-transform:uppercase;line-height:1;margin:8px 0 7px}
-.dish .cap p{font-family:var(--serif);font-weight:500;font-size:14px;line-height:1.4;color:var(--gris);max-width:34ch}
-.dish:hover{border-color:rgba(46,155,255,.55)}
-.dish:hover img{transform:scale(1.09)}
-.dish:hover .fr{opacity:1}
-@media(hover:hover){.dish:hover .scan{animation:dscan 1.15s cubic-bezier(.4,0,.2,1)}}
-@keyframes dscan{0%{opacity:0;top:0}10%{opacity:1}88%{opacity:1}100%{opacity:0;top:100%}}
-/* relevé macros, se pose au survol (le « au gramme près » matérialisé sur chaque plat, langage HUD du hero) */
-.dish .macro{position:absolute;top:15px;left:16px;z-index:4;display:flex;flex-direction:column;gap:6px;
-  opacity:0;transform:translateY(-7px);pointer-events:none;
-  transition:opacity .5s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
-.dish .macro .mk{font-family:var(--disp);font-size:21px;line-height:1;color:var(--ice);letter-spacing:.01em;
-  font-variant-numeric:tabular-nums;text-shadow:0 1px 12px rgba(3,5,10,.9)}
-.dish .macro .mk i{font-style:normal;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-left:6px}
-.dish .macro .mrow{display:flex;gap:9px}
-.dish .macro .mm{font-family:var(--disp);font-size:12px;color:var(--gris);letter-spacing:.02em;
-  font-variant-numeric:tabular-nums;text-shadow:0 1px 8px rgba(3,5,10,.9)}
-.dish .macro .mm b{color:var(--blue);font-weight:400;margin-right:2px}
-@media(hover:hover){.dish:hover .macro{opacity:1;transform:none;transition-delay:.18s}}
-@media(hover:none){.dish .macro{opacity:1;transform:none}}   /* tactile : pas de survol -> toujours lisible */
-@media(prefers-reduced-motion:reduce){.dish .macro{transition:none}}
-.plates .note{max-width:1180px;margin:34px auto 0;font-family:var(--serif);font-weight:500;font-size:14px;letter-spacing:normal;color:var(--steel);display:flex;gap:10px;align-items:baseline}
-.plates .note b{color:var(--gris);font-weight:500}
-.plates .note span:first-child{color:var(--blue)}
-@media(prefers-reduced-motion:reduce){.dish img{transition:none;transform:none}.dish .scan{display:none}}
-
-/* ---------- « Vrai ou Faux » : idées reçues (interactif, révèle 0 méthodo) ---------- */
-.myth{position:relative;z-index:1;background:var(--void);padding:clamp(90px,13vh,150px) var(--edge)}
-.myth-in{max-width:1000px;margin:0 auto}
-.myth .kick{margin-bottom:20px}
-.myth h2{font-family:var(--disp);font-weight:600;font-size:clamp(38px,5.6vw,74px);color:var(--ice);line-height:.94;text-transform:uppercase;letter-spacing:.005em}
-.myth h2 .l2{display:block;color:var(--blue)}
-.myth-lead{font-family:var(--serif);font-style:italic;font-size:clamp(17px,2.1vw,23px);color:#cdd6e4;margin:22px 0 42px;max-width:44ch}
-.myth-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,1.9vw,26px)}
-@media(max-width:720px){.myth-grid{grid-template-columns:1fr}}
-.myth-card{position:relative;text-align:left;background:var(--void2);border:1px solid var(--line);padding:30px 28px;cursor:pointer;font:inherit;color:inherit;transition:border-color .4s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
-.myth-card:hover{border-color:rgba(46,155,255,.42);transform:translateY(-2px)}
-.myth-card .q{display:block;font-family:var(--disp);font-weight:500;font-size:clamp(17px,1.9vw,21px);color:var(--ice);line-height:1.28;text-transform:none}
-.myth-card .tap{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-family:var(--disp);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);transition:opacity .3s ease}
-/* la réponse est un bloc (le span inline ignorait max-height/overflow -> réponse toujours présente = bug mobile). */
-.myth-card .rev{display:block;max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s ease,margin-top .5s ease}
-.myth-card.on .rev{max-height:420px;opacity:1;margin-top:18px}
-.myth-card.on .tap{opacity:0}
-.myth-card .verdict{display:inline-block;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:4px 13px;margin-bottom:13px}
-.myth-card .why{display:block;font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.55;color:var(--gris)}
-@media(prefers-reduced-motion:reduce){.myth-card,.myth-card .rev{transition:none}}
-
-/* ---------- séquence de démarrage : l'instrument se calibre (overlay, 1re visite/session) ---------- */
-.boot{position:fixed;inset:0;z-index:200;background:var(--void);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.boot.done{opacity:0;transform:scale(1.045);pointer-events:none;transition:opacity .45s ease,transform .6s cubic-bezier(.4,0,.2,1)}
-.boot-in{position:relative;width:min(330px,74vw);height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
-.boot .bc{position:absolute;width:26px;height:26px;border:1.5px solid var(--blue);opacity:0}
-.boot .bc.tl{top:0;left:0;border-right:0;border-bottom:0}.boot .bc.tr{top:0;right:0;border-left:0;border-bottom:0}
-.boot .bc.bl{bottom:0;left:0;border-right:0;border-top:0}.boot .bc.br{bottom:0;right:0;border-left:0;border-top:0}
-.boot.play .bc{animation:bcin .5s ease forwards}
-.boot.play .bc.tl{animation-delay:.05s}.boot.play .bc.tr{animation-delay:.12s}.boot.play .bc.bl{animation-delay:.19s}.boot.play .bc.br{animation-delay:.26s}
-@keyframes bcin{from{opacity:0;transform:scale(.5)}to{opacity:.9;transform:none}}
-.boot .logo{opacity:0}
-.boot.play .logo{animation:bfade .7s ease .28s forwards}
-@keyframes bfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.boot-bar{width:150px;height:2px;background:rgba(255,255,255,.08);overflow:hidden}
-.boot-bar i{display:block;height:100%;background:var(--blue);box-shadow:0 0 10px rgba(46,155,255,.7);transform:scaleX(0);transform-origin:left}
-.boot.play .boot-bar i{animation:bfill .85s cubic-bezier(.4,0,.2,1) .42s forwards}
-@keyframes bfill{to{transform:scaleX(1)}}
-.boot-cap{font-family:var(--disp);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--steel);display:flex;gap:10px;opacity:0}
-.boot-cap b{color:var(--blue);font-weight:400}
-.boot.play .boot-cap{animation:bfade .6s ease .58s forwards}
-.boot-scan{position:absolute;left:0;right:0;top:0;height:2px;opacity:0;background:linear-gradient(90deg,transparent,rgba(46,155,255,.55),transparent)}
-.boot.play .boot-scan{animation:bootscan 1s cubic-bezier(.4,0,.2,1) .2s}
-@keyframes bootscan{0%{opacity:0;top:0}12%{opacity:1}88%{opacity:1}100%{opacity:0;top:100%}}
-@media(prefers-reduced-motion:reduce){.boot{display:none}}
-/* transition de section : un scan fin balaie à l'entrée des 2 gros blocs (subtil, pas partout) */
-.xscan{position:fixed;top:0;left:0;right:0;height:2px;z-index:58;pointer-events:none;opacity:0;
-  background:linear-gradient(90deg,transparent,rgba(46,155,255,.5),transparent);box-shadow:0 0 16px 2px rgba(46,155,255,.35)}
-@media(prefers-reduced-motion:reduce){.xscan{display:none}}
-
-/* ---------- aperçu méthode (renvoie vers la page dédiée) ---------- */
-.mteaser{position:relative;z-index:1;background:linear-gradient(rgba(6,8,12,.72),rgba(6,8,12,.9)),url('assets/real/plat_boeuf.jpg') center/cover no-repeat var(--void);padding:clamp(80px,11vh,130px) var(--edge);text-align:center}
-.mteaser-in{max-width:760px;margin:0 auto}
-.mteaser .kick{justify-content:center;margin-bottom:20px}
-.mteaser h2{font-family:var(--disp);font-weight:600;font-size:clamp(38px,5.6vw,72px);color:var(--ice);line-height:.94;text-transform:uppercase;letter-spacing:.005em}
-.mteaser h2 .l2{display:block;color:var(--blue)}
-.mteaser-lead{font-family:var(--serif);font-style:italic;font-size:clamp(17px,2.2vw,23px);color:#cdd6e4;margin:22px auto 30px;max-width:52ch}
-.mteaser-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-bottom:38px}
-.mteaser-steps span{font-family:var(--disp);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
-.mteaser-steps b{color:var(--blue);font-weight:400;margin-right:5px}
-/* ===== Bande « suivi évolutif » — accompagnement dans la durée (Dimitri 26/07) ===== */
-.follow{position:relative;z-index:1;background:var(--void);padding:clamp(64px,9vh,104px) var(--edge);text-align:center;border-top:1px solid var(--line)}
-.follow-in{max-width:740px;margin:0 auto}
-.follow .kick{justify-content:center;margin-bottom:20px}
-.follow h2{font-family:var(--disp);font-weight:600;font-size:clamp(30px,4.4vw,54px);color:var(--ice);line-height:.98;text-transform:uppercase;letter-spacing:.005em}
-.follow h2 .l2{color:var(--blue)}
-.follow-lead{font-size:clamp(15px,1.9vw,18px);line-height:1.66;color:var(--gris);margin:22px auto 0;max-width:56ch}
-.follow-lead b{color:var(--ice);font-weight:600}
-.follow-sub{font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,20px);color:#cdd6e4;margin:16px auto 28px;max-width:50ch}
-.follow-link{font-family:var(--disp);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(46,155,255,.4);padding-bottom:3px}
-.follow-link:hover{color:var(--ice)}
+  /* ── effet appli sur mobile : action principale toujours sous le pouce ── */
+  .dock{display:none}
+  @media(max-width:700px){
+    .dock{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30}
+    .dock .btn{flex:1;box-shadow:0 12px 30px -12px rgba(17,17,17,.45)}
+    body{padding-bottom:84px}
+  }
 </style>
 </head>
 <body>
 
-<a class="skip" href="#main">Aller au contenu</a>
-
-<!-- SÉQUENCE DE DÉMARRAGE : l'instrument se calibre (1re visite par session, coupée si reduced-motion) -->
-<div class="boot" id="boot" aria-hidden="true">
-  <span class="boot-scan"></span>
-  <div class="boot-in">
-    <span class="bc tl"></span><span class="bc tr"></span><span class="bc bl"></span><span class="bc br"></span>
-    <div class="logo big"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></div>
-    <div class="boot-bar"><i></i></div>
-    <div class="boot-cap"><span>Calibration</span><b>Sur-mesure</b></div>
+<header class="band">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Elysium, accueil">ELYSIUM</a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="methode.html">Méthode</a>
+      <a href="qui-sommes-nous.html">Coachs</a>
+      <a href="resultats.html">Résultats</a>
+      <a href="formules.html">Formules</a>
+      <a href="faq.html">FAQ</a>
+      <a class="acc" href="connexion.html">Mon espace</a>
+    </nav>
   </div>
-</div>
-<script>
-(function(){
-  var b=document.getElementById('boot'); if(!b){ window.ELY_BOOTDUR=0.25; return; }
-  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches, seen=false;
-  try{ seen=sessionStorage.getItem('ely_booted')==='1'; }catch(e){}
-  if(reduce||seen){ if(b.parentNode) b.parentNode.removeChild(b); window.ELY_BOOTDUR=0.25; return; }
-  try{ sessionStorage.setItem('ely_booted','1'); }catch(e){}
-  window.ELY_BOOTDUR=1.15;
-  document.documentElement.style.overflow='hidden';
-  setTimeout(function(){ b.classList.add('play'); },30);
-  var cleared=false;
-  function clear(){ if(cleared||!b) return; cleared=true; b.classList.add('done');
-    document.documentElement.style.overflow='';
-    setTimeout(function(){ if(b&&b.parentNode) b.parentNode.removeChild(b); },650); }
-  setTimeout(clear,1300);
-  addEventListener('load',function(){ setTimeout(clear,2200); });   // failsafe : jamais d'écran bloqué
-})();
-</script>
-
-<!-- cadre + statut instrument -->
-<div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
-<div class="ambscan" aria-hidden="true"></div>
-<div class="xscan" aria-hidden="true"></div>
-<div class="grain" aria-hidden="true"></div>
-<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
-<header class="status">
-  <a class="logo" href="#top" aria-label="Elysium · Nutrition & Performance"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></a>
-  <span class="mid">Protocole nutritionnel · calibré au gramme</span>
-  <span class="rt"><span class="dot"></span>Système actif</span>
 </header>
-<nav class="menu" aria-label="Navigation principale">
-  <a href="methode.html">Méthode</a>
-  <a href="qui-sommes-nous.html">Coachs</a>
-  <a href="resultats.html">Résultats</a>
-  <a href="formules.html">Formules</a>
-  <a href="faq.html">FAQ</a>
-  <a class="go" href="connexion.html">Connexion</a>
-</nav>
-<button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
-<nav class="msheet" aria-label="Navigation mobile">
-  <a href="#top"><span class="mnum">01</span>Accueil</a>
-  <a href="methode.html"><span class="mnum">02</span>Méthode</a>
-  <a href="qui-sommes-nous.html"><span class="mnum">03</span>Coachs</a>
-  <a href="resultats.html"><span class="mnum">04</span>Résultats</a>
-  <a href="formules.html"><span class="mnum">05</span>Formules</a>
-  <a href="faq.html"><span class="mnum">06</span>FAQ</a>
-  <a class="go-m" href="connexion.html"><span class="mnum">→</span>Connexion</a>
-</nav>
-<script>
-/* Maquette localStorage : si un compte est ouvert, « Connexion » -> « Mon espace » (espace.html), sinon revenir à l'espace obligeait à repasser par le login. Remplacé par Supabase en phase 2. */
-try {
-  if (JSON.parse(localStorage.getItem('ely_user_demo') || 'null')) {
-    document.querySelectorAll('a.go, a.go-m').forEach(function(a){
-      if (!/connexion/i.test(a.getAttribute('href') || '')) return;   // clean URLs (Cloudflare Pages) : connexion.html -> /connexion
-      a.setAttribute('href', 'espace.html');
-      var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
-      a.appendChild(document.createTextNode('Mon espace'));
-    });
-    // déjà connecté : le CTA « Construire mon programme » renvoie vers l'espace, pas l'inscription.
-    // (en DOMContentLoaded car ce script tourne avant que le hero/CTA soit parsé)
-    document.addEventListener('DOMContentLoaded', function(){
-      document.querySelectorAll('a.btn[href*="inscription"]').forEach(function(a){
-        a.setAttribute('href', 'espace.html');
-        a.textContent = 'Accéder à mon espace';
-      });
-    });
-  }
-} catch (e) {}
-</script>
-
-<!-- PLAN DE FOND FIXE : toutes les photos empilées, elles se FONDENT l'une dans l'autre au scroll
-     (fondu-enchaîné) au lieu de se remplacer d'un coup. Ordre = ordre des sections. -->
-<div class="stage" aria-hidden="true">
-  <div class="sl" style="background-image:url('assets/real/plat_saumon.jpg')"></div>
-</div>
 
 <main id="main">
-<!-- ===================== HERO ===================== -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <canvas class="hfield" aria-hidden="true"></canvas>
-  <div class="render" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="scan" aria-hidden="true"></div>
-  <div class="tags" aria-hidden="true">
-    <div class="tg" style="top:47%;left:66%"><span class="pt"></span><span class="cl"></span><span class="bx">PROTÉINES <b>162 g</b></span></div>
-    <div class="tg" style="top:62%;left:72%"><span class="pt"></span><span class="cl"></span><span class="bx">GLUCIDES <b>205 g</b></span></div>
-    <div class="tg" style="top:78%;left:60%"><span class="pt"></span><span class="cl"></span><span class="bx">LIPIDES <b>74 g</b></span></div>
-  </div>
-  <div class="hero-in">
-    <div class="kick">Nutrition de précision</div>
-    <h1>Au gramme<span class="l2">près.</span></h1>
-    <p class="sub">Un programme fait à la main, pesé au gramme près, et pensé pour toi.</p>
-    <div class="hero-cta">
-      <a class="btn" href="inscription.html">Construire mon programme</a>
-      <a class="link" href="methode.html">Voir la méthode</a>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Nutrition de précision</p>
+        <h1>Au gramme <em>près.</em></h1>
+        <p class="lede">Un programme fait à la main, pesé au gramme près, et pensé pour toi.</p>
+        <div class="ctas">
+          <a class="btn main" href="inscription.html">Construire mon programme</a>
+          <a class="btn line" href="methode.html">Voir la méthode</a>
+        </div>
+        <p class="sign"><span class="dots" aria-hidden="true"><i style="background:var(--pdj)"></i><i style="background:var(--dej)"></i><i style="background:var(--col)"></i><i style="background:var(--din)"></i></span><span>Composé par <b>Damien &amp; Yoann</b>, tes coachs.</span></p>
+      </div>
+
+      <figure class="dayzone" style="margin:0">
+        <div class="day" aria-label="Exemple de journée d'un programme">
+          <div class="day-hd"><b>Jour 1</b><span>Exemple de journée</span></div>
+          <div class="day-body">
+            <article class="meal pdj">
+              <div class="meal-hd">Petit-déjeuner <i>485 kcal</i></div>
+              <div class="meal-in"><h3>Bowl fromage blanc</h3>
+                <p>200 g de fromage blanc 3 % · 20 g de flocons d'avoine · 100 g de fruits rouges · 5 g de miel · 30 g d'amandes</p>
+                <div class="mac"><span class="p">P 23,6</span><span class="g">G 35,8</span><span class="l">L 23,9</span></div></div>
+            </article>
+            <article class="meal dej">
+              <div class="meal-hd">Déjeuner <i>566 kcal</i></div>
+              <div class="meal-in"><h3>Wrap mexicain</h3>
+                <p>1 wrap de blé (58 g) · 110 g de filet de poulet · 35 g de riz · 100 g de haricots rouges · 80 g de maïs</p>
+                <div class="mac"><span class="p">P 55,4</span><span class="g">G 64,2</span><span class="l">L 11,0</span></div></div>
+            </article>
+            <article class="meal col">
+              <div class="meal-hd">Collation <i>463 kcal</i></div>
+              <div class="meal-in"><h3>Sandwich salé</h3>
+                <p>3 tranches de pain complet (105 g) · 2 tranches de blanc de poulet · salade verte à volonté · 3 tranches de cheddar (60 g)</p>
+                <div class="mac"><span class="p">P 37,1</span><span class="g">G 48,6</span><span class="l">L 14,8</span></div></div>
+            </article>
+            <article class="meal din">
+              <div class="meal-hd">Dîner <i>804 kcal</i></div>
+              <div class="meal-in"><h3>Bolognaise</h3>
+                <p>170 g de viande hachée 5 % · 140 g de pâtes · 250 g de pulpe de tomate · 1 oignon · 20 g de parmesan</p>
+                <div class="mac"><span class="p">P 58,1</span><span class="g">G 120,0</span><span class="l">L 18,8</span></div></div>
+            </article>
+          </div>
+          <div class="day-ft"><span>Total de la journée</span><b>2 318 kcal</b></div>
+        </div>
+        <figcaption class="day-note">Exemple. Chaque programme est composé selon ton questionnaire.</figcaption>
+      </figure>
     </div>
-  </div>
-  <aside class="readout" aria-hidden="true">
-    <div class="rhd"><span>Analyse // cible</span><b>SUR-MESURE</b></div>
-    <div class="rbody">
-      <div class="big"><span data-count="2058">0</span><small>KCAL / JOUR</small></div>
-      <div class="mrow"><div class="t"><span>Protéines</span><span>162 g</span></div><div class="track"><i data-fill="1"></i></div></div>
-      <div class="mrow"><div class="t"><span>Glucides</span><span>205 g</span></div><div class="track"><i data-fill=".78"></i></div></div>
-      <div class="mrow"><div class="t"><span>Lipides</span><span>74 g</span></div><div class="track"><i data-fill=".46"></i></div></div>
+  </section>
+
+  <!-- IDÉES REÇUES -->
+  <section class="soft">
+    <div class="wrap">
+      <p class="eyebrow">Idées reçues</p>
+      <h2>Ce qu'on t'a fait croire.</h2>
+      <p class="lede">Touche une croyance pour la retourner. Ce qu'on t'a répété n'est pas toujours vrai.</p>
+      <div class="myths">
+        <details><summary>« Les glucides le soir, ça fait grossir. »</summary>
+          <p class="ans"><span class="verdict faux">Faux</span>C'est le total de ta journée qui compte, pas l'heure de l'assiette. Du riz le soir ne t'a jamais fait grossir.</p></details>
+        <details><summary>« Pour maigrir, il faut se priver. »</summary>
+          <p class="ans"><span class="verdict faux">Faux</span>On ne tient pas une diète qu'on déteste. De vrais repas, en quantité, que tu as envie de manger. C'est ce qui dure.</p></details>
+        <details><summary>« Un écart, et tout est foutu. »</summary>
+          <p class="ans"><span class="verdict faux">Faux</span>La gourmandise a sa place : dosée, jamais supprimée. Un carré de chocolat ne ruine pas des semaines de travail.</p></details>
+        <details><summary>« Manger plus peut t'aider à progresser. »</summary>
+          <p class="ans"><span class="verdict vrai">Vrai</span>En prise de masse, on vise de gros volumes, et c'est justement le plus dur à tenir sans un plan calibré.</p></details>
+        <details><summary>« Le même programme convient à tout le monde. »</summary>
+          <p class="ans"><span class="verdict faux">Faux</span>Aucun corps n'a les mêmes besoins. Tes quantités sont calculées pour toi, pas pour une moyenne.</p></details>
+      </div>
     </div>
-  </aside>
-  <div class="cue"><span>Défiler</span><i></i></div>
-</section>
+  </section>
 
-<!-- ===================== VRAI OU FAUX (remonté, en avant) ===================== -->
-<section class="myth" id="idees">
-  <div class="myth-in">
-    <div class="kick">Idées reçues</div>
-    <h2>Ce qu'on t'a fait<span class="l2">croire.</span></h2>
-    <p class="myth-lead">Tape une croyance pour la retourner. Ce qu'on t'a répété n'est pas toujours vrai.</p>
-    <div class="myth-grid">
-      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Les glucides le soir, ça fait grossir. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">C'est le total de ta journée qui compte, pas l'heure de l'assiette. Du riz le soir ne t'a jamais fait grossir.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Pour maigrir, il faut se priver. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">On ne tient pas une diète qu'on déteste. De vrais repas, en quantité, que tu as envie de manger. C'est ce qui dure.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Un écart, et tout est foutu. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">La gourmandise a sa place : dosée, jamais supprimée. Un carré de chocolat ne ruine pas des semaines de travail.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal d1" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Manger PLUS peut t'aider à progresser. »</span>
-        <span class="rev"><span class="verdict">Vrai</span><span class="why">En prise de masse, on vise de gros volumes, et c'est justement le plus dur à tenir sans un plan calibré.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
-      <button class="myth-card reveal" type="button" aria-label="Révéler la réponse">
-        <span class="q">« Le même programme convient à tout le monde. »</span>
-        <span class="rev"><span class="verdict">Faux</span><span class="why">Aucun corps n'a les mêmes besoins. Tes quantités sont calculées pour toi, pas pour une moyenne.</span></span>
-        <span class="tap">Révéler ›</span>
-      </button>
+  <!-- PAS UN RÉGIME -->
+  <section>
+    <div class="wrap">
+      <div class="two">
+        <div>
+          <p class="eyebrow">Ce n'est pas un régime</p>
+          <h2>Manger à sa faim. Atteindre son objectif.</h2>
+          <p class="lede">Un programme Elysium, c'est de vrais repas, <b>en quantité</b>, pour que tu manges à ta faim sans te priver.</p>
+          <a class="more" href="resultats.html">Voir leurs transformations</a>
+        </div>
+        <blockquote>
+          <p>« Je ne pensais pas qu'on allait autant manger. »</p>
+          <footer>Un client, en perte de poids</footer>
+        </blockquote>
+      </div>
+      <div class="partner">
+        <span>Partenaire nutrition</span>
+        <img src="assets/prozis_logo.jpg" alt="Prozis" width="105" height="30">
+        <span>Code <b>ELYSIUM</b> : 10 % de réduction et des cadeaux sur tout le site</span>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===================== MANGER À SA FAIM ===================== -->
-<section class="creed" id="philosophie">
-  <div class="creed-in">
-    <div class="kick">Ce n'est pas un régime</div>
-    <h2 class="creed-h">Manger à sa faim.<span class="l2">Atteindre son objectif.</span></h2>
-    <p class="creed-sub">Un protocole Elysium, c'est de <b>vrais repas, en quantité</b>, pour que tu manges à ta faim sans te priver.</p>
-    <figure class="quote">
-      <blockquote>Je ne pensais pas qu'on allait <span class="hl">autant manger</span>.</blockquote>
-      <figcaption>Un client, en perte de poids</figcaption>
-    </figure>
-    <p class="seemore reveal"><a href="resultats.html">Voir leurs transformations</a></p>
-    <div class="partner">
-      <span class="pk">Partenaire nutrition</span>
-      <img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="150" height="43">
+  <!-- DANS L'ASSIETTE -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Dans l'assiette</p>
+      <h2>Ce que tu manges vraiment.</h2>
+      <p class="lede">Pas des barres ni des shakers. De vrais repas, en quantité, calibrés au gramme, pensés pour une vie réelle.</p>
+      <div class="plates">
+        <article class="plate">
+          <img src="assets/food/web/poke.jpg" alt="Poke bowl au saumon, riz et légumes" loading="lazy" decoding="async" width="600" height="450">
+          <div class="plate-in"><span class="tag sig">Signature</span>
+            <h3>Poke bowl saumon</h3><p>Riz, saumon, avocat, légumes croquants. Frais, coloré, jamais fade.</p>
+            <div class="mac"><span class="p">P 38</span><span class="g">G 56</span><span class="l">L 22</span><span class="kc">590 kcal</span></div></div>
+        </article>
+        <article class="plate">
+          <img src="assets/food/web/wrap.jpg" alt="Wrap de bœuf grillé coupé en deux" loading="lazy" decoding="async" width="600" height="450">
+          <div class="plate-in"><span class="tag dej">Déjeuner · Dîner</span>
+            <h3>Wrap bœuf</h3><p>Protéine, féculent et légumes dans la tortilla. Rassasiant, carré.</p>
+            <div class="mac"><span class="p">P 34</span><span class="g">G 50</span><span class="l">L 20</span><span class="kc">540 kcal</span></div></div>
+        </article>
+        <article class="plate">
+          <img src="assets/food/web/pasta.jpg" alt="Spaghetti sauce bolognaise" loading="lazy" decoding="async" width="600" height="450">
+          <div class="plate-in"><span class="tag dej">Déjeuner · Dîner</span>
+            <h3>Spaghetti bolognaise</h3><p>Les glucides sont dosés, pas supprimés. Le confort reste au menu.</p>
+            <div class="mac"><span class="p">P 33</span><span class="g">G 82</span><span class="l">L 18</span><span class="kc">640 kcal</span></div></div>
+        </article>
+        <article class="plate">
+          <img src="assets/food/web/bowl.jpg" alt="Petit-déjeuner gourmand" loading="lazy" decoding="async" width="600" height="450">
+          <div class="plate-in"><span class="tag pdj">Petit-déjeuner</span>
+            <h3>Petit-déj gourmand</h3><p>On ne se prive pas au réveil. La gourmandise est calibrée, pas sautée.</p>
+            <div class="mac"><span class="p">P 24</span><span class="g">G 60</span><span class="l">L 14</span><span class="kc">470 kcal</span></div></div>
+        </article>
+      </div>
+      <p class="fine">Visuels d'illustration. Chaque programme est composé selon ton questionnaire.</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===================== DANS L'ASSIETTE ===================== -->
-<section class="plates" id="assiette">
-  <div class="phd">
-    <div class="kick">Dans l'assiette</div>
-    <h2>Ce que tu manges<span class="l2">vraiment.</span></h2>
-    <p class="lead">Pas des barres ni des shakers. De <b>vrais repas</b>, en quantité, calibrés au gramme, pensés pour une vie réelle.</p>
-  </div>
-  <!-- crédits photos (licence Pexels, attribution non requise) : poke, cottonbro studio ; wrap, Kerem Kaplan -->
-  <div class="dishes">
-    <article class="dish">
-      <img src="assets/food/web/poke.jpg" alt="Poke bowl au saumon, riz et légumes" loading="lazy" decoding="async">
-      <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
-      <span class="macro" aria-hidden="true"><span class="mk">590<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>38</span><span class="mm"><b>G</b>56</span><span class="mm"><b>L</b>22</span></span></span>
-      <div class="cap"><span class="rf">Signature</span><h3>Poke bowl saumon</h3><p>Riz, saumon, avocat, légumes croquants. Frais, coloré, jamais fade.</p></div>
-    </article>
-    <article class="dish">
-      <img src="assets/food/web/wrap.jpg" alt="Wrap de bœuf grillé coupé en deux" loading="lazy" decoding="async">
-      <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
-      <span class="macro" aria-hidden="true"><span class="mk">540<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>34</span><span class="mm"><b>G</b>50</span><span class="mm"><b>L</b>20</span></span></span>
-      <div class="cap"><span class="rf">Déjeuner · Dîner</span><h3>Wrap bœuf</h3><p>Protéine, féculent et légumes dans la tortilla. Rassasiant, carré.</p></div>
-    </article>
-    <article class="dish">
-      <img src="assets/food/web/pasta.jpg" alt="Spaghetti sauce bolognaise" loading="lazy" decoding="async">
-      <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
-      <span class="macro" aria-hidden="true"><span class="mk">640<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>33</span><span class="mm"><b>G</b>82</span><span class="mm"><b>L</b>18</span></span></span>
-      <div class="cap"><span class="rf">Déjeuner · Dîner</span><h3>Spaghetti bolognaise</h3><p>Les glucides sont dosés, pas supprimés. Le confort reste au menu.</p></div>
-    </article>
-    <article class="dish">
-      <img src="assets/food/web/bowl.jpg" alt="Petit-déjeuner gourmand" loading="lazy" decoding="async">
-      <span class="fr tl"></span><span class="fr br"></span><span class="scan"></span>
-      <span class="macro" aria-hidden="true"><span class="mk">470<i>kcal</i></span><span class="mrow"><span class="mm"><b>P</b>24</span><span class="mm"><b>G</b>60</span><span class="mm"><b>L</b>14</span></span></span>
-      <div class="cap"><span class="rf">Petit-déjeuner</span><h3>Petit-déj gourmand</h3><p>On ne se prive pas au réveil. La gourmandise est calibrée, pas sautée.</p></div>
-    </article>
-  </div>
-  <div class="note"><span>◇</span><span>Visuels d'illustration. Chaque programme est composé selon <b>ton</b> questionnaire.</span></div>
-</section>
-
-<!-- ===================== APERÇU MÉTHODE (-> page dédiée) ===================== -->
-<section class="mteaser" id="methode">
-  <div class="mteaser-in">
-    <div class="kick">La méthode</div>
-    <h2>Du profil à<span class="l2">l'assiette.</span></h2>
-    <p class="mteaser-lead">Quatre étapes, toutes tournées vers toi. On pose tes chiffres, on construit tes plats, on ajuste au gramme, et on te livre.</p>
-    <div class="mteaser-steps">
-      <span><b>01</b> Le profil</span>
-      <span><b>02</b> Le calcul</span>
-      <span><b>03</b> La construction</span>
-      <span><b>04</b> La livraison</span>
+  <!-- LA MÉTHODE -->
+  <section class="soft">
+    <div class="wrap">
+      <p class="eyebrow">La méthode</p>
+      <h2>Du profil à l'assiette.</h2>
+      <p class="lede">Quatre étapes, toutes tournées vers toi. On pose tes chiffres, on construit tes plats, on ajuste au gramme, et on te livre.</p>
+      <ol class="steps">
+        <li><h3>Le profil</h3><p>Ton questionnaire : objectif, rythme de vie, goûts, contraintes.</p></li>
+        <li><h3>Le calcul</h3><p>Tes besoins posés en chiffres : calories, protéines, glucides, lipides.</p></li>
+        <li><h3>La construction</h3><p>Tes plats, composés un par un et ajustés au gramme.</p></li>
+        <li><h3>La livraison</h3><p>Ton programme dans ton espace, et en PDF à imprimer.</p></li>
+      </ol>
+      <a class="more" href="methode.html">Découvrir la méthode</a>
     </div>
-    <a class="btn" href="methode.html">Découvrir la méthode</a>
-  </div>
-</section>
+  </section>
 
-<!-- ===================== SUIVI ÉVOLUTIF (bande courte — Dimitri 26/07) ===================== -->
-<section class="follow" id="suivi">
-  <div class="follow-in">
-    <div class="kick">Un accompagnement, pas un menu</div>
-    <h2>Ton programme<span class="l2"> évolue avec toi.</span></h2>
-    <p class="follow-lead">Pour de vrais résultats, on recommande <b>au minimum 12 semaines</b>. Ensuite, ton programme est <b>renouvelé toutes les 4 semaines</b> et recalculé selon ton poids et ta progression — tu continues aussi longtemps que tu veux, avec un menu régulièrement renouvelé.</p>
-    <p class="follow-sub">Tu changes d'objectif quand tu veux. Nous, on s'occupe de la réflexion&nbsp;; toi, tu fais tes courses, tu cuisines et tu profites.</p>
-    <a class="follow-link" href="formules.html">La formule &amp; le suivi</a>
-  </div>
-</section>
+  <!-- ACCOMPAGNEMENT -->
+  <section>
+    <div class="wrap">
+      <div class="evo">
+        <p class="eyebrow">Un accompagnement, pas un menu</p>
+        <h2>Ton programme évolue avec toi.</h2>
+        <p class="lede">Pour de vrais résultats, on recommande au minimum <b>12 semaines</b>. Ton programme est recalculé selon ton poids et ta progression, et tu continues aussi longtemps que tu veux.</p>
+        <p class="lede">Tu changes d'objectif quand tu veux. Nous, on s'occupe de la réflexion ; toi, tu fais tes courses, tu cuisines et tu profites.</p>
+        <a class="more" href="formules.html">Les formules</a>
+      </div>
+    </div>
+  </section>
 
-<!-- ===================== FINAL ===================== -->
-<section class="end" id="end">
-  <div class="end-bg"></div>
-  <canvas class="wgl" aria-hidden="true"></canvas>
-  <div class="end-in">
-    <div class="kick" style="justify-content:center">La méthode Elysium</div>
-    <h2 style="margin-top:22px">Calibrons<br>ton protocole.</h2>
-    <p class="sub">Fait à la main, pesé au gramme, pour toi et personne d'autre.</p>
-    <a class="btn" href="inscription.html">Construire mon programme</a>
-    <p style="margin-top:36px;font-family:var(--serif);font-weight:500;font-size:16px;letter-spacing:normal;color:var(--steel)">par mail, <a href="mailto:elysium.np.pro@gmail.com" style="color:var(--blue);border-bottom:1px solid rgba(46,155,255,.4);text-decoration:none">elysium.np.pro@gmail.com</a> &nbsp;·&nbsp; sur Insta, <a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" style="color:var(--blue);border-bottom:1px solid rgba(46,155,255,.4);text-decoration:none">@elysium.nutrition.performance</a></p>
-  </div>
-</section>
+  <!-- FIN -->
+  <section class="end">
+    <div class="wrap">
+      <p class="eyebrow">On commence&nbsp;?</p>
+      <h2>Calibrons ton programme.</h2>
+      <p class="lede">Fait à la main, pesé au gramme, pour toi et personne d'autre.</p>
+      <div class="ctas"><a class="btn main" href="inscription.html">Construire mon programme</a></div>
+      <p class="contact">Une question&nbsp;? Par mail, <a href="mailto:elysium.np.pro@gmail.com">elysium.np.pro@gmail.com</a>, ou sur Instagram, <a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener">@elysium.nutrition.performance</a></p>
+    </div>
+  </section>
 
 </main>
 
-<footer>
-  <div class="logo big"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></div>
-  <div class="foot-links"><a href="#top">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
-  <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 SAS Elysium · Nutrition &amp; Performance</span>
+    <nav aria-label="Liens du pied de page">
+      <a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a>
+      <a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a>
+    </nav>
+  </div>
 </footer>
 
-<script src="assets/vendor/gsap.min.js"></script>
-<script src="assets/vendor/ScrollTrigger.min.js"></script>
-<script src="assets/vendor/SplitText.min.js"></script>
-<script src="assets/vendor/lenis.min.js"></script>
-<script>
-(function(){
-  try{ document.body.style.opacity='1'; }catch(e){}
-  if(!window.gsap){ var _r=document.querySelector('.render'); if(_r) _r.style.display='none'; return; }  // sans gsap : ne pas laisser les stores couvrir le plat
-  gsap.registerPlugin(ScrollTrigger);
-  var hasSplit = !!window.SplitText; if(hasSplit) gsap.registerPlugin(SplitText);
-  // SCROLL FLUIDE (Lenis) + sync ScrollTrigger : les enchaînements de section deviennent DOUX
-  // (fini le « trop d'un coup » du scroll natif). Coupé si reduced-motion (scroll natif alors).
-  var _reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if(!_reduce && window.Lenis){
-    var lenis = new Lenis({ lerp:0.08, wheelMultiplier:1.0, touchMultiplier:1.4 });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(function(t){ lenis.raf(t*1000); });
-    gsap.ticker.lagSmoothing(0);
-    document.querySelectorAll('a[href^="#"]').forEach(function(a){   // ancres -> scroll doux
-      a.addEventListener('click', function(e){
-        var id=a.getAttribute('href');
-        if(id==='#'||id==='#top'){ e.preventDefault(); lenis.scrollTo(0,{duration:1.1}); return; }
-        var el=document.querySelector(id); if(el){ e.preventDefault(); lenis.scrollTo(el,{offset:0,duration:1.1}); }
-      });
-    });
-    // retour visuel au clic du logo : les arcs se re-dessinent (sinon en haut de page rien ne se voit)
-    if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
-      var elgRedraw=function(l){                  // re-trace les 2 arcs + flash néon, animation NEUVE (repart à chaque fois)
-        l.querySelectorAll('.elg-ring path').forEach(function(p){
-          p.animate([
-            {strokeDashoffset:'335',filter:'drop-shadow(0 0 0 rgba(46,155,255,0)) drop-shadow(0 0 0 rgba(46,155,255,0)) drop-shadow(0 0 0 rgba(46,155,255,0))'},
-            {filter:'drop-shadow(0 0 4px #2E9BFF) drop-shadow(0 0 16px #2E9BFF) drop-shadow(0 0 34px rgba(46,155,255,.9))',offset:.55},
-            {strokeDashoffset:'0',filter:'drop-shadow(0 0 3px #2E9BFF) drop-shadow(0 0 12px #2E9BFF) drop-shadow(0 0 26px rgba(46,155,255,.8))'}
-          ],{duration:1000,easing:'cubic-bezier(.5,.05,.15,1)'});
-        });
-      };
-      document.querySelectorAll('.logo').forEach(function(l){
-        l.addEventListener('mouseenter', function(){ elgRedraw(l); });   // survol : les arcs se re-dessinent
-        l.addEventListener('click',      function(){ elgRedraw(l); });   // clic : idem (feedback en haut de page)
-      });
-    }
-  }
+<div class="dock"><a class="btn main" href="inscription.html">Construire mon programme</a></div>
 
-  var E='power3.out';
-  function count(node,end,dur,delay,trig){ var o={v:0}; gsap.to(o,{v:end,duration:dur||1.6,delay:delay||0,ease:'power2.out',
-    scrollTrigger:trig?{trigger:trig,start:'top 60%'}:undefined, onUpdate:function(){ node.textContent=Math.round(o.v); }}); }
-
-  var bootDur = (typeof window.ELY_BOOTDUR==='number'?window.ELY_BOOTDUR:0.25);   // synchro avec la séquence de démarrage (overlay #boot)
-
-  // ---- HERO : scan + analyse du plat + révélation + readout qui se calibre ----
-  gsap.from('.hero-bg',{scale:1.1,duration:2.8,ease:'power2.out',delay:bootDur-0.3});
-  gsap.to('.hero-bg',{yPercent:9,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
-
-  var tl=gsap.timeline({defaults:{ease:E},delay:bootDur});
-  // ligne de scan qui balaie le plat, puis annotations d'analyse qui se posent
-  tl.set('.scan',{opacity:1,top:'0%'})
-    .to('.scan',{top:'100%',duration:1.4,ease:'power1.inOut'},0)
-    .to('.scan',{opacity:0,duration:.4},1.15);
-  // stores « rendu instrument » : chaque bande s'efface vers la gauche, de haut en bas, dans le sillage du scan
-  tl.to('.render i',{scaleX:0,duration:.7,stagger:{each:.05,from:'start'},ease:'power2.inOut'},0)
-    .set('.render',{display:'none'},1.4);
-  if(hasSplit){ var sh=new SplitText('.hero h1',{type:'lines',mask:'lines',linesClass:'ln'}); tl.set('.hero h1',{autoAlpha:1});
-    tl.from(sh.lines,{yPercent:130,duration:1.1,stagger:.16,ease:'power4.out'},0.45);
-  } else tl.from('.hero h1',{y:50,opacity:0,duration:1},0.45);
-  tl.from('.hero .kick',{x:-20,opacity:0,duration:.7},0.45)
-    .from('.hero .sub',{y:24,opacity:0,duration:.9},0.95)
-    .from('.hero-cta > *',{y:20,opacity:0,duration:.7,stagger:.12},1.15)
-    .from('.readout',{opacity:0,x:40,duration:.9},0.85)
-    .to('.tags .tg',{opacity:1,duration:.5,stagger:.2,ease:'power2.out'},1.25)
-    .from('.tags .cl',{scaleX:0,duration:.5,stagger:.2,ease:'power2.out'},1.25)
-    .from('.cue',{opacity:0,duration:.6},1.6);
-  // readout : compteur kcal + jauges (se calibrent après le scan)
-  var kc=document.querySelector('.readout [data-count]'); if(kc) count(kc,+kc.getAttribute('data-count'),1.6,bootDur+0.95);
-  gsap.utils.toArray('.readout [data-fill]').forEach(function(i,idx){
-    gsap.to(i,{scaleX:+i.getAttribute('data-fill'),duration:1.1,delay:bootDur+1.15+idx*.12,ease:'power2.out'}); });
-
-  // ---- CHAPITRES PINNÉS : la section se FIGE, l'image se démasque, le contenu se joue au scroll ----
-  gsap.utils.toArray('.chap').forEach(function(ch){
-    var bg=ch.querySelector('.chap-bg');
-    var even=ch.matches(':nth-of-type(even)');
-    var head=ch.querySelector('.chap-head');
-    var h=ch.querySelector('h2');
-    var p=ch.querySelector('p');
-    var data=ch.querySelector('.data');
-    var lines=null;
-    // trait néon injecté sous l'en-tête, tracé au scroll (SVG stroke-dashoffset + nœud « stylo »)
-    var trPath=null, trNode=null, trSvg=null;
-    if(head){
-      trSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-      trSvg.setAttribute('class','trace'); trSvg.setAttribute('viewBox','0 0 210 12');
-      trSvg.setAttribute('preserveAspectRatio','none'); trSvg.setAttribute('aria-hidden','true');
-      trSvg.innerHTML='<path d="M2 6 H160" pathLength="1"/><circle class="tnode" cx="2" cy="6" r="2.6"/>';
-      head.insertAdjacentElement('afterend', trSvg);
-      trPath=trSvg.querySelector('path'); trNode=trSvg.querySelector('.tnode');
-      gsap.set(trPath,{strokeDasharray:1,strokeDashoffset:1}); gsap.set(trNode,{opacity:0});
-    }
-    if(h){ if(hasSplit){ lines=new SplitText(h,{type:'lines',mask:'lines',linesClass:'ln'}).lines; } gsap.set(h,{autoAlpha:1}); }
-    // états initiaux (contenu caché, image clippée)
-    if(head) gsap.set(head,{opacity:0,y:46});
-    if(lines) gsap.set(lines,{yPercent:130}); else if(h) gsap.set(h,{opacity:0,y:34});
-    if(p) gsap.set(p,{opacity:0,y:28});
-    if(data) gsap.set(data.querySelectorAll('.d'),{opacity:0,y:22});
-    // IMAGE VISIBLE dès l'entrée (plus de clip-path lié au pin qui laissait un vide NOIR pendant tout
-    // le scroll d'entrée). On garde juste le zoom parallaxe -> l'enchaînement des plans reste fluide.
-    if(bg) gsap.set(bg,{scale:1.12});
-    // timeline PINNÉE, scrubbée sur la durée du pin (chaque cran = un plan)
-    var tl=gsap.timeline({scrollTrigger:{trigger:ch,start:'top top',end:'+=115%',pin:true,scrub:0.7,anticipatePin:1}});
-    if(bg){ tl.to(bg,{scale:1.0,ease:'none',duration:1.0},0); }
-    if(head) tl.to(head,{opacity:1,y:0,ease:'power3.out',duration:.32},0.12);
-    if(lines) tl.to(lines,{yPercent:0,ease:'power3.out',duration:.42,stagger:.07},0.18);
-    else if(h) tl.to(h,{opacity:1,y:0,duration:.35},0.18);
-    // le stylo mène, la ligne se trace, puis le stylo s'efface en laissant le trait
-    if(trPath){ tl.to(trNode,{opacity:1,duration:.05},0.14)
-                  .to(trPath,{strokeDashoffset:0,ease:'power2.inOut',duration:.5},0.16)
-                  .to(trNode,{attr:{cx:160},ease:'power2.inOut',duration:.5},0.16)
-                  .to(trNode,{opacity:0,duration:.18},0.68); }
-    if(p) tl.to(p,{opacity:1,y:0,ease:'power3.out',duration:.32},0.32);
-    if(data){ tl.to(data.querySelectorAll('.d'),{opacity:1,y:0,ease:'power3.out',duration:.32,stagger:.06},0.42);
-      data.querySelectorAll('[data-count]').forEach(function(n){ tl.to(n,{textContent:+n.getAttribute('data-count'),snap:{textContent:1},duration:.4,ease:'none'},0.44); }); }
-    // sortie : le bloc remonte et fond en fin de pin (« caméra qui passe au plan suivant »)
-    tl.to([head,trSvg,h,p,data].filter(Boolean),{opacity:0,y:-46,ease:'power2.in',duration:.4,stagger:.03},0.82);
-  });
-
-  // ---- galerie « Dans l'assiette » : en-tête + plats montent en fondu (flux normal, pas de pin) ----
-  (function(){
-    var pl=document.querySelector('.plates'); if(!pl) return;
-    gsap.from(pl.querySelectorAll('.phd > *'),{opacity:0,y:30,duration:.7,ease:'power3.out',stagger:.1,
-      scrollTrigger:{trigger:pl,start:'top 78%'}});
-    gsap.utils.toArray('.plates .dish').forEach(function(d,i){
-      gsap.from(d,{opacity:0,y:46,duration:.75,ease:'power3.out',delay:i*.08,
-        scrollTrigger:{trigger:d,start:'top 88%'}});
-    });
-    gsap.from('.plates .note',{opacity:0,y:16,duration:.6,ease:'power2.out',
-      scrollTrigger:{trigger:'.plates .note',start:'top 92%'}});
-  })();
-
-  // ---- FONDU-ENCHAÎNÉ DES PHOTOS (plan de fond fixe) : chaque photo se fond par-dessus la précédente
-  // quand sa section approche du haut -> transition DOUCE au lieu d'un remplacement d'un coup. ----
-  var _sl=gsap.utils.toArray('.stage .sl');
-  var _secs=[document.querySelector('.hero')].concat(gsap.utils.toArray('.chap'));
-  _secs.forEach(function(sec,i){
-    if(i===0 || !sec || !_sl[i]) return;                 // la photo du hero est déjà à 1
-    gsap.fromTo(_sl[i],{opacity:0},{opacity:1,ease:'none',
-      scrollTrigger:{trigger:sec,start:'top 80%',end:'top 25%',scrub:true}});
-  });
-  // une fois les chapitres finis, le plan de fond N'A PLUS de raison d'être -> il se fond vers le noir
-  // en arrivant sur la section philosophie, pour que le bas de page (creed/CTA/footer) reste PROPRE
-  // (sinon la dernière photo bavait derrière le footer transparent).
-  var _fadeSec=document.querySelector('.myth')||document.querySelector('.creed')||document.querySelector('.end');
-  if(_fadeSec){ gsap.to('.stage',{opacity:0,ease:'none',
-    scrollTrigger:{trigger:_fadeSec,start:'top 92%',end:'top 45%',scrub:true}}); }
-
-  // ---- FINAL ----
-  gsap.timeline({defaults:{ease:E},scrollTrigger:{trigger:'.end',start:'top 60%'}})
-    .from('.end .kick',{opacity:0,y:16,duration:.7})
-    .from('.end h2',{y:44,opacity:0,duration:1},.1)
-    .from('.end .sub',{y:20,opacity:0,duration:.85},.35)
-    .from('.end .btn',{y:16,opacity:0,duration:.7},.5);
-
-  // ---- TRANSITION DE SECTION : un scan fin balaie à l'entrée des 2 blocs majeurs (subtil, pas partout) ----
-  (function(){
-    var xs=document.querySelector('.xscan'); if(!xs) return;
-    function sweep(){ gsap.killTweensOf(xs);
-      gsap.set(xs,{top:'0vh',opacity:1});
-      gsap.to(xs,{top:'100vh',duration:.85,ease:'power1.inOut'});
-      gsap.to(xs,{opacity:0,duration:.28,delay:.58}); }
-    ['.myth','.plates'].forEach(function(sel){ var el=document.querySelector(sel); if(!el) return;
-      ScrollTrigger.create({trigger:el,start:'top 82%',once:true,onEnter:sweep}); });
-  })();
-
-  // ---- VRAI OU FAUX (idées reçues) : clic -> révèle la réponse + fondu d'entrée ----
-  document.querySelectorAll('.myth-card').forEach(function(c){
-    c.setAttribute('aria-expanded','false');   // état de départ : réponse repliée (a11y : annoncé au lecteur d'écran)
-    c.addEventListener('click',function(){ c.setAttribute('aria-expanded', c.classList.toggle('on') ? 'true' : 'false'); });
-  });
-  gsap.from('.myth .kick, .myth h2, .myth-lead',{opacity:0,y:26,duration:.7,ease:'power3.out',stagger:.1,
-    scrollTrigger:{trigger:'.myth',start:'top 78%'}});
-  gsap.utils.toArray('.myth-card').forEach(function(c,i){
-    gsap.from(c,{opacity:0,y:34,duration:.6,ease:'power3.out',delay:(i%2)*.08,
-      scrollTrigger:{trigger:c,start:'top 90%'}});
-  });
-
-  // ---- CURSEUR INSTRUMENT (viseur) : point instantané + anneau qui suit en douceur ----
-  var fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
-  var cur=document.querySelector('.cur'), dot=document.querySelector('.curdot');
-  if(fine && cur && dot){
-    var mx=innerWidth/2, my=innerHeight/2, cx=mx, cy=my;
-    addEventListener('mousemove',function(e){ mx=e.clientX; my=e.clientY;
-      dot.style.transform='translate('+mx+'px,'+my+'px)'; }, {passive:true});
-    gsap.ticker.add(function(){ cx+=(mx-cx)*0.2; cy+=(my-cy)*0.2;
-      cur.style.transform='translate('+cx+'px,'+cy+'px)'; });
-    document.querySelectorAll('a,button,.btn,.link').forEach(function(el){
-      el.addEventListener('mouseenter',function(){ cur.classList.add('hot'); });
-      el.addEventListener('mouseleave',function(){ cur.classList.remove('hot'); });
-    });
-  }
-  // ---- MENU MOBILE (hamburger -> panneau plein écran) ----
-  var burger=document.querySelector('.burger'), sheet=document.querySelector('.msheet');
-  if(burger && sheet){
-    var setOpen=function(on){ burger.setAttribute('aria-expanded', on?'true':'false');
-      sheet.classList.toggle('open', on); document.body.style.overflow = on?'hidden':''; };
-    burger.addEventListener('click',function(){ setOpen(burger.getAttribute('aria-expanded')!=='true'); });
-    sheet.addEventListener('click',function(e){ if(e.target.closest('a')) setOpen(false); });
-    addEventListener('keydown',function(e){ if(e.key==='Escape') setOpen(false); });
-  }
-  // ---- BOUTONS MAGNÉTIQUES ----
-  if(fine){
-    document.querySelectorAll('.btn, .go').forEach(function(b){
-      b.addEventListener('mousemove',function(e){ var r=b.getBoundingClientRect();
-        gsap.to(b,{x:(e.clientX-r.left-r.width/2)*0.35, y:(e.clientY-r.top-r.height/2)*0.5, duration:.45, ease:'power3.out'}); }, {passive:true});
-      b.addEventListener('mouseleave',function(){ gsap.to(b,{x:0,y:0,duration:.6,ease:'elastic.out(1,0.4)'}); });
-    });
-  }
-
-  ScrollTrigger.refresh();
-})();
-</script>
-
-<!-- CHAMP DE DONNÉES : grille de points (télémétrie) qui ondule + réagit au curseur. Canvas 2D, autonome. -->
-<script>
-(function(){
-  var c=document.querySelector('.hfield'); if(!c || !c.getContext) return;
-  var ctx=c.getContext('2d'); if(!ctx) return;
-  var hero=c.parentElement;
-  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var DPR=Math.min(window.devicePixelRatio||1,2), W=0,H=0, cols=0,rows=0, gap=38;
-  var mx=-999,my=-999, visible=true, raf=0;
-  function resize(){
-    var r=hero.getBoundingClientRect(); W=r.width; H=r.height;
-    c.width=Math.round(W*DPR); c.height=Math.round(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-    cols=Math.ceil(W/gap)+1; rows=Math.ceil(H/gap)+1;
-  }
-  resize(); addEventListener('resize',resize,{passive:true});
-  hero.addEventListener('pointermove',function(e){ var r=hero.getBoundingClientRect(); mx=e.clientX-r.left; my=e.clientY-r.top; },{passive:true});
-  hero.addEventListener('pointerleave',function(){ mx=-999; my=-999; });
-  function draw(t){
-    var time=t*0.001;
-    ctx.clearRect(0,0,W,H);
-    for(var j=0;j<rows;j++){ for(var i=0;i<cols;i++){
-      var x=i*gap, y=j*gap;
-      var wave=Math.sin(x*0.014 + y*0.011 + time*1.05)*0.5+0.5;
-      var dx=x-mx, dy=y-my, d=Math.sqrt(dx*dx+dy*dy), near=Math.max(0,1-d/180);
-      var a=0.05 + wave*0.12 + near*0.55;
-      var rad=0.7 + wave*0.6 + near*2.2;
-      ctx.beginPath(); ctx.arc(x,y,rad,0,6.2832);
-      ctx.fillStyle='rgba(46,155,255,'+a.toFixed(3)+')'; ctx.fill();
-    }}
-  }
-  function loop(t){ if(visible) draw(t); raf=requestAnimationFrame(loop); }
-  if(reduce){ draw(0); }                                   // 1 image fixe, pas de boucle
-  else { raf=requestAnimationFrame(loop);
-    if('IntersectionObserver' in window){                  // coupe le rAF quand le hero sort de l'écran
-      new IntersectionObserver(function(es){ visible=es[0].isIntersecting; }).observe(hero);
-    }
-  }
-})();
-</script>
-
-<!-- MOMENT WOW : champ de données WebGL (shader GLSL, u_time/u_mouse) sur le CTA final. Fallback = fond sombre. -->
-<script>
-(function(){
-  var c = document.querySelector('.wgl'); if(!c || !window.WebGLRenderingContext) return;
-  var gl = c.getContext('webgl', {alpha:false, antialias:true}) || c.getContext('experimental-webgl');
-  if(!gl){ c.style.display='none'; return; }                       // pas de WebGL -> fond sombre
-  var VERT = 'attribute vec2 a_pos; void main(){ gl_Position = vec4(a_pos,0.0,1.0); }';
-  var FRAG = [
-    'precision highp float;',
-    'uniform float u_time; uniform vec2 u_res; uniform vec2 u_mouse;',
-    'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453123); }',
-    'float noise(vec2 p){ vec2 i=floor(p), f=fract(p); vec2 u=f*f*(3.0-2.0*f);',
-    '  return mix(mix(hash(i),hash(i+vec2(1.0,0.0)),u.x), mix(hash(i+vec2(0.0,1.0)),hash(i+vec2(1.0,1.0)),u.x), u.y); }',
-    'float fbm(vec2 p){ float v=0.0, a=0.5; for(int k=0;k<5;k++){ v+=a*noise(p); p=p*2.02+vec2(1.7,9.2); a*=0.5; } return v; }',
-    'void main(){',
-    '  vec2 uv = gl_FragCoord.xy/u_res;',
-    '  vec2 p = (gl_FragCoord.xy - 0.5*u_res)/u_res.y;',
-    '  float t = u_time*0.045;',
-    '  vec2 q = vec2(fbm(p*1.6 + vec2(0.0,t)), fbm(p*1.6 + vec2(5.2,-t*0.8)));',   // domain warp
-    '  float n = fbm(p*1.9 + q*1.4 + vec2(-t*0.5, t*0.35));',
-    '  float energy = smoothstep(0.42, 0.92, n);',
-    '  vec2 gr = abs(fract(p*9.0)-0.5);',                                          // grille instrument
-    '  float line = smoothstep(0.03, 0.0, min(gr.x,gr.y));',
-    '  float grid = line*(0.35+0.65*energy);',
-    '  vec2 m = (u_mouse - 0.5*u_res)/u_res.y;',
-    '  float md = length(p-m);',
-    '  float glow = 0.10/(md*md*8.0 + 0.06);',                                     // halo au curseur
-    '  vec3 base = vec3(0.020,0.028,0.045); vec3 blue = vec3(0.18,0.60,1.0);',
-    '  vec3 col = base;',
-    '  col += blue*energy*0.13; col += blue*grid*0.05; col += blue*glow*0.16;',
-    '  col += blue*0.012*sin(gl_FragCoord.y*0.6 + u_time*2.0);',                   // léger scintillement
-    '  col *= smoothstep(1.25, 0.35, length(uv-0.5));',                           // vignette
-    '  gl_FragColor = vec4(col, 1.0);',
-    '}'
-  ].join('\n');
-  function compile(type, src){ var s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s);
-    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)){ console.warn('WGL shader:', gl.getShaderInfoLog(s)); return null; } return s; }
-  var vs=compile(gl.VERTEX_SHADER,VERT), fs=compile(gl.FRAGMENT_SHADER,FRAG);
-  if(!vs||!fs){ c.style.display='none'; return; }
-  var prog=gl.createProgram(); gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
-  if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){ c.style.display='none'; return; }
-  gl.useProgram(prog);
-  var b=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,b);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);   // triangle plein écran
-  var loc=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
-  var uT=gl.getUniformLocation(prog,'u_time'), uR=gl.getUniformLocation(prog,'u_res'), uM=gl.getUniformLocation(prog,'u_mouse');
-  var DPR=Math.min(window.devicePixelRatio||1, 1.75), W=1, H=1, mx, my;
-  function resize(){ var r=c.getBoundingClientRect(); W=Math.max(1,Math.round(r.width*DPR)); H=Math.max(1,Math.round(r.height*DPR)); c.width=W; c.height=H; gl.viewport(0,0,W,H); }
-  resize(); addEventListener('resize', resize, {passive:true});
-  mx=W*0.5; my=H*0.55;
-  var sec = (c.closest && c.closest('.end')) || c.parentElement;
-  sec.addEventListener('pointermove', function(e){ var r=c.getBoundingClientRect(); mx=(e.clientX-r.left)*DPR; my=(r.height-(e.clientY-r.top))*DPR; }, {passive:true});
-  var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches, visible=true;
-  function frame(ms){ if(visible){ gl.uniform1f(uT, ms*0.001); gl.uniform2f(uR, W, H); gl.uniform2f(uM, mx, my); gl.drawArrays(gl.TRIANGLES,0,3); } requestAnimationFrame(frame); }
-  if(reduce){ gl.uniform1f(uT, 8.0); gl.uniform2f(uR, W, H); gl.uniform2f(uM, W*0.5, H*0.55); gl.drawArrays(gl.TRIANGLES,0,3); }  // 1 image fixe
-  else { requestAnimationFrame(frame);
-    if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ visible=es[0].isIntersecting; }).observe(sec); } }  // rAF coupé hors-écran
-})();
-</script>
 </body>
 </html>

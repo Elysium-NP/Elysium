@@ -155,6 +155,8 @@
 
   /* abonnements (Damien 27/09) : formules, montant, résiliations — Stripe pour l'argent */
   .kpis.abo{grid-template-columns:repeat(6,1fr)}
+  @media(max-width:1100px){.kpis.abo{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:640px){.kpis.abo{grid-template-columns:repeat(2,1fr)}}   /* Damien 27/09 : illisible sur téléphone */
   .kpi .v.att{font-size:26px;color:var(--steel)}
   /* messagerie clients <-> coachs */
   .msgs{display:grid;grid-template-columns:280px 1fr;border:1px solid var(--line);background:var(--void2);margin-bottom:22px;min-height:340px}

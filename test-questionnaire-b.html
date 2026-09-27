@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("ely_theme")==="obscur")document.documentElement.setAttribute("data-theme","obscur")}catch(e){}</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F3EE">
+<title>ELYSIUM · Test questionnaire B</title>
+<meta name="description" content="Quelques questions et on construit ton programme sur-mesure, au gramme près.">
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js');try{sessionStorage.removeItem('ely_tr')}catch(e){}document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
+<link rel="stylesheet" href="assets/site.css?v=2709tq">
+<style>
+  body{overflow-x:hidden}
+  .qtop{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px var(--edge);background:var(--voile)}
+  .qtop .back{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
+  .qtop .back:hover{color:var(--blue)}
+  .qprog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue-d),var(--blue));box-shadow:0 0 12px var(--blue);width:0;z-index:60;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  .qwrap{max-width:680px;margin:0 auto;padding:120px var(--edge) 80px}
+  /* En-tête de page (remplace l'ancien compteur « Étape 1 / 19 ») */
+  .qintro{margin-bottom:8px}
+  .qintro .kick{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+  .qintro h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,5.4vw,52px);color:var(--ice);text-transform:uppercase;line-height:1.02;letter-spacing:.005em;margin:0 0 14px}
+  .qintro p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);margin:0}
+  .qintro p b{color:var(--ice);font-weight:500}
+
+  /* PAGE UNIQUE : toutes les questions sont affichées, on descend simplement.
+     (Avant : 19 étapes masquées. Abandonné — tant que ce n'est pas validé, le
+     client peut tout modifier, donc découper n'apportait rien et décourageait.) */
+  .qstep{display:block;counter-increment:qs;padding-top:44px;margin-top:44px;border-top:1px solid var(--line)}
+  #qform{counter-reset:qs}
+  .qstep h2{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3.4vw,32px);color:var(--ice);text-transform:uppercase;line-height:1.08;letter-spacing:.005em;margin-bottom:10px}
+  /* numéro de section : repère de progression, sans enfermer dans un parcours */
+  .qstep h2::before{content:counter(qs,decimal-leading-zero);display:block;font-family:var(--disp);font-size:11px;font-weight:500;
+    letter-spacing:.24em;color:var(--blue);margin-bottom:9px}
+  .qstep .qhint{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--steel);margin-bottom:24px}
+  /* champ obligatoire non rempli au moment de valider */
+  .qstep.miss{border-left:2px solid #8a5a00;margin-left:-16px;padding-left:14px}
+  .qcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .qcards.one{grid-template-columns:1fr}
+  @media(max-width:520px){.qcards{grid-template-columns:1fr}}
+  .qcard{position:relative;display:flex;align-items:center;gap:12px;padding:17px 18px;border:1px solid var(--line);background:var(--void2);cursor:pointer;transition:border-color .3s,background .3s}
+  .qcard:hover{border-color:rgba(46,155,255,.5)}
+  .qcard input{position:absolute;opacity:0;pointer-events:none}
+  .qcard .dot{width:16px;height:16px;border:1px solid var(--steel);border-radius:50%;flex:none;transition:border-color .3s;position:relative}
+  .qcard .tx{font-family:var(--disp);font-weight:500;font-size:16px;color:var(--ice);text-transform:none}
+  .qcard:has(input:checked){border-color:var(--blue);background:rgba(46,155,255,.07)}
+  .qcard:has(input:checked) .dot{border-color:var(--blue)}
+  .qcard:has(input:checked) .dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)}
+  .qcard:has(input[type=checkbox]) .dot{border-radius:3px}
+  .qcard:has(input[type=checkbox]:checked) .dot::after{border-radius:1px;inset:3px}
+  .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:520px){.qgrid{grid-template-columns:1fr}}
+  .qfield{display:flex;flex-direction:column;gap:8px}
+  .qfield.full{grid-column:1 / -1}
+  .qfield label{font-family:var(--disp);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+  .qfield input,.qfield textarea,.qfield select{font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;transition:border-color .3s;width:100%}
+  .qfield textarea{min-height:104px;resize:vertical;line-height:1.6}
+  .qfield input::placeholder,.qfield textarea::placeholder{color:var(--steel)}
+  .qfield input:focus,.qfield textarea:focus,.qfield select:focus{outline:none;border-color:var(--blue)}
+  .qfield select{color-scheme:light;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--steel) 50%),linear-gradient(135deg,var(--steel) 50%,transparent 50%);background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px;background-repeat:no-repeat}
+  /* note 1-10 */
+  .qrange{display:flex;align-items:center;gap:16px}
+  .qrange input[type=range]{flex:1;accent-color:var(--blue);height:26px}
+  .qrange .val{font-family:var(--disp);font-weight:700;font-size:34px;color:var(--blue);min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+  /* avertissement dans une étape sensible */
+  .qwarn{margin-top:16px;padding:13px 15px;border:1px solid rgba(232,176,75,.35);background:rgba(232,176,75,.06);font-family:var(--disp);font-size:12.5px;line-height:1.65;color:#6b4a00}
+  .qwarn b{color:#6b4a00}
+  /* bloc de fin : avertissement + bouton de validation */
+  .qend{margin-top:44px;padding-top:44px;border-top:1px solid var(--line)}
+  .qnav{display:flex;justify-content:center;margin-top:26px}
+  .qnav .btn{cursor:pointer;background:var(--brand);padding:18px 42px;font-size:15px}
+  .qerr{font-family:var(--disp);font-size:13px;line-height:1.6;color:#8a5a00;margin-top:16px;min-height:16px;text-align:center}
+  /* état d'enregistrement : fixe en bas d'écran, visible pendant tout le remplissage */
+  .qsave{position:fixed;right:var(--edge);bottom:18px;z-index:58;font-family:var(--disp);font-size:11px;letter-spacing:.1em;
+    color:var(--steel);background:rgba(251,248,242,.95);border:1px solid var(--line);padding:8px 13px;
+    opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;pointer-events:none}
+  .qsave.on{opacity:1;transform:none}
+  @media(max-width:520px){.qsave{left:var(--edge);right:var(--edge);text-align:center}}
+  /* fenêtre de confirmation (double sécurité avant verrouillage) */
+  .qmodal{display:none;position:fixed;inset:0;z-index:95;background:rgba(40,32,20,.45);align-items:center;justify-content:center;padding:24px}
+  .qmodal.on{display:flex}
+  .qmodal-in{max-width:460px;background:var(--void2);border:1px solid rgba(46,155,255,.4);padding:32px 28px;text-align:center}
+  .qmodal h3{font-family:var(--disp);font-weight:600;font-size:26px;color:var(--ice);text-transform:uppercase;margin:0 0 14px}
+  .qmodal p{font-family:var(--disp);font-size:14px;line-height:1.65;color:var(--gris);margin:0 0 24px}
+  .qmodal p b{color:var(--ice)}
+  .qmodal .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .qmodal .btn{cursor:pointer;background:var(--brand)}
+  .qmodal .no{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);background:none;border:0;cursor:pointer;padding:14px 10px}
+  .qmodal .no:hover{color:var(--ice)}
+  /* écrans pleins : chargement, verrou, fin */
+  #confetti{position:fixed;inset:0;z-index:90;pointer-events:none;display:none}
+  .qfull{display:none;position:fixed;inset:0;z-index:80;background:var(--void);align-items:center;justify-content:center;text-align:center;padding:40px var(--edge)}
+  .qfull.on{display:flex;animation:qin .6s ease}
+  .qfull-in{max-width:560px}
+  .qfull .em{font-family:var(--disp);font-weight:600;font-size:clamp(40px,8vw,78px);color:var(--blue);line-height:1;letter-spacing:.02em}
+  .qfull h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4vw,42px);color:var(--ice);text-transform:uppercase;margin:16px 0 18px;letter-spacing:.005em}
+  .qfull p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);max-width:46ch;margin:0 auto 32px}
+  .qfull p b{color:var(--ice);font-weight:500}
+
+  /* ===== PAGE DE TEST ===== */
+  .testbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:70;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;
+    max-width:calc(100% - 24px);background:#111;color:#fff;font:13px/1.4 var(--texte);padding:10px 14px;border-radius:14px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+  .testbar b{color:var(--brand)}
+  .testbar button{font:600 12px/1 var(--texte);border:1px solid rgba(255,255,255,.35);background:none;color:#fff;border-radius:999px;padding:7px 11px;cursor:pointer}
+  .site-foot{padding-bottom:110px}
+  /* ===== RECHERCHE D'ALIMENTS (Damien 27/09) ===== */
+  .picker{display:flex;flex-direction:column;gap:12px}
+  .pick-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .pick-chips:empty{display:none}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 8px 8px 14px;border-radius:999px;background:var(--p-bleu);border:1px solid var(--b-bleu);
+    font:500 15px/1 var(--texte);color:var(--ice)}
+  .picker[data-liste="refus"] .chip{background:var(--p-jaune);border-color:var(--b-jaune)}
+  .chip button{width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.08);color:var(--ice);cursor:pointer;font:700 14px/1 var(--texte)}
+  .chip button:hover{background:rgba(0,0,0,.18)}
+  .pick-box{position:relative}
+  .pick-in{width:100%;font:16px/1.4 var(--texte);color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:14px 15px;border-radius:10px}
+  .pick-in:focus{outline:none;border-color:var(--blue)}
+  .pick-sug{list-style:none;margin:6px 0 0;padding:6px;position:absolute;left:0;right:0;top:100%;z-index:20;background:var(--void2);border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 18px 40px -20px rgba(0,0,0,.4);max-height:300px;overflow:auto}
+  .pick-sug:empty{display:none}
+  .pick-sug li{padding:11px 12px;border-radius:8px;cursor:pointer;font:15px/1.3 var(--texte);color:var(--ice)}
+  .pick-sug li.on,.pick-sug li:hover{background:var(--p-bleu)}
+  .pick-sug li.vide{cursor:default;color:var(--steel);background:none}
+  .pick-rien{align-self:flex-start;font:500 13px/1 var(--texte);color:var(--steel);background:none;border:1px dashed var(--line);border-radius:999px;padding:8px 13px;cursor:pointer}
+  .pick-rien.on{color:var(--ice);border-style:solid;border-color:var(--blue);background:var(--p-bleu)}
+  .pick-note{font:13px/1.5 var(--texte);color:var(--steel);margin:0}
+
+  /* ===== PISTE B : une question à la fois ===== */
+  .qwrap{padding-top:140px;min-height:100vh}
+  #prog{display:none}
+  .etapes{position:fixed;top:64px;left:0;right:0;z-index:54;background:var(--voile);border-bottom:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .etapes-in{max-width:680px;margin:0 auto;padding:10px var(--edge);display:flex;align-items:center;gap:14px}
+  .etapes .jauge{flex:1;height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+  .etapes .jauge i{display:block;height:100%;width:0;border-radius:999px;background:var(--brand);transition:width .8s cubic-bezier(.3,.7,.3,1)}
+  .etapes .compte{font:600 14px/1 var(--texte);color:var(--ice);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .qstep,.qend{display:none;border-top:0;margin-top:0;padding-top:12px}
+  .qstep.cur,.qend.cur{display:block}
+  .qintro{display:none} .qintro.cur{display:block}
+  .qstep h2{font-size:clamp(26px,4.4vw,38px)}
+  .qcard{padding:22px 20px;border-radius:14px}
+  .qcard .tx{font-size:18px}
+  .qcard:has(input:checked){background:var(--p-bleu);border-color:var(--b-bleu)}
+  .qfield input,.qfield select,.qfield textarea{border-radius:10px}
+  .entree{animation:entre .6s cubic-bezier(.2,.7,.2,1) both}
+  .entree.retour{animation-name:entre-retour}
+  @keyframes entre{from{opacity:0;transform:translateX(46px)}to{opacity:1;transform:none}}
+  @keyframes entre-retour{from{opacity:0;transform:translateX(-46px)}to{opacity:1;transform:none}}
+  .pas{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:34px}
+  .pas button{font:600 15px/1 var(--texte);border-radius:999px;padding:15px 26px;cursor:pointer}
+  .pas .prec{background:none;border:1px solid var(--line);color:var(--ice)}
+  .pas .prec[disabled]{visibility:hidden}
+  .pas .suiv{background:var(--brand);border:1px solid var(--brand);color:#111;margin-left:auto}
+  .pas .suiv[disabled]{opacity:.35;cursor:not-allowed}
+  .pas .aide{font:13px/1.4 var(--texte);color:var(--steel)}
+  @media(prefers-reduced-motion:reduce){.entree{animation:none}.etapes .jauge i{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="qprog" id="prog" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<div class="qtop">
+  <a class="logo" href="index.html" aria-label="Elysium · Nutrition & Performance"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></a>
+  <span class="back">Page de test · piste B</span>
+</div>
+
+<div class="testbar" role="note"><b>PAGE DE TEST · piste B : une question à la fois</b> — exemple fictif pré-rempli, rien n'est enregistré ni envoyé.
+  <button type="button" id="t-vider">Tout vider pour essayer</button><button type="button" id="t-exemple">Remettre l'exemple</button></div>
+<div class="etapes" aria-live="polite"><div class="etapes-in"><span class="compte" id="e-compte">1 / 1</span><span class="jauge"><i id="e-jauge"></i></span></div></div>
+<main>
+  <div class="qwrap">
+    <form id="qform" autocomplete="off">
+      <div class="qintro">
+        <div class="kick">Construire mon programme</div>
+        <h1>Parle-nous de toi.</h1>
+        <p>Prends le temps, <b>rien n'est définitif tant que tu n'as pas validé en bas de page</b>.
+           Tes réponses s'enregistrent toutes seules&nbsp;: tu peux fermer et revenir plus tard,
+           tu retrouveras tout.</p>
+      </div>
+
+      <!-- 01 -->
+      <div class="qstep active">
+        <h2>Ton objectif&nbsp;?</h2>
+        <p class="qhint">Le point de départ de tout le reste.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Perte de poids" required><span class="dot"></span><span class="tx">Perte de poids</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Prise de masse"><span class="dot"></span><span class="tx">Prise de masse</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Rééquilibrage / Maintien de poids"><span class="dot"></span><span class="tx">Rééquilibrage / Maintien de poids</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Te sens-tu actuellement plutôt…</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En surpoids" required><span class="dot"></span><span class="tx">En surpoids</span></label>
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="À ton poids"><span class="dot"></span><span class="tx">À ton poids</span></label>
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En sous-poids"><span class="dot"></span><span class="tx">En sous-poids</span></label>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div class="qstep">
+        <h2>Où en es-tu aujourd'hui&nbsp;?</h2>
+        <p class="qhint">Ton nom, ton sexe, ton âge et ta taille sont déjà enregistrés à ton compte&nbsp;: on ne te les redemande pas.</p>
+        <div class="qgrid">
+          <div class="qfield"><label>Poids actuel (kg)</label>
+            <input type="number" name="poids" data-q="Poids (en kg)" min="35" max="250" step="0.1" placeholder="kg" required></div>
+          <div class="qfield"><label>Téléphone</label>
+            <input type="tel" name="telephone" data-q="Numéro de téléphone" placeholder="06 12 34 56 78" required></div>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Si le poids compte pour toi, ton idéal dans un premier temps&nbsp;?</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="Je souhaite maintenir mon poids" required><span class="dot"></span><span class="tx">Je souhaite maintenir mon poids</span></label>
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="1 à 4 kilos"><span class="dot"></span><span class="tx">1 à 4 kilos</span></label>
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="5 à 8 kilos"><span class="dot"></span><span class="tx">5 à 8 kilos</span></label>
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="9 kilos ou plus"><span class="dot"></span><span class="tx">9 kilos ou plus</span></label>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div class="qstep">
+        <h2>Ton travail.</h2>
+        <p class="qhint">Une journée assise et une journée debout ne consomment pas pareil.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Ton activité professionnelle</label>
+            <input type="text" name="profession" data-q="Quelle est ton activité professionnelle ?" placeholder="Ex. infirmière, développeur, artisan, étudiant…" required></div>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Ton métier t'amène plutôt à&nbsp;:</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t&#x27;amène plutôt à" value="Rester assis la majorité de la journée (bureau, conduite…)" required><span class="dot"></span><span class="tx">Rester assis la majorité de la journée (bureau, conduite…)</span></label>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t&#x27;amène plutôt à" value="Être debout / en mouvement (vente, soin, restauration…)"><span class="dot"></span><span class="tx">Être debout / en mouvement (vente, soin, restauration…)</span></label>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t&#x27;amène plutôt à" value="Faire un travail physique (port de charges, manutention, BTP…)"><span class="dot"></span><span class="tx">Faire un travail physique (port de charges, manutention, BTP…)</span></label>
+        </div>
+      </div>
+
+      <!-- 04 -->
+      <div class="qstep">
+        <h2>Ton activité.</h2>
+        <p class="qhint">Nombre moyen de pas par jour, si tu utilises une montre connectée ou ton téléphone.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&lt;10.000" required><span class="dot"></span><span class="tx">Moins de 10.000</span></label>
+<label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="10.000–13.000"><span class="dot"></span><span class="tx">10.000 à 13.000</span></label>
+<label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&gt;13.000"><span class="dot"></span><span class="tx">Plus de 13.000</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">En moyenne, combien de séances de sport fais-tu (ou feras-tu) par semaine&nbsp;?</p>
+        <div class="qgrid">
+          <div class="qfield"><label>Séances par semaine</label>
+            <select name="seances" data-q="En moyenne, combien de séances de sport fais-tu (ou feras-tu) par semaine ?" required><option value="">Choisir…</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
+        </div>
+      </div>
+
+      <!-- 05 -->
+      <div class="qstep">
+        <h2>Petit-déjeuner&nbsp;: sucré ou salé&nbsp;?</h2>
+        <p class="qhint">Tu peux cocher les deux si tu alternes.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="checkbox" name="pdj" data-q="Es-tu plutôt team sucré ou salé au petit-déjeuner ? (choix multiple possible)" value="Sucré" data-req="1"><span class="dot"></span><span class="tx">Sucré</span></label>
+          <label class="qcard"><input type="checkbox" name="pdj" data-q="Es-tu plutôt team sucré ou salé au petit-déjeuner ? (choix multiple possible)" value="Salé"><span class="dot"></span><span class="tx">Salé</span></label>
+        </div>
+      </div>
+
+      <!-- 06 -->
+      <div class="qstep">
+        <h2>Ce que tu veux garder.</h2>
+        <p class="qhint">Les aliments auxquels tu tiens&nbsp;: on construit autour d'eux plutôt que contre eux.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Aliments à conserver absolument</label>
+            <div class="picker" data-liste="conserver"><textarea name="conserver" data-q="Y a-t-il des aliments que tu souhaites absolument conserver dans ton alimentation ?" required hidden></textarea><div class="pick-chips" aria-live="polite"></div><div class="pick-box"><input type="text" class="pick-in" placeholder="Tape un aliment… (ex. pâtes, chocolat noir)" autocomplete="off" aria-label="Rechercher un aliment"><ul class="pick-sug" role="listbox"></ul></div><button type="button" class="pick-rien">Rien de particulier</button><p class="pick-note"></p></div></div>
+        </div>
+      </div>
+
+      <!-- 07 -->
+      <div class="qstep">
+        <h2>Un régime particulier&nbsp;?</h2>
+        <p class="qhint">Plusieurs choix possibles.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Aucun" data-req="1"><span class="dot"></span><span class="tx">Aucun</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Végétarien"><span class="dot"></span><span class="tx">Végétarien</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Vegan"><span class="dot"></span><span class="tx">Vegan</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Pescétarien"><span class="dot"></span><span class="tx">Pescétarien</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Sans porc"><span class="dot"></span><span class="tx">Sans porc</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Sans gluten"><span class="dot"></span><span class="tx">Sans gluten</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Sans lactose"><span class="dot"></span><span class="tx">Sans lactose</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Pauvre en FODMAP"><span class="dot"></span><span class="tx">Pauvre en FODMAP</span></label>
+        </div>
+        <div class="qwarn">Dans le cas d'une alimentation spécifique, un <b>supplément de 20&nbsp;€</b> est appliqué pour l'adaptation personnalisée supplémentaire.</div>
+      </div>
+
+      <!-- 08 -->
+      <div class="qstep">
+        <h2>Allergies &amp; santé.</h2>
+        <p class="qhint">Allergies, intolérances ou pathologies à nous signaler.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>À signaler</label>
+            <textarea name="allergies" data-q="Allergies, intolérances ou pathologies à signaler ?  ⚠️ A SAVOIR : Dans un cas d&#x27;alimentation spécifique, un supplément de 20 € est appliqué en raison de l’adaptation personnalisée supplémentaire.  ⚠️ En cas de pathologie lourde, spécifique ou nécessitant une prise en charge particulière, nous nous réservons le droit d’évaluer la situation au cas par cas. Si nous estimons que celle-ci dépasse le cadre de nos compétences ou nécessite un suivi médical adapté, nous pourrons vous orienter vers un professionnel de santé qualifié et ne pas assurer la mise en place de votre programmation.  " placeholder="Ex. allergie aux fruits à coque, intolérance au lactose, diabète… ou « aucune »" required></textarea></div>
+        </div>
+        <div class="qwarn">En cas de <b>pathologie lourde, spécifique ou nécessitant une prise en charge particulière</b>, nous évaluons la situation au cas par cas. Si elle dépasse notre cadre de compétences ou nécessite un suivi médical adapté, nous t'orienterons vers un professionnel de santé et ne pourrons pas assurer la programmation.</div>
+      </div>
+
+      <!-- 09 -->
+      <div class="qstep">
+        <h2>Ce que tu ne mangeras pas.</h2>
+        <p class="qhint">Aliments refusés, détestés, écœurants, restrictions religieuses ou éthiques. Prends ton temps.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Aliments refusés</label>
+            <div class="picker" data-liste="refus"><textarea name="refuses" data-q="Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses&#10;ou éthiques ? (Intolérances, écœurements, goûts...)&#10;(Attention à ne rien oublier, aucune modification ne sera faite une fois la programmation terminée)" required hidden></textarea><div class="pick-chips" aria-live="polite"></div><div class="pick-box"><input type="text" class="pick-in" placeholder="Tape un aliment… (ex. poisson, champignons)" autocomplete="off" aria-label="Rechercher un aliment"><ul class="pick-sug" role="listbox"></ul></div><button type="button" class="pick-rien">Rien de particulier</button><p class="pick-note"></p></div></div>
+        </div>
+        <div class="qwarn"><b>N'oublie rien.</b> Aucune modification ne sera faite une fois la programmation terminée.</div>
+      </div>
+
+      <!-- 10 -->
+      <div class="qstep">
+        <h2>Pour aller plus loin.</h2>
+        <p class="qhint">Facultatif, plusieurs choix possibles.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux le même petit déjeuner chaque jour"><span class="dot"></span><span class="tx">Je veux le même petit déjeuner chaque jour</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je préfère 3 repas par jour (sans collation)"><span class="dot"></span><span class="tx">Je préfère 3 repas par jour (sans collation)</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)"><span class="dot"></span><span class="tx">Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que les plats du midi soient froids"><span class="dot"></span><span class="tx">Je veux que les plats du midi soient froids</span></label>
+        </div>
+      </div>
+
+      <!-- 12 -->
+      <div class="qstep">
+        <h2>Et l'entraînement&nbsp;?</h2>
+        <p class="qhint">Nous réalisons aussi des programmes d'entraînement.</p>
+        <p class="qhint" style="margin:24px 0 12px">Le savais-tu&nbsp;?</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d&#x27;entraînement ?" value="Oui" required><span class="dot"></span><span class="tx">Oui</span></label>
+          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d&#x27;entraînement ?" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Ça t'intéresserait&nbsp;? C'est une formule à part&nbsp;: si oui, tes coachs reprendront contact avec toi.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Oui (Je rempli le questionnaire disponible en description)" required><span class="dot"></span><span class="tx">Oui</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Peut-être plus tard"><span class="dot"></span><span class="tx">Peut-être plus tard</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="J&#x27;ai déjà convenu de prendre le pack complet"><span class="dot"></span><span class="tx">J'ai déjà convenu de prendre le pack complet</span></label>
+        </div>
+      </div>
+
+      <!-- 13 -->
+      <div class="qstep">
+        <h2>Comment nous as-tu connus&nbsp;?</h2>
+        <p class="qhint">Ça nous aide à savoir où on est utile.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Instagram" required><span class="dot"></span><span class="tx">Instagram</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Bouche-à-oreille / recommandation d&#x27;un proche"><span class="dot"></span><span class="tx">Bouche-à-oreille / recommandation d'un proche</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Ancient client"><span class="dot"></span><span class="tx">Ancien client</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="A la salle de sport"><span class="dot"></span><span class="tx">À la salle de sport</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Partenariat / Entreprise / CSE"><span class="dot"></span><span class="tx">Partenariat / Entreprise / CSE</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Autre"><span class="dot"></span><span class="tx">Autre</span></label>
+        </div>
+        <div class="qgrid" style="margin-top:16px">
+          <div class="qfield full"><label>Si partenariat / entreprise / CSE, précise (optionnel)</label>
+            <input type="text" name="entreprise" data-q="Si vous avez sélectionné &quot;Partenariat / Entreprise / CSE&quot; à la question précédente, merci d&#x27;indiquer le nom de votre entreprise ou de votre CSE." placeholder="Nom de l&#x27;entreprise ou du CSE"></div>
+        </div>
+      </div>
+
+      <!-- 14 -->
+      <div class="qstep">
+        <h2>Facturation.</h2>
+        <p class="qhint">Pour établir ta facture.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Adresse (n° de voie, rue, complément)</label>
+            <input type="text" name="adresse" data-q="Adresse de facturation complète (N° de voie, Rue, complément d&#x27;adresse)" placeholder="Ex. 2 rue de la Chapelle" required></div>
+          <div class="qfield"><label>Code postal</label>
+            <input type="text" name="cp" data-q="Code postal" inputmode="numeric" placeholder="80000" required></div>
+          <div class="qfield"><label>Ville</label>
+            <input type="text" name="ville" data-q="Ville" placeholder="Amiens" required></div>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px"><a href="cgv.html" target="_blank" rel="noopener" style="color:inherit">Conditions générales de vente</a></p>
+        <div class="qcards one">
+          <label class="qcard"><input type="checkbox" name="cgv" data-q="Conditions Générales de Vente" value="J’ai lu et j’accepte les Conditions Générales de Vente de SAS ELYSIUM. Je certifie que les informations transmises sont sincères, exactes et complètes, et j’autorise Elysium Nutrition &amp; Performance à les utiliser pour établir ma programmation personnalisée." required><span class="dot"></span><span class="tx">J’ai lu et j’accepte les Conditions Générales de Vente de SAS ELYSIUM. Je certifie que les informations transmises sont sincères, exactes et complètes, et j’autorise Elysium Nutrition &amp; Performance à les utiliser pour établir ma programmation personnalisée.</span></label>
+        </div>
+      </div>
+
+      <!-- FIN · VALIDATION
+           Le récapitulatif d'antan n'a plus lieu d'être : sur une page unique, le
+           client relit ses réponses en remontant simplement la page. -->
+      <div class="qend">
+        <div class="qwarn"><b>Une fois validé, tu ne pourras plus modifier ce questionnaire.</b> C'est sur ces réponses que ton programme sera construit. Si tu dois corriger quelque chose, c'est maintenant — remonte la page et relis-toi. En cas d'erreur découverte plus tard, écris-nous à elysium.np.pro@gmail.com.</div>
+        <div class="qnav">
+          <button type="submit" class="btn" id="next">Valider définitivement</button>
+        </div>
+        <div class="qerr" id="err" role="alert"></div>
+      </div>
+      <div class="qsave" id="save">Brouillon enregistré</div>
+    </form>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <img class="foot-logo" src="assets/logo-pied.png" alt="Elysium · Nutrition &amp; Performance" width="200" height="105" loading="lazy" decoding="async">
+  <div class="foot-links"><a href="index.html">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
+  <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
+</footer>
+
+<!-- confirmation avant verrouillage définitif -->
+<div class="qmodal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="qmodal-in">
+    <h3 id="mtitle">Tu es sûr ?</h3>
+    <p>Après validation, <b>tes réponses ne seront plus modifiables</b>. Ton programme sera construit à partir de ce que tu viens de relire.</p>
+    <div class="row">
+      <button type="button" class="no" id="mno">Non, je relis</button>
+      <button type="button" class="btn" id="myes">Oui, je valide</button>
+    </div>
+  </div>
+</div>
+
+<!-- écran : chargement -->
+<div class="qfull" id="scr-load"><div class="qfull-in"><div class="em">·</div><h2>Un instant</h2><p>On récupère ton questionnaire…</p></div></div>
+
+<!-- écran : accès verrouillé (pas encore payé) -->
+<div class="qfull" id="scr-lock"><div class="qfull-in">
+  <div class="em">◆</div><h2>Programme à activer</h2>
+  <p>Le questionnaire s'ouvre une fois ta formule choisie. C'est lui qui sert à construire ta programmation sur-mesure.</p>
+  <a class="btn" href="choisir.html">Choisir ma formule</a>
+</div></div>
+
+<!-- écran : déjà validé -->
+<div class="qfull" id="scr-done2"><div class="qfull-in">
+  <div class="em">✓</div><h2>Questionnaire validé</h2>
+  <p>Tes réponses sont enregistrées et <b>ne sont plus modifiables</b>. Damien &amp; Yoann construisent ta programmation. Une erreur à signaler&nbsp;? Écris-nous à <b>elysium.np.pro@gmail.com</b>.</p>
+  <a class="btn" href="espace.html">Retour à mon espace</a>
+</div></div>
+
+<!-- écran : merci (juste après validation) -->
+<div class="qfull" id="scr-thanks"><div class="qfull-in">
+  <div class="em">✓</div><h2>C'est envoyé.</h2>
+  <p>Merci. Damien &amp; Yoann prennent le relais et construisent ta programmation <b>à la main, au gramme près</b>. Tu la retrouveras dans ton espace.</p>
+  <p id="ent-contact" hidden style="margin-top:12px">Pour l'entraînement&nbsp;: <b>tes coachs vont reprendre contact avec toi</b>, dans ta messagerie.</p>
+  <a class="btn" href="espace.html">Retour à mon espace</a>
+</div></div>
+
+<script src="assets/site.js?v=2709tq"></script>
+<script>
+/* RECHERCHE D'ALIMENTS : on affiche le LIBELLÉ, on envoie ses VALEURS (texte, séparées par des
+   virgules) sous le MÊME data-q qu'avant. Table fournie par le moteur (assets/aliments_questionnaire.json). */
+(function(){
+  function norm(t){ return String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/œ/g,'oe'); }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  fetch('assets/aliments_questionnaire.json').then(function(r){ return r.json(); }).then(function(T){
+    document.querySelectorAll('.picker').forEach(function(p){
+      var table=T[p.getAttribute('data-liste')]||{}, libelles=Object.keys(table), choisis=[], rien=false, idx=-1;
+      var ta=p.querySelector('textarea'), chips=p.querySelector('.pick-chips'), inp=p.querySelector('.pick-in'),
+          sug=p.querySelector('.pick-sug'), btnRien=p.querySelector('.pick-rien');
+      p.querySelector('.pick-note').textContent=T.message_introuvable||'';
+      function valeur(){
+        if(rien) return 'Rien de particulier';
+        var v=[]; choisis.forEach(function(l){ (table[l]||[]).forEach(function(x){ if(v.indexOf(x)<0) v.push(x); }); });
+        return v.join(', ');
+      }
+      function maj(nouveau){
+        chips.innerHTML=choisis.map(function(l){ return '<span class="chip'+(l===nouveau?' neuf':'')+'">'+esc(l)+'<button type="button" aria-label="Retirer '+esc(l)+'" data-l="'+esc(l)+'">×</button></span>'; }).join('');
+        btnRien.classList.toggle('on',rien);
+        ta.value=valeur(); ta.dispatchEvent(new Event('input',{bubbles:true}));
+      }
+      function suggerer(){
+        var q=norm(inp.value.trim()); idx=-1;
+        if(!q){ sug.innerHTML=''; return; }
+        var r=libelles.filter(function(l){ return choisis.indexOf(l)<0 && norm(l).indexOf(q)>-1; })
+          .sort(function(a,b){ return (norm(a).indexOf(q)===0?0:1)-(norm(b).indexOf(q)===0?0:1) || a.localeCompare(b,'fr'); }).slice(0,8);
+        sug.innerHTML = r.length ? r.map(function(l,i){ return '<li role="option" data-l="'+esc(l)+'">'+esc(l)+'</li>'; }).join('')
+          : '<li class="vide">Aucun aliment trouvé</li>';
+      }
+      function ajouter(l){ if(!l||choisis.indexOf(l)>-1) return; rien=false; choisis.push(l); inp.value=''; sug.innerHTML=''; maj(l); inp.focus(); }
+      inp.addEventListener('input',suggerer);
+      inp.addEventListener('focus',suggerer);
+      inp.addEventListener('keydown',function(e){
+        var li=[].slice.call(sug.querySelectorAll('li[data-l]'));
+        if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); if(!li.length) return;
+          idx=(idx+(e.key==='ArrowDown'?1:-1)+li.length)%li.length; li.forEach(function(x,i){ x.classList.toggle('on',i===idx); }); }
+        else if(e.key==='Enter'){ e.preventDefault(); var c=li[idx>-1?idx:0]; if(c) ajouter(c.getAttribute('data-l')); }
+        else if(e.key==='Escape'){ sug.innerHTML=''; }
+      });
+      sug.addEventListener('mousedown',function(e){ var li=e.target.closest('li[data-l]'); if(li){ e.preventDefault(); ajouter(li.getAttribute('data-l')); } });
+      chips.addEventListener('click',function(e){ var b=e.target.closest('button[data-l]'); if(!b) return;
+        choisis=choisis.filter(function(l){ return l!==b.getAttribute('data-l'); }); maj(); });
+      btnRien.addEventListener('click',function(){ rien=!rien; if(rien) choisis=[]; maj(); });
+      document.addEventListener('click',function(e){ if(!p.contains(e.target)) sug.innerHTML=''; });
+      p._poser=function(l){ rien=false; choisis=l.filter(function(x){ return table[x]; }); maj(); };
+    });
+    document.dispatchEvent(new CustomEvent('ely:aliments-prets'));
+  });
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var form=document.getElementById('qform');
+  var prog=document.getElementById('prog');
+  var err=document.getElementById('err'), saveTag=document.getElementById('save');
+  var modal=document.getElementById('modal');
+  var scr={load:'scr-load',lock:'scr-lock',done2:'scr-done2',thanks:'scr-thanks'};
+  function show(id){ Object.keys(scr).forEach(function(k){ document.getElementById(scr[k]).classList.toggle('on', scr[k]===id); }); }
+
+  /* ---------- lecture / écriture des réponses (clé = LIBELLÉ EXACT du formulaire
+     historique, pour que le moteur les retrouve sans modification) ---------- */
+  function collect(){
+    var out={};
+    form.querySelectorAll('[data-q]').forEach(function(el){
+      var q=el.getAttribute('data-q');
+      if(el.type==='radio'){ if(el.checked) out[q]=el.value; }
+      // cases à cocher -> « A, B » comme dans une ligne du Google Form
+      else if(el.type==='checkbox'){ if(el.checked) out[q]=out[q] ? out[q]+', '+el.value : el.value; }
+      else if(el.value!=='') out[q]=el.value;
+    });
+    return out;
+  }
+  function restore(rep){
+    if(!rep) return;
+    form.querySelectorAll('[data-q]').forEach(function(el){
+      var v=rep[el.getAttribute('data-q')];
+      if(v===undefined||v===null) return;
+      if(el.type==='radio') el.checked=(el.value===v);
+      else if(el.type==='checkbox') el.checked=(v===el.value || v.split(', ').indexOf(el.value)>-1);
+      else el.value=v;
+    });
+  }
+
+  /* ---------- avancement + contrôle des réponses manquantes ----------
+     Chaque question obligatoire compte pour une part de la barre du haut : elle
+     mesure ce qui est RÉPONDU, pas la position dans la page (on peut remplir
+     dans le désordre). */
+  function eachRequired(fn){
+    var vus={};
+    form.querySelectorAll('[required]').forEach(function(el){
+      if(el.type==='radio'){
+        if(vus[el.name]) return;                       // un groupe de boutons = UNE question
+        vus[el.name]=1;
+        fn(el, !!form.querySelector('input[name="'+el.name+'"]:checked'));
+      } else fn(el, el.value.trim()!=='' && el.checkValidity());
+    });
+    // groupes de cases à cocher obligatoires (au moins une) : « required » forcerait CHAQUE case
+    form.querySelectorAll('[data-req]').forEach(function(el){
+      fn(el, !!form.querySelector('input[name="'+el.name+'"]:checked'));
+    });
+  }
+  function progress(){
+    var tot=0, done=0;
+    eachRequired(function(el,ok){ tot++; if(ok) done++; });
+    prog.style.width=(tot ? done/tot*100 : 0)+'%';
+  }
+  function firstMissing(){
+    var bad=null;
+    eachRequired(function(el,ok){ if(!ok && !bad) bad=el; });
+    return bad;
+  }
+
+  /* PAGE DE TEST : aucune sauvegarde */
+  form.addEventListener('input',progress); form.addEventListener('change',progress);
+  form.noValidate=true;   // la vérification est faite par le script (questions masquées en piste B)
+
+  /* ---------- validation définitive ----------
+     ⚠️ Le bouton est un `type="submit"`. Quand les 19 étapes étaient MASQUÉES,
+     le navigateur bloquait l'envoi à cause des champs obligatoires cachés qu'il
+     ne pouvait ni afficher ni signaler : le bouton paraissait mort, sans aucun
+     message. Tout étant visible désormais, on peut emmener le client sur la
+     question manquante et la lui montrer. NE PAS remasquer de section. */
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    err.textContent='';
+    form.querySelectorAll('.qstep.miss').forEach(function(s){ s.classList.remove('miss'); });
+    var bad=firstMissing();
+    if(bad){
+      var sec=bad.closest('.qstep');
+      if(sec) sec.classList.add('miss');
+      err.textContent='Il manque une réponse — on t’a emmené dessus, elle est signalée en jaune.';
+      (sec||bad).scrollIntoView({behavior:'smooth',block:'center'});
+      if(bad.type!=='radio' && bad.type!=='checkbox'){
+        setTimeout(function(){ try{ bad.focus(); bad.reportValidity(); }catch(e){} },500);
+      }
+      return;
+    }
+    modal.classList.add('on');                       // tout est rempli -> double confirmation
+  });
+  document.getElementById('mno').addEventListener('click',function(){ modal.classList.remove('on'); });
+  document.getElementById('myes').addEventListener('click',function(){
+    var b=this; b.disabled=true; b.textContent='Envoi…';
+    // PAGE DE TEST : rien n'est envoyé
+    setTimeout(function(){ b.disabled=false; b.textContent='Oui, je valide'; modal.classList.remove('on'); show('scr-thanks'); confetti();
+      var c=form.querySelector('input[name=veut_ent]:checked'); document.getElementById('ent-contact').hidden=!(c&&/^Oui|pack complet/i.test(c.value)); },600);
+  });
+
+  /* ENTRAÎNEMENT (Damien 27/09) : l'entraînement est une formule à part, sans achat en ligne pour
+     l'instant. Si le client est intéressé, on le dit ET on alerte les coachs : un message part de sa
+     part dans la messagerie (alerte « non lu » + notification côté coachs), ils répondent dans le fil.
+     Une seule fois : pas de nouveau message si la même demande est déjà dans le fil. */
+  /* ---------- démarrage : exemple fictif pré-rempli ---------- */
+  var EXEMPLE={objectif:'Perte de poids',ressenti:'En surpoids',poids:'78',telephone:'06 00 00 00 00',ideal:'5 à 8 kilos',
+    profession:'Assistante de direction (exemple)',metier:'Rester assis la majorité de la journée (bureau, conduite…)',pas:'<10.000',seances:'2',
+    pdj:['Sucré'],regime:['Aucun'],allergies:'Aucune (exemple)',sait_ent:'Non',veut_ent:'Peut-être plus tard',connu:'Instagram',
+    adresse:"1 rue de l'Exemple",cp:'80000',ville:'Amiens',cgv:true};
+  var EX_ALIMENTS={conserver:['Pâtes','Chocolat noir','Poulet','Pain'],refuses:['Poisson (tous)','Champignons','Fromage de chèvre']};
+  function remplirExemple(){
+    Object.keys(EXEMPLE).forEach(function(n){ var v=EXEMPLE[n];
+      form.querySelectorAll('[name="'+n+'"]').forEach(function(el){
+        if(el.type==='radio') el.checked=(el.value===v);
+        else if(el.type==='checkbox') el.checked=(v===true)||(Array.isArray(v)&&v.indexOf(el.value)>-1);
+        else el.value=v; }); });
+    Object.keys(EX_ALIMENTS).forEach(function(n){ var p=form.querySelector('[name="'+n+'"]').closest('.picker'); if(p&&p._poser) p._poser(EX_ALIMENTS[n]); });
+    progress(); document.dispatchEvent(new CustomEvent('ely:rempli'));
+  }
+  function viderTout(){
+    form.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function(el){ el.checked=false; });
+    form.querySelectorAll('input[type=text],input[type=number],input[type=tel],select,textarea').forEach(function(el){ if(!el.classList.contains('pick-in')) el.value=''; });
+    form.querySelectorAll('.picker').forEach(function(p){ if(p._poser) p._poser([]); });
+    progress(); document.dispatchEvent(new CustomEvent('ely:vide'));
+  }
+  document.getElementById('t-vider').addEventListener('click',viderTout);
+  document.getElementById('t-exemple').addEventListener('click',remplirExemple);
+  show('');
+
+  /* ---------- confettis (canvas, zéro dépendance) ---------- */
+  function confetti(){
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var cv=document.getElementById('confetti'); cv.style.display='block';
+    var ctx=cv.getContext('2d'); cv.width=innerWidth; cv.height=innerHeight;
+    var P=[],C=['#2E9BFF','#ffd966','#93c47d','#8e7cc3','#6fa8dc'];
+    for(var k=0;k<90;k++) P.push({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*.5,
+      w:4+Math.random()*5,h:6+Math.random()*8,vy:1.6+Math.random()*2.4,vx:-1+Math.random()*2,
+      a:Math.random()*6.28,va:-.1+Math.random()*.2,c:C[(Math.random()*C.length)|0]});
+    var t0=Date.now();
+    (function loop(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      P.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.a+=p.va;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillStyle=p.c;
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); });
+      if(Date.now()-t0<4200) requestAnimationFrame(loop); else cv.style.display='none';
+    })();
+  }
+})();
+</script>
+<script>
+/* PISTE B : un bloc par écran. « Suivant » s'allume quand le bloc est complet ; pour un choix
+   unique, on passe tout seul au suivant après un court temps (on voit sa réponse s'allumer). */
+(function(){
+  var reduit=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var form=document.getElementById('qform');
+  var ecrans=[form.querySelector('.qintro')].concat([].slice.call(form.querySelectorAll('.qstep')),[form.querySelector('.qend')]);
+  var nb=ecrans.length-2, cur=0;
+  // barre Précédent / Suivant sous chaque écran (sauf le dernier, qui a déjà « Valider »)
+  ecrans.forEach(function(e,i){
+    if(i===ecrans.length-1) return;
+    var d=document.createElement('div'); d.className='pas';
+    d.innerHTML='<button type="button" class="prec"'+(i===0?' disabled':'')+'>← Précédent</button><button type="button" class="suiv">'+(i===0?'Commencer':'Suivant →')+'</button>';
+    e.appendChild(d);
+  });
+  var pr=document.createElement('div'); pr.className='pas'; pr.innerHTML='<button type="button" class="prec">← Précédent</button>';
+  ecrans[ecrans.length-1].insertBefore(pr,ecrans[ecrans.length-1].firstChild);
+  function complet(b){
+    var ok=true, vus={};
+    b.querySelectorAll('[required],[data-req]').forEach(function(el){
+      if(el.type==='radio'||el.type==='checkbox'){ if(vus[el.name]) return; vus[el.name]=1;
+        if(!b.querySelector('input[name="'+el.name+'"]:checked')) ok=false; }
+      else if(!String(el.value).trim()) ok=false;
+    });
+    return ok;
+  }
+  function aller(i,retour){
+    ecrans[cur].classList.remove('cur','entree','retour');
+    cur=Math.max(0,Math.min(ecrans.length-1,i));
+    var e=ecrans[cur]; e.classList.add('cur');
+    if(!reduit){ e.classList.add('entree'); if(retour) e.classList.add('retour'); }
+    scrollTo({top:0});
+    var q=Math.min(Math.max(cur,1),nb);
+    document.getElementById('e-compte').textContent= cur===0 ? 'Bienvenue' : cur>nb ? 'Dernière étape' : 'Question '+q+' / '+nb;
+    document.getElementById('e-jauge').style.width=(cur/(ecrans.length-1)*100)+'%';
+    etatSuivant();
+  }
+  function etatSuivant(){ var s=ecrans[cur].querySelector('.suiv'); if(s) s.disabled=cur>0&&!complet(ecrans[cur]); }
+  form.addEventListener('click',function(e){
+    if(e.target.closest('.suiv')&&!e.target.closest('.suiv').disabled) aller(cur+1);
+    else if(e.target.closest('.prec')) aller(cur-1,true);
+  });
+  // choix unique dans un bloc qui ne demande rien d'autre -> passage automatique
+  form.addEventListener('change',function(e){
+    etatSuivant();
+    var b=ecrans[cur];
+    if(e.target.type==='radio'&&complet(b)&&b.querySelectorAll('[required],[data-req]').length===1)
+      setTimeout(function(){ if(ecrans[cur]===b) aller(cur+1); },reduit?0:750);
+  });
+  form.addEventListener('input',etatSuivant);
+  // la validation finale emmène sur le premier bloc incomplet
+  form.addEventListener('submit',function(){
+    for(var i=1;i<=nb;i++){ if(!complet(ecrans[i])){ aller(i); return; } }
+  },true);
+  document.addEventListener('ely:rempli',function(){ etatSuivant(); });
+  document.addEventListener('ely:vide',function(){ aller(0); });
+  document.addEventListener('ely:aliments-prets',function(){ document.getElementById('t-exemple').click(); aller(0); });
+  aller(0);
+})();
+</script>
+</body>
+</html>

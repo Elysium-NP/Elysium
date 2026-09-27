@@ -1,0 +1,802 @@
+{
+ "_note": "Libellé affiché au client -> valeurs envoyées (noms de la base), séparées par des virgules sous le même data-q. Généré par construire_aliments_questionnaire.py, chaque entrée éprouvée dans l'intake. Ne pas éditer à la main.",
+ "refus": {
+  "Poulet": [
+   "Poulet",
+   "Filet de poulet",
+   "Cuisse de poulet",
+   "Pilon de poulet",
+   "Blanc de poulet (fleury michon)",
+   "Émincé de poulet grillé (Fleury Michon)"
+  ],
+  "Dinde": [
+   "Filet de dinde"
+  ],
+  "Volaille (poulet, dinde)": [
+   "Volaille"
+  ],
+  "Bœuf / steak": [
+   "Bifteck",
+   "Entrecote"
+  ],
+  "Viande hachée": [
+   "Viande hachee",
+   "Viande hachee 5%",
+   "Viande hachee 15%"
+  ],
+  "Viande rouge": [
+   "Viande rouge"
+  ],
+  "Porc": [
+   "Porc",
+   "Roti de porc"
+  ],
+  "Jambon": [
+   "Jambon",
+   "Tranche de jambon",
+   "Allumettes de jambon"
+  ],
+  "Bacon": [
+   "Bacon",
+   "Tranche de bacon"
+  ],
+  "Saint Agaûne (viande séchée)": [
+   "Saint agaune"
+  ],
+  "Poisson (tous)": [
+   "Poisson"
+  ],
+  "Poisson blanc": [
+   "Poisson blanc"
+  ],
+  "Saumon": [
+   "Saumon"
+  ],
+  "Saumon fumé": [
+   "Saumon fume"
+  ],
+  "Thon": [
+   "Thon au naturel",
+   "Thon en boîte"
+  ],
+  "Sardine": [
+   "Sardine"
+  ],
+  "Crevette": [
+   "Crevette"
+  ],
+  "Fruits de mer": [
+   "Fruits de mer"
+  ],
+  "Œufs": [
+   "Œufs",
+   "Oeuf"
+  ],
+  "Blanc d'œuf": [
+   "Blanc d'oeuf"
+  ],
+  "Jaune d'œuf": [
+   "Jaune d'oeuf"
+  ],
+  "Produits laitiers (tous)": [
+   "Produits laitiers"
+  ],
+  "Lait": [
+   "Lait (par défaut)",
+   "Lait demi ecreme",
+   "Lait entier"
+  ],
+  "Lait sans lactose": [
+   "Lait sans lactose"
+  ],
+  "Fromage (tous)": [
+   "Fromage"
+  ],
+  "Fromage blanc": [
+   "Fromage blanc 0%",
+   "Fromage blanc 3%",
+   "Fromage blanc 3,2%"
+  ],
+  "Skyr": [
+   "Skyr"
+  ],
+  "Yaourt": [
+   "Yaourt"
+  ],
+  "Petit suisse": [
+   "Petit suisse"
+  ],
+  "Cottage cheese": [
+   "Cottage cheese"
+  ],
+  "Crème légère": [
+   "Creme legere 18%"
+  ],
+  "Mozzarella": [
+   "Mozzarella",
+   "Boule de mozzarella"
+  ],
+  "Emmental": [
+   "Emmental",
+   "Emmental râpé"
+  ],
+  "Gruyère": [
+   "Gruyere",
+   "Gruyère Rapé"
+  ],
+  "Parmesan": [
+   "Parmesan"
+  ],
+  "Feta": [
+   "Feta"
+  ],
+  "Camembert": [
+   "Camembert 5%"
+  ],
+  "Fromage de chèvre": [
+   "Fromage de chevre"
+  ],
+  "Carré Frais": [
+   "Carré Frais 0%"
+  ],
+  "Saint Môret": [
+   "Saint-moret leger 8%"
+  ],
+  "Toastinette": [
+   "Toastinette"
+  ],
+  "Whey (protéine en poudre)": [
+   "Whey / protéine en poudre",
+   "Whey isolat",
+   "Whey isolate (cappuccino)"
+  ],
+  "Pâtes": [
+   "Pates"
+  ],
+  "Pâtes sans gluten": [
+   "Pates sans gluten"
+  ],
+  "Riz": [
+   "Riz"
+  ],
+  "Nouilles de riz": [
+   "Nouilles de riz"
+  ],
+  "Semoule": [
+   "Semoule"
+  ],
+  "Boulgour": [
+   "Boulgour"
+  ],
+  "Blé": [
+   "Ble"
+  ],
+  "Quinoa": [
+   "Quinoa"
+  ],
+  "Gnocchis": [
+   "Gnocchis",
+   "Gnocchi a poeler"
+  ],
+  "Pomme de terre": [
+   "Pommes de terre"
+  ],
+  "Patate douce": [
+   "Patate douce"
+  ],
+  "Pain": [
+   "Pain (par défaut)",
+   "Pain complet",
+   "Pain blanc",
+   "Tranche de pain"
+  ],
+  "Pain de mie": [
+   "Tranche de pain de mie blanc"
+  ],
+  "Bagel": [
+   "Bagel"
+  ],
+  "Wrap / tortilla": [
+   "Wrap",
+   "Grand wrap",
+   "Tortilla de mais"
+  ],
+  "Galette de riz": [
+   "Galette de riz",
+   "Galette de riz chocolat"
+  ],
+  "Galette de sarrasin": [
+   "Galette de sarrasin"
+  ],
+  "Wasa (pain croustillant)": [
+   "Wasa"
+  ],
+  "Flocons d'avoine": [
+   "Flocons d'avoine",
+   "Farine d'avoine"
+  ],
+  "Muesli": [
+   "Muesli"
+  ],
+  "Lentilles": [
+   "Lentille blonde",
+   "Lentille corail"
+  ],
+  "Pois chiches": [
+   "Pois chiche"
+  ],
+  "Haricots rouges": [
+   "Haricot rouge"
+  ],
+  "Légumineuses (toutes)": [
+   "Légumineuses"
+  ],
+  "Brocolis": [
+   "Brocolis",
+   "Brocoli frai"
+  ],
+  "Courgette": [
+   "Courgette"
+  ],
+  "Aubergine": [
+   "Aubergine"
+  ],
+  "Poivron": [
+   "Poivron"
+  ],
+  "Carottes": [
+   "Carottes"
+  ],
+  "Petits pois": [
+   "Petits pois",
+   "Petits Pois Carottes"
+  ],
+  "Haricots verts": [
+   "Haricot vert"
+  ],
+  "Épinards": [
+   "Epinard"
+  ],
+  "Champignons": [
+   "Champignons",
+   "Champignon"
+  ],
+  "Poireaux": [
+   "Poireaux",
+   "Poireau"
+  ],
+  "Asperges": [
+   "Asperge"
+  ],
+  "Butternut": [
+   "Butternut"
+  ],
+  "Tomate": [
+   "Tomate",
+   "Tomates cerises",
+   "Pulpe de tomate"
+  ],
+  "Concombre": [
+   "Concombre"
+  ],
+  "Salade": [
+   "Salade"
+  ],
+  "Oignon": [
+   "Oignon",
+   "Oignon rouge"
+  ],
+  "Ratatouille": [
+   "Ratatouille"
+  ],
+  "Maïs": [
+   "Mais"
+  ],
+  "Avocat": [
+   "Avocat"
+  ],
+  "Olives": [
+   "Olive"
+  ],
+  "Edamame": [
+   "Edamame"
+  ],
+  "Tofu": [
+   "Tofu"
+  ],
+  "Tempeh": [
+   "Tempeh"
+  ],
+  "Banane": [
+   "Banane"
+  ],
+  "Pomme": [
+   "Pomme"
+  ],
+  "Orange": [
+   "Orange"
+  ],
+  "Clémentine": [
+   "Clementine"
+  ],
+  "Kiwi": [
+   "Kiwi"
+  ],
+  "Fraise": [
+   "Fraise"
+  ],
+  "Fruits rouges": [
+   "Fruits rouges"
+  ],
+  "Melon": [
+   "Melon"
+  ],
+  "Dattes": [
+   "Datte",
+   "Datte dénoyautées"
+  ],
+  "Raisins secs": [
+   "Raisin secs"
+  ],
+  "Compote": [
+   "Compote",
+   "Compote gourde allegee",
+   "Compote gourde sans sucre ajoute",
+   "Gourde compote sans sucre ajoute"
+  ],
+  "Fruits à coque (tous)": [
+   "Fruits à coque"
+  ],
+  "Amandes": [
+   "Amande"
+  ],
+  "Noix": [
+   "Noix"
+  ],
+  "Noix de cajou": [
+   "Noix de cajou"
+  ],
+  "Cacahuètes": [
+   "Cacahuete"
+  ],
+  "Beurre de cacahuète": [
+   "Beurre de cacahuete"
+  ],
+  "Beurre d'amande": [
+   "Beurre d'amande"
+  ],
+  "Graines (chia, courge, sésame)": [
+   "Graine de chia",
+   "Graine de courge",
+   "Graine de sesame"
+  ],
+  "Huile d'olive": [
+   "Huile d'olive"
+  ],
+  "Lait de coco": [
+   "Lait de coco"
+  ],
+  "Lait d'amande": [
+   "Lait d'amande",
+   "Lait d'amande sans sucre"
+  ],
+  "Lait d'avoine": [
+   "Lait d'avoine"
+  ],
+  "Lait de soja": [
+   "Lait de soja"
+  ],
+  "Yaourt de soja": [
+   "Yaourt de soja"
+  ],
+  "Dessert végétal": [
+   "Dessert vegetal"
+  ],
+  "Chocolat noir": [
+   "Chocolat noir 70 %",
+   "Chocolat noir 75%",
+   "Chocolat noir 85%",
+   "Chocolat noir 90%",
+   "Pépites de Chocolat Noir"
+  ],
+  "Miel": [
+   "Miel"
+  ],
+  "Confiture": [
+   "Confiture allegee"
+  ],
+  "Sirop d'érable": [
+   "Sirop d'erable"
+  ],
+  "Sirop d'agave": [
+   "Sirop d'agave"
+  ],
+  "Sauce soja": [
+   "Sauce soja"
+  ],
+  "Vinaigre balsamique": [
+   "Vinaigre balsamique"
+  ]
+ },
+ "conserver": {
+  "Poulet": [
+   "Poulet",
+   "Filet de poulet",
+   "Cuisse de poulet",
+   "Pilon de poulet",
+   "Blanc de poulet (fleury michon)",
+   "Émincé de poulet grillé (Fleury Michon)"
+  ],
+  "Dinde": [
+   "Filet de dinde"
+  ],
+  "Bœuf / steak": [
+   "Bifteck",
+   "Entrecote"
+  ],
+  "Viande hachée": [
+   "Viande hachee",
+   "Viande hachee 5%",
+   "Viande hachee 15%"
+  ],
+  "Viande rouge": [
+   "Viande rouge"
+  ],
+  "Porc": [
+   "Porc",
+   "Roti de porc"
+  ],
+  "Jambon": [
+   "Jambon",
+   "Tranche de jambon",
+   "Allumettes de jambon"
+  ],
+  "Bacon": [
+   "Bacon",
+   "Tranche de bacon"
+  ],
+  "Saint Agaûne (viande séchée)": [
+   "Saint agaune"
+  ],
+  "Poisson (tous)": [
+   "Poisson"
+  ],
+  "Poisson blanc": [
+   "Poisson blanc"
+  ],
+  "Saumon": [
+   "Saumon"
+  ],
+  "Saumon fumé": [
+   "Saumon fume"
+  ],
+  "Thon": [
+   "Thon au naturel",
+   "Thon en boîte"
+  ],
+  "Sardine": [
+   "Sardine"
+  ],
+  "Crevette": [
+   "Crevette"
+  ],
+  "Œufs": [
+   "Œufs",
+   "Oeuf"
+  ],
+  "Blanc d'œuf": [
+   "Blanc d'oeuf"
+  ],
+  "Jaune d'œuf": [
+   "Jaune d'oeuf"
+  ],
+  "Lait": [
+   "Lait (par défaut)",
+   "Lait demi ecreme",
+   "Lait entier"
+  ],
+  "Lait sans lactose": [
+   "Lait sans lactose"
+  ],
+  "Fromage blanc": [
+   "Fromage blanc 0%",
+   "Fromage blanc 3%",
+   "Fromage blanc 3,2%"
+  ],
+  "Skyr": [
+   "Skyr"
+  ],
+  "Yaourt": [
+   "Yaourt"
+  ],
+  "Cottage cheese": [
+   "Cottage cheese"
+  ],
+  "Crème légère": [
+   "Creme legere 18%"
+  ],
+  "Mozzarella": [
+   "Mozzarella",
+   "Boule de mozzarella"
+  ],
+  "Emmental": [
+   "Emmental",
+   "Emmental râpé"
+  ],
+  "Gruyère": [
+   "Gruyere",
+   "Gruyère Rapé"
+  ],
+  "Parmesan": [
+   "Parmesan"
+  ],
+  "Feta": [
+   "Feta"
+  ],
+  "Camembert": [
+   "Camembert 5%"
+  ],
+  "Carré Frais": [
+   "Carré Frais 0%"
+  ],
+  "Saint Môret": [
+   "Saint-moret leger 8%"
+  ],
+  "Whey (protéine en poudre)": [
+   "Whey isolat"
+  ],
+  "Pâtes": [
+   "Pates"
+  ],
+  "Pâtes sans gluten": [
+   "Pates sans gluten"
+  ],
+  "Riz": [
+   "Riz"
+  ],
+  "Nouilles de riz": [
+   "Nouilles de riz"
+  ],
+  "Semoule": [
+   "Semoule"
+  ],
+  "Boulgour": [
+   "Boulgour"
+  ],
+  "Blé": [
+   "Ble"
+  ],
+  "Quinoa": [
+   "Quinoa"
+  ],
+  "Gnocchis": [
+   "Gnocchis",
+   "Gnocchi a poeler"
+  ],
+  "Pomme de terre": [
+   "Pommes de terre"
+  ],
+  "Patate douce": [
+   "Patate douce"
+  ],
+  "Pain": [
+   "Pain (par défaut)",
+   "Pain complet",
+   "Pain blanc",
+   "Tranche de pain"
+  ],
+  "Pain de mie": [
+   "Tranche de pain de mie blanc"
+  ],
+  "Bagel": [
+   "Bagel"
+  ],
+  "Wrap / tortilla": [
+   "Wrap",
+   "Grand wrap",
+   "Tortilla de mais"
+  ],
+  "Galette de riz": [
+   "Galette de riz",
+   "Galette de riz chocolat"
+  ],
+  "Galette de sarrasin": [
+   "Galette de sarrasin"
+  ],
+  "Wasa (pain croustillant)": [
+   "Wasa"
+  ],
+  "Flocons d'avoine": [
+   "Flocons d'avoine",
+   "Farine d'avoine"
+  ],
+  "Muesli": [
+   "Muesli"
+  ],
+  "Lentilles": [
+   "Lentille blonde",
+   "Lentille corail"
+  ],
+  "Pois chiches": [
+   "Pois chiche"
+  ],
+  "Haricots rouges": [
+   "Haricot rouge"
+  ],
+  "Brocolis": [
+   "Brocolis",
+   "Brocoli frai"
+  ],
+  "Courgette": [
+   "Courgette"
+  ],
+  "Aubergine": [
+   "Aubergine"
+  ],
+  "Poivron": [
+   "Poivron"
+  ],
+  "Carottes": [
+   "Carottes"
+  ],
+  "Petits pois": [
+   "Petits pois",
+   "Petits Pois Carottes"
+  ],
+  "Haricots verts": [
+   "Haricot vert"
+  ],
+  "Épinards": [
+   "Epinard"
+  ],
+  "Champignons": [
+   "Champignons",
+   "Champignon"
+  ],
+  "Poireaux": [
+   "Poireaux",
+   "Poireau"
+  ],
+  "Asperges": [
+   "Asperge"
+  ],
+  "Butternut": [
+   "Butternut"
+  ],
+  "Tomate": [
+   "Tomate",
+   "Tomates cerises",
+   "Pulpe de tomate"
+  ],
+  "Concombre": [
+   "Concombre"
+  ],
+  "Salade": [
+   "Salade"
+  ],
+  "Oignon": [
+   "Oignon",
+   "Oignon rouge"
+  ],
+  "Ratatouille": [
+   "Ratatouille"
+  ],
+  "Avocat": [
+   "Avocat"
+  ],
+  "Olives": [
+   "Olive"
+  ],
+  "Edamame": [
+   "Edamame"
+  ],
+  "Tofu": [
+   "Tofu"
+  ],
+  "Tempeh": [
+   "Tempeh"
+  ],
+  "Banane": [
+   "Banane"
+  ],
+  "Pomme": [
+   "Pomme"
+  ],
+  "Clémentine": [
+   "Clementine"
+  ],
+  "Kiwi": [
+   "Kiwi"
+  ],
+  "Fraise": [
+   "Fraise"
+  ],
+  "Fruits rouges": [
+   "Fruits rouges"
+  ],
+  "Melon": [
+   "Melon"
+  ],
+  "Dattes": [
+   "Datte",
+   "Datte dénoyautées"
+  ],
+  "Raisins secs": [
+   "Raisin secs"
+  ],
+  "Compote": [
+   "Compote",
+   "Compote gourde allegee",
+   "Compote gourde sans sucre ajoute",
+   "Gourde compote sans sucre ajoute"
+  ],
+  "Amandes": [
+   "Amande"
+  ],
+  "Noix": [
+   "Noix"
+  ],
+  "Noix de cajou": [
+   "Noix de cajou"
+  ],
+  "Cacahuètes": [
+   "Cacahuete"
+  ],
+  "Beurre de cacahuète": [
+   "Beurre de cacahuete"
+  ],
+  "Beurre d'amande": [
+   "Beurre d'amande"
+  ],
+  "Graines (chia, courge, sésame)": [
+   "Graine de chia",
+   "Graine de courge",
+   "Graine de sesame"
+  ],
+  "Huile d'olive": [
+   "Huile d'olive"
+  ],
+  "Lait de coco": [
+   "Lait de coco"
+  ],
+  "Lait d'amande": [
+   "Lait d'amande",
+   "Lait d'amande sans sucre"
+  ],
+  "Lait d'avoine": [
+   "Lait d'avoine"
+  ],
+  "Yaourt de soja": [
+   "Yaourt de soja"
+  ],
+  "Dessert végétal": [
+   "Dessert vegetal"
+  ],
+  "Chocolat noir": [
+   "Chocolat noir 70 %",
+   "Chocolat noir 75%",
+   "Chocolat noir 85%",
+   "Chocolat noir 90%",
+   "Pépites de Chocolat Noir"
+  ],
+  "Miel": [
+   "Miel"
+  ],
+  "Confiture": [
+   "Confiture allegee"
+  ],
+  "Sirop d'érable": [
+   "Sirop d'erable"
+  ],
+  "Sirop d'agave": [
+   "Sirop d'agave"
+  ],
+  "Sauce soja": [
+   "Sauce soja"
+  ],
+  "Vinaigre balsamique": [
+   "Vinaigre balsamique"
+  ]
+ },
+ "message_introuvable": "Si vous ne trouvez pas l'ingrédient, c'est que nous ne travaillons pas encore avec."
+}

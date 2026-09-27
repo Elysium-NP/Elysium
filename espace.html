@@ -570,7 +570,7 @@ var PROG = {
       var cats=Object.keys(PROG.courses).map(function(cn){
         var arr=PROG.courses[cn]; total+=arr.length;
         var li=arr.map(function(x){return '<label class="ci" data-k="'+encodeURIComponent(cn+'::'+x[0])+'"><input type="checkbox"><span class="box"></span><span class="nm">'+x[0]+'</span><b>'+x[1]+'</b></label>';}).join('');
-        return '<div class="cat rv"><h4><span class="cn">'+catEmo(cn)+' '+cn+'</span><span class="n"><b class="done">0</b> / '+arr.length+'</span></h4>'+li+'</div>';
+        return '<div class="cat rv"><h4><span class="cn">'+(/^[A-Za-zÀ-ÿ]/.test(cn)?catEmo(cn)+' ':'')+cn+'</span><span class="n"><b class="done">0</b> / '+arr.length+'</span></h4>'+li+'</div>';
       }).join('');
       return '<div class="panel">'+
         '<div class="courses-top"><span class="clabel"><b>0</b> / '+total+' articles</span><div class="cprog"><i></i></div><button type="button" class="clearbtn">Tout décocher</button></div>'+
@@ -644,7 +644,11 @@ var PROG = {
      · sinon, REPLI : la somme exacte de ce que contient le menu (grammes, ou pièces quand
        l'aliment se compte), sans règle d'achat. */
   function coursesDepuis(menu){
-    if(menu&&menu.courses&&Object.keys(menu.courses).length) return menu.courses;
+    if(menu&&menu.courses&&Object.keys(menu.courses).length){
+      var c={}; Object.keys(menu.courses).forEach(function(cat){
+        c[esc(cat)]=(menu.courses[cat]||[]).map(function(l){ return [esc(l[0]||''), esc(l[1]==null?'':l[1])]; }); });
+      return c;
+    }
     var t={};
     ((menu&&menu.jours)||[]).forEach(function(j){ if(j.off) return; (j.repas||[]).forEach(function(r){ (r.ingredients||[]).forEach(function(i){
       var nom=i.aliment||i.ingredient; if(!nom) return;

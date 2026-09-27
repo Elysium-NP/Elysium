@@ -105,7 +105,7 @@
   .band{position:sticky;top:0;z-index:20;background:var(--voile);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
   /* en-tête IDENTIQUE aux autres pages (hauteur 64 px, marges de site.css, pleine largeur) :
      le logo ne bouge pas d'un pixel en changeant de page (retour de Yoann, 27/09) */
-  .band .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px;max-width:none;padding:0 clamp(18px,4vw,54px)}
+  .band .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:63px;max-width:none;padding:0 clamp(18px,4vw,54px)}   /* 63 + 1 px de bordure = les 64 px des autres pages */
   .brand{font-family:var(--wordmark);font-weight:500;font-size:25px;letter-spacing:.42em;text-decoration:none;color:var(--ink);padding-left:.42em;cursor:pointer;transition:color .25s}
   .brand:hover{color:var(--blue-ink)}
   .nav{display:flex;gap:26px;align-items:center}

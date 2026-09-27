@@ -10,9 +10,9 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/oswald-600-normal-latin.woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
-<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
 <link rel="stylesheet" href="assets/site.css">
 <style>
   body{overflow-x:hidden}
@@ -524,7 +524,7 @@
     if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
     var cv=document.getElementById('confetti'); cv.style.display='block';
     var ctx=cv.getContext('2d'); cv.width=innerWidth; cv.height=innerHeight;
-    var P=[],C=['#2E9BFF','#EAF2FF','#7ea6df'];
+    var P=[],C=['#2E9BFF','#ffd966','#93c47d','#8e7cc3','#6fa8dc'];
     for(var k=0;k<90;k++) P.push({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*.5,
       w:4+Math.random()*5,h:6+Math.random()*8,vy:1.6+Math.random()*2.4,vx:-1+Math.random()*2,
       a:Math.random()*6.28,va:-.1+Math.random()*.2,c:C[(Math.random()*C.length)|0]});

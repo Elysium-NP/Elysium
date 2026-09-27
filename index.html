@@ -7,14 +7,14 @@
 <title>ELYSIUM · Protocole nutritionnel de précision</title>
 <link rel="canonical" href="https://elysium-x57.pages.dev/">
 <meta name="description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. Pensé pour toi, suivi dans la durée.">
-<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Elysium · Nutrition &amp; Performance">
 <meta property="og:title" content="ELYSIUM · La nutrition au gramme près">
 <meta property="og:description" content="Un programme nutritionnel façonné à la main par deux coachs, au gramme près. Pensé pour toi, suivi dans la durée.">
-<meta property="og:image" content="https://elysium-x57.pages.dev/assets/og.jpg">
+<meta property="og:image" content="https://elysium-x57.pages.dev/assets/og-creme.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://elysium-x57.pages.dev/">
@@ -29,8 +29,8 @@
       "name": "Elysium · Nutrition & Performance",
       "legalName": "SAS Elysium · Nutrition & Performance",
       "url": "https://elysium-x57.pages.dev/",
-      "logo": "https://elysium-x57.pages.dev/assets/logo.png",
-      "image": "https://elysium-x57.pages.dev/assets/og.jpg",
+      "logo": "https://elysium-x57.pages.dev/assets/logo-creme.png",
+      "image": "https://elysium-x57.pages.dev/assets/og-creme.jpg",
       "description": "Coaching nutritionnel sur mesure : un programme façonné à la main par deux coachs pour chaque objectif, perte de poids, prise de masse, rééquilibrage. Accompagnement 100 % à distance, partout dans le monde.",
       "email": "elysium.np.pro@gmail.com",
       "areaServed": { "@type": "Country", "name": "France" },
@@ -110,7 +110,18 @@
   .nav a{font-size:14px;text-decoration:none;color:var(--ink2)}
   .nav a:hover{color:var(--ink)}
   .nav .acc{color:var(--ink);border:1px solid var(--ink);border-radius:999px;padding:8px 16px}
-  @media(max-width:860px){.nav a:not(.acc){display:none}}
+  @media(max-width:860px){.nav > a:not(.acc){display:none}}
+  .mnav{display:none;position:relative}
+  @media(max-width:860px){.mnav{display:block}}
+  .mnav summary{list-style:none;cursor:pointer;width:44px;height:44px;display:grid;align-content:center;justify-items:center;gap:5px;border-radius:50%}
+  .mnav summary::-webkit-details-marker{display:none}
+  .mnav summary span{width:20px;height:1.5px;background:var(--ink);transition:transform .25s,opacity .2s}
+  .mnav[open] summary span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .mnav[open] summary span:nth-child(2){opacity:0}
+  .mnav[open] summary span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  .mnav-list{position:absolute;right:0;top:52px;min-width:210px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:8px;box-shadow:0 20px 40px -24px rgba(60,45,20,.45)}
+  .mnav-list a{padding:12px 14px;border-radius:10px;font-size:16px;color:var(--ink)!important;text-decoration:none}
+  .mnav-list a:hover{background:var(--soft)}
 
   /* ── HERO ── */
   .hero{padding:clamp(40px,7vw,88px) 0 clamp(56px,8vw,96px);border-top:0}
@@ -249,6 +260,14 @@
       <a href="formules.html">Formules</a>
       <a href="faq.html">FAQ</a>
       <a class="acc" href="connexion.html">Mon espace</a>
+      <!-- menu mobile natif (details/summary) : l'accueil ne charge pas site.js -->
+      <details class="mnav">
+        <summary aria-label="Ouvrir le menu"><span></span><span></span><span></span></summary>
+        <div class="mnav-list">
+          <a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="resultats.html">Résultats</a>
+          <a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+        </div>
+      </details>
     </nav>
   </div>
 </header>

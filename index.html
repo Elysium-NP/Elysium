@@ -54,7 +54,7 @@
 }
 </script>
 <script>try{sessionStorage.removeItem('ely_tr')}catch(e){}document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
-<link rel="stylesheet" href="assets/site.css?v=2709u">
+<link rel="stylesheet" href="assets/site.css?v=2709v">
 <style>
   @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;
     src:url(assets/fonts/cormorant-garamond-500-normal-latin.woff2) format("woff2");font-display:block}
@@ -458,6 +458,12 @@
           <footer>Un client, en perte de poids</footer>
         </blockquote>
       </div>
+      <div class="figures">
+        <div class="fg"><div class="v">500<small>+</small></div><div class="k">clients accompagnés</div></div>
+        <div class="fg"><div class="v">300<small>+</small></div><div class="k">recettes calibrées</div></div>
+        <div class="fg"><div class="v">100<small>%</small></div><div class="k">fait main, par un coach</div></div>
+        <div class="fg"><div class="v">0</div><div class="k">aliment interdit ou détesté imposé</div></div>
+      </div>
       <div class="partner">
         <span>Partenaire nutrition</span>
         <img src="assets/prozis_logo.jpg" alt="Prozis" width="105" height="30">
@@ -558,14 +564,17 @@
 (function(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   var H='.hero .eyebrow,.hero h1,.hero .lede,.hero .ctas,.hero .sign,.hero .dayzone';
-  var S='main section:not(.hero) :is(.eyebrow,h2,.lede,.more,.fine,.contact,.ctas,blockquote,.partner,.evo,details,.plate,.steps li)';
+  var S='main section:not(.hero) :is(.eyebrow,h2,.lede,.more,.fine,.contact,.ctas,blockquote,.figures,.partner,.evo,details,.plate,.steps li)';
   function prepare(sel){ var els=[].slice.call(document.querySelectorAll(sel));
     els.forEach(function(e){ var sec=e.closest('section'), i=[].indexOf.call(sec.querySelectorAll('.rv'),e);
       e.classList.add('rv'); e.style.transitionDelay=Math.min(i<0?0:sec.querySelectorAll('.rv').length-1,7)*.07+'s'; });
     return els; }
-  function montre(e){ e.classList.add('in');
+  function montre(e){ e.classList.add('in'); var tr=e.nextElementSibling; if(e.tagName==='H2'&&tr&&tr.classList.contains('trace')) tr.classList.add('on');
     e.addEventListener('transitionend',function f(){ e.removeEventListener('transitionend',f);
       e.classList.remove('rv','in'); e.style.transitionDelay=''; }); }   // rend ses propres transitions (survol) à l'élément
+  // le trait bleu sous chaque titre de section, comme sur les autres pages (site.css « .trace »)
+  document.querySelectorAll('main section:not(.hero) h2').forEach(function(h){
+    h.insertAdjacentHTML('afterend','<svg class="trace" viewBox="0 0 170 20" aria-hidden="true"><path d="M2 14 H120 l16 -9" pathLength="1"/><circle class="tnode" cx="136" cy="5" r="2.4"/></svg>'); });
   var hero=prepare(H), reste=prepare(S);
   var jour=document.querySelector('.day'); if(jour) jour.classList.add('attente');
   // le total de la journée compte jusqu'à sa valeur
@@ -580,6 +589,6 @@
   setTimeout(function(){ hero.concat(reste).forEach(function(e){ if(e.classList.contains('rv')&&!e.classList.contains('in')) montre(e); }); },6000);   // filet
 })();
 </script>
-<script src="assets/site.js?v=2709u"></script>
+<script src="assets/site.js?v=2709v"></script>
 </body>
 </html>

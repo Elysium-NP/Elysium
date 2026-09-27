@@ -203,15 +203,16 @@ main{position:relative;z-index:2}
 .sec-head h2{font-size:clamp(30px,4.4vw,56px)}
 .sec-head .lbl{font-family:var(--disp);font-size:12px;letter-spacing:.18em;color:var(--blue);text-transform:uppercase}
 /* trait néon qui se trace (signature Elysium, injecté par site.js) — se dessine à la révélation */
-.sec-head .trace{display:block;width:170px;height:20px;overflow:visible;margin-top:14px}
-.sec-head .trace path{stroke:var(--blue);stroke-width:1.4;fill:none;stroke-linecap:round;
+.trace{display:block;width:170px;height:20px;overflow:visible;margin-top:14px}
+.trace path{stroke:var(--blue);stroke-width:1.4;fill:none;stroke-linecap:round;
   filter:drop-shadow(0 0 4px rgba(46,155,255,.7));stroke-dasharray:1;stroke-dashoffset:1;
   transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1) .25s}
-.sec-head .trace .tnode{fill:#eaf4ff;opacity:0;filter:drop-shadow(0 0 6px var(--blue));transition:opacity .3s ease .35s}
+.trace .tnode{fill:#eaf4ff;opacity:0;filter:drop-shadow(0 0 6px var(--blue));transition:opacity .3s ease .35s}
 html.reveal-ready .sec-head.in .trace path{stroke-dashoffset:0}
 html.reveal-ready .sec-head.in .trace .tnode{opacity:1}
+.trace.on path{stroke-dashoffset:0}.trace.on .tnode{opacity:1}   /* accueil : posé par son script */
 @media(prefers-reduced-motion:reduce){
-  .sec-head .trace path{stroke-dashoffset:0;transition:none}.sec-head .trace .tnode{opacity:1;transition:none}
+  .trace path{stroke-dashoffset:0;transition:none}.trace .tnode{opacity:1;transition:none}
 }
 .sec p.lead{font-size:clamp(19px,1rem + 0.8vw,23px);line-height:1.7;color:var(--gris);max-width:62ch}
 .sec p.lead b{color:var(--ice);font-weight:500}
@@ -519,8 +520,8 @@ nav.menu a.go:hover{background:var(--ice);color:#fff}
 .phead h1 .l2,.auth-card h1 .l2,.dash-hd h1 span{color:var(--brand)}
 .phead .sub,.cta .sub{font-family:var(--texte);color:var(--gris)}
 .sec-head .no{-webkit-text-stroke:1px rgba(46,155,255,.55)}
-.sec-head .trace path{stroke:var(--brand);filter:none}
-.sec-head .trace .tnode{fill:var(--brand);filter:none}
+.trace path{stroke:var(--brand);filter:none}
+.trace .tnode{fill:var(--brand);filter:none}
 
 /* cartes et surfaces */
 .coach{background:var(--void2)}

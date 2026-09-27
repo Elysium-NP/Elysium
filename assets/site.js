@@ -145,30 +145,25 @@
     });
   }
 
-  // ---- FIGURES : le nombre monte quand la section entre (méthode + coachs) — no-op ailleurs ----
+  // ---- CHIFFRES : le nombre monte de 0 à sa valeur au premier passage à l'écran, sur TOUTES
+  //      les pages (.figures, .rstat). Gère « −39 kg », « +15,6 kg », « 500+ ».
   (function(){
-    var host = document.querySelector('.figures'); if (!host) return;
     var red = matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var jobs = [].slice.call(host.querySelectorAll('.v')).map(function(v){
-      var tn = v.firstChild; if (!tn || tn.nodeType !== 3) return null;
-      var m = tn.textContent.match(/^(\D*)(\d+)(.*)$/); if (!m) return null;
-      return { tn: tn, pre: m[1], tgt: +m[2], suf: m[3] };
-    }).filter(Boolean);
-    if (!jobs.length) return;
-    function run(j){
-      if (red || j.tgt <= 2){ j.tn.textContent = j.pre + j.tgt + j.suf; return; }  // 0/1/2 : pas d'anim
-      var t0 = null, dur = 1400;
-      function step(ts){ if (!t0) t0 = ts; var p = Math.min(1, (ts - t0) / dur);
-        j.tn.textContent = j.pre + Math.round(j.tgt * (1 - Math.pow(1 - p, 3))) + j.suf;
-        if (p < 1) requestAnimationFrame(step); }
-      requestAnimationFrame(step);
-      setTimeout(function(){ j.tn.textContent = j.pre + j.tgt + j.suf; }, dur + 300);  // fallback garanti
-    }
-    function go(){ jobs.forEach(run); }
-    if ('IntersectionObserver' in window){
-      var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ go(); io.disconnect(); } }, { threshold: 0.4 });
-      io.observe(host);
-    } else go();
+    [].slice.call(document.querySelectorAll('.figures .v, .rstat .v')).forEach(function(v){
+      var tn = v.firstChild; if (!tn || tn.nodeType !== 3) return;
+      var m = tn.textContent.match(/^(\D*?)(\d+)(?:,(\d+))?(\D*)$/); if (!m) return;
+      var dec = m[3] ? m[3].length : 0, tgt = parseFloat(m[2] + '.' + (m[3] || 0)), fin = tn.textContent;
+      if (red || tgt <= 2) return;                                  // 0/1/2 : pas d'anim
+      function aff(x){ tn.textContent = m[1] + x.toFixed(dec).replace('.', ',') + m[4]; }
+      function run(){ var t0 = null, dur = 1400;
+        (function step(ts){ if (!t0) t0 = ts; var p = Math.min(1, (ts - t0) / dur);
+          aff(tgt * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); else tn.textContent = fin; })(performance.now());
+        setTimeout(function(){ tn.textContent = fin; }, dur + 300); }  // filet garanti
+      if (!('IntersectionObserver' in window)) return;
+      aff(0);
+      var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ io.disconnect(); run(); } }, { threshold: 0.4 });
+      io.observe(v);
+    });
   })();
 
   // ---- logo : les arcs se re-dessinent au survol ET au clic (on retrouve le plaisir du chargement) ----

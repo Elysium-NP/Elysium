@@ -493,7 +493,7 @@ input,select,textarea,button{font-family:var(--texte)}
 nav.menu{top:0;height:64px}
 nav.menu a{font-size:14px;letter-spacing:0;text-transform:none;color:var(--gris)}
 nav.menu a:hover{color:var(--ice)}
-nav.menu a[aria-current="page"]{color:var(--ice);font-weight:600}
+nav.menu a[aria-current="page"]{color:var(--ice)}   /* pas de gras : il élargit le mot et décale le menu d'une page à l'autre */
 nav.menu a[aria-current="page"]::after{background:var(--brand);height:2px;border-radius:2px}
 nav.menu a.go{color:var(--ice);border:1px solid var(--ice);border-radius:999px;padding:8px 16px}
 nav.menu a.go:hover{background:var(--ice);color:#fff}

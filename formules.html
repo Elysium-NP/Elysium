@@ -82,6 +82,15 @@
   .plan.feat.complet::before{content:"Le plus complet";background:var(--b-violet);color:#111}
   @media(max-width:900px){ .plans{grid-template-columns:1fr;max-width:460px;margin:0 auto} }
   /* ===== Section « Le suivi » : accompagnement évolutif (Dimitri 26/07) ===== */
+  /* ta pesée : 3 étapes aux couleurs des repas */
+  .pesee-etapes{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:p}
+  @media(max-width:760px){.pesee-etapes{grid-template-columns:1fr}}
+  .pesee-etapes li{counter-increment:p;position:relative;padding:20px 20px 20px 70px;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  .pesee-etapes li::before{content:counter(p);position:absolute;left:20px;top:20px;width:34px;height:34px;border-radius:50%;background:var(--c);color:#111;display:grid;place-items:center;font-weight:700}
+  .pesee-etapes b{display:block;color:var(--ice)}
+  .pesee-etapes span{display:block;font-size:15px;color:var(--gris);margin-top:4px}
+  .pesee-rythme{margin-top:20px;font-size:16px;color:var(--gris);padding:14px 18px;border-left:3px solid var(--brand);background:var(--void2);border-radius:0 10px 10px 0}
+  .pesee-rythme b{color:var(--ice)}
   .evol{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:30px}
   .evol .ev{padding:22px 20px;border:1px solid var(--line);border-radius:14px;
     background:linear-gradient(180deg,rgba(60,45,20,.02),rgba(60,45,20,0))}
@@ -213,11 +222,36 @@
     </div>
   </section>
 
+  <!-- ===================== TA PESÉE (Damien, 27/09 : « c'est grâce à l'évolution de leur poids
+       que nous réajustons les quantités ; sans pesée, la diète n'évolue pas ») ===================== -->
+  <section class="sec pesee">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="no">02</span>
+        <div>
+          <span class="lbl">// Ta pesée</span>
+          <h2>C'est ta pesée qui fait évoluer ta diète</h2>
+        </div>
+      </div>
+      <p class="lead reveal">Tes quantités ne sont pas fixées une fois pour toutes. Damien &amp; Yoann les réajustent
+        d'après <b>l'évolution de ton poids</b>&nbsp;: tu le notes dans ton espace, et ta programmation suit.
+        <b>Sans pesée, rien ne bouge</b>&nbsp;: ta diète reste celle du premier jour. C'est pour ça qu'un
+        programme Elysium se suit dans la durée, pas le temps d'un mois.</p>
+      <ol class="pesee-etapes reveal">
+        <li style="--c:var(--b-jaune)"><b>Tu te pèses</b><span>le même jour, à jeun</span></li>
+        <li style="--c:var(--b-vert)"><b>Tu notes ton poids</b><span>dans ton espace, en quelques secondes</span></li>
+        <li style="--c:var(--b-bleu)"><b>On réajuste tes quantités</b><span>au gramme près, selon ta progression</span></li>
+      </ol>
+      <p class="pesee-rythme reveal"><b>À quel rythme&nbsp;?</b> Chaque semaine avec la formule 03, dont les
+        quantités sont réajustées chaque semaine&nbsp;; toutes les 4 semaines avec les formules 01 et 02.</p>
+    </div>
+  </section>
+
   <!-- ===================== LE SUIVI (accompagnement évolutif — Dimitri 26/07) ===================== -->
   <section class="sec">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="no">02</span>
+        <span class="no">03</span>
         <div>
           <span class="lbl">// Le suivi</span>
           <h2>Un accompagnement qui évolue avec toi</h2>

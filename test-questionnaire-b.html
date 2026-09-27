@@ -143,6 +143,7 @@
   .qstep.ecran-on,.qend.ecran-on{display:block}
   .qintro{display:none} .qintro.ecran-on{display:block}
   .qstep h2{font-size:clamp(26px,4.4vw,38px)}
+  .qstep h2::before{display:none}   /* le compteur CSS ne voit que l'écran affiché : la barre du haut numérote */
   .qcard{padding:22px 20px;border-radius:14px}
   .qcard .tx{font-size:18px}
   .qcard:has(input:checked){background:var(--p-bleu);border-color:var(--b-bleu)}

@@ -287,7 +287,7 @@
           <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d&#x27;entraînement ?" value="Oui" required><span class="dot"></span><span class="tx">Oui</span></label>
           <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d&#x27;entraînement ?" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
         </div>
-        <p class="qhint" style="margin:24px 0 12px">Ça t'intéresserait&nbsp;? 15&nbsp;% de remise si les deux programmes sont pris en même temps.</p>
+        <p class="qhint" style="margin:24px 0 12px">Ça t'intéresserait&nbsp;? C'est une formule à part&nbsp;: si oui, tes coachs reprendront contact avec toi.</p>
         <div class="qcards one">
           <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Oui (Je rempli le questionnaire disponible en description)" required><span class="dot"></span><span class="tx">Oui</span></label>
           <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
@@ -386,6 +386,7 @@
 <div class="qfull" id="scr-thanks"><div class="qfull-in">
   <div class="em">✓</div><h2>C'est envoyé.</h2>
   <p>Merci. Damien &amp; Yoann prennent le relais et construisent ta programmation <b>à la main, au gramme près</b>. Tu la retrouveras dans ton espace.</p>
+  <p id="ent-contact" hidden style="margin-top:12px">Pour l'entraînement&nbsp;: <b>tes coachs vont reprendre contact avec toi</b>, dans ta messagerie.</p>
   <a class="btn" href="espace.html">Retour à mon espace</a>
 </div></div>
 
@@ -501,9 +502,25 @@
     },{onConflict:'user_id,type'}).then(function(r){
       if(r.error){ b.disabled=false; b.textContent='Oui, je valide'; err.textContent="Envoi impossible pour le moment. Réessaie dans un instant."; modal.classList.remove('on'); return; }
       modal.classList.remove('on'); show('scr-thanks'); confetti();
+      alerteEntrainement();
       try{ ElyAuth.setQuest(true); }catch(e){}
     });
   });
+
+  /* ENTRAÎNEMENT (Damien 27/09) : l'entraînement est une formule à part, sans achat en ligne pour
+     l'instant. Si le client est intéressé, on le dit ET on alerte les coachs : un message part de sa
+     part dans la messagerie (alerte « non lu » + notification côté coachs), ils répondent dans le fil.
+     Une seule fois : pas de nouveau message si la même demande est déjà dans le fil. */
+  var DEMANDE_ENT="Je suis intéressé(e) par un programme d'entraînement. (message automatique du questionnaire)";
+  function alerteEntrainement(){
+    var c=form.querySelector('input[name=veut_ent]:checked'); if(!c) return;
+    if(!/^Oui|pack complet/i.test(c.value)) return;
+    document.getElementById('ent-contact').hidden=false;
+    sb.from('messages').select('id').eq('client_id',uid).eq('texte',DEMANDE_ENT).limit(1).then(function(r){
+      if(r.error||(r.data&&r.data.length)) return;
+      sb.from('messages').insert({client_id:uid,auteur_id:uid,texte:DEMANDE_ENT}).then(function(){});
+    });
+  }
 
   /* ---------- démarrage ---------- */
   if(!ElyAuth.requireAuth('connexion.html')) return;

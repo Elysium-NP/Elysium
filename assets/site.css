@@ -600,3 +600,9 @@ html.page-sort::before,html.page-sort::after{animation:rideau-vient .75s ease-in
 .coach .ph.photo::after{display:none}
 
 
+
+/* pastille « messages non lus » sur Mon espace (et sur le menu mobile) */
+.pastille{display:inline-block;min-width:18px;height:18px;margin-left:7px;padding:0 5px;border-radius:9px;background:var(--brand);
+  color:#111;font:700 11px/18px var(--texte);text-align:center;vertical-align:1px;letter-spacing:0}
+.burger{position:relative}
+.burger .pastille{position:absolute;top:-4px;right:-6px;margin:0}

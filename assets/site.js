@@ -116,6 +116,27 @@
         var s = a.querySelector('.mnum'); a.textContent = ''; if (s) a.appendChild(s);
         a.appendChild(document.createTextNode('Mon espace'));
       });
+      // PASTILLE « messages non lus » (Dimitri 27/09) : réponses des coachs pas encore lues.
+      // Requête directe à la base avec la session déjà ouverte (les pages vitrine ne chargent pas
+      // la bibliothèque Supabase). Le RLS ne renvoie que les messages de CE client.
+      // ponytail: session expirée = pas de pastille jusqu'à la prochaine visite de l'espace (qui la renouvelle)
+      (function(){
+        var SB='https://xchahmcflineiupqmges.supabase.co', KEY='sb_publishable_CBtiKYoE1OKZ5ag_wGvmtQ_rRCzaV2p';
+        var ses; try{ ses=JSON.parse(localStorage.getItem('sb-xchahmcflineiupqmges-auth-token')||'null'); }catch(e){}
+        if(!ses||!ses.access_token||!ses.user||(ses.expires_at&&ses.expires_at*1000<Date.now())) return;
+        var id=ses.user.id;
+        fetch(SB+'/rest/v1/messages?select=id&client_id=eq.'+id+'&auteur_id=neq.'+id+'&lu_at=is.null',
+          {headers:{apikey:KEY,Authorization:'Bearer '+ses.access_token}})
+          .then(function(r){ return r.ok?r.json():[]; }).then(function(l){
+            var n=(l||[]).length; if(!n) return;
+            var titre=n+(n>1?' nouveaux messages':' nouveau message')+' de tes coachs';
+            document.querySelectorAll('a.go, a.go-m, .burger').forEach(function(el){
+              if(el.tagName==='A'&&!/espace/.test(el.getAttribute('href')||'')) return;
+              var b=document.createElement('span'); b.className='pastille'; b.textContent=n; b.title=titre;
+              b.setAttribute('aria-label',titre); el.appendChild(b);
+            });
+          }).catch(function(){});
+      })();
       // déjà connecté : les CTA d'inscription ne renvoient plus vers l'inscription.
       // Payé -> espace membre ; PAS encore payé -> choix de la formule (sinon impasse : « je ne peux plus choisir »).
       var _dest = _u.paid ? 'espace.html' : 'choisir.html';

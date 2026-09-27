@@ -73,7 +73,8 @@
             paid: !!prev.paid,
             quest: !!prev.quest,
             cadence: prev.cadence, confort: prev.confort, abo_apres: prev.abo_apres,
-            formule: prev.formule, formule_prix: prev.formule_prix,
+            formule: prev.formule || (s.user.user_metadata || {}).formule,
+            formule_prix: prev.formule_prix || (s.user.user_metadata || {}).formule_prix,
             created: prev.created || Date.now()
           };
           writeMirror(u);
@@ -107,7 +108,9 @@
             nom: (data.nom || "").trim(),
             naissance: (data.naissance || "").trim(),
             sexe: (data.sexe || "").trim().toUpperCase(),
-            taille_cm: data.taille ? parseInt(data.taille, 10) : null
+            taille_cm: data.taille ? parseInt(data.taille, 10) : null,
+            // formule choisie AVANT la création du compte (parcours « comme dans le commerce », 27/09)
+            formule: data.formule || null, formule_prix: data.formule_prix || null
           }
         }
       }).then(function (r) {

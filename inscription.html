@@ -8,6 +8,15 @@
 <meta name="description" content="Crée ton compte Elysium et accède à ton espace membre.">
 <meta name="robots" content="noindex">
 <script>document.documentElement.classList.add('js')</script>
+<script>
+/* Parcours « comme dans le commerce » (Damien, 27/09) : on choisit d'abord sa formule,
+   puis on crée son compte. Sans formule valide dans l'adresse -> retour aux formules. */
+var ELY_FORMULES={f1:{nom:'Formule 1 · Menu unique',prix:'19,90 € / 4 sem'},
+                  f2:{nom:'Formule 2 · Menu mensuel',prix:'25,90 € / 4 sem'},
+                  f3:{nom:'Formule 3 · Menu mensuel & recettes',prix:'29,90 € / 4 sem'}};
+var ELY_CHOIX=ELY_FORMULES[new URLSearchParams(location.search).get('formule')];
+if(!ELY_CHOIX) location.replace('formules.html#les-formules');
+</script>
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
@@ -19,6 +28,9 @@
   .frow>label{flex:1 1 140px}
   .auth-form select,.auth-form input[type=date]{color-scheme:dark;font-family:var(--disp);font-size:16px;color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:13px 14px;width:100%;transition:border-color .3s}
   .auth-form select:focus,.auth-form input[type=date]:focus{outline:none;border-color:var(--blue)}
+  .choix{margin:-12px 0 26px;padding:12px 16px;border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:10px;background:var(--void2);font-size:15px;color:var(--gris)}
+  .choix b{color:var(--ice)}
+  .choix a{color:var(--blue);margin-left:6px}
   .auth-note{font-family:var(--disp);font-size:11.5px;line-height:1.6;color:var(--steel);margin:0}
   /* aide sous un champ — texte normal (pas de capitales : le <label> parent les impose) */
   .auth-form .fhint{font-family:var(--disp);font-size:11.5px;line-height:1.55;color:var(--steel);
@@ -39,7 +51,8 @@
   <div class="auth-card">
     <div class="kick">Espace membre</div>
     <h1>Crée ton<span class="l2">compte.</span></h1>
-    <p class="sub">Ton compte gratuit te donne accès à ton espace et à ton suivi. Ces informations servent à construire ta programmation.</p>
+    <p class="sub">Dernière étape avant ton programme&nbsp;: ton compte. Ces informations servent à construire ta programmation.</p>
+    <p class="choix" id="choix"></p>
     <form class="auth-form" id="signup">
       <div class="frow">
         <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
@@ -81,6 +94,8 @@
 <script>
 (function(){
   var f=document.getElementById('signup');
+  if(!ELY_CHOIX) return;
+  document.getElementById('choix').innerHTML='Formule choisie&nbsp;: <b>'+ELY_CHOIX.nom.replace('&','&amp;')+'</b> · '+ELY_CHOIX.prix+'<a href="formules.html#les-formules">changer</a>';
   // programmations réservées aux majeurs -> borne la date de naissance à il y a 18 ans
   var d=new Date(); d.setFullYear(d.getFullYear()-18);
   f.naissance.max=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -109,7 +124,8 @@
     msg.className='auth-msg';
     btn.disabled=true; btn.textContent='Création…';
     ElyAuth.signup({prenom:f.prenom.value, nom:f.nom.value, email:f.email.value, password:f.password.value,
-                    naissance:f.naissance.value, sexe:f.sexe.value, taille:f.taille.value})
+                    naissance:f.naissance.value, sexe:f.sexe.value, taille:f.taille.value,
+                    formule:ELY_CHOIX.nom, formule_prix:ELY_CHOIX.prix})
       .then(function(res){
         if(res.needsEmailConfirm){
           // Confirmation d'adresse activée : pas de session tant que le lien n'est pas cliqué.
@@ -117,7 +133,7 @@
           say("Compte créé. Ouvre ta boîte mail et clique sur le lien de confirmation, puis reviens te connecter.","ok");
           return;
         }
-        location.href='choisir.html';
+        location.href='espace.html';
       })
       .catch(function(err){ say(human(err)); btn.disabled=false; btn.textContent=label; });
   });

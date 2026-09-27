@@ -579,17 +579,16 @@ html::before{content:"";position:fixed;inset:0;z-index:19;pointer-events:none;ba
   box-shadow:2px 0 0 rgba(46,155,255,.6),-2px 0 0 rgba(46,155,255,.6);transform:translateX(101%)}
 /* au centre du rideau : le mot « ELYSIUM » de l'en-tête (même police, noir), en GRAND comme dans
    l'intro de l'accueil (Yoann 27/09 : « l'Elysium en haut à gauche, en plus grand »). Pas de tracé :
-   il arrive avec le rideau et part avec lui. ~13,5vw = presque toute la largeur, iPhone compris. */
-html::after{content:"ELYSIUM";position:fixed;inset:0;z-index:19;pointer-events:none;opacity:0;transform:translateX(101%);
+   il est PORTÉ par le rideau (Yoann 18:25 : « comme un film ») : il entre par la gauche
+   avec lui et sort par la droite avec lui, sans fondu. ~13vw = presque toute la largeur, iPhone compris. */
+html::after{content:"ELYSIUM";position:fixed;inset:0;z-index:19;pointer-events:none;transform:translateX(101%);
   display:flex;align-items:center;justify-content:center;
-  font-family:var(--wordmark);font-weight:500;font-size:13.5vw;letter-spacing:.42em;padding-left:.42em;color:var(--ice);white-space:nowrap}
-html.arrivee::before,html.arrivee::after{transform:translateX(0);opacity:1}
+  font-family:var(--wordmark);font-weight:500;font-size:13vw;letter-spacing:.42em;padding-left:.42em;color:var(--ice);white-space:nowrap}
+html.arrivee::before,html.arrivee::after{transform:translateX(0)}
 html.arrivee.arrive::before,html.arrivee.arrive::after{animation:rideau-part .75s ease-in-out forwards}
-html.page-sort::before{animation:rideau-vient .75s ease-in-out forwards!important}
-html.page-sort::after{animation:logo-vient .75s ease-in-out forwards!important}
+html.page-sort::before,html.page-sort::after{animation:rideau-vient .75s ease-in-out forwards!important}
 @keyframes rideau-part{from{transform:translateX(0)}to{transform:translateX(101%)}}
 @keyframes rideau-vient{from{transform:translateX(-101%)}to{transform:translateX(0)}}
-@keyframes logo-vient{0%{transform:translateX(0);opacity:0}45%{opacity:0}100%{transform:translateX(0);opacity:1}}
 @media(prefers-reduced-motion:reduce){html::before,html::after{display:none}}
 
 /* photos des coachs (qui-sommes-nous) : même cadrage portrait 2:3 pour les deux (tête entière, air au-dessus, haut des épaules). Le cadre

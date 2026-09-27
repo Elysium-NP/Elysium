@@ -127,36 +127,43 @@
            tu retrouveras tout.</p>
       </div>
 
-      <!-- 01 · OBJECTIF -->
+      <!-- 01 -->
       <div class="qstep active">
-        <h2>Ton objectif ?</h2>
+        <h2>Ton objectif&nbsp;?</h2>
         <p class="qhint">Le point de départ de tout le reste.</p>
         <div class="qcards one">
           <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Perte de poids" required><span class="dot"></span><span class="tx">Perte de poids</span></label>
-          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Prise de masse musculaire"><span class="dot"></span><span class="tx">Prise de masse musculaire</span></label>
-          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Prise de muscle ET perte de masse grasse"><span class="dot"></span><span class="tx">Prise de muscle ET perte de masse grasse</span></label>
-          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Rééquilibrage"><span class="dot"></span><span class="tx">Rééquilibrage alimentaire</span></label>
-          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Maintien de poids"><span class="dot"></span><span class="tx">Maintien de poids</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Prise de masse"><span class="dot"></span><span class="tx">Prise de masse</span></label>
+          <label class="qcard"><input type="radio" name="objectif" data-q="Quel est ton objectif principal ?" value="Rééquilibrage / Maintien de poids"><span class="dot"></span><span class="tx">Rééquilibrage / Maintien de poids</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Te sens-tu actuellement plutôt…</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En surpoids" required><span class="dot"></span><span class="tx">En surpoids</span></label>
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="À ton poids"><span class="dot"></span><span class="tx">À ton poids</span></label>
+          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En sous-poids"><span class="dot"></span><span class="tx">En sous-poids</span></label>
         </div>
       </div>
 
-      <!-- 02 · POIDS + OBJECTIF DE POIDS + TÉLÉPHONE
-           ⚠️ ORDRE CRITIQUE : « Poids (en kg) » DOIT rester AVANT la question sur le
-           poids idéal. Le moteur retient la 1re colonne dont l'intitulé contient
-           « poids » — si l'idéal passe devant, il prend l'objectif pour le poids
-           actuel et tout le calcul est faux (bug attrapé au test de bout en bout). -->
+      <!-- 02 -->
       <div class="qstep">
         <h2>Où en es-tu aujourd'hui&nbsp;?</h2>
-        <p class="qhint">Ton nom, ton sexe, ton âge et ta taille sont déjà enregistrés à ton compte : on ne te les redemande pas.</p>
+        <p class="qhint">Ton nom, ton sexe, ton âge et ta taille sont déjà enregistrés à ton compte&nbsp;: on ne te les redemande pas.</p>
         <div class="qgrid">
-          <div class="qfield"><label>Poids actuel (kg)</label><input type="number" name="poids" data-q="Poids (en kg)" min="35" max="250" step="0.1" placeholder="kg" required></div>
-          <div class="qfield"><label>Téléphone</label><input type="tel" name="telephone" data-q="Numéro de téléphone" placeholder="06 12 34 56 78" required></div>
-          <div class="qfield full"><label>Si le poids compte pour toi, ton idéal dans un premier temps&nbsp;?</label>
-            <input type="text" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" placeholder="Ex. 72 kg, ou « perdre 8 kg » — laisse vide si non concerné"></div>
+          <div class="qfield"><label>Poids actuel (kg)</label>
+            <input type="number" name="poids" data-q="Poids (en kg)" min="35" max="250" step="0.1" placeholder="kg" required></div>
+          <div class="qfield"><label>Téléphone</label>
+            <input type="tel" name="telephone" data-q="Numéro de téléphone" placeholder="06 12 34 56 78" required></div>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">Si le poids compte pour toi, ton idéal dans un premier temps&nbsp;?</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="Je souhaite maintenir mon poids" required><span class="dot"></span><span class="tx">Je souhaite maintenir mon poids</span></label>
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="1 à 4 kilos"><span class="dot"></span><span class="tx">1 à 4 kilos</span></label>
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="5 à 8 kilos"><span class="dot"></span><span class="tx">5 à 8 kilos</span></label>
+          <label class="qcard"><input type="radio" name="ideal" data-q="Si l’aspect du poids est important, quel serait ton idéal dans un premier temps ?" value="9 kilos ou plus"><span class="dot"></span><span class="tx">9 kilos ou plus</span></label>
         </div>
       </div>
 
-      <!-- 03 · MÉTIER -->
+      <!-- 03 -->
       <div class="qstep">
         <h2>Ton travail.</h2>
         <p class="qhint">Une journée assise et une journée debout ne consomment pas pareil.</p>
@@ -164,217 +171,163 @@
           <div class="qfield full"><label>Ton activité professionnelle</label>
             <input type="text" name="profession" data-q="Quelle est ton activité professionnelle ?" placeholder="Ex. infirmière, développeur, artisan, étudiant…" required></div>
         </div>
-        <p class="qhint" style="margin:22px 0 12px">Ton métier t'amène plutôt à&nbsp;:</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Bureau" required><span class="dot"></span><span class="tx">Rester assis (bureau)</span></label>
-          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Terrain"><span class="dot"></span><span class="tx">Être debout / bouger</span></label>
-          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Ça varie"><span class="dot"></span><span class="tx">Ça varie</span></label>
-          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t'amène plutôt à" value="Travail physique"><span class="dot"></span><span class="tx">Travail physique / port de charges</span></label>
-        </div>
-        <div class="qgrid" style="margin-top:16px">
-          <div class="qfield full"><label>Horaires particuliers ? (optionnel)</label>
-            <input type="text" name="horaires" data-q="Horaires ou rythme de travail" placeholder="Ex. 3×8, nuit, 7h-16h45…"></div>
-        </div>
-      </div>
-
-      <!-- 04 · NIVEAU D'ACTIVITÉ -->
-      <div class="qstep">
-        <h2>Ton niveau d'activité.</h2>
-        <p class="qhint">Quotidien + sport + travail, tout compris.</p>
+        <p class="qhint" style="margin:24px 0 12px">Ton métier t'amène plutôt à&nbsp;:</p>
         <div class="qcards one">
-          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Sédentaire" required><span class="dot"></span><span class="tx">Sédentaire — peu de mouvement</span></label>
-          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Légèrement actif"><span class="dot"></span><span class="tx">Légèrement actif</span></label>
-          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Actif"><span class="dot"></span><span class="tx">Actif</span></label>
-          <label class="qcard"><input type="radio" name="niveau" data-q="Comment qualifies tu ton niveau d'activité physique général ? (Quotidien + Sport + Travail)" value="Très actif"><span class="dot"></span><span class="tx">Très actif</span></label>
-        </div>
-        <div class="qgrid" style="margin-top:16px">
-          <div class="qfield full"><label>Nombre de pas par jour (optionnel)</label>
-            <input type="text" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" placeholder="Ex. 8 000 — ou « aucune idée »"></div>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t&#x27;amène plutôt à" value="Rester assis la majorité de la journée (bureau, conduite…)" required><span class="dot"></span><span class="tx">Rester assis la majorité de la journée (bureau, conduite…)</span></label>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t&#x27;amène plutôt à" value="Être debout / en mouvement (vente, soin, restauration…)"><span class="dot"></span><span class="tx">Être debout / en mouvement (vente, soin, restauration…)</span></label>
+          <label class="qcard"><input type="radio" name="metier" data-q="Ton métier t&#x27;amène plutôt à" value="Faire un travail physique (port de charges, manutention, BTP…)"><span class="dot"></span><span class="tx">Faire un travail physique (port de charges, manutention, BTP…)</span></label>
         </div>
       </div>
 
-      <!-- 05 · SPORT -->
+      <!-- 04 -->
       <div class="qstep">
-        <h2>Ton sport.</h2>
-        <p class="qhint">Ce que tu pratiques, ou ce que tu vas pratiquer pendant la programmation.</p>
+        <h2>Ton activité.</h2>
+        <p class="qhint">Nombre moyen de pas par jour, si tu utilises une montre connectée ou ton téléphone.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&lt;7.000" required><span class="dot"></span><span class="tx">&lt;7.000</span></label>
+          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="7.000 à 10.000"><span class="dot"></span><span class="tx">7.000 à 10.000</span></label>
+          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="10.000–13.000"><span class="dot"></span><span class="tx">10.000–13.000</span></label>
+          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&gt;13.000"><span class="dot"></span><span class="tx">&gt;13.000</span></label>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px">En moyenne, combien de séances de sport fais-tu (ou feras-tu) par semaine&nbsp;?</p>
         <div class="qgrid">
-          <div class="qfield full"><label>Quels types d'activités&nbsp;?</label>
-            <textarea name="sports" data-q="Quels types d’activités physiques pratiques-tu ? (ou vas-tu pratiquer lors de ta programmation)" placeholder="Ex. musculation en salle, course à pied, natation… ou « aucune pour l'instant »" required></textarea></div>
           <div class="qfield"><label>Séances par semaine</label>
-            <input type="text" name="seances" data-q="Combien de séances de sport fais-tu (ou feras-tu) par semaine ?" placeholder="Ex. 3 à 4" required></div>
-          <div class="qfield"><label>Durée d'une séance</label>
-            <input type="text" name="duree" data-q="Quelle est, ou quelle sera la durée des séances ?" placeholder="Ex. 1h15" required></div>
+            <select name="seances" data-q="En moyenne, combien de séances de sport fais-tu (ou feras-tu) par semaine ?" required><option value="">Choisir…</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div>
         </div>
       </div>
 
-      <!-- 06 · PETIT-DÉJEUNER -->
+      <!-- 05 -->
       <div class="qstep">
         <h2>Petit-déjeuner&nbsp;: sucré ou salé&nbsp;?</h2>
         <p class="qhint">Tu peux cocher les deux si tu alternes.</p>
         <div class="qcards">
-          <label class="qcard"><input type="checkbox" name="pdj" value="Sucré"><span class="dot"></span><span class="tx">Sucré</span></label>
-          <label class="qcard"><input type="checkbox" name="pdj" value="Salé"><span class="dot"></span><span class="tx">Salé</span></label>
+          <label class="qcard"><input type="checkbox" name="pdj" data-q="Es-tu plutôt team sucré ou salé au petit-déjeuner ? (choix multiple possible)" value="Sucré" data-req="1"><span class="dot"></span><span class="tx">Sucré</span></label>
+          <label class="qcard"><input type="checkbox" name="pdj" data-q="Es-tu plutôt team sucré ou salé au petit-déjeuner ? (choix multiple possible)" value="Salé"><span class="dot"></span><span class="tx">Salé</span></label>
         </div>
       </div>
 
-      <!-- 07 · APPÉTIT -->
-      <div class="qstep">
-        <h2>Ton appétit.</h2>
-        <p class="qhint">Ça décide du volume dans l'assiette — c'est plus important qu'on ne croit.</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="appetit" data-q="Comment décrirais-tu ton appétit ?" value="Petit" required><span class="dot"></span><span class="tx">Petit</span></label>
-          <label class="qcard"><input type="radio" name="appetit" data-q="Comment décrirais-tu ton appétit ?" value="Normal"><span class="dot"></span><span class="tx">Normal</span></label>
-          <label class="qcard"><input type="radio" name="appetit" data-q="Comment décrirais-tu ton appétit ?" value="Gros"><span class="dot"></span><span class="tx">Gros</span></label>
-        </div>
-        <p class="qhint" style="margin:24px 0 12px">As-tu du mal à finir tes repas / es-tu vite rassasié(e)&nbsp;?</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="rassasie" data-q="As-tu du mal à finir tes repas / es-tu vite rassasié(e) ?" value="Non" required><span class="dot"></span><span class="tx">Non</span></label>
-          <label class="qcard"><input type="radio" name="rassasie" data-q="As-tu du mal à finir tes repas / es-tu vite rassasié(e) ?" value="Un peu"><span class="dot"></span><span class="tx">Un peu</span></label>
-          <label class="qcard"><input type="radio" name="rassasie" data-q="As-tu du mal à finir tes repas / es-tu vite rassasié(e) ?" value="Oui"><span class="dot"></span><span class="tx">Oui</span></label>
-        </div>
-      </div>
-
-      <!-- 08 · RESSENTI -->
-      <div class="qstep">
-        <h2>Comment tu te sens&nbsp;?</h2>
-        <p class="qhint">Ton ressenti, pas un jugement.</p>
-        <div class="qcards one">
-          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En sous-poids" required><span class="dot"></span><span class="tx">Plutôt en sous-poids</span></label>
-          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="À ton poids"><span class="dot"></span><span class="tx">Plutôt à mon poids</span></label>
-          <label class="qcard"><input type="radio" name="ressenti" data-q="Te sens-tu actuellement plutôt…" value="En surpoids"><span class="dot"></span><span class="tx">Plutôt en surpoids</span></label>
-        </div>
-      </div>
-
-      <!-- 09 · QUALITÉ ALIMENTATION -->
-      <div class="qstep">
-        <h2>Ton alimentation aujourd'hui.</h2>
-        <p class="qhint">Note-la honnêtement, de 1 (à revoir entièrement) à 10 (déjà très propre). Personne ne juge.</p>
-        <div class="qrange">
-          <input type="range" name="qualite" data-q="Note la qualité de ton alimentation actuelle" min="1" max="10" step="1" value="5">
-          <span class="val" id="qualval">5</span>
-        </div>
-      </div>
-
-      <!-- 10 · CUISINE -->
-      <div class="qstep">
-        <h2>En cuisine.</h2>
-        <p class="qhint">On adapte les plats à ton temps et à ton envie.</p>
-        <p class="qhint" style="margin-bottom:12px">Combien de temps peux-tu y consacrer&nbsp;?</p>
-        <div class="qcards one">
-          <label class="qcard"><input type="radio" name="cuisine" data-q="Combien de temps peux-tu consacrer à cuisiner ?" value="Le moins possible / rapide" required><span class="dot"></span><span class="tx">Le moins possible / rapide</span></label>
-          <label class="qcard"><input type="radio" name="cuisine" data-q="Combien de temps peux-tu consacrer à cuisiner ?" value="Modéré"><span class="dot"></span><span class="tx">Modéré</span></label>
-          <label class="qcard"><input type="radio" name="cuisine" data-q="Combien de temps peux-tu consacrer à cuisiner ?" value="J'aime cuisiner"><span class="dot"></span><span class="tx">J'aime cuisiner</span></label>
-        </div>
-        <p class="qhint" style="margin:24px 0 12px">Variété ou repas simples et répétitifs&nbsp;?</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="variete" data-q="Préfères-tu de la variété ou des repas simples et répétitifs ?" value="Variété" required><span class="dot"></span><span class="tx">Variété</span></label>
-          <label class="qcard"><input type="radio" name="variete" data-q="Préfères-tu de la variété ou des repas simples et répétitifs ?" value="Répétitif/simple"><span class="dot"></span><span class="tx">Simple / répétitif</span></label>
-          <label class="qcard"><input type="radio" name="variete" data-q="Préfères-tu de la variété ou des repas simples et répétitifs ?" value="Équilibré"><span class="dot"></span><span class="tx">Un peu des deux</span></label>
-        </div>
-      </div>
-
-      <!-- 11 · RÉGIME -->
-      <div class="qstep">
-        <h2>Un régime particulier&nbsp;?</h2>
-        <p class="qhint">Alimentaire, religieux ou éthique.</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Aucun" required><span class="dot"></span><span class="tx">Aucun</span></label>
-          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Végétarien"><span class="dot"></span><span class="tx">Végétarien</span></label>
-          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Végan"><span class="dot"></span><span class="tx">Végan</span></label>
-          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Sans porc"><span class="dot"></span><span class="tx">Sans porc</span></label>
-          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Sans lactose"><span class="dot"></span><span class="tx">Sans lactose</span></label>
-          <label class="qcard"><input type="radio" name="regime" data-q="As-tu un régime particulier ?" value="Sans gluten"><span class="dot"></span><span class="tx">Sans gluten</span></label>
-        </div>
-        <div class="qgrid" style="margin-top:16px">
-          <div class="qfield full"><label>Autre régime à préciser (optionnel)</label>
-            <input type="text" name="regime_autre" data-q="Autre régime particulier à préciser" placeholder="Ex. halal, casher, sans FODMAP…"></div>
-        </div>
-      </div>
-
-      <!-- 12 · ALIMENTS À CONSERVER -->
+      <!-- 06 -->
       <div class="qstep">
         <h2>Ce que tu veux garder.</h2>
-        <p class="qhint">Les aliments auxquels tu tiens : on construit autour d'eux plutôt que contre eux.</p>
+        <p class="qhint">Les aliments auxquels tu tiens&nbsp;: on construit autour d'eux plutôt que contre eux.</p>
         <div class="qgrid">
           <div class="qfield full"><label>Aliments à conserver absolument</label>
             <textarea name="conserver" data-q="Y a-t-il des aliments que tu souhaites absolument conserver dans ton alimentation ?" placeholder="Ex. pâtes, fromage, chocolat noir, pain le matin… ou « rien de particulier »" required></textarea></div>
         </div>
       </div>
 
-      <!-- 13 · ALIMENTS REFUSÉS -->
+      <!-- 07 -->
       <div class="qstep">
-        <h2>Ce que tu ne mangeras pas.</h2>
-        <p class="qhint">La question la plus importante du questionnaire. Prends ton temps.</p>
-        <div class="qgrid">
-          <div class="qfield full"><label>Aliments refusés, détestés, écœurants</label>
-            <textarea name="refuses" data-q="Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses ou éthiques ? (Intolérances, écœurements, goûts...)" placeholder="Ex. poisson, courgette, fromage de chèvre, champignons… Sois exhaustif." required></textarea></div>
+        <h2>Un régime particulier&nbsp;?</h2>
+        <p class="qhint">Plusieurs choix possibles.</p>
+        <div class="qcards">
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Aucun" data-req="1"><span class="dot"></span><span class="tx">Aucun</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Végétarien"><span class="dot"></span><span class="tx">Végétarien</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Vegan"><span class="dot"></span><span class="tx">Vegan</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Pescétarien"><span class="dot"></span><span class="tx">Pescétarien</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Sans porc"><span class="dot"></span><span class="tx">Sans porc</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Sans gluten"><span class="dot"></span><span class="tx">Sans gluten</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Sans lactose"><span class="dot"></span><span class="tx">Sans lactose</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Pauvre en FODMAP"><span class="dot"></span><span class="tx">Pauvre en FODMAP</span></label>
         </div>
-        <div class="qwarn"><b>N'oublie rien.</b> Tout ce que tu ne cites pas ici peut se retrouver dans ton programme. C'est la première cause d'un menu qu'on n'a pas envie de suivre.</div>
+        <div class="qwarn">Dans le cas d'une alimentation spécifique, un <b>supplément de 20&nbsp;€</b> est appliqué pour l'adaptation personnalisée supplémentaire.</div>
       </div>
 
-      <!-- 14 · ALLERGIES / SANTÉ -->
+      <!-- 08 -->
       <div class="qstep">
         <h2>Allergies &amp; santé.</h2>
         <p class="qhint">Allergies, intolérances ou pathologies à nous signaler.</p>
         <div class="qgrid">
           <div class="qfield full"><label>À signaler</label>
-            <textarea name="allergies" data-q="Allergies, intolérances ou pathologies à signaler ?" placeholder="Ex. allergie aux fruits à coque, intolérance au lactose, diabète… ou « aucune »" required></textarea></div>
+            <textarea name="allergies" data-q="Allergies, intolérances ou pathologies à signaler ?  ⚠️ A SAVOIR : Dans un cas d&#x27;alimentation spécifique, un supplément de 20 € est appliqué en raison de l’adaptation personnalisée supplémentaire.  ⚠️ En cas de pathologie lourde, spécifique ou nécessitant une prise en charge particulière, nous nous réservons le droit d’évaluer la situation au cas par cas. Si nous estimons que celle-ci dépasse le cadre de nos compétences ou nécessite un suivi médical adapté, nous pourrons vous orienter vers un professionnel de santé qualifié et ne pas assurer la mise en place de votre programmation.  " placeholder="Ex. allergie aux fruits à coque, intolérance au lactose, diabète… ou « aucune »" required></textarea></div>
         </div>
-        <div class="qwarn">En cas de <b>pathologie lourde ou nécessitant une prise en charge particulière</b>, nous évaluons la situation au cas par cas. Si elle dépasse notre cadre de compétences, nous t'orienterons vers un professionnel de santé et ne pourrons pas assurer la programmation.</div>
+        <div class="qwarn">En cas de <b>pathologie lourde, spécifique ou nécessitant une prise en charge particulière</b>, nous évaluons la situation au cas par cas. Si elle dépasse notre cadre de compétences ou nécessite un suivi médical adapté, nous t'orienterons vers un professionnel de santé et ne pourrons pas assurer la programmation.</div>
       </div>
 
-      <!-- 15 · CONTRAINTES -->
+      <!-- 09 -->
       <div class="qstep">
-        <h2>Tes contraintes.</h2>
-        <p class="qhint">Ce qui pèse sur ton alimentation au quotidien.</p>
+        <h2>Ce que tu ne mangeras pas.</h2>
+        <p class="qhint">Aliments refusés, détestés, écœurants, restrictions religieuses ou éthiques. Prends ton temps.</p>
         <div class="qgrid">
-          <div class="qfield full"><label>Contraintes ou obligations</label>
-            <textarea name="contraintes" data-q="As-tu des des contraintes ou obligations qui influencent ton alimentation ?" placeholder="Ex. budget serré, repas à emporter, cantine, famille à gérer, peu de temps le midi… ou « aucune »" required></textarea></div>
+          <div class="qfield full"><label>Aliments refusés</label>
+            <textarea name="refuses" data-q="Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses&#10;ou éthiques ? (Intolérances, écœurements, goûts...)&#10;(Attention à ne rien oublier, aucune modification ne sera faite une fois la programmation terminée)" placeholder="Ex. poisson, courgette, fromage de chèvre, champignons… Sois exhaustif." required></textarea></div>
+        </div>
+        <div class="qwarn"><b>N'oublie rien.</b> Aucune modification ne sera faite une fois la programmation terminée.</div>
+      </div>
+
+      <!-- 10 -->
+      <div class="qstep">
+        <h2>Pour aller plus loin.</h2>
+        <p class="qhint">Facultatif, plusieurs choix possibles.</p>
+        <div class="qcards one">
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux le même petit déjeuner chaque jour"><span class="dot"></span><span class="tx">Je veux le même petit déjeuner chaque jour</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je préfère 3 repas par jour (sans collation)"><span class="dot"></span><span class="tx">Je préfère 3 repas par jour (sans collation)</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)"><span class="dot"></span><span class="tx">Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que les plats du midi soient froids"><span class="dot"></span><span class="tx">Je veux que les plats du midi soient froids</span></label>
         </div>
       </div>
 
-      <!-- 16 · POINTS PARTICULIERS -->
+      <!-- 11 -->
       <div class="qstep">
         <h2>Autre chose&nbsp;?</h2>
-        <p class="qhint">Ton vécu, tes attentes, ce qui a marché ou raté avant. C'est ici que ça se dit.</p>
+        <p class="qhint">Ton alimentation, ton vécu, tes contraintes ou tes attentes. C'est ici que ça se dit.</p>
         <div class="qgrid">
-          <div class="qfield full"><label>À partager (optionnel)</label>
-            <textarea name="points" data-q="Y a-t-il des points particuliers que tu souhaites préciser ou partager sur ton alimentation, ton vécu ou tes attentes ?" placeholder="Écris librement…"></textarea></div>
+          <div class="qfield full"><label>À partager</label>
+            <textarea name="points" data-q="Y a-t-il des points particuliers que tu souhaites préciser ou partager sur ton&#10;alimentation, ton vécu, tes contraintes ou tes attentes ?" placeholder="Écris librement… ou « rien de particulier »" required></textarea></div>
         </div>
       </div>
 
-      <!-- 17 · ENTRAÎNEMENT -->
+      <!-- 12 -->
       <div class="qstep">
         <h2>Et l'entraînement&nbsp;?</h2>
         <p class="qhint">Nous réalisons aussi des programmes d'entraînement.</p>
-        <p class="qhint" style="margin-bottom:12px">Le savais-tu&nbsp;?</p>
+        <p class="qhint" style="margin:24px 0 12px">Le savais-tu&nbsp;?</p>
         <div class="qcards">
-          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d'entraînement ?" value="Oui" required><span class="dot"></span><span class="tx">Oui</span></label>
-          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d'entraînement ?" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
+          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d&#x27;entraînement ?" value="Oui" required><span class="dot"></span><span class="tx">Oui</span></label>
+          <label class="qcard"><input type="radio" name="sait_ent" data-q="Sais-tu que nous réalisons également des programmes d&#x27;entraînement ?" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
         </div>
-        <p class="qhint" style="margin:24px 0 12px">Ça t'intéresserait&nbsp;?</p>
+        <p class="qhint" style="margin:24px 0 12px">Ça t'intéresserait&nbsp;? 15&nbsp;% de remise si les deux programmes sont pris en même temps.</p>
         <div class="qcards one">
-          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="Oui" required><span class="dot"></span><span class="tx">Oui</span></label>
-          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="Peut-être plus tard"><span class="dot"></span><span class="tx">Peut-être plus tard</span></label>
-          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="J'ai déjà pris le pack complet"><span class="dot"></span><span class="tx">J'ai déjà pris le pack complet</span></label>
-          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ?" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Oui (Je rempli le questionnaire disponible en description)" required><span class="dot"></span><span class="tx">Oui</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Non"><span class="dot"></span><span class="tx">Non</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="Peut-être plus tard"><span class="dot"></span><span class="tx">Peut-être plus tard</span></label>
+          <label class="qcard"><input type="radio" name="veut_ent" data-q="Serais-tu intéressé(e) par un programme d&#x27;entraînement afin d&#x27;optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)" value="J&#x27;ai déjà convenu de prendre le pack complet"><span class="dot"></span><span class="tx">J'ai déjà convenu de prendre le pack complet</span></label>
         </div>
       </div>
 
-      <!-- 18 · PROVENANCE -->
+      <!-- 13 -->
       <div class="qstep">
         <h2>Comment nous as-tu connus&nbsp;?</h2>
         <p class="qhint">Ça nous aide à savoir où on est utile.</p>
         <div class="qcards one">
           <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Instagram" required><span class="dot"></span><span class="tx">Instagram</span></label>
-          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Bouche-à-oreille / recommandation d'un proche"><span class="dot"></span><span class="tx">Bouche-à-oreille</span></label>
-          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="À la salle de sport"><span class="dot"></span><span class="tx">À la salle de sport</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Bouche-à-oreille / recommandation d&#x27;un proche"><span class="dot"></span><span class="tx">Bouche-à-oreille / recommandation d'un proche</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Ancient client"><span class="dot"></span><span class="tx">Ancien client</span></label>
+          <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="A la salle de sport"><span class="dot"></span><span class="tx">À la salle de sport</span></label>
           <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Partenariat / Entreprise / CSE"><span class="dot"></span><span class="tx">Partenariat / Entreprise / CSE</span></label>
           <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Autre"><span class="dot"></span><span class="tx">Autre</span></label>
         </div>
         <div class="qgrid" style="margin-top:16px">
           <div class="qfield full"><label>Si partenariat / entreprise / CSE, précise (optionnel)</label>
-            <input type="text" name="entreprise" data-q="Si vous avez sélectionné &quot;Partenariat / Entreprise / CSE&quot; à la question précédente, merci d'indiquer le nom de votre entreprise ou de votre CSE." placeholder="Nom de l'entreprise ou du CSE"></div>
+            <input type="text" name="entreprise" data-q="Si vous avez sélectionné &quot;Partenariat / Entreprise / CSE&quot; à la question précédente, merci d&#x27;indiquer le nom de votre entreprise ou de votre CSE." placeholder="Nom de l&#x27;entreprise ou du CSE"></div>
+        </div>
+      </div>
+
+      <!-- 14 -->
+      <div class="qstep">
+        <h2>Facturation.</h2>
+        <p class="qhint">Pour établir ta facture.</p>
+        <div class="qgrid">
+          <div class="qfield full"><label>Adresse (n° de voie, rue, complément)</label>
+            <input type="text" name="adresse" data-q="Adresse de facturation complète (N° de voie, Rue, complément d&#x27;adresse)" placeholder="Ex. 2 rue de la Chapelle" required></div>
+          <div class="qfield"><label>Code postal</label>
+            <input type="text" name="cp" data-q="Code postal" inputmode="numeric" placeholder="80000" required></div>
+          <div class="qfield"><label>Ville</label>
+            <input type="text" name="ville" data-q="Ville" placeholder="Amiens" required></div>
+        </div>
+        <p class="qhint" style="margin:24px 0 12px"><a href="cgv.html" target="_blank" rel="noopener" style="color:inherit">Conditions générales de vente</a></p>
+        <div class="qcards one">
+          <label class="qcard"><input type="checkbox" name="cgv" data-q="Conditions Générales de Vente" value="J’ai lu et j’accepte les Conditions Générales de Vente de SAS ELYSIUM. Je certifie que les informations transmises sont sincères, exactes et complètes, et j’autorise Elysium Nutrition &amp; Performance à les utiliser pour établir ma programmation personnalisée." required><span class="dot"></span><span class="tx">J’ai lu et j’accepte les Conditions Générales de Vente de SAS ELYSIUM. Je certifie que les informations transmises sont sincères, exactes et complètes, et j’autorise Elysium Nutrition &amp; Performance à les utiliser pour établir ma programmation personnalisée.</span></label>
         </div>
       </div>
 
@@ -449,11 +402,10 @@
     form.querySelectorAll('[data-q]').forEach(function(el){
       var q=el.getAttribute('data-q');
       if(el.type==='radio'){ if(el.checked) out[q]=el.value; }
+      // cases à cocher -> « A, B » comme dans une ligne du Google Form
+      else if(el.type==='checkbox'){ if(el.checked) out[q]=out[q] ? out[q]+', '+el.value : el.value; }
       else if(el.value!=='') out[q]=el.value;
     });
-    // petit-déj : cases à cocher -> « Sucré », « Salé » ou « Sucré, Salé »
-    var pdj=[].slice.call(form.querySelectorAll('input[name=pdj]:checked')).map(function(c){return c.value;});
-    if(pdj.length) out["Es-tu plutôt team sucré ou salé au petit-déjeuner ?"]=pdj.join(', ');
     return out;
   }
   function restore(rep){
@@ -462,12 +414,9 @@
       var v=rep[el.getAttribute('data-q')];
       if(v===undefined||v===null) return;
       if(el.type==='radio') el.checked=(el.value===v);
+      else if(el.type==='checkbox') el.checked=(v===el.value || v.split(', ').indexOf(el.value)>-1);
       else el.value=v;
     });
-    var pdj=rep["Es-tu plutôt team sucré ou salé au petit-déjeuner ?"]||'';
-    form.querySelectorAll('input[name=pdj]').forEach(function(c){ c.checked=pdj.indexOf(c.value)>-1; });
-    var qv=document.getElementById('qualval'), r=form.querySelector('input[name=qualite]');
-    if(qv&&r) qv.textContent=r.value;
   }
 
   /* ---------- avancement + contrôle des réponses manquantes ----------
@@ -483,9 +432,10 @@
         fn(el, !!form.querySelector('input[name="'+el.name+'"]:checked'));
       } else fn(el, el.value.trim()!=='' && el.checkValidity());
     });
-    // le petit-déj est en cases à cocher : pas d'attribut « required » possible
-    var pdj=form.querySelector('input[name=pdj]');
-    if(pdj) fn(pdj, !!form.querySelector('input[name=pdj]:checked'));
+    // groupes de cases à cocher obligatoires (au moins une) : « required » forcerait CHAQUE case
+    form.querySelectorAll('[data-req]').forEach(function(el){
+      fn(el, !!form.querySelector('input[name="'+el.name+'"]:checked'));
+    });
   }
   function progress(){
     var tot=0, done=0;
@@ -510,10 +460,7 @@
     });
   }
   function queueSave(){ clearTimeout(tmr); tmr=setTimeout(saveDraft,800); }
-  form.addEventListener('input',function(e){
-    if(e.target.name==='qualite'){ document.getElementById('qualval').textContent=e.target.value; }
-    progress(); queueSave();
-  });
+  form.addEventListener('input',function(){ progress(); queueSave(); });
   form.addEventListener('change',function(){ progress(); queueSave(); });
 
   /* ---------- validation définitive ----------

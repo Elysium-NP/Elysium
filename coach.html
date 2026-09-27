@@ -318,10 +318,11 @@
 
   /* ---------- fiche client : les réponses, directement à l'écran ---------- */
   // On met EN AVANT ce qui compte pour juger une diète, le reste suit.
-  var PRIO=['Quel est ton objectif principal ?','Comment décrirais-tu ton appétit ?',
-    'Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses ou éthiques ? (Intolérances, écœurements, goûts...)',
-    'Allergies, intolérances ou pathologies à signaler ?','As-tu un régime particulier ?',
-    'Y a-t-il des aliments que tu souhaites absolument conserver dans ton alimentation ?'];
+  // Repérées par DÉBUT de libellé : couvre l'ancien formulaire et celui refondu le 04/09
+  // (« … (choix multiple possible) », avertissements ajoutés en fin de question).
+  var PRIO=['Quel est ton objectif principal','Comment décrirais-tu ton appétit',
+    'Des aliments que tu refuses','Allergies','As-tu un régime particulier',
+    'Y a-t-il des aliments que tu souhaites absolument conserver','FACULTATIF - Pour aller plus loin'];
   var ALERTE=['Des aliments que tu refuses','Allergies'];
 
   function renderClient(){
@@ -332,13 +333,14 @@
       '<span class="idmeta">'+(c.sexe==='HOMME'?'Homme':'Femme')+' · <b>'+age+' ans</b> · <b>'+
       (c.dernier_poids||c.reponses['Poids (en kg)']||'?')+' kg</b> · '+(c.taille_cm||'?')+' cm</span></div>';
     var rep=c.reponses||{}, vus={};
-    PRIO.forEach(function(k){ if(rep[k]){ vus[k]=1; h+=qa(k,rep[k]); } });
+    PRIO.forEach(function(p){ Object.keys(rep).forEach(function(k){
+      if(!vus[k] && rep[k] && k.indexOf(p)===0){ vus[k]=1; h+=qa(k,rep[k]); } }); });
     Object.keys(rep).forEach(function(k){ if(!vus[k] && rep[k]) h+=qa(k,rep[k]); });
     box.innerHTML=h;
   }
   function qa(k,v){
     var flag=ALERTE.some(function(a){return k.indexOf(a)===0;});
-    return '<div class="qa'+(flag?' flag':'')+'"><dt>'+esc(k.replace(/\s*\(.*?\)\s*$/,'').slice(0,90))+'</dt><dd>'+esc(v)+'</dd></div>';
+    return '<div class="qa'+(flag?' flag':'')+'"><dt>'+esc(k.split('⚠')[0].split('\n(')[0].replace(/\s+/g,' ').replace(/\s*\(.*?\)\s*$/,'').slice(0,90))+'</dt><dd>'+esc(v)+'</dd></div>';
   }
 
   /* ---------- le programme, à côté ---------- */

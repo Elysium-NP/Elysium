@@ -135,6 +135,7 @@
 
   /* ===== PISTE B : une question à la fois ===== */
   .qwrap{padding-top:140px;min-height:100vh}
+  main{overflow-x:clip}   /* l'entrée en glissé (46 px) ne doit jamais élargir la page sur mobile */
   #prog{display:none}
   .etapes{position:fixed;top:64px;left:0;right:0;z-index:54;background:var(--voile);border-bottom:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
   .etapes-in{max-width:680px;margin:0 auto;padding:10px var(--edge);display:flex;align-items:center;gap:14px}

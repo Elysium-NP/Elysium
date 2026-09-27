@@ -22,7 +22,7 @@
   .bv .mark{width:66px;height:66px;margin:0 auto 30px;border:1px solid var(--blue);
     display:flex;align-items:center;justify-content:center;position:relative}
   .bv .mark::before,.bv .mark::after{content:"";position:absolute;background:var(--blue);
-    box-shadow:0 0 10px var(--blue)}
+    }
   .bv .mark::before{width:2px;height:15px;transform:rotate(-45deg) translate(-7px,7px)}
   .bv .mark::after{width:2px;height:29px;transform:rotate(38deg) translate(6px,-2px)}
   .bv h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,6vw,52px);
@@ -34,7 +34,10 @@
   .bv .who{font-family:var(--disp);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--steel);margin-bottom:34px}
   .bv .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:44px}
-  .bv .cta .btn{cursor:pointer;background:transparent}
+  .bv .cta .btn{cursor:pointer;background:var(--brand)}
+  /* ⚠️ `.cta` est AUSSI le grand bandeau de fin de page de site.css (padding + fond) : on l'annule ici */
+  .bv .cta{padding:0;border:0;overflow:visible;text-align:center}
+  .bv .cta::before{display:none}
   /* étapes suivantes — le client doit savoir ce qui l'attend */
   .steps{text-align:left;border-top:1px solid var(--line);padding-top:30px}
   .steps .t{font-family:var(--disp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;

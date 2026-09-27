@@ -83,10 +83,12 @@
   .mrow .bar{height:5px;background:rgba(60,45,20,.06);border-radius:3px;overflow:hidden}
   .mrow .bar i{display:block;height:100%;width:0;border-radius:3px;box-shadow:0 0 8px currentColor;transition:width 1.15s cubic-bezier(.2,.7,.2,1)}
   .tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  /* dès la tablette, la rangée passe à la ligne au lieu de déborder (le bouton Imprimer était coupé) ; sur téléphone : défilement horizontal */
+  @media(min-width:700px){.tabs{flex-wrap:wrap;overflow:visible}}
   .tabs::-webkit-scrollbar{display:none}
   .tab{font-family:var(--disp);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:11px 16px;cursor:pointer;white-space:nowrap;transition:border-color .25s,color .25s,background .25s;flex:none}
   .tab:hover{color:var(--gris)}
-  .tab.on{color:#04060a;background:var(--blue);border-color:var(--blue);font-weight:600}
+  .tab.on{color:#fff;background:var(--blue);border-color:var(--blue);font-weight:600}
   .panel{display:none;padding-top:20px}
   .panel.on{display:block;animation:fade .35s ease}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -178,8 +180,9 @@
   .cat.alldone{border-color:rgba(46,155,255,.3)}
   .cat.alldone h4 .cn{opacity:.5}
   .tab{position:relative}
-  .tab.today::after{content:"";position:absolute;top:6px;right:7px;width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 6px var(--blue)}
-  .tab.today.on::after{background:#04060a;box-shadow:none}
+  /* pastille = « aujourd'hui » (jour de la semaine en cours) */
+  .tab.today::after{content:"";position:absolute;top:6px;right:7px;width:5px;height:5px;border-radius:50%;background:var(--blue)}
+  .tab.today.on::after{background:#fff}
   .meal{transition:border-color .3s,transform .3s,box-shadow .3s}
   .meal:hover{border-color:rgba(46,155,255,.32);transform:translateY(-2px);box-shadow:0 8px 24px rgba(60,45,20,.18)}
   @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.2)}100%{transform:scale(1)}}

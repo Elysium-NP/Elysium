@@ -104,6 +104,29 @@
     addEventListener('keydown', function(e){ if (e.key === 'Escape') setOpen(false); });
   }
 
+  // ---- CLAIR / OBSCUR (Dimitri 27/09) : bouton dans le menu (ou l'en-tête des pages membre).
+  //      Le choix est retenu (localStorage ely_theme) et posé dès le <head> de chaque page (pas de flash). ----
+  (function(){
+    var html=document.documentElement;
+    var LUNE='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>';
+    var SOLEIL='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>';
+    function obscur(){ return html.getAttribute('data-theme')==='obscur'; }
+    var btns=[];
+    function maj(){ btns.forEach(function(b){ var o=obscur();
+      b.innerHTML=(o?SOLEIL:LUNE)+(b.dataset.lbl?'<span>'+(o?'Version claire':'Version obscure')+'</span>':'');
+      b.setAttribute('aria-label',o?'Passer en version claire':'Passer en version obscure'); b.title=b.getAttribute('aria-label'); }); }
+    function bouton(parent,avant,lbl){ if(!parent) return; var b=document.createElement('button'); b.type='button'; b.className='theme-btn';
+      if(lbl) b.dataset.lbl='1'; parent.insertBefore(b,avant||null); btns.push(b);
+      b.addEventListener('click',function(){ var o=!obscur(); if(o) html.setAttribute('data-theme','obscur'); else html.removeAttribute('data-theme');
+        try{ localStorage.setItem('ely_theme',o?'obscur':'clair'); }catch(e){} maj(); }); }
+    var nav=document.querySelector('nav.menu');
+    if(nav) bouton(nav, nav.querySelector('a.go'));
+    bouton(document.querySelector('.msheet'),null,true);
+    var q=document.querySelector('.qtop'); if(q) bouton(q,null);
+    var c=document.querySelector('.chead .who'); if(c) bouton(c,c.firstChild);
+    maj();
+  })();
+
   // ---- nav consciente de la connexion (maquette localStorage) : si un compte est ouvert,
   //      le CTA « Connexion » devient « Mon espace » -> espace.html (sinon, revenir à l'espace
   //      obligeait à repasser par le login). Remplacé par Supabase Auth en phase suivante. ----

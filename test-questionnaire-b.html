@@ -140,8 +140,8 @@
   .etapes .jauge i{display:block;height:100%;width:0;border-radius:999px;background:var(--brand);transition:width .8s cubic-bezier(.3,.7,.3,1)}
   .etapes .compte{font:600 14px/1 var(--texte);color:var(--ice);white-space:nowrap;font-variant-numeric:tabular-nums}
   .qstep,.qend{display:none;border-top:0;margin-top:0;padding-top:12px}
-  .qstep.cur,.qend.cur{display:block}
-  .qintro{display:none} .qintro.cur{display:block}
+  .qstep.ecran-on,.qend.ecran-on{display:block}
+  .qintro{display:none} .qintro.ecran-on{display:block}
   .qstep h2{font-size:clamp(26px,4.4vw,38px)}
   .qcard{padding:22px 20px;border-radius:14px}
   .qcard .tx{font-size:18px}
@@ -664,9 +664,9 @@
     return ok;
   }
   function aller(i,retour){
-    ecrans[cur].classList.remove('cur','entree','retour');
+    ecrans[cur].classList.remove('ecran-on','entree','retour');
     cur=Math.max(0,Math.min(ecrans.length-1,i));
-    var e=ecrans[cur]; e.classList.add('cur');
+    var e=ecrans[cur]; e.classList.add('ecran-on');   // ⚠️ pas « .cur » : classe du curseur, masquée par site.css
     if(!reduit){ e.classList.add('entree'); if(retour) e.classList.add('retour'); }
     scrollTo({top:0});
     var q=Math.min(Math.max(cur,1),nb);

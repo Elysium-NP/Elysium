@@ -201,7 +201,7 @@
     var u=new URL(a.href,location.href);
     if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search)) return;   // autre site, mailto, ancre de la même page
     e.preventDefault(); html.classList.add('vt-sort');
-    setTimeout(function(){ location.href=u.href; },200);
+    setTimeout(function(){ location.href=u.href; },250);
   });
   addEventListener('pageshow',function(e){ if(e.persisted) html.classList.remove('vt-sort'); });   // retour arrière
 })();

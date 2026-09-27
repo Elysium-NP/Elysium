@@ -52,7 +52,7 @@
   ]
 }
 </script>
-<script>if(!('onpagereveal' in window))document.documentElement.classList.add('vt-repli')</script>
+<script>if(!('onpagereveal' in window))document.documentElement.classList.add('vt-repli');addEventListener('pagereveal',function(e){window.ELY_VT=!!e.viewTransition})</script>
 <link rel="stylesheet" href="assets/site.css">
 <style>
   @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;
@@ -605,7 +605,7 @@
     var u=new URL(a.href,location.href);
     if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search)) return;   // autre site, mailto, ancre de la même page
     e.preventDefault(); html.classList.add('vt-sort');
-    setTimeout(function(){ location.href=u.href; },200);
+    setTimeout(function(){ location.href=u.href; },250);
   });
   addEventListener('pageshow',function(e){ if(e.persisted) html.classList.remove('vt-sort'); });   // retour arrière
 })();

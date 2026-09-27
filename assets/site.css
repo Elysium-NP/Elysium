@@ -703,6 +703,6 @@ html[data-theme="obscur"] .evo{background:var(--p-vert)}
 html[data-theme="obscur"] .end{background:var(--p-bleu)}
 html[data-theme="obscur"] .btn.line:hover{color:var(--fond)}
 /* en-tête des pages membres (espace, connexion, inscription…) : même barre que le menu vitrine,
-   avec son filet de séparation (Yoann 27/09). Il reste en haut de la page, sans suivre le défilement. */
+   avec son filet de séparation (Yoann 27/09) ; collée en haut pendant le défilement, comme la vitrine et l'espace coachs. */
 .qtop{height:64px;padding:0 var(--edge)!important;align-items:center!important;background:var(--voile)!important;
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}

@@ -323,11 +323,15 @@
     if(document.visibilityState!=='visible'){ document.addEventListener('visibilitychange',function v(){
       if(document.visibilityState==='visible'){ document.removeEventListener('visibilitychange',v); pret(); } }); return; }
     requestAnimationFrame(function(){ requestAnimationFrame(demarre); }); }
+  // Onglet caché PENDANT l'intro : on l'annule et on la remet à zéro ; elle repart DU DÉBUT quand
+  // l'onglet redevient visible. Déterministe (la simple pause laissait parfois l'horloge avancer :
+  // on revenait sur un mot déjà plein — le « bug » de Yoann). Pendant la sortie, on ne touche à rien.
   document.addEventListener('visibilitychange',function(){
-    // ⚠️ ne reprendre QUE les animations mises en pause : relancer une animation déjà finie la
-    // rejoue depuis le début (le contour d'une lettre pleine se redessinait — trouvé au banc).
-    var vis=document.visibilityState==='visible';
-    anims.forEach(function(a){ try{ if(vis&&a.playState==='paused') a.play(); else if(!vis&&a.playState==='running') a.pause(); }catch(e){} }); });
+    if(fini||document.visibilityState==='visible'||!parti) return;
+    anims.forEach(function(a){ try{ a.cancel(); }catch(e){} }); anims=[];
+    tmr.forEach(clearTimeout); tmr=[]; parti=false;           // les lettres reviennent à leur état initial (invisible)
+    pret();                                                    // attend le retour de l'onglet, puis redémarre
+  });
   // retour arrière vers une page gardée en cache par le navigateur : l'intro est simplement terminée
   addEventListener('pageshow',function(e){ if(e.persisted&&!fini) passer(); });
   function apresLecture(){

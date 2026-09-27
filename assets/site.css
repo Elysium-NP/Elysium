@@ -594,3 +594,4 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
 .coach .ph.photo{aspect-ratio:4/5}
 .coach .ph.photo > span{display:none}
 .coach .ph.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.coach .ph.photo::after{display:none}

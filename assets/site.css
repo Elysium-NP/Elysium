@@ -588,3 +588,9 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
   ::view-transition-old(root),::view-transition-new(root){animation:none}
   body{animation:none!important}
 }
+
+/* photos des coachs (qui-sommes-nous) : même cadrage portrait 4:5 pour les deux. Le cadre
+   « Photo à venir » reste dans la page : retirer la classe `photo` et l'<img> pour y revenir. */
+.coach .ph.photo{aspect-ratio:4/5}
+.coach .ph.photo > span{display:none}
+.coach .ph.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}

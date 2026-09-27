@@ -102,7 +102,8 @@
   /* ── EN-TÊTE : blanc, la marque en Cormorant comme sur les fiches ── */
   .band{position:sticky;top:0;z-index:20;background:var(--voile);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
   .band .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:62px}
-  .brand{font-family:var(--wordmark);font-weight:500;font-size:25px;letter-spacing:.42em;text-decoration:none;color:var(--ink);padding-left:.42em}
+  .brand{font-family:var(--wordmark);font-weight:500;font-size:25px;letter-spacing:.42em;text-decoration:none;color:var(--ink);padding-left:.42em;cursor:pointer;transition:color .25s}
+  .brand:hover{color:var(--blue-ink)}
   .nav{display:flex;gap:26px;align-items:center}
   .nav a{font-size:14px;text-decoration:none;color:var(--ink2)}
   .nav a:hover{color:var(--ink)}
@@ -244,10 +245,10 @@
      Le mot, dans la police exacte de « Elysium » en haut à gauche (Cormorant, converti en
      tracés), en géant : chaque lettre se DESSINE trait par trait de gauche à droite, l'espacement
      se resserre, le remplissage arrive, courte pause, puis le mot rejoint sa place dans l'en-tête.
-     ~2,9 s. Créée par le script en tout début de page : sans JS elle n'existe pas (jamais de
+     ~4,7 s (voir TEMPO dans le script). Créée par le script en tout début de page : sans JS elle n'existe pas (jamais de
      page blanche, Google lit la page). Une fois par visite, passable d'un clic / d'une touche,
      absente si « réduire les animations ». */
-  .intro{position:fixed;inset:0;z-index:200;background:var(--fond);display:flex;align-items:center;justify-content:center;transition:background-color .6s ease}
+  .intro{position:fixed;inset:0;z-index:200;pointer-events:none;background:var(--fond);display:flex;align-items:center;justify-content:center;transition:background-color .6s ease}
   .intro.sort{background-color:transparent;pointer-events:none}
   .intro svg{width:90vw;height:auto;overflow:visible;transform-origin:0 0;transition:transform .6s cubic-bezier(.65,0,.25,1),opacity .35s ease}
   .intro path{fill:var(--ink);fill-opacity:0;stroke:var(--ink);stroke-linejoin:round;stroke-linecap:round}
@@ -282,19 +283,41 @@
   var svg=document.createElementNS(NS,'svg'); svg.setAttribute('viewBox','0 -40 '+W+' '+(CAP+80));
   o.appendChild(svg); document.body.insertBefore(o,document.body.firstChild);
   var px=svg.getBoundingClientRect().width/W;                 // pixels écran par unité de police
-  // animations explicites (Web Animations API) : tracé, resserrement, remplissage — lettre après lettre
-  var anims=[];
-  D.forEach(function(d,i){
+  // Les lettres sont posées tout de suite, INVISIBLES (trait non tracé, plein à 0) : le beige
+  // reste seul à l'écran tant que l'animation n'a pas démarré.
+  var ps=D.map(function(d){
     var p=document.createElementNS(NS,'path'); p.setAttribute('d',d); svg.appendChild(p);
     var L=p.getTotalLength();
     p.style.strokeWidth=(1.3/px)+'px';                        // trait fin et constant, ~1,3 px à l'écran
-    p.style.strokeDasharray=L+'px'; p.style.strokeDashoffset=L+'px';
-    anims.push(
-      p.animate([{strokeDashoffset:L+'px'},{strokeDashoffset:'0px'}],{duration:900,delay:i*140,easing:'cubic-bezier(.45,0,.25,1)',fill:'both'}),
-      p.animate([{transform:'translateX('+((i-3)*110)+'px)'},{transform:'translateX(0px)'}],{duration:1800,easing:'cubic-bezier(.2,.7,.2,1)',fill:'both'}),
-      p.animate([{fillOpacity:0,strokeOpacity:1},{fillOpacity:1,strokeOpacity:0}],{duration:450,delay:i*140+750,easing:'ease',fill:'both'}));
+    p.style.strokeDasharray=L+'px'; p.style.strokeDashoffset=L+'px'; p.style.fillOpacity='0';
+    p._L=L; return p;
   });
-  var fini=false, tmr=[];
+  var anims=[], fini=false, tmr=[], parti=false;
+  /* TEMPO (Yoann, 16:55 : « regardez ça pendant 4 ou même 5 secondes ») — en millisecondes,
+     horloge des animations : indépendant du nombre d'images par seconde et du chargement.
+       0 → 2,2 s   phase 1 : le CONTOUR seul, lettre après lettre, de gauche à droite
+       2,25 → 3,7 s phase 2 : le plein noir arrive « derrière » le trait, lettre après lettre
+       3,7 → 4,1 s pause, puis le mot rejoint l'en-tête (0,6 s). */
+  function demarre(){
+    if(parti||fini) return; parti=true;
+    ps.forEach(function(p,i){
+      anims.push(
+        p.animate([{strokeDashoffset:p._L+'px'},{strokeDashoffset:'0px'}],{duration:1100,delay:i*180,easing:'cubic-bezier(.45,0,.25,1)',fill:'both'}),
+        p.animate([{transform:'translateX('+((i-3)*110)+'px)'},{transform:'translateX(0px)'}],{duration:2200,easing:'cubic-bezier(.2,.7,.2,1)',fill:'both'}),
+        p.animate([{fillOpacity:0},{fillOpacity:1}],{duration:700,delay:2250+i*130,easing:'ease-in-out',fill:'both'}));
+    });
+    tmr.push(setTimeout(function(){ sortie(false); },4080));
+  }
+  /* DÉPART STABLE d'un appareil à l'autre : on attend que la page soit lue ET la police prête
+     (la sortie vers l'en-tête en dépend), puis deux images, pour ne jamais démarrer « à moitié
+     jouée » pendant que le téléphone est encore occupé à charger. Filet : 2,5 s maximum. */
+  function pret(){ requestAnimationFrame(function(){ requestAnimationFrame(demarre); }); }
+  function apresLecture(){
+    var f=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+    Promise.race([f,new Promise(function(r){ setTimeout(r,1500); })]).then(pret,pret);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apresLecture,{once:true}); else apresLecture();
+  tmr.push(setTimeout(demarre,2500));
   function libere(){ html.classList.remove('intro-en-cours'); html.style.overflow=''; window.ELY_INTRO=false;
     if(o.parentNode) o.parentNode.removeChild(o); dispatchEvent(new Event('ely:intro-fin')); }
   function sortie(vite){
@@ -312,9 +335,9 @@
       o.classList.add('sort'); setTimeout(libere,650);
     } else { o.style.transition='opacity .35s ease'; o.style.opacity='0'; setTimeout(libere,380); }
   }
-  function passer(){ anims.forEach(function(a){ try{ a.finish(); }catch(e){} }); sortie(true); }
+  function passer(){ anims.forEach(function(a){ try{ a.finish(); }catch(e){} });
+    ps.forEach(function(p){ p.style.strokeDashoffset='0px'; p.style.fillOpacity='1'; }); sortie(true); }
   ['click','keydown','touchstart'].forEach(function(t){ addEventListener(t,passer,true); });
-  tmr.push(setTimeout(function(){ sortie(false); },2350));   // mot plein à ~2,05 s + pause 0,3 s, puis sortie 0,6 s = 2,95 s
 })();
 </script>
 

@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<link rel="preload" as="image" href="assets/logo-pied.png">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F6F3EE">
@@ -54,7 +55,7 @@
 }
 </script>
 <script>try{sessionStorage.removeItem('ely_tr')}catch(e){}document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
-<link rel="stylesheet" href="assets/site.css?v=2709q">
+<link rel="stylesheet" href="assets/site.css?v=2709r">
 <style>
   @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;
     src:url(assets/fonts/cormorant-garamond-500-normal-latin.woff2) format("woff2");font-display:block}
@@ -73,7 +74,7 @@
     --din-bg:#cfe2f3; --din:#6fa8dc;
     /* macros */
     --mG:#3d85c6; --mP:#cc0000; --mL:#f1c232;
-    --r:14px; --edge:clamp(16px,4vw,40px);
+    --r:14px;
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -101,30 +102,6 @@
   .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
   .more{display:inline-block;margin-top:24px;font-weight:600;color:var(--blue-ink);text-decoration:none;border-bottom:1px solid currentColor}
 
-  /* ── EN-TÊTE : blanc, la marque en Cormorant comme sur les fiches ── */
-  .band{position:sticky;top:0;z-index:20;background:var(--voile);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
-  /* en-tête IDENTIQUE aux autres pages (hauteur 64 px, marges de site.css, pleine largeur) :
-     le logo ne bouge pas d'un pixel en changeant de page (retour de Yoann, 27/09) */
-  .band .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:63px;max-width:none;padding:0 clamp(18px,4vw,54px)}   /* 63 + 1 px de bordure = les 64 px des autres pages */
-  .brand{font-family:var(--wordmark);font-weight:500;font-size:25px;letter-spacing:.42em;text-decoration:none;color:var(--ink);padding-left:.42em;cursor:pointer;transition:color .25s}
-  .brand:hover{color:var(--blue-ink)}
-  .nav{display:flex;gap:26px;align-items:center}
-  .nav a{font-size:14px;text-decoration:none;color:var(--ink2)}
-  .nav a:hover{color:var(--ink)}
-  .nav .acc{color:var(--ink);border:1px solid var(--ink);border-radius:999px;padding:8px 16px;white-space:nowrap}
-  @media(max-width:860px){.nav{gap:10px}}
-  @media(max-width:860px){.nav > a:not(.acc){display:none}}
-  .mnav{display:none;position:relative}
-  @media(max-width:860px){.mnav{display:block}}
-  .mnav summary{list-style:none;cursor:pointer;width:44px;height:44px;display:grid;align-content:center;justify-items:center;gap:5px;border-radius:50%}
-  .mnav summary::-webkit-details-marker{display:none}
-  .mnav summary span{width:20px;height:1.5px;background:var(--ink);transition:transform .25s,opacity .2s}
-  .mnav[open] summary span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-  .mnav[open] summary span:nth-child(2){opacity:0}
-  .mnav[open] summary span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-  .mnav-list{position:absolute;right:0;top:52px;min-width:210px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:8px;box-shadow:0 20px 40px -24px rgba(60,45,20,.45)}
-  .mnav-list a{padding:12px 14px;border-radius:10px;font-size:16px;color:var(--ink)!important;text-decoration:none}
-  .mnav-list a:hover{background:var(--soft)}
 
   /* ── HERO ── */
   .hero{padding:clamp(40px,7vw,88px) 0 clamp(56px,8vw,96px);border-top:0}
@@ -256,7 +233,7 @@
   .intro.sort{background-color:transparent;pointer-events:none}
   .intro svg{width:90vw;height:auto;overflow:visible;transform-origin:0 0;transition:transform .6s cubic-bezier(.65,0,.25,1),opacity .35s ease}
   .intro path{fill:var(--ink);fill-opacity:0;stroke:var(--ink);stroke-linejoin:round;stroke-linecap:round}
-  html.intro-en-cours .band .brand{visibility:hidden}
+  html.intro-en-cours .status .elg-name{visibility:hidden}
 
   /* ── ANIMATIONS (Damien : « ça manque un poil d'animation, comme le premier site ») ──
      Posées PAR LE SCRIPT (classe .rv) : sans JS, rien n'est jamais masqué. Sobres : fondu +
@@ -347,7 +324,7 @@
   function sortie(vite){
     if(fini) return; fini=true; tmr.forEach(clearTimeout);
     ['click','keydown','touchstart'].forEach(function(t){ removeEventListener(t,passer,true); });
-    var brand=document.querySelector('.band .brand'), r=brand&&brand.getBoundingClientRect();
+    var brand=document.querySelector('.status .elg-name'), r=brand&&brand.getBoundingClientRect();
     if(!vite && r && r.width){
       // FLIP : le mot rejoint « Elysium » dans l'en-tête (même police, même espacement)
       var fs=parseFloat(getComputedStyle(brand).fontSize), k=fs/UPM;
@@ -365,29 +342,33 @@
 })();
 </script>
 
-<header class="band">
-  <div class="wrap">
-    <a class="brand" href="index.html" aria-label="Elysium, accueil">ELYSIUM</a>
-    <nav class="nav" aria-label="Navigation principale">
-      <a href="methode.html">Méthode</a>
-      <a href="qui-sommes-nous.html">Coachs</a>
-      <a href="resultats.html">Résultats</a>
-      <a href="formules.html">Formules</a>
-      <a href="faq.html">FAQ</a>
-      <a class="acc" href="connexion.html">Mon espace</a>
-      <!-- menu mobile natif (details/summary) : l'accueil ne charge pas site.js -->
-      <details class="mnav">
-        <summary aria-label="Ouvrir le menu"><span></span><span></span><span></span></summary>
-        <div class="mnav-list">
-          <a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="resultats.html">Résultats</a>
-          <a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
-        </div>
-      </details>
-    </nav>
-  </div>
+<!-- en-tête IDENTIQUE aux 17 autres pages (même menu, « Accueil » actif) : plus de décalage -->
+<header class="status">
+  <a class="logo" href="index.html" aria-label="Elysium · Nutrition & Performance"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></a>
+  <span class="mid">Accueil</span>
+  <span class="rt"><span class="dot"></span>Système actif</span>
 </header>
+<nav class="menu">
+  <a href="index.html" aria-current="page">Accueil</a>
+  <a href="methode.html">Méthode</a>
+  <a href="qui-sommes-nous.html">Coachs</a>
+  <a href="resultats.html">Résultats</a>
+  <a href="formules.html">Formules</a>
+  <a href="faq.html">FAQ</a>
+  <a class="go" href="connexion.html">Connexion</a>
+</nav>
+<button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+<nav class="msheet" aria-label="Navigation mobile">
+  <a href="index.html" aria-current="page"><span class="mnum">01</span>Accueil</a>
+  <a href="methode.html"><span class="mnum">02</span>Méthode</a>
+  <a href="qui-sommes-nous.html"><span class="mnum">03</span>Coachs</a>
+  <a href="resultats.html"><span class="mnum">04</span>Résultats</a>
+  <a href="formules.html"><span class="mnum">05</span>Formules</a>
+  <a href="faq.html"><span class="mnum">06</span>FAQ</a>
+  <a class="go-m" href="connexion.html"><span class="mnum">→</span>Connexion</a>
+</nav>
 
-<main id="main">
+<main id="main" style="padding-top:64px">
 
   <!-- HERO -->
   <section class="hero">
@@ -596,25 +577,6 @@
   setTimeout(function(){ hero.concat(reste).forEach(function(e){ if(e.classList.contains('rv')&&!e.classList.contains('in')) montre(e); }); },6000);   // filet
 })();
 </script>
-<script>
-/* TRANSITIONS entre pages (voir site.css) : arrivée après le premier affichage ; sortie 0,3 s au
-   clic sur un lien interne, vers l'adresse FINALE (sans le détour de la redirection .html). */
-(function(){
-  var html=document.documentElement;
-  function arrive(){ requestAnimationFrame(function(){ requestAnimationFrame(function(){ html.classList.add('arrive'); }); }); }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',arrive,{once:true}); else arrive();
-  addEventListener('pageshow',function(e){ if(e.persisted){ html.classList.remove('page-sort'); html.classList.add('arrive'); } });   // retour arrière
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-  document.addEventListener('click',function(e){
-    var a=e.target.closest&&e.target.closest('a[href]');
-    if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||(a.target&&a.target!=='_self')||a.hasAttribute('download')) return;
-    var u=new URL(a.href,location.href);
-    if(u.origin!==location.origin||u.protocol==='file:'||(u.pathname===location.pathname&&u.search===location.search)) return;
-    e.preventDefault(); html.classList.add('page-sort');
-    var cible=u.pathname.replace(/\/index\.html$/,'/').replace(/\.html$/,'')+u.search+u.hash;   // /methode.html -> /methode
-    setTimeout(function(){ location.href=cible; },760);   // le rideau est fermé : on change de page
-  });
-})();
-</script>
+<script src="assets/site.js?v=2709r"></script>
 </body>
 </html>

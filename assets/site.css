@@ -575,14 +575,20 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
    bord du rideau est voulu (« c'est pas mal »). L'en-tête passe AU-DESSUS (il ne bouge jamais).
    Filet : `arrive` est posée au plus tard à 1,5 s par le <head>. Rien si « réduire les animations ». */
 @view-transition{navigation:none}
-html::after{content:"";position:fixed;inset:0;z-index:19;pointer-events:none;background:var(--cream2);
+html::before{content:"";position:fixed;inset:0;z-index:19;pointer-events:none;background:var(--cream2);
   box-shadow:2px 0 0 rgba(46,155,255,.6),-2px 0 0 rgba(46,155,255,.6);transform:translateX(101%)}
-html.arrivee::after{transform:translateX(0)}
-html.arrivee.arrive::after{animation:rideau-part .75s ease-in-out forwards}
-html.page-sort::after{animation:rideau-vient .75s ease-in-out forwards!important}
+/* le LOGO complet au centre du rideau (Dimitri : « une page nue apparaît ») — même image que le
+   pied de page ; calque au-dessus du rideau, qui part avec lui */
+html::after{content:"";position:fixed;inset:0;z-index:19;pointer-events:none;opacity:0;transform:translateX(101%);
+  background:url(logo-pied.png) no-repeat center/min(300px,64vw) auto}
+html.arrivee::before,html.arrivee::after{transform:translateX(0);opacity:1}
+html.arrivee.arrive::before,html.arrivee.arrive::after{animation:rideau-part .75s ease-in-out forwards}
+html.page-sort::before{animation:rideau-vient .75s ease-in-out forwards!important}
+html.page-sort::after{animation:logo-vient .75s ease-in-out forwards!important}
 @keyframes rideau-part{from{transform:translateX(0)}to{transform:translateX(101%)}}
 @keyframes rideau-vient{from{transform:translateX(-101%)}to{transform:translateX(0)}}
-@media(prefers-reduced-motion:reduce){html::after{display:none}}
+@keyframes logo-vient{0%{transform:translateX(0);opacity:0}45%{opacity:0}100%{transform:translateX(0);opacity:1}}
+@media(prefers-reduced-motion:reduce){html::before,html::after{display:none}}
 
 /* photos des coachs (qui-sommes-nous) : même cadrage portrait 2:3 pour les deux (tête entière, air au-dessus, haut des épaules). Le cadre
    « Photo à venir » reste dans la page : retirer la classe `photo` et l'<img> pour y revenir. */

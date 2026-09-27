@@ -41,47 +41,12 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/site.css?v=2709zt">
+<link rel="stylesheet" href="assets/site.css?v=2709zu">
 <style>
   /* ===== PRIX DES FORMULES (Damien & Yoann 27/07) — retour à un affichage SIMPLE :
      le prix principal, puis les précisions de paiement dessous. PLUS d'ancien prix
      barré sur la nutrition. Le barré ne sert QUE sur le pack, pour montrer la remise. */
-  .plan .price01{margin:14px 0 0;line-height:1}
-  .plan .now{display:flex;align-items:flex-start;font-family:var(--disp);color:var(--ice)}
-  .plan .now .n1{font-size:58px;font-weight:700;letter-spacing:-.015em;line-height:.85;
-    text-shadow:0 0 24px rgba(46,155,255,.16)}
-  .plan .now .eur{font-size:29px;font-weight:700;margin:3px 1px 0 3px;color:var(--blue)}
-  .plan .now .n2{font-size:23px;font-weight:700;margin:4px 0 0 1px;letter-spacing:.01em}
-  .plan .pterm{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--blue);margin-top:12px}
-  .plan .pfine{font-family:var(--disp);font-size:12.5px;line-height:1.5;color:var(--steel);margin:6px 0 20px}
-  /* PACK : total des deux prestations barré + pastille de remise */
-  .plan .packold{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--steel);
-    text-decoration:line-through;text-decoration-color:#c8d0dc;text-decoration-thickness:2px}
-  .plan .packsave{display:inline-block;margin-left:9px;font-family:var(--disp);font-size:11px;
-    font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);
-    border:1px solid rgba(46,155,255,.45);padding:3px 8px;vertical-align:2px}
-  /* bandeau « durée recommandée » sous la carte prix (Dimitri 26/07) */
-  .plan .reco{margin:2px 0 20px;padding:12px 14px;border:1px solid rgba(46,155,255,.28);
-    border-radius:12px;background:rgba(46,155,255,.06)}
-  .plan .reco b{font-family:var(--disp);text-transform:uppercase;letter-spacing:.04em;color:var(--ice)}
-  .plan .reco span{display:block;margin-top:5px;font-size:13px;line-height:1.55;color:var(--steel)}
-  .plan ul li b{color:var(--ice);font-weight:600}
-  .plan li.opt-reco{color:var(--blue)}
-  .plan li.opt-reco b{color:var(--blue)}
-  .plan.feat::before{content:"Le plus choisi"}
-  /* Damien (27/09) : « des notions de couleur dans les avantages, pour pousser à prendre celle à 25
-     ou 29 ». Un avantage EN PLUS = une pastille de couleur, la même d'une formule à l'autre
-     (pastels des repas) ; la formule 1 garde des puces neutres. */
-  .plan li.plus{padding-left:30px}
-  .plan li.plus::before{left:0;top:1px;width:20px;height:20px;border:0;border-radius:50%;background:var(--pc);transform:none}
-  .plan li.plus::after{content:"";position:absolute;left:6px;top:6px;width:8px;height:4px;border-left:2px solid #111;border-bottom:2px solid #111;transform:rotate(-45deg)}
-  .plan li.vert{--pc:var(--b-vert)} .plan li.bleu{--pc:var(--b-bleu)} .plan li.jaune{--pc:var(--b-jaune)} .plan li.violet{--pc:var(--b-violet)}
-  /* formule 3 mise en avant aussi, en violet (couleur de son avantage propre : les recettes) */
-  .plan.feat.complet{border-color:var(--b-violet);box-shadow:0 0 0 1px rgba(142,124,195,.35),0 24px 50px -34px rgba(90,70,150,.5)}
-  html.reveal-ready .plan.feat.complet.in{box-shadow:0 0 0 1px rgba(142,124,195,.4),0 24px 50px -34px rgba(90,70,150,.55)}
-  .plan.feat.complet::before{content:"Le plus complet";background:var(--b-violet);color:#111}
-  @media(max-width:900px){ .plans{grid-template-columns:1fr;max-width:460px;margin:0 auto} }
+  /* styles des cartes de formule : déplacés dans site.css (« CARTES DE FORMULE »), partagés avec choisir.html */
   /* ===== Section « Le suivi » : accompagnement évolutif (Dimitri 26/07) ===== */
   /* ta pesée : 3 étapes aux couleurs des repas */
   .pesee-etapes{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:p}
@@ -296,6 +261,6 @@
   <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
 </footer>
 
-<script src="assets/site.js?v=2709zt"></script>
+<script src="assets/site.js?v=2709zu"></script>
 </body>
 </html>

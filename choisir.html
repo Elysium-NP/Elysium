@@ -14,7 +14,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2709zt">
+<link rel="stylesheet" href="assets/site.css?v=2709zu">
 <style>
   /* ===== Choisir sa formule (post-inscription), étape de bienvenue avant paiement ===== */
   .chwrap{max-width:1000px;margin:0 auto;padding:120px var(--edge) 90px}
@@ -74,7 +74,17 @@
   .chopt .pn{font-family:var(--disp);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
   .chopt h2{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3vw,30px);color:var(--ice);text-transform:uppercase;margin:8px 0 12px;letter-spacing:.005em}
   .optlede{font-family:var(--disp);font-size:14px;line-height:1.65;color:var(--steel);margin:0 0 22px;max-width:640px}
-  .optgroup{display:flex;flex-direction:column;gap:10px}
+  /* 3 cartes comme la page Formules (Yoann 27/09 : même design, « c'est écrit petit ») */
+  .optgroup.plans{margin-top:26px}
+  .opt-card{cursor:pointer;display:flex;flex-direction:column}
+  .opt-card input{position:absolute;opacity:0;pointer-events:none}
+  .opt-card ul{margin-bottom:18px}
+  .opt-choix{margin-top:auto;display:block;text-align:center;border:1px solid var(--line);border-radius:999px;padding:12px;font:600 15px/1 var(--texte);color:var(--ice)}
+  .opt-choix::after{content:"Choisir cette formule"}
+  .opt-card:has(input:checked){outline:3px solid var(--brand);outline-offset:2px}
+  .opt-card:has(input:checked) .opt-choix{background:var(--brand);border-color:var(--brand);color:#111}
+  .opt-card:has(input:checked) .opt-choix::after{content:"✓ Formule choisie"}
+  .opt-card:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
   .opt{display:flex;align-items:center;gap:14px;border:1px solid var(--line);background:var(--void);padding:14px 16px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
   .opt:hover{border-color:rgba(46,155,255,.42)}
   .opt input{accent-color:var(--blue);width:17px;height:17px;flex:none;cursor:pointer}
@@ -120,21 +130,54 @@
       <span class="pn">Ta formule</span>
       <h2>Choisis ta formule</h2>
       <p class="optlede">Toutes construites à la main d'après ton questionnaire, au gramme près. Elles diffèrent par la fréquence des nouveaux menus, l'ajustement des quantités, la liste de courses et les recettes. <a href="formules.html" style="color:var(--blue)">Voir le détail</a>.</p>
-      <div class="optgroup" role="radiogroup" aria-label="Formule">
-        <label class="opt">
+      <div class="optgroup plans" role="radiogroup" aria-label="Formule">
+        <label class="plan opt-card">
           <input type="radio" name="formule" value="f1" data-nom="Menu unique" data-prix="19,90 €">
-          <span class="optbody"><b>Formule 01 · Menu unique</b><small>Quantités réajustées chaque mois</small></span>
-          <span class="optprice">19,90 €<i> / 4 sem</i></span>
+          <span class="pn">Formule 01</span>
+          <h3>Menu unique</h3>
+          <p class="desc">Un menu sur-mesure, qui suit ta progression.</p>
+          <div class="price01"><div class="now"><span class="n1">19</span><span class="eur">€</span><span class="n2">90</span></div></div>
+          <div class="pterm">Toutes les 4 semaines</div>
+          <ul>
+            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li><b>Menu unique</b></li>
+            <li><b>Quantités réajustées chaque mois</b></li>
+            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
+          </ul>
+          <span class="opt-choix" aria-hidden="true"></span>
         </label>
-        <label class="opt">
+        <label class="plan opt-card feat in">
           <input type="radio" name="formule" value="f2" data-nom="Menu mensuel" data-prix="25,90 €" checked>
-          <span class="optbody"><b>Formule 02 · Menu mensuel <span style="color:var(--blue)">· le plus choisi</span></b><small>Nouveau menu chaque mois · quantités réajustées à chaque menu · liste de courses de chaque semaine</small></span>
-          <span class="optprice">25,90 €<i> / 4 sem</i></span>
+          <span class="pn">Formule 02</span>
+          <h3>Menu mensuel</h3>
+          <p class="desc">Un nouveau menu chaque mois, et les courses déjà faites sur le papier.</p>
+          <div class="price01"><div class="now"><span class="n1">25</span><span class="eur">€</span><span class="n2">90</span></div></div>
+          <div class="pterm">Toutes les 4 semaines</div>
+          <ul>
+            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li class="plus vert"><b>Nouveau menu chaque mois</b></li>
+            <li class="plus bleu"><b>Quantités réajustées</b> à chaque changement de menu</li>
+            <li class="plus jaune"><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
+            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
+          </ul>
+          <span class="opt-choix" aria-hidden="true"></span>
         </label>
-        <label class="opt">
+        <label class="plan opt-card feat complet in">
           <input type="radio" name="formule" value="f3" data-nom="Menu mensuel &amp; recettes" data-prix="29,90 €">
-          <span class="optbody"><b>Formule 03 · Menu mensuel &amp; recettes</b><small>Nouveau menu chaque mois · quantités réajustées chaque semaine · recettes des coachs · liste de courses de chaque semaine</small></span>
-          <span class="optprice">29,90 €<i> / 4 sem</i></span>
+          <span class="pn">Formule 03</span>
+          <h3>Menu mensuel &amp; recettes</h3>
+          <p class="desc">Le suivi le plus serré, avec les recettes de chaque plat.</p>
+          <div class="price01"><div class="now"><span class="n1">29</span><span class="eur">€</span><span class="n2">90</span></div></div>
+          <div class="pterm">Toutes les 4 semaines</div>
+          <ul>
+            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li class="plus vert"><b>Nouveau menu chaque mois</b></li>
+            <li class="plus bleu"><b>Quantités réajustées chaque semaine</b></li>
+            <li class="plus violet"><b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise</li>
+            <li class="plus jaune"><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
+            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
+          </ul>
+          <span class="opt-choix" aria-hidden="true"></span>
         </label>
       </div>
       <div class="optrecap">
@@ -181,7 +224,7 @@
 
 <div class="demo-banner">⚠︎ Maquette, le paiement est simulé (Stripe arrivera en phase suivante). « Choisir » débloque ton espace pour visualiser la suite.</div>
 
-<script src="assets/site.js?v=2709zt"></script>
+<script src="assets/site.js?v=2709zu"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script src="assets/ely-auth.js"></script>
 <script>

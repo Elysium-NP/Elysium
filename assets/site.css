@@ -57,7 +57,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- curseur instrument (viseur carré) ---------- */
 @media (hover:hover) and (pointer:fine){
-  html.js, html.js *{cursor:none}
+  /* (ancien curseur « viseur » retiré avec le thème sombre : le navigateur gère le curseur) */
   .cur{position:fixed;left:0;top:0;z-index:100;pointer-events:none;width:26px;height:26px;margin:-13px 0 0 -13px;
     border:1px solid rgba(46,155,255,.75);will-change:transform;
     transition:width .22s ease,height .22s ease,margin .22s ease,background .22s ease,border-color .22s ease}
@@ -474,8 +474,6 @@ html.reveal-ready .reveal.in{opacity:1;transform:none}
    condensées. Placée en fin de fichier pour gagner sur les règles ci-dessus.
    ========================================================================== */
 .cur,.curdot,.grain,.ambscan,.frame,.phead .pfield{display:none!important}
-html.js,html.js *{cursor:auto}
-html.js a,html.js button,html.js summary,html.js label,html.js [role=button]{cursor:pointer}
 
 /* titres : Georgia, casse normale (comme leurs fiches) — même dans les styles propres aux pages */
 h1,h2:not(.intitule),h3:not(.intitule){font-family:var(--titre)!important;font-weight:400!important;text-transform:none!important;letter-spacing:-.01em!important;line-height:1.12!important;color:var(--ice)}

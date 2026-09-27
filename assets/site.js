@@ -132,7 +132,7 @@
             var titre=n+(n>1?' nouveaux messages':' nouveau message')+' de tes coachs';
             document.querySelectorAll('a.go, a.go-m, .burger').forEach(function(el){
               if(el.tagName==='A'&&!/espace/.test(el.getAttribute('href')||'')) return;
-              var b=document.createElement('span'); b.className='pastille'; b.textContent=n; b.title=titre;
+              var b=document.createElement('b'); b.className='pastille';   // <b> : les <span> du burger sont ses barres b.textContent=n; b.title=titre;
               b.setAttribute('aria-label',titre); el.appendChild(b);
             });
           }).catch(function(){});

@@ -569,3 +569,22 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
    L'en-tête garde « Elysium » en texte (décision des coachs, 27/09 16 h 15). */
 .site-foot{text-align:center}
 .site-foot .foot-logo{display:block;width:200px;max-width:60%;height:auto;margin:0 auto 26px}
+
+/* ── TRANSITIONS ENTRE PAGES (Yoann, 27/09 16 h 24 : « un petit effet, léger ») ──
+   View Transitions API : l'ancienne page s'efface en glissant à peine vers le haut, la
+   nouvelle arrive du bas (~0,3 s). L'en-tête garde son nom de transition -> il ne bouge pas.
+   Repli (navigateur sans l'API) : simple fondu d'arrivée, en opacité seule (un transform sur
+   <body> décalerait l'en-tête fixe). Rien du tout si « réduire les animations ». */
+@view-transition{navigation:auto}
+.status,.band{view-transition-name:entete}
+::view-transition-old(root){animation:vt-sortie .2s ease both}
+::view-transition-new(root){animation:vt-entree .32s cubic-bezier(.2,.7,.2,1) both}
+@keyframes vt-sortie{to{opacity:0;transform:translateY(-6px)}}
+@keyframes vt-entree{from{opacity:0;transform:translateY(10px)}}
+@keyframes vt-fondu{from{opacity:0}}
+@supports not (view-transition-name:none){ body{animation:vt-fondu .3s ease both} }
+@media(prefers-reduced-motion:reduce){
+  @view-transition{navigation:none}
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+  body{animation:none!important}
+}

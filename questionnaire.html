@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="assets/site.css">
 <style>
   body{overflow-x:hidden}
-  .qtop{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px var(--edge);background:linear-gradient(var(--void),rgba(6,8,12,0))}
+  .qtop{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px var(--edge);background:rgba(245,241,232,.92)}
   .qtop .back{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s}
   .qtop .back:hover{color:var(--blue)}
   .qprog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue-d),var(--blue));box-shadow:0 0 12px var(--blue);width:0;z-index:60;transition:width .5s cubic-bezier(.4,0,.2,1)}
@@ -77,7 +77,7 @@
   .qerr{font-family:var(--disp);font-size:13px;line-height:1.6;color:#8a5a00;margin-top:16px;min-height:16px;text-align:center}
   /* état d'enregistrement : fixe en bas d'écran, visible pendant tout le remplissage */
   .qsave{position:fixed;right:var(--edge);bottom:18px;z-index:58;font-family:var(--disp);font-size:11px;letter-spacing:.1em;
-    color:var(--steel);background:rgba(6,8,12,.9);border:1px solid var(--line);padding:8px 13px;
+    color:var(--steel);background:rgba(251,248,242,.95);border:1px solid var(--line);padding:8px 13px;
     opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;pointer-events:none}
   .qsave.on{opacity:1;transform:none}
   @media(max-width:520px){.qsave{left:var(--edge);right:var(--edge);text-align:center}}

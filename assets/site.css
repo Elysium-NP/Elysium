@@ -540,3 +540,5 @@ footer .logo{margin-bottom:18px}
 .auth-msg.err{color:#8a1c1c;border-color:#e3a3a3;background:#f9e3e3}
 .auth-msg.ok{color:#0f4f8f;border-color:#9cc3ea;background:#E3EEF8}
 .cok{background:var(--p-bleu);border-radius:12px}
+/* ces règles de l'ancien thème forçaient un fond transparent (bouton contour) : plus précises, on les suit */
+.cform .btn,.auth-form .btn,.locked .btn{background:var(--brand)}

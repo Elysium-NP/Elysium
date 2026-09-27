@@ -82,11 +82,11 @@
   .mrow .p{font-family:var(--disp);font-size:11px;color:var(--steel);width:34px;text-align:right}
   .mrow .bar{height:5px;background:rgba(60,45,20,.06);border-radius:3px;overflow:hidden}
   .mrow .bar i{display:block;height:100%;width:0;border-radius:3px;box-shadow:0 0 8px currentColor;transition:width 1.15s cubic-bezier(.2,.7,.2,1)}
-  .tabs{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tabs{display:flex;gap:6px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   /* dès la tablette, la rangée passe à la ligne au lieu de déborder (le bouton Imprimer était coupé) ; sur téléphone : défilement horizontal */
   @media(min-width:700px){.tabs{flex-wrap:wrap;overflow:visible}}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{font-family:var(--disp);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:11px 16px;cursor:pointer;white-space:nowrap;transition:border-color .25s,color .25s,background .25s;flex:none}
+  .tab{font-family:var(--disp);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:10px 12px;cursor:pointer;white-space:nowrap;transition:border-color .25s,color .25s,background .25s;flex:none}
   .tab:hover{color:var(--gris)}
   .tab.on{color:#fff;background:var(--blue);border-color:var(--blue);font-weight:600}
   .panel{display:none;padding-top:20px}
@@ -166,7 +166,7 @@
   .mdate-lbl .dpick:focus{outline:none;border-color:var(--blue)}
   /* ===== améliorations : progression courses · aujourd'hui · survol · reveal · impression ===== */
   .tabs .printbtn{margin-left:auto;flex:none}
-  .printbtn{font-family:var(--disp);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:11px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .3s,color .3s;white-space:nowrap}
+  .printbtn{font-family:var(--disp);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--steel);background:none;border:1px solid var(--line);padding:10px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .3s,color .3s;white-space:nowrap}
   .printbtn:hover{border-color:var(--blue);color:var(--blue)}
   .printbtn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   .courses-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}

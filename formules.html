@@ -7,7 +7,7 @@
 <title>ELYSIUM · Les formules</title>
 <link rel="canonical" href="https://elysium-x57.pages.dev/formules">
 <meta name="description" content="Les formules Elysium : trois programmations nutritionnelles sur-mesure, construites par les coachs, de 19,90 € à 29,90 € toutes les 4 semaines.">
-<script>document.documentElement.classList.add('js');if(!('onpagereveal' in window))document.documentElement.classList.add('vt-repli');addEventListener('pagereveal',function(e){window.ELY_VT=!!e.viewTransition})</script>
+<script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
@@ -39,7 +39,7 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site.css?v=2709j">
 <style>
   /* ===== PRIX DES FORMULES (Damien & Yoann 27/07) — retour à un affichage SIMPLE :
      le prix principal, puis les précisions de paiement dessous. PLUS d'ancien prix
@@ -68,6 +68,17 @@
   .plan li.opt-reco{color:var(--blue)}
   .plan li.opt-reco b{color:var(--blue)}
   .plan.feat::before{content:"Le plus choisi"}
+  /* Damien (27/09) : « des notions de couleur dans les avantages, pour pousser à prendre celle à 25
+     ou 29 ». Un avantage EN PLUS = une pastille de couleur, la même d'une formule à l'autre
+     (pastels des repas) ; la formule 1 garde des puces neutres. */
+  .plan li.plus{padding-left:30px}
+  .plan li.plus::before{left:0;top:1px;width:20px;height:20px;border:0;border-radius:50%;background:var(--pc);transform:none}
+  .plan li.plus::after{content:"";position:absolute;left:6px;top:6px;width:8px;height:4px;border-left:2px solid #111;border-bottom:2px solid #111;transform:rotate(-45deg)}
+  .plan li.vert{--pc:var(--b-vert)} .plan li.bleu{--pc:var(--b-bleu)} .plan li.jaune{--pc:var(--b-jaune)} .plan li.violet{--pc:var(--b-violet)}
+  /* formule 3 mise en avant aussi, en violet (couleur de son avantage propre : les recettes) */
+  .plan.feat.complet{border-color:var(--b-violet);box-shadow:0 0 0 1px rgba(142,124,195,.35),0 24px 50px -34px rgba(90,70,150,.5)}
+  html.reveal-ready .plan.feat.complet.in{box-shadow:0 0 0 1px rgba(142,124,195,.4),0 24px 50px -34px rgba(90,70,150,.55)}
+  .plan.feat.complet::before{content:"Le plus complet";background:var(--b-violet);color:#111}
   @media(max-width:900px){ .plans{grid-template-columns:1fr;max-width:460px;margin:0 auto} }
   /* ===== Section « Le suivi » : accompagnement évolutif (Dimitri 26/07) ===== */
   .evol{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:30px}
@@ -169,15 +180,15 @@
           <div class="pterm">Toutes les 4 semaines</div>
           <ul>
             <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
-            <li><b>Nouveau menu chaque mois</b></li>
-            <li><b>Quantités réajustées</b> à chaque changement de menu</li>
-            <li><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
+            <li class="plus vert"><b>Nouveau menu chaque mois</b></li>
+            <li class="plus bleu"><b>Quantités réajustées</b> à chaque changement de menu</li>
+            <li class="plus jaune"><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
             <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
           </ul>
           <a class="btn" href="inscription.html?formule=f2">Choisir cette formule</a>
         </article>
 
-        <article class="plan reveal d2">
+        <article class="plan feat complet reveal d2">
           <span class="pn">Formule 03</span>
           <h3>Menu mensuel &amp; recettes</h3>
           <p class="desc">Le suivi le plus serré, avec les recettes de chaque plat.</p>
@@ -187,10 +198,10 @@
           <div class="pterm">Toutes les 4 semaines</div>
           <ul>
             <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
-            <li><b>Nouveau menu chaque mois</b></li>
-            <li><b>Quantités réajustées chaque semaine</b></li>
-            <li><b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise</li>
-            <li><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
+            <li class="plus vert"><b>Nouveau menu chaque mois</b></li>
+            <li class="plus bleu"><b>Quantités réajustées chaque semaine</b></li>
+            <li class="plus violet"><b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise</li>
+            <li class="plus jaune"><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
             <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
           </ul>
           <a class="btn" href="inscription.html?formule=f3">Choisir cette formule</a>
@@ -249,6 +260,6 @@
   <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
 </footer>
 
-<script src="assets/site.js"></script>
+<script src="assets/site.js?v=2709j"></script>
 </body>
 </html>

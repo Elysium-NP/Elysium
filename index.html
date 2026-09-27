@@ -322,7 +322,10 @@
       if(document.visibilityState==='visible'){ document.removeEventListener('visibilitychange',v); pret(); } }); return; }
     requestAnimationFrame(function(){ requestAnimationFrame(demarre); }); }
   document.addEventListener('visibilitychange',function(){
-    anims.forEach(function(a){ try{ document.visibilityState==='visible'?a.play():a.pause(); }catch(e){} }); });
+    // ⚠️ ne reprendre QUE les animations mises en pause : relancer une animation déjà finie la
+    // rejoue depuis le début (le contour d'une lettre pleine se redessinait — trouvé au banc).
+    var vis=document.visibilityState==='visible';
+    anims.forEach(function(a){ try{ if(vis&&a.playState==='paused') a.play(); else if(!vis&&a.playState==='running') a.pause(); }catch(e){} }); });
   // retour arrière vers une page gardée en cache par le navigateur : l'intro est simplement terminée
   addEventListener('pageshow',function(e){ if(e.persisted&&!fini) passer(); });
   function apresLecture(){

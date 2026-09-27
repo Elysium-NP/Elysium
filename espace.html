@@ -102,7 +102,7 @@
   .meal .mac{margin-top:14px;padding-top:11px;border-top:1px solid rgba(60,45,20,.06);font-family:var(--disp);font-size:11px;letter-spacing:.05em;color:var(--steel);display:flex;gap:14px}
   .meal .mac b{color:var(--gris);font-weight:600}
   .meal .seas{margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--steel)}
-  .meal .seas::before{content:"Assaisonnement : ";font-style:normal;color:var(--steel)}
+  .meal .seas::before{content:"🌿 ";font-style:normal}
   .dayoff{border:1px dashed var(--line);padding:40px 20px;text-align:center;background:rgba(46,155,255,.03)}
   .dayoff .t{font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:.05em;text-transform:uppercase;color:var(--blue)}
   .dayoff .s{font-family:var(--serif);font-size:17px;color:var(--gris);margin-top:12px;line-height:1.6}
@@ -324,34 +324,34 @@ var PROG = {
   kcal:1288, P:94, G:168, L:27,
   jours:[
     {j:1,repas:[
-      {type:"Petit-déjeuner",emo:"",kcal:272,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[25,29,5]},
-      {type:"Déjeuner",emo:"",kcal:504,rec:"Bœuf, pâtes & poivron",seas:"Oignon, ail, cumin, origan",ings:[["115 g","viande hachée 5%"],["80 g","pâtes"],["1/2","poivron"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[25,62,14]},
-      {type:"Dîner",emo:"",kcal:480,rec:"Axoa de bœuf & semoule",seas:"Ail, thym, poivre",ings:[["95 g","viande hachée 5%"],["1","poivron"],["1/2","oignon"],["90 g","semoule"]],m:[30,75,6]}
+      {type:"Petit-déjeuner",emo:"🟠",kcal:272,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[25,29,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:504,rec:"Bœuf, pâtes & poivron",seas:"Oignon, ail, cumin, origan",ings:[["115 g","viande hachée 5%"],["80 g","pâtes"],["1/2","poivron"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[25,62,14]},
+      {type:"Dîner",emo:"🌙",kcal:480,rec:"Axoa de bœuf & semoule",seas:"Ail, thym, poivre",ings:[["95 g","viande hachée 5%"],["1","poivron"],["1/2","oignon"],["90 g","semoule"]],m:[30,75,6]}
     ]},
     {j:2,repas:[
-      {type:"Petit-déjeuner",emo:"",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
-      {type:"Déjeuner",emo:"",kcal:530,rec:"Thon, pâtes & concombre",seas:"Citron, ail, persil",ings:[["95 g","thon au naturel"],["95 g","pâtes"],["1/2","concombre"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[40,72,9]},
-      {type:"Dîner",emo:"",kcal:525,rec:"Poisson blanc, patate douce & haricots verts",seas:"Citron, persil, ail, thym",ings:[["120 g","poisson blanc"],["300 g","patate douce"],["120 g","haricots verts"],["10 g","huile d'olive"],["15 g","parmesan"]],m:[34,62,15]}
+      {type:"Petit-déjeuner",emo:"🟠",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:530,rec:"Thon, pâtes & concombre",seas:"Citron, ail, persil",ings:[["95 g","thon au naturel"],["95 g","pâtes"],["1/2","concombre"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[40,72,9]},
+      {type:"Dîner",emo:"🌙",kcal:525,rec:"Poisson blanc, patate douce & haricots verts",seas:"Citron, persil, ail, thym",ings:[["120 g","poisson blanc"],["300 g","patate douce"],["120 g","haricots verts"],["10 g","huile d'olive"],["15 g","parmesan"]],m:[34,62,15]}
     ]},
     {j:3,repas:[
-      {type:"Petit-déjeuner",emo:"",kcal:276,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[21,31,7]},
-      {type:"Déjeuner",emo:"",kcal:510,rec:"Poulet, riz & tomates cerises",seas:"Paprika, ail, herbes de Provence",ings:[["125 g","filet de poulet"],["75 g","riz"],["195 g","tomates cerises"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[39,66,9]},
-      {type:"Dîner",emo:"",kcal:518,rec:"Bœuf, riz & maïs (au Saint-Môret)",seas:"Ail, thym, poivre",ings:[["110 g","viande hachée 5%"],["75 g","riz"],["100 g","maïs"],["15 g","Saint-Môret léger 8%"]],m:[32,70,11]}
+      {type:"Petit-déjeuner",emo:"🟠",kcal:276,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[21,31,7]},
+      {type:"Déjeuner",emo:"🍴",kcal:510,rec:"Poulet, riz & tomates cerises",seas:"Paprika, ail, herbes de Provence",ings:[["125 g","filet de poulet"],["75 g","riz"],["195 g","tomates cerises"],["5 g","huile d'olive"],["20 g","Saint-Môret léger 8%"]],m:[39,66,9]},
+      {type:"Dîner",emo:"🌙",kcal:518,rec:"Bœuf, riz & maïs (au Saint-Môret)",seas:"Ail, thym, poivre",ings:[["110 g","viande hachée 5%"],["75 g","riz"],["100 g","maïs"],["15 g","Saint-Môret léger 8%"]],m:[32,70,11]}
     ]},
     {j:4,repas:[
-      {type:"Petit-déjeuner",emo:"",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
-      {type:"Déjeuner",emo:"",kcal:535,rec:"Pâtes au poulet",seas:"Origan, basilic, ail, poivre",ings:[["90 g","pâtes"],["100 g","filet de poulet"],["150 g","pulpe de tomate"],["15 g","parmesan"]],m:[40,72,8]},
-      {type:"Dîner",emo:"",kcal:502,rec:"Pâtes au poulet, pesto & parmesan",seas:"Basilic, ail, poivre",ings:[["80 g","pâtes"],["85 g","filet de poulet"],["10 g","huile d'olive"],["10 g","parmesan"]],m:[33,58,15]}
+      {type:"Petit-déjeuner",emo:"🟠",kcal:239,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["20 g","Saint-Môret léger 8%"]],m:[20,35,5]},
+      {type:"Déjeuner",emo:"🍴",kcal:535,rec:"Pâtes au poulet",seas:"Origan, basilic, ail, poivre",ings:[["90 g","pâtes"],["100 g","filet de poulet"],["150 g","pulpe de tomate"],["15 g","parmesan"]],m:[40,72,8]},
+      {type:"Dîner",emo:"🌙",kcal:502,rec:"Pâtes au poulet, pesto & parmesan",seas:"Basilic, ail, poivre",ings:[["80 g","pâtes"],["85 g","filet de poulet"],["10 g","huile d'olive"],["10 g","parmesan"]],m:[33,58,15]}
     ]},
     {j:5,repas:[
-      {type:"Petit-déjeuner",emo:"",kcal:256,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["35 g","Saint-Môret léger 8%"]],m:[19,30,6]},
-      {type:"Déjeuner",emo:"",kcal:559,rec:"Steak, riz & poivron",seas:"Poivre, ail, thym",ings:[["140 g","bifteck"],["70 g","riz"],["1","poivron"],["5 g","huile d'olive"]],m:[44,61,14]},
-      {type:"Dîner",emo:"",kcal:521,rec:"Poulet, semoule & ratatouille",seas:"Paprika, herbes de Provence, ail",ings:[["120 g","filet de poulet"],["80 g","semoule"],["200 g","ratatouille"],["10 g","huile d'olive"]],m:[38,58,12]}
+      {type:"Petit-déjeuner",emo:"🟠",kcal:256,rec:"Tartines poulet & Saint-Môret",seas:"Poivre, origan, persil",ings:[["2 tr.","pain complet"],["1 tr.","blanc de poulet"],["35 g","Saint-Môret léger 8%"]],m:[19,30,6]},
+      {type:"Déjeuner",emo:"🍴",kcal:559,rec:"Steak, riz & poivron",seas:"Poivre, ail, thym",ings:[["140 g","bifteck"],["70 g","riz"],["1","poivron"],["5 g","huile d'olive"]],m:[44,61,14]},
+      {type:"Dîner",emo:"🌙",kcal:521,rec:"Poulet, semoule & ratatouille",seas:"Paprika, herbes de Provence, ail",ings:[["120 g","filet de poulet"],["80 g","semoule"],["200 g","ratatouille"],["10 g","huile d'olive"]],m:[38,58,12]}
     ]},
     {j:6,repas:[
-      {type:"Petit-déjeuner",emo:"",kcal:279,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[23,36,7]},
-      {type:"Déjeuner",emo:"",kcal:504,rec:"Thon, blé & concombre",seas:"Citron, ail, persil",ings:[["70 g","thon au naturel"],["95 g","blé"],["1/2","concombre"],["10 g","huile d'olive"]],m:[34,63,12]},
-      {type:"Dîner",emo:"",kcal:498,rec:"Thon, pâtes & maïs",seas:"Ail, basilic, poivre",ings:[["125 g","thon au naturel"],["65 g","pâtes"],["100 g","maïs"],["5 g","huile d'olive"]],m:[44,59,9]}
+      {type:"Petit-déjeuner",emo:"🟠",kcal:279,rec:"Galettes de riz, poulet & fromage",seas:"Poivre, origan, persil",ings:[["4","galettes de riz"],["2 tr.","blanc de poulet"],["50 g","Saint-Môret léger 8%"]],m:[23,36,7]},
+      {type:"Déjeuner",emo:"🍴",kcal:504,rec:"Thon, blé & concombre",seas:"Citron, ail, persil",ings:[["70 g","thon au naturel"],["95 g","blé"],["1/2","concombre"],["10 g","huile d'olive"]],m:[34,63,12]},
+      {type:"Dîner",emo:"🌙",kcal:498,rec:"Thon, pâtes & maïs",seas:"Ail, basilic, poivre",ings:[["125 g","thon au naturel"],["65 g","pâtes"],["100 g","maïs"],["5 g","huile d'olive"]],m:[44,59,9]}
     ]}
   ],
   courses:{
@@ -361,8 +361,8 @@ var PROG = {
     "Fruits & légumes":[["Concombre","2"],["Haricots verts","120 g"],["Maïs","200 g"],["Oignon","1"],["Poivrons","5"],["Pulpe de tomate","150 g"],["Ratatouille","200 g"],["Tomates cerises","195 g"]],
     "Divers":[["Huile d'olive","à volonté"]]
   },
-  conseils:["Fréquence régulière des repas (idéal 4 h)","Aliments pesés crus","Cuisson au spray antiadhésif","Ne pas changer les plats entre les jours","Épices / herbes au choix & à volonté (sel modéré)","Café & thé sans sucre","Pas de soda ni de jus industriel","Féculents « complets » possibles","Jour Off : repas libres (1 cheat meal possible)"],
-  modevie:["10 000 pas par jour minimum","8 h de sommeil","~2,2 L d'eau / jour (1 L / 25 kg de poids de forme)","Astuce batch-cooking : cuisiner ses protéines & féculents à l'avance fait gagner du temps dans la semaine","Resto / déplacement : protéine maigre + légumes, modère sauces & féculents"]
+  conseils:["🍽️ Fréquence régulière des repas (idéal 4 h)","⚖️ Aliments pesés crus","🍳 Cuisson au spray antiadhésif","🔄 Ne pas changer les plats entre les jours","🌿 Épices / herbes au choix & à volonté (sel modéré)","☕ Café & thé sans sucre","🥤 Pas de soda ni de jus industriel","🌾 Féculents « complets » possibles","🎉 Jour Off : repas libres (1 cheat meal possible)"],
+  modevie:["🚶 10 000 pas par jour minimum","😴 8 h de sommeil","💧 ~2,2 L d'eau / jour (1 L / 25 kg de poids de forme)","🍱 Astuce batch-cooking : cuisiner ses protéines & féculents à l'avance fait gagner du temps dans la semaine","🍽️ Resto / déplacement : protéine maigre + légumes, modère sauces & féculents"]
 };
 (function(){
   var u=ElyAuth.user(); if(!u) return;
@@ -555,11 +555,18 @@ var PROG = {
       return '<div class="panel"><div class="meals">'+m+'</div></div>';
     }
     function coursesHTML(){
+      function catEmo(n){ n=n.toLowerCase();
+        if(/oléagineux|oleagineux|divers/.test(n)) return '🥜';
+        if(/protéin|protein/.test(n)) return '🥩';
+        if(/laitier/.test(n)) return '🧀';
+        if(/fruit|légume|legume/.test(n)) return '🥑';
+        if(/féculent|feculent|céréale|cereale/.test(n)) return '🥖';
+        return '🛒'; }
       var total=0;
       var cats=Object.keys(PROG.courses).map(function(cn){
         var arr=PROG.courses[cn]; total+=arr.length;
         var li=arr.map(function(x){return '<label class="ci" data-k="'+encodeURIComponent(cn+'::'+x[0])+'"><input type="checkbox"><span class="box"></span><span class="nm">'+x[0]+'</span><b>'+x[1]+'</b></label>';}).join('');
-        return '<div class="cat rv"><h4><span class="cn">'+cn+'</span><span class="n"><b class="done">0</b> / '+arr.length+'</span></h4>'+li+'</div>';
+        return '<div class="cat rv"><h4><span class="cn">'+catEmo(cn)+' '+cn+'</span><span class="n"><b class="done">0</b> / '+arr.length+'</span></h4>'+li+'</div>';
       }).join('');
       return '<div class="panel">'+
         '<div class="courses-top"><span class="clabel"><b>0</b> / '+total+' articles</span><div class="cprog"><i></i></div><button type="button" class="clearbtn">Tout décocher</button></div>'+
@@ -569,13 +576,13 @@ var PROG = {
       var c=PROG.conseils.map(function(x){return '<li>'+x+'</li>';}).join('');
       var v=PROG.modevie.map(function(x){return '<li>'+x+'</li>';}).join('');
       var suivi=[
-        ['Photos avant / après','Prendre 3 photos (face, profil, dos) dès maintenant, puis dans 12 semaines.<br>Objectif : un retour visuel à coupler avec l\'évolution du poids','c-photos','Ajouter une photo'],
-        ['Pesée hebdomadaire','1 fois par semaine, le même jour<br>À jeun, nu, après les toilettes<br>Éviter la pesée 1 ou 2 jours après le jour off','c-courbe','Enregistrer une pesée'],
-        ['Mensurations (optionnel)','À saisir dans « Mes mensurations », sur ton tableau de bord, 1 fois par mois pour un suivi encore plus complet.','c-mens','Saisir mes mensurations']
+        ['📷 Photos avant / après','Prendre 3 photos (face, profil, dos) dès maintenant, puis dans 12 semaines.<br>🎯 Objectif : un retour visuel à coupler avec l\'évolution du poids','c-photos','Ajouter une photo'],
+        ['⚖️ Pesée hebdomadaire','1 fois par semaine, le même jour<br>À jeun, nu, après les toilettes<br>Éviter la pesée 1 ou 2 jours après le jour off','c-courbe','Enregistrer une pesée'],
+        ['📏 Mensurations (optionnel)','À saisir dans « Mes mensurations », sur ton tableau de bord, 1 fois par mois pour un suivi encore plus complet.','c-mens','Saisir mes mensurations']
       ].map(function(s){return '<div class="acard note rv goto" data-goto="'+s[2]+'" role="button" tabindex="0"><h4>'+s[0]+'</h4><div class="mini">'+s[1]+'</div><span class="gohint">'+s[3]+' ↓</span></div>';}).join('');
       return '<div class="panel"><div class="advice">'+
-        '<div class="acard rv"><h4>Conseils essentiels</h4><ul>'+c+'</ul></div>'+
-        '<div class="acard rv"><h4>Mode de vie</h4><ul>'+v+'</ul></div></div>'+
+        '<div class="acard rv"><h4>📌 Conseils essentiels</h4><ul>'+c+'</ul></div>'+
+        '<div class="acard rv"><h4>🏃 Mode de vie</h4><ul>'+v+'</ul></div></div>'+
         '<div class="suivi">'+suivi+'</div></div>';
     }
     // liste de courses : cases mémorisées + progression + « tout décocher »

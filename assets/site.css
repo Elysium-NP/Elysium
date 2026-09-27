@@ -685,7 +685,7 @@ html[data-theme="obscur"] .demo-banner{background:var(--p-jaune);color:#F3DB8C}
 html[data-theme="obscur"] .auth-msg.err{color:#F3B4B4;border-color:#7a3a3a;background:#2e1a1a}
 html[data-theme="obscur"] .auth-msg.ok{color:#BFDDFB;border-color:#2d5a86;background:#1D2A38}
 html[data-theme="obscur"] .foot-logo{filter:invert(1) hue-rotate(180deg)}          /* logo noir -> clair, le bleu reste bleu */
-html[data-theme="obscur"] img[src*="prozis"]{filter:invert(1) hue-rotate(180deg)}
+/* logo Prozis : jamais modifié, c'est le logo officiel (Dimitri 27/09) */
 
 /* bouton clair / obscur (injecté par site.js dans le menu et les en-têtes) */
 .theme-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:1px solid var(--line);

@@ -687,7 +687,9 @@
 /* PISTE A : réactions à chaque réponse, blocs cochés, jauge et encouragements. Rythme posé. */
 (function(){
   var reduit=matchMedia('(prefers-reduced-motion:reduce)').matches, html=document.documentElement;
-  var form=document.getElementById('qform'), blocs=[].slice.call(form.querySelectorAll('.qstep'));
+  var form=document.getElementById('qform'), tous=[].slice.call(form.querySelectorAll('.qstep'));
+  // la jauge ne compte que les blocs à questions obligatoires (le bloc facultatif serait « rempli » d'office)
+  var blocs=tous.filter(function(b){ return b.querySelector('[required],[data-req]'); });
   if(!reduit) html.classList.add('anim');
   // un bloc est complet quand toutes ses réponses obligatoires sont données
   function complet(b){
@@ -722,7 +724,7 @@
     maj(true);
     // bloc tout juste complété par un choix -> on glisse doucement au suivant
     if(b&&!avant&&b.classList.contains('fait')&&(e.target.type==='radio'||e.target.type==='checkbox')){
-      var i=blocs.indexOf(b), s=blocs[i+1];
+      var i=tous.indexOf(b), s=tous[i+1];
       if(s) setTimeout(function(){ s.scrollIntoView({behavior:reduit?'auto':'smooth',block:'start'}); },900);
     }
   });
@@ -732,8 +734,8 @@
   // apparition des blocs au défilement
   if(!reduit&&'IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){ es.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('vu'); io.unobserve(x.target); } }); },{rootMargin:'0px 0px -12% 0px'});
-    blocs.forEach(function(b){ io.observe(b); });
-  } else blocs.forEach(function(b){ b.classList.add('vu'); });
+    tous.forEach(function(b){ io.observe(b); });
+  } else tous.forEach(function(b){ b.classList.add('vu'); });
   maj(false); document.addEventListener('ely:restaure',function(){ maj(false); });
   setTimeout(function(){ pret=true; },1500);   // pas d'encouragement pendant la reprise du brouillon
 })();

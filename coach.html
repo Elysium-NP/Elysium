@@ -34,7 +34,7 @@
   .cwrap{padding:22px var(--edge) 60px;max-width:1680px;margin:0 auto}
 
   /* ---- bandeau de chiffres ---- */
-  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:22px}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
   /* suivi du client (pesées + mensurations) dans sa fiche */
   .suivi{border:1px solid var(--line);background:var(--void2);padding:14px 16px;margin:0 0 16px}
   .suivi h4{font:600 11px/1 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin:0 0 10px}
@@ -152,6 +152,26 @@
     box-shadow:0 0 10px rgba(46,155,255,.5);width:0;transition:width 1s cubic-bezier(.2,.7,.2,1)}
   .bar .bv{font-family:var(--disp);font-size:12px;color:var(--ice);min-width:30px;text-align:right;font-variant-numeric:tabular-nums}
 
+  /* abonnements (Damien 27/09) : formules, montant, résiliations — Stripe pour l'argent */
+  .kpis.abo{grid-template-columns:repeat(6,1fr)}
+  .kpi .v.att{font-size:26px;color:var(--steel)}
+  /* messagerie clients <-> coachs */
+  .msgs{display:grid;grid-template-columns:280px 1fr;border:1px solid var(--line);background:var(--void2);margin-bottom:22px;min-height:340px}
+  @media(max-width:800px){.msgs{grid-template-columns:1fr}}
+  .msgs .fils{border-right:1px solid var(--line);overflow-y:auto;max-height:460px}
+  .msgs .fil{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 14px;cursor:pointer;font:14px/1.35 var(--texte);color:var(--ice)}
+  .msgs .fil.on{background:var(--p-bleu)}
+  .msgs .fil small{display:block;color:var(--steel);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+  .msgs .nl{flex:none;align-self:center;min-width:22px;height:22px;border-radius:11px;background:var(--brand);color:#111;font:700 12px/22px var(--texte);text-align:center;padding:0 6px}
+  .msgs .conv{display:flex;flex-direction:column;min-width:0}
+  .msgs .bulles{flex:1;overflow-y:auto;max-height:380px;padding:16px;display:flex;flex-direction:column;gap:8px}
+  .msgs .b{max-width:78%;padding:9px 12px;border-radius:12px;font-size:14.5px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+  .msgs .b.lui{align-self:flex-start;background:#fff;border:1px solid var(--line)}
+  .msgs .b.nous{align-self:flex-end;background:var(--p-bleu)}
+  .msgs .b time{display:block;font-size:11px;color:var(--steel);margin-top:4px}
+  .msgs form{display:flex;gap:8px;border-top:1px solid var(--line);padding:10px}
+  .msgs textarea{flex:1;min-height:44px;resize:vertical;font:16px/1.4 var(--texte);border:1px solid var(--line);padding:9px 11px;background:#fff;color:var(--ice)}
+  .msgs form button{font:600 14px/1 var(--texte);background:var(--brand);color:#111;border:0;border-radius:999px;padding:0 18px;cursor:pointer}
   .empty{font-family:var(--disp);font-size:13.5px;line-height:1.65;color:var(--steel);text-align:center;padding:38px 20px}
   .empty b{color:var(--ice);display:block;font-size:16px;margin-bottom:6px}
   .soon{font-family:var(--disp);font-size:11px;letter-spacing:.1em;color:var(--steel);border:1px dashed var(--line);padding:9px 12px;margin-top:10px}
@@ -200,8 +220,23 @@
     <div class="kpi"><div class="k">Validés</div><div class="v" id="k-val">0</div><div class="s">envoyés au client</div></div>
     <div class="kpi"><div class="k">Clients</div><div class="v" id="k-cli">0</div><div class="s">comptes créés</div></div>
     <div class="kpi"><div class="k">Pesées en retard</div><div class="v" id="k-pesee">—</div><div class="s">clients sans pesée depuis 7 jours</div></div>
-    <div class="kpi"><div class="k">Chiffre d'affaires</div><div class="v" id="k-ca">—</div><div class="s" id="k-ca-s">en attente de Stripe</div></div>
   </div>
+
+  <!-- ── abonnements (Damien 27/09) : l'argent viendra de Stripe, rien n'est inventé ── -->
+  <h2 class="intitule" style="margin:4px 0 12px">Abonnements</h2>
+  <div class="kpis abo">
+    <div class="kpi"><div class="k">Formule 1 · 19,90 €</div><div class="v" id="k-f1">—</div><div class="s">Menu unique</div></div>
+    <div class="kpi"><div class="k">Formule 2 · 25,90 €</div><div class="v" id="k-f2">—</div><div class="s">Menu mensuel</div></div>
+    <div class="kpi"><div class="k">Formule 3 · 29,90 €</div><div class="v" id="k-f3">—</div><div class="s">Menu mensuel &amp; recettes</div></div>
+    <div class="kpi"><div class="k">Clients depuis le début</div><div class="v" id="k-total">—</div><div class="s" id="k-total-s">comptes créés sur le site</div></div>
+    <div class="kpi"><div class="k">Montant / 4 semaines</div><div class="v att">—</div><div class="s">en attente de Stripe</div></div>
+    <div class="kpi"><div class="k">Résiliations</div><div class="v att">—</div><div class="s">en attente de Stripe</div></div>
+  </div>
+  <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
+
+  <!-- ── messagerie : les coachs répondent à la main ── -->
+  <h2 class="intitule" style="margin:4px 0 12px">Messages <span id="msg-nl" style="color:var(--blue)"></span></h2>
+  <div class="msgs" id="msgs"><div class="empty" style="grid-column:1/-1">Chargement…</div></div>
 
   <!-- ── cockpit ───────────────────────────────────────────────────────── -->
   <div class="cock">
@@ -402,6 +437,66 @@
       $('k-pesee').textContent=n;
     });
   }
+  /* ---------- abonnements ---------- */
+  function chargerAbo(){
+    sb.from('profiles').select('id,formule').then(function(r){
+      if(r.error){ // colonne pas encore créée : on le dit, on n'invente rien
+        $('abo-note').textContent='Répartition par formule : à activer (script supabase/tableau_de_bord_coach.sql).';
+        return; }
+      var n={f1:0,f2:0,f3:0}; (r.data||[]).forEach(function(p){ if(n[p.formule]!=null) n[p.formule]++; });
+      $('k-f1').textContent=n.f1; $('k-f2').textContent=n.f2; $('k-f3').textContent=n.f3;
+      $('abo-note').textContent='Comptes par formule choisie à l’inscription. Les clients réellement actifs viendront de Stripe.';
+    });
+    Promise.all([sb.from('profiles').select('id'),sb.from('stats_historique').select('hommes,femmes')]).then(function(r){
+      var site=((r[0].data)||[]).length, histo=((r[1].data)||[]).reduce(function(a,x){ return a+(+x.hommes||0)+(+x.femmes||0); },0);
+      $('k-total').textContent=site+histo;
+      $('k-total-s').textContent= histo ? site+' sur le site + '+histo+' avant le site' : 'comptes créés sur le site (historique d’avant à importer)';
+    });
+  }
+
+  /* ---------- messagerie : un fil par client (table messages) ---------- */
+  var MSG=[], NOMS={}, filOuvert=null;
+  function heure(t){ return new Date(t).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+  function chargerMessages(){
+    return Promise.all([
+      sb.from('messages').select('id,client_id,auteur_id,texte,lu_at,created_at').order('created_at'),
+      sb.from('profiles').select('id,prenom,nom')
+    ]).then(function(r){
+      if(r[0].error){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Messagerie à activer</b>Il reste à lancer le script supabase/tableau_de_bord_coach.sql.</div>'; return; }
+      MSG=r[0].data||[]; (r[1].data||[]).forEach(function(p){ NOMS[p.id]=(p.prenom||'')+' '+(p.nom||''); });
+      renderMessages();
+    });
+  }
+  function nonLus(cid){ return MSG.filter(function(m){ return m.client_id===cid && m.auteur_id===cid && !m.lu_at; }).length; }
+  function majNonLus(){ var n=MSG.filter(function(m){ return m.auteur_id===m.client_id&&!m.lu_at; }).length; $('msg-nl').textContent=n?'· '+n+' non lu'+(n>1?'s':''):''; }
+  function renderMessages(){
+    var fils={}; MSG.forEach(function(m){ fils[m.client_id]=m; });   // dernier message de chaque fil
+    var ids=Object.keys(fils).sort(function(a,b){ return (nonLus(b)-nonLus(a)) || (fils[b].created_at>fils[a].created_at?1:-1); });
+    majNonLus();
+    if(!ids.length){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Aucun message</b>Les messages des clients arriveront ici.</div>'; return; }
+    if(!filOuvert||!fils[filOuvert]) filOuvert=ids[0];
+    var h='<div class="fils">'+ids.map(function(id){ var n=nonLus(id);
+      return '<button type="button" class="fil'+(id===filOuvert?' on':'')+'" data-fil="'+id+'"><span>'+esc(NOMS[id]||'Client')+
+        '<small>'+esc(fils[id].texte)+'</small></span>'+(n?'<span class="nl">'+n+'</span>':'')+'</button>'; }).join('')+'</div>';
+    h+='<div class="conv"><div class="bulles" id="bulles">'+MSG.filter(function(m){ return m.client_id===filOuvert; }).map(function(m){
+      var lui=m.auteur_id===m.client_id;
+      return '<div class="b '+(lui?'lui':'nous')+'">'+esc(m.texte)+'<time>'+(lui?'':'Coach · ')+heure(m.created_at)+'</time></div>'; }).join('')+'</div>'+
+      '<form id="msg-form"><textarea id="msg-txt" placeholder="Ta réponse…" required maxlength="4000"></textarea><button type="submit">Envoyer</button></form></div>';
+    $('msgs').innerHTML=h;
+    var b=$('bulles'); b.scrollTop=b.scrollHeight;
+    // ouvrir un fil = lire ses messages
+    var aLire=MSG.filter(function(m){ return m.client_id===filOuvert && m.auteur_id===filOuvert && !m.lu_at; }).map(function(m){ return m.id; });
+    if(aLire.length) sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(r){
+      if(r.error) return;
+      MSG.forEach(function(m){ if(aLire.indexOf(m.id)>=0) m.lu_at=new Date().toISOString(); });
+      majNonLus(); document.querySelectorAll('.fil.on .nl').forEach(function(x){ x.remove(); }); });
+  }
+  document.addEventListener('click',function(e){ var f=e.target.closest&&e.target.closest('.fil'); if(f){ filOuvert=f.getAttribute('data-fil'); renderMessages(); } });
+  document.addEventListener('submit',function(e){ if(e.target.id!=='msg-form') return; e.preventDefault();
+    var t=$('msg-txt'), txt=t.value.trim(); if(!txt) return; var bt=e.target.querySelector('button'); bt.disabled=true;
+    sb.from('messages').insert({client_id:filOuvert,auteur_id:moi.id,texte:txt}).then(function(r){ bt.disabled=false;
+      if(r.error){ toast('Message non envoyé, réessaie.'); return; } t.value=''; chargerMessages(); });
+  });
   function qa(k,v){
     var flag=ALERTE.some(function(a){return k.indexOf(a)===0;});
     return '<div class="qa'+(flag?' flag':'')+'"><dt>'+esc(k.split('⚠')[0].split('\n(')[0].replace(/\s+/g,' ').replace(/\s*\(.*?\)\s*$/,'').slice(0,90))+'</dt><dd>'+esc(v)+'</dd></div>';
@@ -565,7 +660,7 @@
         sb.from('v_stats_mensuelles').select('*').limit(24),
         sb.from('profiles').select('id')
       ]).then(function(res){
-        file=(res[0].data)||[]; renderFile(); recount(); compterRetards();
+        file=(res[0].data)||[]; renderFile(); recount(); compterRetards(); chargerAbo(); chargerMessages();
         renderStats((res[1].data)||[], ((res[2].data)||[]).length);
         if(file.length){ sel=0; renderFile(); renderClient(); renderProg(); }
         requestAnimationFrame(function(){ document.querySelectorAll('.bf').forEach(function(b){ b.style.width=b.style.width; }); });

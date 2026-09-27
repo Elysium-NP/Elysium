@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#06080C">
+<meta name="theme-color" content="#F5F1E8">
 <title>ELYSIUM · Mon espace</title>
 <meta name="robots" content="noindex">
 <script>document.documentElement.classList.add('js')</script>
@@ -55,7 +55,7 @@
   /* ===== PROGRAMME V2 intégré (affiché si payé + questionnaire rempli) ===== */
   #progview{margin:6px 0 30px;animation:fade .45s ease}
   #progview[hidden]{display:none}
-  .phd{display:flex;flex-wrap:wrap;gap:26px;align-items:center;justify-content:space-between;margin:0 0 8px;border:1px solid var(--line);background:rgba(10,14,22,.5);padding:22px clamp(18px,3vw,30px)}
+  .phd{display:flex;flex-wrap:wrap;gap:26px;align-items:center;justify-content:space-between;margin:0 0 8px;border:1px solid var(--line);background:var(--void2);padding:22px clamp(18px,3vw,30px)}
   .phd .who .kick{font-family:var(--disp);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:9px}
   .phd .who .kick::before{content:"";width:22px;height:1px;background:var(--blue)}
   .phd .who h1{font-family:var(--disp);font-weight:700;font-size:clamp(26px,5vw,40px);line-height:1;text-transform:uppercase;color:var(--ice);margin-top:8px}
@@ -92,7 +92,7 @@
   .panel.on{display:block;animation:fade .35s ease}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   .meals{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-  .meal{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:16px 17px;display:flex;flex-direction:column}
+  .meal{border:1px solid var(--line);background:var(--void2);padding:16px 17px;display:flex;flex-direction:column}
   .meal .mh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
   .meal .mt{font-family:var(--disp);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:7px}
   .meal .mk{font-family:var(--disp);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);white-space:nowrap}
@@ -108,7 +108,7 @@
   .dayoff .t{font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:.05em;text-transform:uppercase;color:var(--blue)}
   .dayoff .s{font-family:var(--serif);font-size:17px;color:var(--gris);margin-top:12px;line-height:1.6}
   .courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-  .cat{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:15px 17px 6px;transition:border-color .3s}
+  .cat{border:1px solid var(--line);background:var(--void2);padding:15px 17px 6px;transition:border-color .3s}
   .cat:hover{border-color:rgba(46,155,255,.32)}
   .cat h4{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:4px}
   .cat h4 .n{font-size:10px;color:var(--steel);background:rgba(46,155,255,.1);border:1px solid var(--line);padding:2px 7px;letter-spacing:.05em}
@@ -125,7 +125,7 @@
   .cat .ci input:checked ~ .nm{color:var(--steel);text-decoration:line-through}
   .cat .ci input:checked ~ b{color:var(--steel)}
   .advice{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
-  .acard{border:1px solid var(--line);background:rgba(10,14,22,.5);padding:18px 20px;transition:border-color .3s}
+  .acard{border:1px solid var(--line);background:var(--void2);padding:18px 20px;transition:border-color .3s}
   .acard:hover{border-color:rgba(46,155,255,.3)}
   .acard.span{grid-column:1/-1}
   .acard.note{text-align:center;display:flex;flex-direction:column;justify-content:center}

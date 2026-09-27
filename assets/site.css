@@ -542,3 +542,4 @@ footer .logo{margin-bottom:18px}
 .cok{background:var(--p-bleu);border-radius:12px}
 /* ces règles de l'ancien thème forçaient un fond transparent (bouton contour) : plus précises, on les suit */
 .cform .btn,.auth-form .btn,.locked .btn{background:var(--brand)}
+.coach .ph{background-color:var(--cream2)}

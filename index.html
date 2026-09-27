@@ -52,6 +52,7 @@
   ]
 }
 </script>
+<script>if(!('onpagereveal' in window))document.documentElement.classList.add('vt-repli')</script>
 <link rel="stylesheet" href="assets/site.css">
 <style>
   @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;
@@ -306,18 +307,29 @@
         p.animate([{transform:'translateX('+((i-3)*110)+'px)'},{transform:'translateX(0px)'}],{duration:2200,easing:'cubic-bezier(.2,.7,.2,1)',fill:'both'}),
         p.animate([{fillOpacity:0},{fillOpacity:1}],{duration:700,delay:2250+i*130,easing:'ease-in-out',fill:'both'}));
     });
-    tmr.push(setTimeout(function(){ sortie(false); },4080));
+    // la sortie suit la FIN RÉELLE des animations (+ pause 0,35 s) : si l'onglet est caché
+    // pendant l'intro, elles sont mises en pause et la sortie attend avec elles.
+    Promise.all(anims.map(function(a){ return a.finished; })).then(function(){
+      tmr.push(setTimeout(function(){ sortie(false); },350)); }).catch(function(){});
   }
   /* DÉPART STABLE d'un appareil à l'autre : on attend que la page soit lue ET la police prête
      (la sortie vers l'en-tête en dépend), puis deux images, pour ne jamais démarrer « à moitié
      jouée » pendant que le téléphone est encore occupé à charger. Filet : 2,5 s maximum. */
-  function pret(){ requestAnimationFrame(function(){ requestAnimationFrame(demarre); }); }
+  // onglet caché (lien ouvert en arrière-plan, autre onglet au premier plan) : on attend qu'il
+  // soit VISIBLE pour démarrer ; s'il est caché en cours de route, pause puis reprise.
+  function pret(){
+    if(document.visibilityState!=='visible'){ document.addEventListener('visibilitychange',function v(){
+      if(document.visibilityState==='visible'){ document.removeEventListener('visibilitychange',v); pret(); } }); return; }
+    requestAnimationFrame(function(){ requestAnimationFrame(demarre); }); }
+  document.addEventListener('visibilitychange',function(){
+    anims.forEach(function(a){ try{ document.visibilityState==='visible'?a.play():a.pause(); }catch(e){} }); });
+  // retour arrière vers une page gardée en cache par le navigateur : l'intro est simplement terminée
+  addEventListener('pageshow',function(e){ if(e.persisted&&!fini) passer(); });
   function apresLecture(){
     var f=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
     Promise.race([f,new Promise(function(r){ setTimeout(r,1500); })]).then(pret,pret);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apresLecture,{once:true}); else apresLecture();
-  tmr.push(setTimeout(demarre,2500));
   function libere(){ html.classList.remove('intro-en-cours'); html.style.overflow=''; window.ELY_INTRO=false;
     if(o.parentNode) o.parentNode.removeChild(o); dispatchEvent(new Event('ely:intro-fin')); }
   function sortie(vite){
@@ -570,6 +582,23 @@
   var io=new IntersectionObserver(function(en){ en.forEach(function(x){ if(x.isIntersecting){ montre(x.target); io.unobserve(x.target); } }); },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
   reste.forEach(function(e){ io.observe(e); });
   setTimeout(function(){ hero.concat(reste).forEach(function(e){ if(e.classList.contains('rv')&&!e.classList.contains('in')) montre(e); }); },6000);   // filet
+})();
+</script>
+<script>
+/* REPLI des transitions entre pages (voir site.css) : fondu de sortie ~200 ms au clic sur un lien
+   interne, là où le navigateur ne fait pas la transition lui-même. */
+(function(){
+  var html=document.documentElement;
+  if(!html.classList.contains('vt-repli')||matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]');
+    if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||(a.target&&a.target!=='_self')||a.hasAttribute('download')) return;
+    var u=new URL(a.href,location.href);
+    if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search)) return;   // autre site, mailto, ancre de la même page
+    e.preventDefault(); html.classList.add('vt-sort');
+    setTimeout(function(){ location.href=u.href; },200);
+  });
+  addEventListener('pageshow',function(e){ if(e.persisted) html.classList.remove('vt-sort'); });   // retour arrière
 })();
 </script>
 </body>

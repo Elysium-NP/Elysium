@@ -189,3 +189,19 @@
     });
   }
 })();
+
+/* REPLI des transitions entre pages (voir site.css) : fondu de sortie ~200 ms au clic sur un lien
+   interne, là où le navigateur ne fait pas la transition lui-même. */
+(function(){
+  var html=document.documentElement;
+  if(!html.classList.contains('vt-repli')||matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]');
+    if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||(a.target&&a.target!=='_self')||a.hasAttribute('download')) return;
+    var u=new URL(a.href,location.href);
+    if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search)) return;   // autre site, mailto, ancre de la même page
+    e.preventDefault(); html.classList.add('vt-sort');
+    setTimeout(function(){ location.href=u.href; },200);
+  });
+  addEventListener('pageshow',function(e){ if(e.persisted) html.classList.remove('vt-sort'); });   // retour arrière
+})();

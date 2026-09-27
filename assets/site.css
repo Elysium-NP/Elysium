@@ -580,7 +580,10 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
 @keyframes vt-sortie{to{opacity:0;transform:translateY(-6px)}}
 @keyframes vt-entree{from{opacity:0;transform:translateY(10px)}}
 @keyframes vt-fondu{from{opacity:0}}
-@supports not (view-transition-name:none){ body{animation:vt-fondu .3s ease both} }
+/* REPLI (navigateurs sans transitions natives entre pages : Safari < 18.2, Firefox…) : la classe
+   vt-repli est posée dans le <head> ; fondu d'entrée à l'arrivée, fondu de sortie au clic (site.js). */
+html.vt-repli body{animation:vt-fondu .3s ease both}
+html.vt-repli.vt-sort body{opacity:0;transition:opacity .2s ease}
 @media(prefers-reduced-motion:reduce){
   @view-transition{navigation:none}
   ::view-transition-old(root),::view-transition-new(root){animation:none}

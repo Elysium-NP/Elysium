@@ -300,7 +300,9 @@
        2,25 → 3,7 s phase 2 : le plein noir arrive « derrière » le trait, lettre après lettre
        3,7 → 4,1 s pause, puis le mot rejoint l'en-tête (0,6 s). */
   function demarre(){
-    if(parti||fini) return; parti=true;
+    if(parti||fini) return;
+    if(document.visibilityState!=='visible'){ pret(); return; }   // caché entre-temps : on attend encore
+    parti=true;
     ps.forEach(function(p,i){
       anims.push(
         p.animate([{strokeDashoffset:p._L+'px'},{strokeDashoffset:'0px'}],{duration:1100,delay:i*180,easing:'cubic-bezier(.45,0,.25,1)',fill:'both'}),

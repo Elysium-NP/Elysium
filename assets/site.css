@@ -577,10 +577,12 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
 @view-transition{navigation:none}
 html::before{content:"";position:fixed;inset:0;z-index:19;pointer-events:none;background:var(--cream2);
   box-shadow:2px 0 0 rgba(46,155,255,.6),-2px 0 0 rgba(46,155,255,.6);transform:translateX(101%)}
-/* le LOGO complet au centre du rideau (Dimitri : « une page nue apparaît ») — même image que le
-   pied de page ; calque au-dessus du rideau, qui part avec lui */
-html::after{content:"";position:fixed;inset:0;z-index:19;pointer-events:none;opacity:0;transform:translateX(101%);
-  background:url(logo-pied.png) no-repeat center/min(300px,64vw) auto}
+/* au centre du rideau : le mot « ELYSIUM » de l'en-tête (même police, noir), en GRAND comme dans
+   l'intro de l'accueil (Yoann 27/09 : « l'Elysium en haut à gauche, en plus grand »). Pas de tracé :
+   il arrive avec le rideau et part avec lui. ~13,5vw = presque toute la largeur, iPhone compris. */
+html::after{content:"ELYSIUM";position:fixed;inset:0;z-index:19;pointer-events:none;opacity:0;transform:translateX(101%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--wordmark);font-weight:500;font-size:13.5vw;letter-spacing:.42em;padding-left:.42em;color:var(--ice);white-space:nowrap}
 html.arrivee::before,html.arrivee::after{transform:translateX(0);opacity:1}
 html.arrivee.arrive::before,html.arrivee.arrive::after{animation:rideau-part .75s ease-in-out forwards}
 html.page-sort::before{animation:rideau-vient .75s ease-in-out forwards!important}

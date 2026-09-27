@@ -205,7 +205,7 @@
     if(u.origin!==location.origin||u.protocol==='file:'||(u.pathname===location.pathname&&u.search===location.search)) return;
     e.preventDefault(); html.classList.add('page-sort');
     var cible=u.pathname.replace(/\/index\.html$/,'/').replace(/\.html$/,'')+u.search+u.hash;   // /methode.html -> /methode
-    var tr=html.getAttribute('data-tr'), duree=tr==='1'?520:tr==='3'?420:300;   // sortie complète avant de changer de page
+    var tr=html.getAttribute('data-tr'), duree=tr==='1'?520:tr==='2'?470:tr==='3'?420:300;   // sortie complète avant de changer de page
     setTimeout(function(){ location.href=cible; },duree);
   });
 })();

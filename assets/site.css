@@ -597,7 +597,7 @@ html.page-sort main{opacity:0!important;transform:translateY(-12px)!important;tr
    1 = rideau beige qui balaie l'écran de gauche à droite ;
    2 = glissement horizontal, comme une appli (sortie à gauche, entrée par la droite) ;
    3 = fondu + léger zoom arrière du contenu (1,05 → 1).
-   1 et 3 ralentis (Dimitri : « beaucoup trop rapide ») : ~1 à 1,1 s au total, courbe douce. */
+   1, 2 et 3 ralentis (Dimitri : « beaucoup trop rapide ») : ~1 à 1,1 s au total, courbe douce. */
 html[data-tr] main{transform:none}
 /* 1 · rideau (sous l'en-tête) */
 html[data-tr="1"].arrivee main,html[data-tr="1"].page-sort main{opacity:1!important;transform:none!important;transition:none!important}
@@ -609,8 +609,8 @@ html[data-tr="1"].page-sort::after{animation:rideau-vient .5s ease-in-out forwar
 /* 2 · glissement horizontal */
 html[data-tr="2"]{overflow-x:hidden}
 html[data-tr="2"].arrivee main{opacity:0;transform:translateX(60px)}
-html[data-tr="2"].arrivee.arrive main{opacity:1;transform:none;transition:opacity .4s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
-html[data-tr="2"].page-sort main{opacity:0!important;transform:translateX(-60px)!important;transition:opacity .25s ease,transform .25s ease!important}
+html[data-tr="2"].arrivee.arrive main{opacity:1;transform:none;transition:opacity .6s ease-in-out,transform .6s ease-in-out}
+html[data-tr="2"].page-sort main{opacity:0!important;transform:translateX(-60px)!important;transition:opacity .45s ease-in-out,transform .45s ease-in-out!important}
 /* 3 · fondu + zoom arrière */
 html[data-tr="3"].arrivee main{opacity:0;transform:scale(1.05);transform-origin:50% 0}
 html[data-tr="3"].arrivee.arrive main{opacity:1;transform:none;transition:opacity .7s ease-in-out,transform .7s ease-in-out}

@@ -54,7 +54,7 @@
 }
 </script>
 <script>try{var m=location.search.match(/[?&]transition=(\d)/);if(m)sessionStorage.setItem('ely_tr',m[1]);var tr=sessionStorage.getItem('ely_tr');if(tr&&tr!=='0')document.documentElement.setAttribute('data-tr',tr)}catch(e){}document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
-<link rel="stylesheet" href="assets/site.css?v=2709o">
+<link rel="stylesheet" href="assets/site.css?v=2709p">
 <style>
   @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;
     src:url(assets/fonts/cormorant-garamond-500-normal-latin.woff2) format("woff2");font-display:block}
@@ -612,7 +612,7 @@
     if(u.origin!==location.origin||u.protocol==='file:'||(u.pathname===location.pathname&&u.search===location.search)) return;
     e.preventDefault(); html.classList.add('page-sort');
     var cible=u.pathname.replace(/\/index\.html$/,'/').replace(/\.html$/,'')+u.search+u.hash;   // /methode.html -> /methode
-    var tr=html.getAttribute('data-tr'), duree=tr==='1'?520:tr==='3'?420:300;   // sortie complète avant de changer de page
+    var tr=html.getAttribute('data-tr'), duree=tr==='1'?520:tr==='2'?470:tr==='3'?420:300;   // sortie complète avant de changer de page
     setTimeout(function(){ location.href=cible; },duree);
   });
 })();

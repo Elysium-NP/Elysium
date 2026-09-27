@@ -238,6 +238,7 @@
       <button class="out" id="logout">Déconnexion</button>
     </div>
   </div>
+  <button type="button" class="pesee-rappel goto" id="msg-bandeau" data-goto="c-msg" hidden style="width:100%;margin:0 0 14px;text-align:left;cursor:pointer;font-family:var(--texte)"></button>
   <div class="dash-sub">
     <span id="statuspill" class="pill free">Compte gratuit</span>
     <span>Ton suivi, en direct, plus tu pèses régulièrement, plus la courbe parle.</span>
@@ -302,6 +303,7 @@
       <div class="fil-msg" id="fil-msg"></div>
       <form id="msg-form"><textarea id="msg-txt" placeholder="Ton message…" required maxlength="4000"></textarea><button type="submit">Envoyer</button></form>
       <p id="msg-err" class="foot-note" aria-live="polite"></p>
+      <button type="button" id="notif-on" class="ghostb" hidden style="margin-top:6px">Être alerté quand un coach me répond</button>
     </div>
 
     <!-- PROFIL -->
@@ -880,6 +882,7 @@ var PROG = {
   document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
 
   // ---- messagerie : la carte n'apparaît que si la table existe (script tableau_de_bord_coach.sql) ----
+  var vusMsg=null, TITRE=document.title;
   function chargerMsgs(){
     return sb.from('messages').select('id,auteur_id,texte,lu_at,created_at').eq('client_id',u.id).order('created_at').then(function(r){
       if(r.error) return;                                      // table pas encore créée : rien à montrer
@@ -889,9 +892,19 @@ var PROG = {
         return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':'Coach · ')+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
         : '<p class="foot-note">Aucun message pour l’instant.</p>';
       box.scrollTop=box.scrollHeight;
-      var aLire=L.filter(function(m){ return m.auteur_id!==u.id && !m.lu_at; }).map(function(m){ return m.id; });
-      document.getElementById('msg-tag').textContent = aLire.length ? aLire.length+' nouveau'+(aLire.length>1?'x':'') : 'Coachs';
-      if(aLire.length) sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(){});
+      var aLire=L.filter(function(m){ return m.auteur_id!==u.id && !m.lu_at; });
+      // ALERTES : chaque nouvelle réponse d'un coach -> alerte du navigateur (si autorisée)
+      if(vusMsg && window.Notification && Notification.permission==='granted') aLire.filter(function(m){ return !vusMsg[m.id]; }).forEach(function(m){
+        var n=new Notification('Elysium · tes coachs t’ont répondu',{body:m.texte.slice(0,140),tag:'ely-msg-'+m.id,icon:'assets/apple-touch-icon.png'});
+        n.onclick=function(){ window.focus(); document.getElementById('c-msg').scrollIntoView({block:'center'}); n.close(); }; });
+      vusMsg={}; L.forEach(function(m){ vusMsg[m.id]=1; });
+      var k=aLire.length, bd=document.getElementById('msg-bandeau');
+      document.getElementById('msg-tag').textContent = k ? k+' nouveau'+(k>1?'x':'') : 'Coachs';
+      document.title=(k?'('+k+') ':'')+TITRE;
+      bd.hidden=!k; if(k) bd.textContent=(k>1?k+' nouveaux messages':'Nouveau message')+' de tes coachs · Lire';
+      // lu seulement quand la page est vraiment sous les yeux ; le bandeau reste jusque-là
+      if(k && document.visibilityState==='visible'){
+        sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire.map(function(m){ return m.id; })).then(function(){}); }
     }).catch(function(){});
   }
   document.getElementById('msg-form').addEventListener('submit',function(e){ e.preventDefault();
@@ -903,7 +916,15 @@ var PROG = {
   });
 
   refresh();
-  chargerMens(); chargerMsgs();
+  chargerMens();
+  chargerMsgs().then(function(){
+    if(document.getElementById('c-msg').hidden) return;          // messagerie pas active : pas de relève
+    setInterval(chargerMsgs,30000);                               // relève toutes les 30 s
+    var b=document.getElementById('notif-on');
+    function btn(){ b.hidden=!(window.Notification && Notification.permission==='default'); }
+    b.addEventListener('click',function(){ Notification.requestPermission().then(btn); }); btn();
+  });
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') chargerMsgs(); });
   reveal(document);
 })();
 </script>

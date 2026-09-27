@@ -568,22 +568,21 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
 .site-foot{text-align:center}
 .site-foot .foot-logo{display:block;width:200px;max-width:60%;height:auto;margin:0 auto 26px}
 
-/* ── TRANSITIONS ENTRE PAGES (Yoann : « un petit effet léger » ; rien ne se voyait chez lui) ──
-   Effet MAISON, identique sur TOUS les navigateurs (Safari iPhone compris) : au clic sur un lien
-   interne, le contenu s'efface en remontant à peine (0,25 s, site.js) ; à l'arrivée, il monte en
-   fondu (0,45 s). L'en-tête ne bouge pas (seul <main> s'anime). Les transitions natives sont
-   COUPÉES pour ne jamais faire doublon. Rien si « réduire les animations ». */
+/* ── TRANSITIONS ENTRE PAGES : le RIDEAU (choisi par Yoann le 27/09, « en plus lent ») ──
+   Un rideau beige balaie l'écran de gauche à droite : ~0,75 s pour couvrir au clic (la page
+   change une fois le rideau fermé, site.js), puis ~0,75 s pour dévoiler la nouvelle page quand
+   elle est réellement affichée (classe `arrive`, voir le <head>). Le petit trait bleu Elysium au
+   bord du rideau est voulu (« c'est pas mal »). L'en-tête passe AU-DESSUS (il ne bouge jamais).
+   Filet : `arrive` est posée au plus tard à 1,5 s par le <head>. Rien si « réduire les animations ». */
 @view-transition{navigation:none}
-/* arrivée : <main> part invisible (classe `arrivee`, posée dans le <head>) et apparaît quand le
-   script pose `arrive`, APRÈS le premier affichage réel de la page — sinon l'animation se jouait
-   pendant que Chrome montrait encore l'ancienne page, et on ne voyait rien. Filet : `arrive` est
-   posée au plus tard à 1,5 s par le <head> lui-même, même si site.js échoue. */
-html.arrivee main{opacity:0;transform:translateY(24px)}
-html.arrivee.arrive main{opacity:1;transform:none;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
-html.page-sort main{opacity:0!important;transform:translateY(-12px)!important;transition:opacity .3s ease,transform .3s ease!important}
-@media(prefers-reduced-motion:reduce){
-  html.arrivee main,html.page-sort main{opacity:1!important;transform:none!important;transition:none!important}
-}
+html::after{content:"";position:fixed;inset:0;z-index:19;pointer-events:none;background:var(--cream2);
+  box-shadow:2px 0 0 rgba(46,155,255,.6),-2px 0 0 rgba(46,155,255,.6);transform:translateX(101%)}
+html.arrivee::after{transform:translateX(0)}
+html.arrivee.arrive::after{animation:rideau-part .75s ease-in-out forwards}
+html.page-sort::after{animation:rideau-vient .75s ease-in-out forwards!important}
+@keyframes rideau-part{from{transform:translateX(0)}to{transform:translateX(101%)}}
+@keyframes rideau-vient{from{transform:translateX(-101%)}to{transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){html::after{display:none}}
 
 /* photos des coachs (qui-sommes-nous) : même cadrage portrait 2:3 pour les deux (tête entière, air au-dessus, haut des épaules). Le cadre
    « Photo à venir » reste dans la page : retirer la classe `photo` et l'<img> pour y revenir. */
@@ -592,27 +591,4 @@ html.page-sort main{opacity:0!important;transform:translateY(-12px)!important;tr
 .coach .ph.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .coach .ph.photo::after{display:none}
 
-/* ── PROPOSITIONS DE TRANSITION à comparer (Yoann, 27/09) : ?transition=1 / 2 / 3, mémorisé
-   pendant la visite ; ?transition=0 revient à l'effet par défaut. Aucune ne touche l'en-tête.
-   1 = rideau beige qui balaie l'écran de gauche à droite ;
-   2 = glissement horizontal, comme une appli (sortie à gauche, entrée par la droite) ;
-   3 = fondu + léger zoom arrière du contenu (1,05 → 1).
-   1, 2 et 3 ralentis (Dimitri : « beaucoup trop rapide ») : ~1 à 1,1 s au total, courbe douce. */
-html[data-tr] main{transform:none}
-/* 1 · rideau (sous l'en-tête) */
-html[data-tr="1"].arrivee main,html[data-tr="1"].page-sort main{opacity:1!important;transform:none!important;transition:none!important}
-html[data-tr="1"]::after{content:"";position:fixed;inset:0;z-index:19;background:var(--cream2);pointer-events:none;transform:translateX(0)}
-html[data-tr="1"].arrive::after{animation:rideau-part .5s ease-in-out forwards}
-html[data-tr="1"].page-sort::after{animation:rideau-vient .5s ease-in-out forwards}
-@keyframes rideau-part{from{transform:translateX(0)}to{transform:translateX(101%)}}
-@keyframes rideau-vient{from{transform:translateX(-101%)}to{transform:translateX(0)}}
-/* 2 · glissement horizontal */
-html[data-tr="2"]{overflow-x:hidden}
-html[data-tr="2"].arrivee main{opacity:0;transform:translateX(60px)}
-html[data-tr="2"].arrivee.arrive main{opacity:1;transform:none;transition:opacity .6s ease-in-out,transform .6s ease-in-out}
-html[data-tr="2"].page-sort main{opacity:0!important;transform:translateX(-60px)!important;transition:opacity .45s ease-in-out,transform .45s ease-in-out!important}
-/* 3 · fondu + zoom arrière */
-html[data-tr="3"].arrivee main{opacity:0;transform:scale(1.05);transform-origin:50% 0}
-html[data-tr="3"].arrivee.arrive main{opacity:1;transform:none;transition:opacity .7s ease-in-out,transform .7s ease-in-out}
-html[data-tr="3"].page-sort main{opacity:0!important;transform:scale(.98)!important;transition:opacity .4s ease-in-out,transform .4s ease-in-out!important}
-@media(prefers-reduced-motion:reduce){html[data-tr="1"]::after{display:none}}
+

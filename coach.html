@@ -235,7 +235,8 @@
   <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
 
   <!-- ── messagerie : les coachs répondent à la main ── -->
-  <h2 class="intitule" style="margin:4px 0 12px">Messages <span id="msg-nl" style="color:var(--blue)"></span></h2>
+  <h2 class="intitule" style="margin:4px 0 12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">Messages <span id="msg-nl" style="color:var(--blue)"></span>
+    <button type="button" id="notif-on" hidden style="margin-left:auto;font:600 12px/1 var(--texte);letter-spacing:0;text-transform:none;background:var(--brand);color:#111;border:0;border-radius:999px;padding:9px 14px;cursor:pointer">Activer les alertes de messages</button></h2>
   <div class="msgs" id="msgs"><div class="empty" style="grid-column:1/-1">Chargement…</div></div>
 
   <!-- ── cockpit ───────────────────────────────────────────────────────── -->
@@ -464,11 +465,14 @@
     ]).then(function(r){
       if(r[0].error){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Messagerie à activer</b>Il reste à lancer le script supabase/tableau_de_bord_coach.sql.</div>'; return; }
       MSG=r[0].data||[]; (r[1].data||[]).forEach(function(p){ NOMS[p.id]=(p.prenom||'')+' '+(p.nom||''); });
+      if(!vus){ vus={}; MSG.forEach(function(m){ vus[m.id]=1; }); setInterval(releve,30000); boutonAlertes(); }
       renderMessages();
     });
   }
   function nonLus(cid){ return MSG.filter(function(m){ return m.client_id===cid && m.auteur_id===cid && !m.lu_at; }).length; }
-  function majNonLus(){ var n=MSG.filter(function(m){ return m.auteur_id===m.client_id&&!m.lu_at; }).length; $('msg-nl').textContent=n?'· '+n+' non lu'+(n>1?'s':''):''; }
+  var TITRE=document.title;
+  function majNonLus(){ var n=MSG.filter(function(m){ return m.auteur_id===m.client_id&&!m.lu_at; }).length;
+    $('msg-nl').textContent=n?'· '+n+' non lu'+(n>1?'s':''):''; document.title=(n?'('+n+') ':'')+TITRE; }
   function renderMessages(){
     var fils={}; MSG.forEach(function(m){ fils[m.client_id]=m; });   // dernier message de chaque fil
     var ids=Object.keys(fils).sort(function(a,b){ return (nonLus(b)-nonLus(a)) || (fils[b].created_at>fils[a].created_at?1:-1); });
@@ -486,11 +490,35 @@
     var b=$('bulles'); b.scrollTop=b.scrollHeight;
     // ouvrir un fil = lire ses messages
     var aLire=MSG.filter(function(m){ return m.client_id===filOuvert && m.auteur_id===filOuvert && !m.lu_at; }).map(function(m){ return m.id; });
-    if(aLire.length) sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(r){
+    if(aLire.length && document.visibilityState==='visible') sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(r){
       if(r.error) return;
       MSG.forEach(function(m){ if(aLire.indexOf(m.id)>=0) m.lu_at=new Date().toISOString(); });
       majNonLus(); document.querySelectorAll('.fil.on .nl').forEach(function(x){ x.remove(); }); });
   }
+  /* ALERTES (choix de Dimitri 27/09 : notification du navigateur) : relève toutes les 30 s, même
+     onglet en arrière-plan ; chaque nouveau message d'un client -> alerte à l'écran + compteur dans
+     le titre de l'onglet. Rien si l'onglet est fermé (c'est la limite de ce choix). */
+  var vus=null;
+  function releve(){
+    var brouillon=$('msg-txt')&&$('msg-txt').value, focus=document.activeElement&&document.activeElement.id==='msg-txt';
+    return sb.from('messages').select('id,client_id,auteur_id,texte,lu_at,created_at').order('created_at').then(function(r){
+      if(r.error) return;
+      var neufs=(r.data||[]).filter(function(m){ return vus && !vus[m.id] && m.auteur_id===m.client_id; });
+      vus={}; (r.data||[]).forEach(function(m){ vus[m.id]=1; });
+      if(!neufs.length && (r.data||[]).length===MSG.length) return;     // rien de nouveau : on ne touche pas à l'écran
+      MSG=r.data||[]; renderMessages();
+      if(brouillon&&$('msg-txt')){ $('msg-txt').value=brouillon; if(focus) $('msg-txt').focus(); }
+      if(window.Notification && Notification.permission==='granted') neufs.forEach(function(m){
+        var prenom=((NOMS[m.client_id]||'').trim().split(' ')[0])||'un client';
+        var n=new Notification('Elysium · message de '+prenom,{body:m.texte.slice(0,140),tag:'ely-msg-'+m.id,icon:'assets/apple-touch-icon.png'});
+        n.onclick=function(){ window.focus(); filOuvert=m.client_id; renderMessages(); $('msgs').scrollIntoView({block:'center'}); n.close(); };
+      });
+    });
+  }
+  function boutonAlertes(){ var b=$('notif-on'); if(!b) return;
+    b.hidden=!(window.Notification && Notification.permission==='default');
+    b.onclick=function(){ Notification.requestPermission().then(boutonAlertes); }; }
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible' && MSG.length) renderMessages(); });
   document.addEventListener('click',function(e){ var f=e.target.closest&&e.target.closest('.fil'); if(f){ filOuvert=f.getAttribute('data-fil'); renderMessages(); } });
   document.addEventListener('submit',function(e){ if(e.target.id!=='msg-form') return; e.preventDefault();
     var t=$('msg-txt'), txt=t.value.trim(); if(!txt) return; var bt=e.target.querySelector('button'); bt.disabled=true;

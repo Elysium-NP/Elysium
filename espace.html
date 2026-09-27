@@ -933,6 +933,8 @@ var PROG = {
   chargerMsgs().then(function(){
     if(document.getElementById('c-msg').hidden) return;          // messagerie pas active : pas de relève
     setInterval(chargerMsgs,30000);                               // relève toutes les 30 s
+    // TEMPS RÉEL : la réponse d'un coach apparaît tout de suite (RLS : uniquement le fil de ce client)
+    sb.channel('messages-'+u.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'client_id=eq.'+u.id},function(){ chargerMsgs(); }).subscribe();
     var b=document.getElementById('notif-on');
     function btn(){ b.hidden=!(window.Notification && Notification.permission==='default'); }
     b.addEventListener('click',function(){ Notification.requestPermission().then(btn); }); btn();

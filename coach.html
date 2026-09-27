@@ -469,7 +469,11 @@
     ]).then(function(r){
       if(r[0].error){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Messagerie à activer</b>Il reste à lancer le script supabase/tableau_de_bord_coach.sql.</div>'; return; }
       MSG=r[0].data||[]; (r[1].data||[]).forEach(function(p){ NOMS[p.id]=(p.prenom||'')+' '+(p.nom||''); });
-      if(!vus){ vus={}; MSG.forEach(function(m){ vus[m.id]=1; }); setInterval(releve,30000); boutonAlertes(); }
+      if(!vus){ vus={}; MSG.forEach(function(m){ vus[m.id]=1; }); setInterval(releve,30000); boutonAlertes();
+        // TEMPS RÉEL (Supabase Realtime, table messages publiée le 27/09) : un message écrit ou lu
+        // -> relève immédiate. Le RLS s'applique : un coach reçoit tout, un client seulement son fil.
+        // La relève toutes les 30 s reste en secours (connexion coupée, téléphone en veille).
+        sb.channel('messages-coachs').on('postgres_changes',{event:'*',schema:'public',table:'messages'},function(){ releve(); }).subscribe(); }
       renderMessages();
     });
   }

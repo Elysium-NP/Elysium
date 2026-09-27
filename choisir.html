@@ -2,17 +2,18 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F6F3EE">
 <title>ELYSIUM · Choisis ta formule</title>
 <meta name="description" content="Choisis ta formule Elysium et débloque ton programme sur-mesure.">
 <meta name="robots" content="noindex">
-<script>document.documentElement.classList.add('js');document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
+<script>document.documentElement.classList.add('js');try{var m=location.search.match(/[?&]transition=(\d)/);if(m)sessionStorage.setItem('ely_tr',m[1]);var tr=sessionStorage.getItem('ely_tr');if(tr&&tr!=='0')document.documentElement.setAttribute('data-tr',tr)}catch(e){}document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2709k">
+<link rel="stylesheet" href="assets/site.css?v=2709l">
 <style>
   /* ===== Choisir sa formule (post-inscription), étape de bienvenue avant paiement ===== */
   .chwrap{max-width:1000px;margin:0 auto;padding:120px var(--edge) 90px}
@@ -179,7 +180,7 @@
 
 <div class="demo-banner">⚠︎ Maquette, le paiement est simulé (Stripe arrivera en phase suivante). « Choisir » débloque ton espace pour visualiser la suite.</div>
 
-<script src="assets/site.js?v=2709k"></script>
+<script src="assets/site.js?v=2709l"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script src="assets/ely-auth.js"></script>
 <script>

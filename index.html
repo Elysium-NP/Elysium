@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F6F3EE">
 <title>ELYSIUM · Protocole nutritionnel de précision</title>
@@ -52,11 +53,11 @@
   ]
 }
 </script>
-<script>document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
-<link rel="stylesheet" href="assets/site.css?v=2709k">
+<script>try{var m=location.search.match(/[?&]transition=(\d)/);if(m)sessionStorage.setItem('ely_tr',m[1]);var tr=sessionStorage.getItem('ely_tr');if(tr&&tr!=='0')document.documentElement.setAttribute('data-tr',tr)}catch(e){}document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
+<link rel="stylesheet" href="assets/site.css?v=2709l">
 <style>
-  @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;
-    src:url(assets/fonts/cormorant-garamond-500-normal-latin.woff2) format("woff2")}
+  @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;
+    src:url(assets/fonts/cormorant-garamond-500-normal-latin.woff2) format("woff2");font-display:block}
 
   /* ── La DA des fiches client (build_pdf_sheet.py), transposée au web ── */
   :root{
@@ -102,7 +103,9 @@
 
   /* ── EN-TÊTE : blanc, la marque en Cormorant comme sur les fiches ── */
   .band{position:sticky;top:0;z-index:20;background:var(--voile);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
-  .band .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:62px}
+  /* en-tête IDENTIQUE aux autres pages (hauteur 64 px, marges de site.css, pleine largeur) :
+     le logo ne bouge pas d'un pixel en changeant de page (retour de Yoann, 27/09) */
+  .band .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px;max-width:none;padding:0 clamp(18px,4vw,54px)}
   .brand{font-family:var(--wordmark);font-weight:500;font-size:25px;letter-spacing:.42em;text-decoration:none;color:var(--ink);padding-left:.42em;cursor:pointer;transition:color .25s}
   .brand:hover{color:var(--blue-ink)}
   .nav{display:flex;gap:26px;align-items:center}

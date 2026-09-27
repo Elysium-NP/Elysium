@@ -381,10 +381,10 @@
         var ing=(r.ingredients||[]).map(function(i){ return esc(i.affichage||((i.grammes||'')+' g '+i.ingredient)); }).join(' · ');
         var ma=r.macros||{};
         h+='<div class="repas"><div class="rt">'+(MEALS[r.type]||r.type)+'</div>'+
-           '<div class="rn">'+esc(r.recette)+'</div><div class="ri">'+ing+'</div>'+
+           '<div class="rn">'+esc(r.titre||r.recette)+'</div><div class="ri">'+ing+'</div>'+
            '<div class="rm">'+Math.round(ma.kcal||0)+' kcal · P'+Math.round(ma.proteines||0)+
            ' G'+Math.round(ma.glucides||0)+' L'+Math.round(ma.lipides||0)+'</div>'+
-           '<button class="flagbtn" data-plat="J'+j.jour+' '+(MEALS[r.type]||r.type)+' — '+esc(r.recette)+'" data-jour="'+j.jour+'" data-repas="'+r.type+'">Signaler ce plat</button>'+
+           '<button class="flagbtn" data-plat="J'+j.jour+' '+(MEALS[r.type]||r.type)+' — '+esc(r.titre||r.recette)+'" data-jour="'+j.jour+'" data-repas="'+r.type+'">Signaler ce plat</button>'+
            '</div>';
       });
       h+='</div>';

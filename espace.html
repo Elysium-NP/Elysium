@@ -291,7 +291,7 @@
     </div>
 
     <!-- DÉMO -->
-    <div class="card rv">
+    <div class="card rv" id="democard" style="display:none">
       <div class="ch"><h3>Coin démo</h3><span class="tag">Maquette</span></div>
       <p>Pour visualiser l'espace <b style="color:var(--ice)">plein</b> (simulation, en attendant Stripe &amp; Supabase). Le programme s'affiche seulement si <b style="color:var(--ice)">payé</b> ET <b style="color:var(--ice)">questionnaire rempli</b> :</p>
       <div class="dashcta">
@@ -308,7 +308,7 @@
      en phase suivante » alors que la vraie authentification Supabase est en place depuis le 26/07
      (compte serveur, RLS, questionnaire en base). Seuls le paiement et l'affichage du programme
      restent en maquette. Un bandeau qui ment sur l'état réel finit par tromper tout le monde. -->
-<div class="demo-banner">⚠︎ Compte et questionnaire sont réels et sécurisés. En revanche, le paiement est simulé et le programme affiché est un exemple — le tien arrivera une fois ta programmation faite.</div>
+<div class="demo-banner" id="demobanner" style="display:none">⚠︎ Compte et questionnaire sont réels et sécurisés. En revanche, le paiement est simulé et le programme affiché est un exemple — le tien arrivera une fois ta programmation faite.</div>
 
 <script src="assets/site.js"></script>
 <script>
@@ -517,7 +517,7 @@ var PROG = {
     var tabs=document.getElementById('tabs'), panels=document.getElementById('panels'), items=[];
     PROG.jours.forEach(function(d){ items.push({id:'j'+d.j,label:'Jour '+d.j,html:dayHTML(d)}); });
     items.push({id:'off',label:'Jour off',html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
-    items.push({id:'courses',label:'Liste de courses',html:coursesHTML()});
+    if(Object.keys(PROG.courses||{}).length) items.push({id:'courses',label:'Liste de courses',html:coursesHTML()});
     items.push({id:'conseils',label:'Conseils',html:adviceHTML()});
     var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6
     var todayId=dow===0?'off':'j'+dow;
@@ -619,10 +619,51 @@ var PROG = {
   }
 
   // ---- carte programme : 3 états (verrou / questionnaire / programme affiché) ----
+  // ---- DEUX RÉGIMES D'AFFICHAGE (Dimitri 27/09) ----
+  //  · compte ADMIN (« mixte », Dimitri) : maquette inchangée — programme d'exemple,
+  //    drapeaux locaux, coin démo. Sert de point de comparaison.
+  //  · tous les autres : l'état RÉEL, lu dans la base — questionnaire validé ou non,
+  //    et le dernier programme `valide` par les coachs (jamais un `en_attente`).
+  //  Le paiement reste un drapeau local pour tout le monde jusqu'à Stripe.
+  var ADMIN=false, REEL={quest:false, prog:false};
+  var MEALS={petit_dejeuner:'Petit-déjeuner',dejeuner:'Déjeuner',collation:'Collation',diner:'Dîner'};
+  function r0(x){ return Math.round(+x||0); }
+  function depuisBase(p, rep){
+    var c=p.cible||{}, jours=((p.menu||{}).jours||[]).filter(function(j){ return !j.off; });
+    return {
+      nom:PROG.nom, objectif:(rep||{})['Quel est ton objectif principal ?']||'',
+      kcal:r0(c.kcal), P:r0(c.proteines), G:r0(c.glucides), L:r0(c.lipides),
+      jours:jours.map(function(j){ return {j:j.jour, repas:(j.repas||[]).map(function(r){
+        var m=r.macros||{};
+        return {type:MEALS[r.type]||String(r.type||'').replace(/_/g,' '), emo:'', kcal:r0(m.kcal),
+          rec:esc(r.titre||''),            // ⛔ jamais `recette` (clé interne) côté client
+          seas:'', m:[r0(m.proteines),r0(m.glucides),r0(m.lipides)],
+          ings:(r.ingredients||[]).map(function(i){
+            return i.affichage ? [esc(i.affichage),''] : [r0(i.grammes)+' g', esc(i.aliment||i.ingredient||'')]; })};
+      })}; }),
+      courses:{},                          // liste de courses : branchée plus tard
+      conseils:PROG.conseils, modevie:PROG.modevie
+    };
+  }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]; }); }
+  function chargerReel(){
+    var sb=ElyAuth.client, id=u.id;
+    return Promise.all([
+      sb.from('questionnaires').select('statut,reponses').eq('user_id',id).eq('type','nutrition').maybeSingle(),
+      sb.from('programmes').select('version,menu,cible').eq('user_id',id).eq('statut','valide')
+        .order('version',{ascending:false}).limit(1)
+    ]).then(function(r){
+      var q=r[0]&&r[0].data, p=r[1]&&r[1].data&&r[1].data[0];
+      REEL.quest=!!(q&&q.statut==='valide');
+      if(p&&p.menu){ PROG=depuisBase(p, q&&q.reponses); REEL.prog=true; }
+    }).catch(function(){});
+  }
+
   function renderProgram(){
-    var uu=ElyAuth.user()||{}, paid=!!uu.paid, quest=!!uu.quest;
+    var uu=ElyAuth.user()||{}, paid=!!uu.paid;
+    var quest = ADMIN ? !!uu.quest : REEL.quest;
     var pill=document.getElementById('statuspill'), c=document.getElementById('progcard'), pv=document.getElementById('progview');
-    if(paid && quest){
+    if(paid && (ADMIN ? quest : REEL.prog)){
       pill.textContent='Programme actif'; pill.className='pill paid';
       c.hidden=true; pv.hidden=false; buildProgView();
       return;
@@ -640,7 +681,15 @@ var PROG = {
         '<p>Ton programme sur-mesure, au gramme près, façonné à la main par un coach, se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
         '<a class="btn" href="#" id="unlock">'+(f ? 'Payer '+(fp||'')+' et débloquer' : 'Débloquer mon programme')+'</a>';
       var ub=document.getElementById('unlock');
-      if(ub) ub.addEventListener('click',function(e){ e.preventDefault(); alert('Ici s\'ouvrira le paiement Stripe (phase suivante). Pour la démo, utilise « Basculer le statut payé » puis « Basculer questionnaire rempli » dans le coin démo.'); });
+      // En attendant Stripe : le bouton SIMULE le paiement (drapeau local) pour que le
+      // parcours réel (questionnaire -> programme) reste testable de bout en bout.
+      if(ub) ub.addEventListener('click',function(e){ e.preventDefault();
+        if(confirm('Paiement simulé : Stripe n\'est pas encore branché. Débloquer l\'accès ?')){ ElyAuth.setPaid(true); renderProgram(); } });
+    } else if(quest){
+      pill.textContent='Programmation en cours'; pill.className='pill paid';
+      c.className='card wide';
+      c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">En cours</span></div>'+
+        '<p>Questionnaire reçu. Damien &amp; Yoann construisent ta programmation <b style="color:var(--ice)">à la main, au gramme près</b>. Elle s\'affichera ici dès qu\'elle sera prête.</p>';
     } else {
       pill.textContent='Questionnaire à remplir'; pill.className='pill paid';
       c.className='card wide';
@@ -707,12 +756,18 @@ var PROG = {
   //  · "client" : rien de spécial.
   ElyAuth.acces().then(function(a){
     if(a==='coach'){ location.replace('coach.html'); return; }
-    if(a==='mixte'){ document.getElementById('coachlink').hidden=false; }
+    ADMIN = a==='mixte';
+    if(ADMIN){
+      document.getElementById('coachlink').hidden=false;
+      document.getElementById('democard').style.display='';
+      document.getElementById('demobanner').style.display='';
+      renderProgram(); return;
+    }
+    return chargerReel().then(renderProgram);
   });
   document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
   document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
 
-  renderProgram();
   refresh();
   reveal(document);
 })();

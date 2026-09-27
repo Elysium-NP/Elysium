@@ -25,6 +25,11 @@
   .stat .sv small{font-size:12px;color:var(--steel);margin-left:3px;letter-spacing:.02em}
   .stat .sv.accent{color:var(--blue)}
   .stat.ring{display:flex;align-items:center;gap:13px}
+  .stat .sd{font-family:var(--texte);font-size:12px;color:var(--steel);margin-top:8px;line-height:1.35}
+  /* rappel de pesée : c'est elle qui fait évoluer la diète (message de Damien) */
+  .pesee-rappel{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    background:var(--p-bleu,#eaf2fb);border:1px solid var(--b-bleu,#6fa8dc);padding:13px 17px;font-size:14.5px;color:var(--ice);line-height:1.45}
+  .pesee-rappel button{font:600 13px/1 var(--texte);color:#111;background:var(--brand);border:0;border-radius:999px;padding:10px 16px;cursor:pointer}
   .stat.ring::after{display:none}
   .ring-svg{width:58px;height:58px;flex-shrink:0}
   .ring-svg .rtrack{fill:none;stroke:var(--line);stroke-width:5}
@@ -251,6 +256,7 @@
         <button id="wadd">Enregistrer</button>
         <button id="wgoal" class="ghostb" type="button">Objectif</button>
       </div>
+      <p id="wmsg" class="foot-note" aria-live="polite"></p>
     </div>
 
     <!-- MENSURATIONS (regroupé avec le poids — suivi physique) -->
@@ -402,8 +408,30 @@ var PROG = {
   document.getElementById('pemail').textContent=u.email||'—';
   document.getElementById('pdate').textContent=u.created?new Date(u.created).toLocaleDateString('fr-FR'):'—';
 
-  function weights(){ try{ return JSON.parse(localStorage.getItem(WK)||'[]'); }catch(e){ return []; } }
-  function saveW(w){ localStorage.setItem(WK,JSON.stringify(w)); }
+  // PESÉES : enregistrées dans Supabase (table `poids`, une par jour, protégée par le RLS) pour que
+  // les coachs les voient — c'est la pesée qui fait évoluer la diète. W = copie en mémoire.
+  var W=[], sb=ElyAuth.client;
+  function weights(){ return W; }
+  function isoJour(t){ var d=new Date(t),m=d.getMonth()+1,j=d.getDate(); return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(j<10?'0':'')+j; }
+  function chargerPoids(verser){
+    return sb.from('poids').select('date,kg').eq('user_id',u.id).order('date').then(function(r){
+      if(r.error) throw r.error;
+      W=(r.data||[]).map(function(x){ return {v:+x.kg,t:new Date(x.date+'T12:00:00').getTime()}; });
+      // reprise des pesées faites avant le branchement (restées dans ce navigateur) : on les verse
+      // une fois dans la base, sans écraser une pesée déjà enregistrée le même jour.
+      var loc; try{ loc=JSON.parse(localStorage.getItem(WK)||'[]'); }catch(e){ loc=[]; }
+      var deja={}; W.forEach(function(x){ deja[isoJour(x.t)]=1; });
+      var aVerser=loc.filter(function(x){ return x&&x.v>=30&&x.v<=250&&!deja[isoJour(x.t)]; })
+        .map(function(x){ return {user_id:u.id,date:isoJour(x.t),kg:Math.round(x.v*10)/10}; });
+      if(!verser||!aVerser.length) return;   // jamais pour le compte admin : son navigateur garde les pesées de DÉMO
+      return sb.from('poids').upsert(aVerser,{onConflict:'user_id,date',ignoreDuplicates:true}).then(function(r2){
+        if(r2.error) throw r2.error;
+        try{ localStorage.removeItem(WK); }catch(e){}
+        return chargerPoids(false);
+      });
+    }).catch(function(){ msgPoids('Impossible de charger tes pesées pour le moment. Recharge la page.'); });
+  }
+  function msgPoids(t){ var el=document.getElementById('wmsg'); if(el) el.textContent=t||''; }
   function goal(){ var g=localStorage.getItem(GK); return g?parseFloat(g):null; }
   function saveGoal(v){ localStorage.setItem(GK,String(v)); }
 
@@ -415,7 +443,7 @@ var PROG = {
       '<circle class="rprog" cx="29" cy="29" r="'+r+'" style="stroke-dasharray:'+c.toFixed(1)+';stroke-dashoffset:'+off.toFixed(1)+'"/>'+
       '<text class="rtxt" x="29" y="33">'+Math.round(pct)+'%</text></svg>';
   }
-  function tile(l,v,unit,cls){ return '<div class="stat"><div class="sl">'+l+'</div><div class="sv '+(cls||'')+'">'+v+(unit?'<small>'+unit+'</small>':'')+'</div></div>'; }
+  function tile(l,v,unit,cls,sous){ return '<div class="stat"><div class="sl">'+l+'</div><div class="sv '+(cls||'')+'">'+v+(unit?'<small>'+unit+'</small>':'')+'</div>'+(sous?'<div class="sd">'+sous+'</div>':'')+'</div>'; }
   function renderStats(){
     var w=weights().slice().sort(function(a,b){return a.t-b.t;}), g=goal(), el=document.getElementById('stats');
     if(!w.length){ el.innerHTML='<div class="stat" style="grid-column:1/-1"><div class="sl">Tableau de bord</div><div class="sv" style="font-size:16px;margin-top:12px">Enregistre ta première pesée pour lancer ton suivi.</div></div>'; return; }
@@ -425,7 +453,16 @@ var PROG = {
     var ringTile=(g!=null)
       ? '<div class="stat ring">'+ringSVG(pct)+'<div><div class="sl">Vers l\'objectif</div><div class="sv" style="font-size:20px">'+g+'<small>kg</small></div></div></div>'
       : '<div class="stat ring"><button class="setgoal" id="setgoal2" type="button">Définir un<br>objectif</button></div>';
-    el.innerHTML=tile('Poids actuel',cur.toFixed(1),'kg')+tile('Départ',start.toFixed(1),'kg')+tile('Évolution',ds,'kg','accent')+ringTile;
+    // rythme : pente sur les 4 dernières semaines (au moins 2 pesées espacées de 5 jours)
+    var jour=86400000, recent=w.filter(function(x){ return x.t>=w[w.length-1].t-28*jour; }), rythme='';
+    if(recent.length>=2){ var dt=(recent[recent.length-1].t-recent[0].t)/(7*jour);
+      if(dt>=5/7){ var pente=(recent[recent.length-1].v-recent[0].v)/dt;
+        rythme=(pente>0?'+':'')+pente.toFixed(1).replace('.',',')+' kg / semaine sur 4 semaines'; } }
+    var depuis=Math.floor((Date.now()-w[w.length-1].t)/jour);
+    var quand = depuis<=0 ? "aujourd'hui" : depuis===1 ? 'hier' : 'il y a '+depuis+' jours';
+    el.innerHTML=(depuis>=7 ? '<div class="pesee-rappel"><span>Ta dernière pesée date de '+depuis+' jours. Pèse-toi : c’est elle qui permet à tes coachs d’ajuster ta diète.</span><button type="button" class="goto" data-goto="c-courbe">Noter mon poids</button></div>' : '')+
+      tile('Poids actuel',cur.toFixed(1),'kg','','Pesée '+quand)+tile('Départ',start.toFixed(1),'kg','',new Date(w[0].t).toLocaleDateString('fr-FR'))+
+      tile('Évolution',ds,'kg','accent',rythme)+ringTile;
     var sg=document.getElementById('setgoal2'); if(sg) sg.addEventListener('click',askGoal);
   }
 
@@ -466,7 +503,7 @@ var PROG = {
 
   function seedDemo(){
     var day=86400000, base=Date.now(), seq=[84.2,83.6,83.9,82.7,82.1,81.6,81.9,80.7,80.1,79.5,79.7,78.6,78.1];
-    saveW(seq.map(function(v,i){ return {v:v,t:base-(seq.length-1-i)*7*day}; }));
+    W=seq.map(function(v,i){ return {v:v,t:base-(seq.length-1-i)*7*day}; });   // affichage seul, rien n'est enregistré
     if(goal()==null) saveGoal(75);
     refresh();
   }
@@ -747,7 +784,13 @@ var PROG = {
   document.getElementById('wadd').addEventListener('click',function(){
     var i=document.getElementById('wval'), v=parseFloat(String(i.value).replace(',','.'));
     if(!v||v<30||v>250){ i.focus(); return; }
-    var w=weights(); w.push({v:Math.round(v*10)/10,t:_pickT('wdate')}); saveW(w); i.value=''; refresh();
+    var kg=Math.round(v*10)/10, jour=isoJour(_pickT('wdate')), b=this; b.disabled=true;
+    sb.from('poids').upsert({user_id:u.id,date:jour,kg:kg},{onConflict:'user_id,date'}).then(function(r){
+      b.disabled=false;
+      if(r.error){ msgPoids('Pesée non enregistrée, réessaie dans un instant.'); return; }
+      i.value=''; msgPoids('Pesée du '+new Date(jour+'T12:00:00').toLocaleDateString('fr-FR')+' enregistrée : tes coachs la voient.');
+      return chargerPoids(false).then(refresh);
+    });
   });
   document.getElementById('wval').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('wadd').click(); });
   document.getElementById('wgoal').addEventListener('click',askGoal);
@@ -760,16 +803,26 @@ var PROG = {
 
   // ---- mensurations (démo : dernière saisie mémorisée dans le navigateur) ----
   var MK='ely_mens'+UID, mfields=['epaules','poitrine','taille','hanches','cuisse','bras'];
-  (function(){ var s; try{ s=JSON.parse(localStorage.getItem(MK)||'null'); }catch(e){ s=null; } if(!s) return;
-    mfields.forEach(function(f){ var el=document.getElementById('m-'+f); if(el&&s[f]!=null) el.value=s[f]; });
-    if(s.t) document.getElementById('mens-msg').textContent='Dernière saisie le '+new Date(s.t).toLocaleDateString('fr-FR')+'.'; })();
+  // MENSURATIONS : table `mensurations` (une ligne par date). On pré-remplit avec la dernière.
+  function chargerMens(){
+    return sb.from('mensurations').select('date,'+mfields.join(',')).eq('user_id',u.id).order('date',{ascending:false}).limit(1).then(function(r){
+      var s=r&&r.data&&r.data[0]; if(!s) return;
+      mfields.forEach(function(f){ var el=document.getElementById('m-'+f); if(el&&s[f]!=null) el.value=s[f]; });
+      document.getElementById('mens-msg').textContent='Dernière saisie le '+new Date(s.date+'T12:00:00').toLocaleDateString('fr-FR')+'.';
+    }).catch(function(){});
+  }
   document.getElementById('mens-save').addEventListener('click',function(){
     var obj={t:_pickT('mdate')}, n=0;
     mfields.forEach(function(f){ var el=document.getElementById('m-'+f), v=parseFloat(String(el.value).replace(',','.')); if(v>0){ obj[f]=Math.round(v*2)/2; n++; } });
     var msg=document.getElementById('mens-msg');
     if(!n){ msg.textContent='Renseigne au moins une mesure.'; return; }
-    localStorage.setItem(MK,JSON.stringify(obj));
-    msg.textContent='Enregistré ('+n+' mesure'+(n>1?'s':'')+') pour le '+new Date(obj.t).toLocaleDateString('fr-FR')+'. La sauvegarde réelle viendra avec Supabase.';
+    var ligne={user_id:u.id,date:isoJour(obj.t)}; mfields.forEach(function(f){ if(obj[f]!=null) ligne[f]=obj[f]; });
+    var b=this; b.disabled=true;
+    sb.from('mensurations').upsert(ligne,{onConflict:'user_id,date'}).then(function(r){
+      b.disabled=false;
+      msg.textContent = r.error ? 'Mesures non enregistrées, réessaie dans un instant.'
+        : 'Enregistré ('+n+' mesure'+(n>1?'s':'')+') pour le '+new Date(obj.t).toLocaleDateString('fr-FR')+' : tes coachs le voient.';
+    });
   });
 
   // ---- cartes suivi cliquables : scroll + flash vers l'outil du tableau de bord ----
@@ -796,6 +849,7 @@ var PROG = {
   ElyAuth.acces().then(function(a){
     if(a==='coach'){ location.replace('coach.html'); return; }
     ADMIN = a==='mixte';
+    chargerPoids(!ADMIN).then(refresh);
     if(ADMIN){
       document.getElementById('coachlink').hidden=false;
       document.getElementById('democard').style.display='';
@@ -808,6 +862,7 @@ var PROG = {
   document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
 
   refresh();
+  chargerMens();
   reveal(document);
 })();
 </script>

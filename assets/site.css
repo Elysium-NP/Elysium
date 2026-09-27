@@ -1,9 +1,9 @@
 /* ============================================================================
-   ELYSIUM — feuille de style PARTAGÉE des pages « contenu » (Coachs, Formules…).
-   Reprend l'ADN « instrument de précision » de la landing v2.html : noir profond,
-   bleu électrique rare, Oswald capitales, JetBrains Mono pour les readouts, serif
-   italique pour les respirations. La landing v2.html garde sa version inline
-   (immersive, scroll-driven) ; ces pages-ci sont éditoriales et plus légères.
+   ELYSIUM — feuille de style PARTAGÉE de toutes les pages (l'accueil la charge aussi).
+   Identité CLAIRE « beige » validée par les coachs le 27/09 : voir site/CLAUDE.md.
+   Tokens en tête (--fond = LA variable de fond ; --titre / --texte = les 2 polices), puis
+   les règles historiques, puis la « COUCHE CRÈME » qui neutralise l'ancien thème sombre.
+   Ancien thème : tag git site-sombre-27-09.
    ========================================================================== */
 
 :root{

@@ -635,7 +635,33 @@ var PROG = {
   //    et le dernier programme `valide` par les coachs (jamais un `en_attente`).
   //  Le paiement reste un drapeau local pour tout le monde jusqu'à Stripe.
   var ADMIN=false, REEL={quest:false, prog:false};
-  var MEALS={petit_dejeuner:'Petit-déjeuner',dejeuner:'Déjeuner',collation:'Collation',diner:'Dîner'};
+  var MEALS={petit_dejeuner:'Petit-déjeuner',dejeuner:'Déjeuner',collation:'Collation',collation_2:'Collation',diner:'Dîner'};
+  // pictos des repas : les MÊMES que sur les fiches PDF des coachs (build_pdf_sheet.py)
+  var EMO={petit_dejeuner:'🟠',dejeuner:'🍴',collation:'🍎',collation_2:'🍎',diner:'🌙'};
+  /* LISTE DE COURSES du vrai programme.
+     · si le moteur dépose sa liste (menu.courses = {catégorie:[[nom, quantité], …]}), on l'affiche
+       telle quelle : c'est elle qui applique les unités d'achat et l'anti-gaspillage ;
+     · sinon, REPLI : la somme exacte de ce que contient le menu (grammes, ou pièces quand
+       l'aliment se compte), sans règle d'achat. */
+  function coursesDepuis(menu){
+    if(menu&&menu.courses&&Object.keys(menu.courses).length) return menu.courses;
+    var t={};
+    ((menu&&menu.jours)||[]).forEach(function(j){ if(j.off) return; (j.repas||[]).forEach(function(r){ (r.ingredients||[]).forEach(function(i){
+      var nom=i.aliment||i.ingredient; if(!nom) return;
+      var e=t[nom]||(t[nom]={g:0,u:0,n:0,nu:0,lib:''});
+      e.g+=+i.grammes||0; e.n++;
+      if(i.unites&&i.affichage){ e.u+=+i.unites; e.nu++; e.lib=String(i.affichage).replace(/^[\d.,\/½¼¾\s]+/,''); }
+    }); }); });
+    var lignes=Object.keys(t).sort(function(a,b){ return a.localeCompare(b,'fr'); }).map(function(nom){
+      var e=t[nom], u=Math.round(e.u*10)/10,
+        lib=u>1 ? e.lib.replace(/^([^\s']+)/,function(w){ return /[sx]$/i.test(w)?w:w+'s'; }) : e.lib,   // « 2 jaunes d'œufs »
+        q=e.nu&&e.nu===e.n ? (String(u).replace('.',',')+' '+lib).trim()      // toujours compté en pièces
+        : e.nu ? Math.round(e.g)+' g'                                        // mélange pièces / grammes : total en grammes
+        : (e.g>=1000 ? (Math.round(e.g/100)/10).toString().replace('.',',')+' kg' : Math.round(e.g)+' g');
+      return [esc(nom), esc(q)];
+    });
+    return lignes.length ? {'Pour la semaine':lignes} : {};
+  }
   function r0(x){ return Math.round(+x||0); }
   function depuisBase(p, rep){
     var c=p.cible||{}, jours=((p.menu||{}).jours||[]).filter(function(j){ return !j.off; });
@@ -644,13 +670,13 @@ var PROG = {
       kcal:r0(c.kcal), P:r0(c.proteines), G:r0(c.glucides), L:r0(c.lipides),
       jours:jours.map(function(j){ return {j:j.jour, repas:(j.repas||[]).map(function(r){
         var m=r.macros||{};
-        return {type:MEALS[r.type]||String(r.type||'').replace(/_/g,' '), emo:'', kcal:r0(m.kcal),
+        return {type:MEALS[r.type]||String(r.type||'').replace(/_/g,' '), emo:EMO[r.type]||'', kcal:r0(m.kcal),
           rec:esc(r.titre||''),            // ⛔ jamais `recette` (clé interne) côté client
           seas:'', m:[r0(m.proteines),r0(m.glucides),r0(m.lipides)],
           ings:(r.ingredients||[]).map(function(i){
             return i.affichage ? [esc(i.affichage),''] : [r0(i.grammes)+' g', esc(i.aliment||i.ingredient||'')]; })};
       })}; }),
-      courses:{},                          // liste de courses : branchée plus tard
+      courses:coursesDepuis(p.menu),       // liste du moteur si déposée, sinon somme du menu
       conseils:PROG.conseils, modevie:PROG.modevie
     };
   }

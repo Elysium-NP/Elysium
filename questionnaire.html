@@ -14,7 +14,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2709zzd">
+<link rel="stylesheet" href="assets/site.css?v=2809q">
 <style>
   body{overflow-x:hidden}
   .qtop{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px var(--edge);background:var(--voile)}
@@ -102,6 +102,67 @@
   .qfull h2{font-family:var(--disp);font-weight:600;font-size:clamp(26px,4vw,42px);color:var(--ice);text-transform:uppercase;margin:16px 0 18px;letter-spacing:.005em}
   .qfull p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);max-width:46ch;margin:0 auto 32px}
   .qfull p b{color:var(--ice);font-weight:500}
+  /* ===== RECHERCHE D'ALIMENTS (Damien 27/09) ===== */
+  .picker{display:flex;flex-direction:column;gap:12px}
+  .pick-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .pick-chips:empty{display:none}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 8px 8px 14px;border-radius:999px;background:var(--p-bleu);border:1px solid var(--b-bleu);
+    font:500 15px/1 var(--texte);color:var(--ice)}
+  .picker[data-liste="refus"] .chip{background:var(--p-jaune);border-color:var(--b-jaune)}
+  .chip button{width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.08);color:var(--ice);cursor:pointer;font:700 14px/1 var(--texte)}
+  .chip button:hover{background:rgba(0,0,0,.18)}
+  .pick-box{position:relative}
+  .pick-in{width:100%;font:16px/1.4 var(--texte);color:var(--ice);background:var(--void2);border:1px solid var(--line);padding:14px 15px;border-radius:10px}
+  .pick-in:focus{outline:none;border-color:var(--blue)}
+  .pick-sug{list-style:none;margin:6px 0 0;padding:6px;position:absolute;left:0;right:0;top:100%;z-index:20;background:var(--void2);border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 18px 40px -20px rgba(0,0,0,.4);max-height:300px;overflow:auto}
+  .pick-sug:empty{display:none}
+  .pick-sug li{padding:11px 12px;border-radius:8px;cursor:pointer;font:15px/1.3 var(--texte);color:var(--ice)}
+  .pick-sug li.on,.pick-sug li:hover{background:var(--p-bleu)}
+  .pick-sug li.vide{cursor:default;color:var(--steel);background:none}
+  .pick-rien{align-self:flex-start;font:500 13px/1 var(--texte);color:var(--steel);background:none;border:1px dashed var(--line);border-radius:999px;padding:8px 13px;cursor:pointer}
+  .pick-rien.on{color:var(--ice);border-style:solid;border-color:var(--blue);background:var(--p-bleu)}
+  .pick-note{font:13px/1.5 var(--texte);color:var(--steel);margin:0}
+
+  /* ===== PISTE A : la même page, vivante (Damien 27/09 « ludique, intuitif ») ===== */
+  .qwrap{padding-top:150px}
+  .suivi{position:fixed;top:64px;left:0;right:0;z-index:54;background:var(--voile);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .suivi-in{max-width:680px;margin:0 auto;padding:10px var(--edge);display:flex;align-items:center;gap:14px}
+  .suivi .jauge{flex:1;height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+  .suivi .jauge i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--b-jaune),var(--b-vert),var(--b-violet),var(--b-bleu));transition:width .9s cubic-bezier(.3,.7,.3,1)}
+  .suivi .compte{font:600 14px/1 var(--texte);color:var(--ice);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .suivi .mot{font:13px/1.3 var(--texte);color:var(--blue);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .4s}
+  @media(max-width:560px){.suivi .mot{display:none}}
+  #prog{display:none}
+  /* chaque bloc prend la couleur d'un repas, à tour de rôle */
+  .qstep:nth-of-type(4n+1){--pc:var(--p-jaune);--bc:var(--b-jaune)} .qstep:nth-of-type(4n+2){--pc:var(--p-vert);--bc:var(--b-vert)}
+  .qstep:nth-of-type(4n+3){--pc:var(--p-violet);--bc:var(--b-violet)} .qstep:nth-of-type(4n+4){--pc:var(--p-bleu);--bc:var(--b-bleu)}
+  .qcard{border-radius:14px;transition:border-color .35s,background .35s,transform .35s}
+  .qcard:has(input:checked){background:var(--pc);border-color:var(--bc)}
+  .qcard .dot{width:22px;height:22px;border-width:2px}
+  .qcard:has(input:checked) .dot{border-color:var(--bc);background:var(--bc)}
+  .qcard:has(input:checked) .dot::after{content:"";inset:auto;left:6px;top:2px;width:6px;height:11px;border:solid #111;border-width:0 2.5px 2.5px 0;border-radius:0;
+    background:none;box-shadow:none;transform:rotate(45deg)}
+  .qcard.hop{animation:hop .55s cubic-bezier(.3,.7,.3,1.4)}
+  @keyframes hop{0%{transform:scale(1)}35%{transform:scale(.96)}70%{transform:scale(1.025)}100%{transform:scale(1)}}
+  .qcard.hop .dot::after{animation:coche .45s ease .1s both}
+  @keyframes coche{from{opacity:0;transform:rotate(45deg) scale(.3)}to{opacity:1;transform:rotate(45deg) scale(1)}}
+  .qfield input,.qfield select,.qfield textarea{border-radius:10px}
+  /* numéro du bloc -> pastille cochée quand le bloc est complet */
+  .qstep h2::before{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:2px solid var(--bc);
+    color:var(--ice);font-size:12px;letter-spacing:0;margin-bottom:12px;transition:background .5s,border-color .5s}
+  .qstep.fait h2::before{content:"✓";background:var(--bc);color:#111;font-size:16px;font-weight:700}
+  .qstep.fait.juste h2::before{animation:hop .6s cubic-bezier(.3,.7,.3,1.4)}
+  .chip.neuf{animation:hop .5s cubic-bezier(.3,.7,.3,1.4)}
+  /* apparition lente des blocs */
+  html.anim .qstep{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  html.anim .qstep.vu{opacity:1;transform:none}
+  /* petit mot d'encouragement */
+  .bravo{position:fixed;left:50%;top:132px;transform:translate(-50%,-10px);z-index:65;background:var(--ice);color:var(--fond);font:600 15px/1 var(--texte);
+    padding:12px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .5s,transform .5s}
+  .bravo.on{opacity:1;transform:translate(-50%,0)}
+  @media(prefers-reduced-motion:reduce){html.anim .qstep{opacity:1;transform:none;transition:none}.qcard.hop,.qstep.fait.juste h2::before,.chip.neuf,.qcard.hop .dot::after{animation:none}
+    .suivi .jauge i,.bravo{transition:none}}
 </style>
 </head>
 <body>
@@ -117,6 +178,8 @@
   <a class="back" href="espace.html">✕ Quitter</a>
 </div>
 
+<div class="suivi" aria-live="polite"><div class="suivi-in"><span class="compte" id="s-compte">0 / 0</span><span class="jauge"><i id="s-jauge"></i></span><span class="mot" id="s-mot"></span></div></div>
+<div class="bravo" id="bravo" aria-hidden="true"></div>
 <main>
   <div class="qwrap">
     <form id="qform" autocomplete="off">
@@ -184,11 +247,10 @@
       <div class="qstep">
         <h2>Ton activité.</h2>
         <p class="qhint">Nombre moyen de pas par jour, si tu utilises une montre connectée ou ton téléphone.</p>
-        <div class="qcards">
-          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&lt;7.000" required><span class="dot"></span><span class="tx">&lt;7.000</span></label>
-          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="7.000 à 10.000"><span class="dot"></span><span class="tx">7.000 à 10.000</span></label>
-          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="10.000–13.000"><span class="dot"></span><span class="tx">10.000–13.000</span></label>
-          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&gt;13.000"><span class="dot"></span><span class="tx">&gt;13.000</span></label>
+        <div class="qcards one">
+          <label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&lt;10.000" required><span class="dot"></span><span class="tx">Moins de 10.000</span></label>
+<label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="10.000–13.000"><span class="dot"></span><span class="tx">10.000 à 13.000</span></label>
+<label class="qcard"><input type="radio" name="pas" data-q="Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)" value="&gt;13.000"><span class="dot"></span><span class="tx">Plus de 13.000</span></label>
         </div>
         <p class="qhint" style="margin:24px 0 12px">En moyenne, combien de séances de sport fais-tu (ou feras-tu) par semaine&nbsp;?</p>
         <div class="qgrid">
@@ -213,7 +275,7 @@
         <p class="qhint">Les aliments auxquels tu tiens&nbsp;: on construit autour d'eux plutôt que contre eux.</p>
         <div class="qgrid">
           <div class="qfield full"><label>Aliments à conserver absolument</label>
-            <textarea name="conserver" data-q="Y a-t-il des aliments que tu souhaites absolument conserver dans ton alimentation ?" placeholder="Ex. pâtes, fromage, chocolat noir, pain le matin… ou « rien de particulier »" required></textarea></div>
+            <div class="picker" data-liste="conserver"><textarea name="conserver" data-q="Y a-t-il des aliments que tu souhaites absolument conserver dans ton alimentation ?" required hidden></textarea><div class="pick-chips" aria-live="polite"></div><div class="pick-box"><input type="text" class="pick-in" placeholder="Tape un aliment… (ex. pâtes, chocolat noir)" autocomplete="off" aria-label="Rechercher un aliment"><ul class="pick-sug" role="listbox"></ul></div><button type="button" class="pick-rien">Rien de particulier</button><p class="pick-note"></p></div></div>
         </div>
       </div>
 
@@ -250,7 +312,7 @@
         <p class="qhint">Aliments refusés, détestés, écœurants, restrictions religieuses ou éthiques. Prends ton temps.</p>
         <div class="qgrid">
           <div class="qfield full"><label>Aliments refusés</label>
-            <textarea name="refuses" data-q="Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses&#10;ou éthiques ? (Intolérances, écœurements, goûts...)&#10;(Attention à ne rien oublier, aucune modification ne sera faite une fois la programmation terminée)" placeholder="Ex. poisson, courgette, fromage de chèvre, champignons… Sois exhaustif." required></textarea></div>
+            <div class="picker" data-liste="refus"><textarea name="refuses" data-q="Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses&#10;ou éthiques ? (Intolérances, écœurements, goûts...)&#10;(Attention à ne rien oublier, aucune modification ne sera faite une fois la programmation terminée)" required hidden></textarea><div class="pick-chips" aria-live="polite"></div><div class="pick-box"><input type="text" class="pick-in" placeholder="Tape un aliment… (ex. poisson, champignons)" autocomplete="off" aria-label="Rechercher un aliment"><ul class="pick-sug" role="listbox"></ul></div><button type="button" class="pick-rien">Rien de particulier</button><p class="pick-note"></p></div></div>
         </div>
         <div class="qwarn"><b>N'oublie rien.</b> Aucune modification ne sera faite une fois la programmation terminée.</div>
       </div>
@@ -264,16 +326,6 @@
           <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je préfère 3 repas par jour (sans collation)"><span class="dot"></span><span class="tx">Je préfère 3 repas par jour (sans collation)</span></label>
           <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)"><span class="dot"></span><span class="tx">Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)</span></label>
           <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que les plats du midi soient froids"><span class="dot"></span><span class="tx">Je veux que les plats du midi soient froids</span></label>
-        </div>
-      </div>
-
-      <!-- 11 -->
-      <div class="qstep">
-        <h2>Autre chose&nbsp;?</h2>
-        <p class="qhint">Ton alimentation, ton vécu, tes contraintes ou tes attentes. C'est ici que ça se dit.</p>
-        <div class="qgrid">
-          <div class="qfield full"><label>À partager</label>
-            <textarea name="points" data-q="Y a-t-il des points particuliers que tu souhaites préciser ou partager sur ton&#10;alimentation, ton vécu, tes contraintes ou tes attentes ?" placeholder="Écris librement… ou « rien de particulier »" required></textarea></div>
         </div>
       </div>
 
@@ -389,9 +441,77 @@
   <a class="btn" href="espace.html">Retour à mon espace</a>
 </div></div>
 
-<script src="assets/site.js?v=2709zzd"></script>
+<script src="assets/site.js?v=2809q"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script src="assets/ely-auth.js"></script>
+<script>
+/* RECHERCHE D'ALIMENTS : on affiche le LIBELLÉ, on envoie ses VALEURS (texte, séparées par des
+   virgules) sous le MÊME data-q qu'avant. Table fournie par le moteur (assets/aliments_questionnaire.json). */
+(function(){
+  function norm(t){ return String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/œ/g,'oe'); }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  fetch('assets/aliments_questionnaire.json').then(function(r){ return r.json(); }).then(function(T){
+    document.querySelectorAll('.picker').forEach(function(p){
+      var table=T[p.getAttribute('data-liste')]||{}, libelles=Object.keys(table), choisis=[], rien=false, idx=-1;
+      var ta=p.querySelector('textarea'), chips=p.querySelector('.pick-chips'), inp=p.querySelector('.pick-in'),
+          sug=p.querySelector('.pick-sug'), btnRien=p.querySelector('.pick-rien');
+      p.querySelector('.pick-note').textContent=T.message_introuvable||'';
+      function valeur(){
+        if(rien) return 'Rien de particulier';
+        // un libellé -> ses valeurs ; une réponse d'avant non reconnue reste telle quelle (jamais perdue)
+        var v=[]; choisis.forEach(function(l){ (table[l]||[l]).forEach(function(x){ if(v.indexOf(x)<0) v.push(x); }); });
+        return v.join(', ');
+      }
+      function maj(nouveau){
+        chips.innerHTML=choisis.map(function(l){ return '<span class="chip'+(l===nouveau?' neuf':'')+'">'+esc(l)+'<button type="button" aria-label="Retirer '+esc(l)+'" data-l="'+esc(l)+'">×</button></span>'; }).join('');
+        btnRien.classList.toggle('on',rien);
+        ta.value=valeur(); ta.dispatchEvent(new Event('input',{bubbles:true}));
+      }
+      function suggerer(){
+        var q=norm(inp.value.trim()); idx=-1;
+        if(!q){ sug.innerHTML=''; return; }
+        var r=libelles.filter(function(l){ return choisis.indexOf(l)<0 && norm(l).indexOf(q)>-1; })
+          .sort(function(a,b){ return (norm(a).indexOf(q)===0?0:1)-(norm(b).indexOf(q)===0?0:1) || a.localeCompare(b,'fr'); }).slice(0,8);
+        sug.innerHTML = r.length ? r.map(function(l,i){ return '<li role="option" data-l="'+esc(l)+'">'+esc(l)+'</li>'; }).join('')
+          : '<li class="vide">Aucun aliment trouvé</li>';
+      }
+      function ajouter(l){ if(!l||choisis.indexOf(l)>-1) return; rien=false; choisis.push(l); inp.value=''; sug.innerHTML=''; maj(l); inp.focus(); }
+      inp.addEventListener('input',suggerer);
+      inp.addEventListener('focus',suggerer);
+      inp.addEventListener('keydown',function(e){
+        var li=[].slice.call(sug.querySelectorAll('li[data-l]'));
+        if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); if(!li.length) return;
+          idx=(idx+(e.key==='ArrowDown'?1:-1)+li.length)%li.length; li.forEach(function(x,i){ x.classList.toggle('on',i===idx); }); }
+        else if(e.key==='Enter'){ e.preventDefault(); var c=li[idx>-1?idx:0]; if(c) ajouter(c.getAttribute('data-l')); }
+        else if(e.key==='Escape'){ sug.innerHTML=''; }
+      });
+      sug.addEventListener('mousedown',function(e){ var li=e.target.closest('li[data-l]'); if(li){ e.preventDefault(); ajouter(li.getAttribute('data-l')); } });
+      chips.addEventListener('click',function(e){ var b=e.target.closest('button[data-l]'); if(!b) return;
+        choisis=choisis.filter(function(l){ return l!==b.getAttribute('data-l'); }); maj(); });
+      btnRien.addEventListener('click',function(){ rien=!rien; if(rien) choisis=[]; maj(); });
+      document.addEventListener('click',function(e){ if(!p.contains(e.target)) sug.innerHTML=''; });
+      p._poser=function(l){ rien=false; choisis=l.filter(function(x){ return table[x]; }); maj(); };
+      // brouillon déjà enregistré (texte des valeurs) -> étiquettes : on retrouve les libellés dont
+      // toutes les valeurs y sont, les plus larges d'abord (« Poisson (tous) » avant « Saumon »).
+      p._depuisValeur=function(v){
+        v=String(v||'').trim(); if(!v){ return; }
+        if(/^rien de particulier$/i.test(v)){ rien=true; choisis=[]; maj(); return; }
+        var dispo={}; v.split(/\s*,\s*/).forEach(function(x){ dispo[x]=1; });
+        var couvert={}, res=[];
+        libelles.slice().sort(function(a,b){ return table[b].length-table[a].length; }).forEach(function(l){
+          var vals=table[l]||[]; if(!vals.length) return;
+          if(vals.every(function(x){ return dispo[x]; }) && vals.some(function(x){ return !couvert[x]; })){ res.push(l); vals.forEach(function(x){ couvert[x]=1; }); }
+        });
+        var reste=Object.keys(dispo).filter(function(x){ return !couvert[x]; });
+        rien=false; choisis=libelles.filter(function(l){ return res.indexOf(l)>-1; }).concat(reste); maj();
+      };
+      if(ta.value) p._depuisValeur(ta.value);
+      document.addEventListener('ely:restaure',function(){ p._depuisValeur(ta.value); });
+    });
+    document.dispatchEvent(new CustomEvent('ely:aliments-prets'));
+  });
+})();
+</script>
 <script>
 (function(){
   "use strict";
@@ -467,6 +587,7 @@
     });
   }
   function queueSave(){ clearTimeout(tmr); tmr=setTimeout(saveDraft,800); }
+  form.noValidate=true;   // champs de recherche d'aliments : le texte envoyé est dans une zone masquée
   form.addEventListener('input',function(){ progress(); queueSave(); });
   form.addEventListener('change',function(){ progress(); queueSave(); });
 
@@ -531,7 +652,7 @@
       .then(function(r){
         var row=r&&r.data;
         if(row&&row.statut==='valide'){ show('scr-done2'); return; }
-        if(row) restore(row.reponses);
+        if(row){ restore(row.reponses); document.dispatchEvent(new CustomEvent('ely:restaure')); }
         // pré-remplir le poids avec la dernière pesée connue
         return sb.from('poids').select('kg').eq('user_id',uid).order('date',{ascending:false}).limit(1)
           .then(function(p){
@@ -560,6 +681,61 @@
       if(Date.now()-t0<4200) requestAnimationFrame(loop); else cv.style.display='none';
     })();
   }
+})();
+</script>
+<script>
+/* PISTE A : réactions à chaque réponse, blocs cochés, jauge et encouragements. Rythme posé. */
+(function(){
+  var reduit=matchMedia('(prefers-reduced-motion:reduce)').matches, html=document.documentElement;
+  var form=document.getElementById('qform'), blocs=[].slice.call(form.querySelectorAll('.qstep'));
+  if(!reduit) html.classList.add('anim');
+  // un bloc est complet quand toutes ses réponses obligatoires sont données
+  function complet(b){
+    var ok=true, vus={};
+    b.querySelectorAll('[required],[data-req]').forEach(function(el){
+      if(el.type==='radio'||el.type==='checkbox'){ if(vus[el.name]) return; vus[el.name]=1;
+        if(!b.querySelector('input[name="'+el.name+'"]:checked')) ok=false; }
+      else if(!String(el.value).trim()) ok=false;
+    });
+    return ok;
+  }
+  var MOTS=[[0,"C'est parti !"],[.25,'Bien lancé'],[.5,'À mi-chemin, continue'],[.75,'Plus que quelques questions'],[1,'Tout est rempli ✓']];
+  var dernierPalier=-1, pret=false;
+  function bravo(t){ var e=document.getElementById('bravo'); e.textContent=t; e.classList.add('on'); clearTimeout(bravo._t); bravo._t=setTimeout(function(){ e.classList.remove('on'); },2200); }
+  function maj(source){
+    var n=0; blocs.forEach(function(b){ var f=complet(b); if(f&&!b.classList.contains('fait')&&pret&&source){ b.classList.add('juste'); setTimeout(function(){ b.classList.remove('juste'); },700); }
+      b.classList.toggle('fait',f); if(f) n++; });
+    var r=blocs.length?n/blocs.length:0;
+    document.getElementById('s-compte').textContent=n+' / '+blocs.length;
+    document.getElementById('s-jauge').style.width=(r*100)+'%';
+    var p=0; MOTS.forEach(function(m,i){ if(r>=m[0]) p=i; });
+    document.getElementById('s-mot').textContent=MOTS[p][1];
+    if(pret&&source&&p>dernierPalier&&p>0) bravo(MOTS[p][1]);
+    dernierPalier=p;
+    return n;
+  }
+  // réaction de la carte cliquée
+  form.addEventListener('change',function(e){
+    var c=e.target.closest('.qcard');
+    if(c&&e.target.checked&&!reduit){ c.classList.remove('hop'); void c.offsetWidth; c.classList.add('hop'); }
+    var b=e.target.closest('.qstep'), avant=b&&b.classList.contains('fait');
+    maj(true);
+    // bloc tout juste complété par un choix -> on glisse doucement au suivant
+    if(b&&!avant&&b.classList.contains('fait')&&(e.target.type==='radio'||e.target.type==='checkbox')){
+      var i=blocs.indexOf(b), s=blocs[i+1];
+      if(s) setTimeout(function(){ s.scrollIntoView({behavior:reduit?'auto':'smooth',block:'start'}); },900);
+    }
+  });
+  form.addEventListener('input',function(){ maj(true); });
+  document.addEventListener('ely:rempli',function(){ maj(false); });
+  document.addEventListener('ely:vide',function(){ dernierPalier=-1; maj(false); scrollTo({top:0,behavior:reduit?'auto':'smooth'}); });
+  // apparition des blocs au défilement
+  if(!reduit&&'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('vu'); io.unobserve(x.target); } }); },{rootMargin:'0px 0px -12% 0px'});
+    blocs.forEach(function(b){ io.observe(b); });
+  } else blocs.forEach(function(b){ b.classList.add('vu'); });
+  maj(false); document.addEventListener('ely:restaure',function(){ maj(false); });
+  setTimeout(function(){ pret=true; },1500);   // pas d'encouragement pendant la reprise du brouillon
 })();
 </script>
 </body>

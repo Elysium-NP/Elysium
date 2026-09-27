@@ -467,7 +467,8 @@
       p.querySelector('.pick-note').textContent=T.message_introuvable||'';
       function valeur(){
         if(rien) return 'Rien de particulier';
-        var v=[]; choisis.forEach(function(l){ (table[l]||[]).forEach(function(x){ if(v.indexOf(x)<0) v.push(x); }); });
+        // un libellé -> ses valeurs ; une réponse d'avant non reconnue reste telle quelle (jamais perdue)
+        var v=[]; choisis.forEach(function(l){ (table[l]||[l]).forEach(function(x){ if(v.indexOf(x)<0) v.push(x); }); });
         return v.join(', ');
       }
       function maj(nouveau){
@@ -499,6 +500,22 @@
       btnRien.addEventListener('click',function(){ rien=!rien; if(rien) choisis=[]; maj(); });
       document.addEventListener('click',function(e){ if(!p.contains(e.target)) sug.innerHTML=''; });
       p._poser=function(l){ rien=false; choisis=l.filter(function(x){ return table[x]; }); maj(); };
+      // brouillon déjà enregistré (texte des valeurs) -> étiquettes : on retrouve les libellés dont
+      // toutes les valeurs y sont, les plus larges d'abord (« Poisson (tous) » avant « Saumon »).
+      p._depuisValeur=function(v){
+        v=String(v||'').trim(); if(!v){ return; }
+        if(/^rien de particulier$/i.test(v)){ rien=true; choisis=[]; maj(); return; }
+        var dispo={}; v.split(/\s*,\s*/).forEach(function(x){ dispo[x]=1; });
+        var couvert={}, res=[];
+        libelles.slice().sort(function(a,b){ return table[b].length-table[a].length; }).forEach(function(l){
+          var vals=table[l]||[]; if(!vals.length) return;
+          if(vals.every(function(x){ return dispo[x]; }) && vals.some(function(x){ return !couvert[x]; })){ res.push(l); vals.forEach(function(x){ couvert[x]=1; }); }
+        });
+        var reste=Object.keys(dispo).filter(function(x){ return !couvert[x]; });
+        rien=false; choisis=libelles.filter(function(l){ return res.indexOf(l)>-1; }).concat(reste); maj();
+      };
+      if(ta.value) p._depuisValeur(ta.value);
+      document.addEventListener('ely:restaure',function(){ p._depuisValeur(ta.value); });
     });
     document.dispatchEvent(new CustomEvent('ely:aliments-prets'));
   });

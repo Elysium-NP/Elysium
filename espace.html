@@ -198,6 +198,15 @@
   @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.cprog i{transition:none}.cat .ci .box.pop{animation:none}}
   @media(max-width:600px){.phd{flex-direction:column;align-items:flex-start;gap:20px}.phd .macros{flex-direction:column;align-items:center;gap:18px;width:100%}.mlist{min-width:0;width:100%}.meal .rec{font-size:17px}.courses-top{gap:10px}}
   @media(prefers-reduced-motion:reduce){.mrow .bar i{transition:none}#progview,.panel.on{animation:none}}
+  /* messagerie avec les coachs */
+  .fil-msg{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;margin:12px 0}
+  .fil-msg .b{max-width:85%;padding:9px 12px;border-radius:12px;font-size:14.5px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+  .fil-msg .b.moi{align-self:flex-end;background:var(--p-bleu)}
+  .fil-msg .b.coach{align-self:flex-start;background:#fff;border:1px solid var(--line)}
+  .fil-msg .b time{display:block;font-size:11px;color:var(--steel);margin-top:4px}
+  #msg-form{display:flex;gap:8px}
+  #msg-form textarea{flex:1;min-height:46px;resize:vertical;font:16px/1.4 var(--texte);border:1px solid var(--line);padding:9px 11px;background:#fff;color:var(--ice)}
+  #msg-form button{font:600 14px/1 var(--texte);background:var(--brand);color:#111;border:0;border-radius:999px;padding:0 18px;cursor:pointer}
   /* en-tête : groupe d'actions (raccourci coachs + déconnexion) */
   .hd-act{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .dash-hd .coachlink{text-decoration:none;color:var(--blue);border-color:rgba(46,155,255,.45)}
@@ -284,6 +293,15 @@
         <input type="file" accept="image/*" hidden id="photo">
       </label>
       <p id="photomsg" class="foot-note"></p>
+    </div>
+
+    <!-- MESSAGES avec les coachs (table messages) -->
+    <div class="card wide rv" id="c-msg" hidden>
+      <div class="ch"><h3>Mes messages</h3><span class="tag" id="msg-tag">Coachs</span></div>
+      <p>Une question sur ton programme ? Écris à Damien &amp; Yoann, ils te répondent ici.</p>
+      <div class="fil-msg" id="fil-msg"></div>
+      <form id="msg-form"><textarea id="msg-txt" placeholder="Ton message…" required maxlength="4000"></textarea><button type="submit">Envoyer</button></form>
+      <p id="msg-err" class="foot-note" aria-live="polite"></p>
     </div>
 
     <!-- PROFIL -->
@@ -861,8 +879,31 @@ var PROG = {
   document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
   document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
 
+  // ---- messagerie : la carte n'apparaît que si la table existe (script tableau_de_bord_coach.sql) ----
+  function chargerMsgs(){
+    return sb.from('messages').select('id,auteur_id,texte,lu_at,created_at').eq('client_id',u.id).order('created_at').then(function(r){
+      if(r.error) return;                                      // table pas encore créée : rien à montrer
+      var card=document.getElementById('c-msg'); card.hidden=false;
+      var L=r.data||[], box=document.getElementById('fil-msg');
+      box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id;
+        return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':'Coach · ')+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
+        : '<p class="foot-note">Aucun message pour l’instant.</p>';
+      box.scrollTop=box.scrollHeight;
+      var aLire=L.filter(function(m){ return m.auteur_id!==u.id && !m.lu_at; }).map(function(m){ return m.id; });
+      document.getElementById('msg-tag').textContent = aLire.length ? aLire.length+' nouveau'+(aLire.length>1?'x':'') : 'Coachs';
+      if(aLire.length) sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(){});
+    }).catch(function(){});
+  }
+  document.getElementById('msg-form').addEventListener('submit',function(e){ e.preventDefault();
+    var t=document.getElementById('msg-txt'), txt=t.value.trim(), err=document.getElementById('msg-err'); if(!txt) return;
+    var bt=this.querySelector('button'); bt.disabled=true;
+    sb.from('messages').insert({client_id:u.id,auteur_id:u.id,texte:txt}).then(function(r){ bt.disabled=false;
+      if(r.error){ err.textContent='Message non envoyé, réessaie dans un instant.'; return; }
+      err.textContent=''; t.value=''; chargerMsgs(); });
+  });
+
   refresh();
-  chargerMens();
+  chargerMens(); chargerMsgs();
   reveal(document);
 })();
 </script>

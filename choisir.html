@@ -60,8 +60,8 @@
   .chafter .reassure b{color:#111111;font-weight:500}
   /* transition entre les formules et le carré « ce qui se passe ensuite » */
   .chturn{text-align:center;max-width:560px;margin:48px auto 6px}
-  .chturn p{font-family:var(--disp);font-size:12.5px;line-height:1.7;letter-spacing:.02em;color:var(--steel)}
-  .chturn p .serif{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ice);letter-spacing:0}
+  .chturn p{font-family:var(--texte);font-size:17px;line-height:1.6;color:var(--steel)}
+  .chturn p .serif{font-style:normal;color:var(--ice)}   /* même taille dans toute la phrase (Dimitri 27/09) */
   .chturn .mark{display:block;width:1px;height:46px;margin:20px auto 0;position:relative;background:linear-gradient(var(--blue),rgba(46,155,255,0))}
   .chturn .mark::after{content:"";position:absolute;left:50%;bottom:-2px;width:6px;height:6px;background:var(--blue);transform:translateX(-50%) rotate(45deg);box-shadow:0 0 9px var(--blue)}
   @media(prefers-reduced-motion:no-preference){.chturn .mark::after{animation:chpulse 2.4s ease-in-out infinite}}

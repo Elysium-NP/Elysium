@@ -7,23 +7,35 @@
    ========================================================================== */
 
 :root{
-  /* ── IDENTITÉ CRÈME (validée par Damien & Yoann le 27/09) ──
-     Les noms de tokens de l'ancienne charte sombre sont GARDÉS (toutes les pages s'en
-     servent) mais leurs valeurs sont celles de la charte claire :
-       --void  = fond de page crème          --void2 = surfaces / cartes, un cran plus clair
-       --ice   = texte fort (noir)           --gris  = texte courant   --steel = texte discret
-       --blue  = bleu Elysium FONCÉ, pour le texte et les filets (AA sur crème)
-       --brand = bleu Elysium #2E9BFF, pour les fonds, boutons, pastilles
-     Ancienne charte : tag git `site-sombre-27-09`. */
-  --void:#F5F1E8; --void2:#FBF8F2; --cream2:#EDE6D8;
-  --blue:#1466b8; --blue-d:#0f4f8f; --brand:#2E9BFF;
-  --ice:#111111; --gris:#4d463c; --steel:#6b6358; --line:#E3DACB;
-  /* pastels : les couleurs des repas de leurs diètes, adoucies dans la crème */
+  /* ═══ LE FOND DU SITE — UNE SEULE LIGNE À RÉGLER ═══
+     Beige très très clair (retours Damien & Yoann, 27/09 16 h 10). Plus clair / plus
+     blanc : rapprocher de #FFFFFF ; plus chaud : ajouter un soupçon de jaune.
+     Surfaces, filets et sections alternées en sont DÉRIVÉS automatiquement. */
+  --fond:#F6F3EE;
+
+  --void2:color-mix(in srgb,var(--fond) 50%,#fffdf9);    /* surfaces / cartes, un cran plus clair */
+  --cream2:color-mix(in srgb,var(--fond) 93%,#8a7a60);   /* sections alternées, un cran plus soutenu */
+  --line:color-mix(in srgb,var(--fond) 85%,#8a7a60);     /* filets et séparateurs, neutres chauds */
+  --void:var(--fond);                                    /* ancien nom, gardé : toutes les pages s'en servent */
+  --voile:color-mix(in srgb,var(--fond) 92%,transparent);/* bandeaux fixes semi-transparents */
+
+  /* textes (AA vérifié sur le fond et les sections alternées) */
+  --ice:#111111; --gris:#4d463c; --steel:#6b6358;
+  /* bleu Elysium : --brand pour les fonds / boutons, --blue (foncé) pour le texte et les filets */
+  --brand:#2E9BFF; --blue:#1466b8; --blue-d:#0f4f8f;
+  /* pastels : les couleurs des repas de leurs diètes, adoucies */
   --p-jaune:#F8EBC4; --p-vert:#DDE8D2; --p-violet:#E2DCEA; --p-bleu:#DCE8F4;
   --b-jaune:#ffd966; --b-vert:#93c47d; --b-violet:#8e7cc3; --b-bleu:#6fa8dc;
-  --disp:"Segoe UI",Arial,Helvetica,system-ui,sans-serif;
-  --mono:"Segoe UI",Arial,Helvetica,system-ui,sans-serif;
-  --serif:Georgia,"Times New Roman",serif;
+
+  /* ═══ DEUX POLICES, PAS UNE DE PLUS (Damien : « une police plus classique ») ═══
+     --titre : Georgia, pour TOUS les titres — celle des noms clients sur leurs fiches PDF.
+     --texte : Arial, pour tout le reste — celle du corps de leurs fiches PDF.
+     Toutes deux installées d'origine sur iPhone, Mac, Windows et Android : rien à
+     télécharger, et le même rendu chez les coachs (Safari iPhone) que chez les clients.
+     Seule exception : le logo ELYSIUM (Cormorant, --wordmark). */
+  --titre:Georgia,"Times New Roman",serif;
+  --texte:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --disp:var(--texte); --mono:var(--texte); --serif:var(--texte);   /* anciens noms -> texte courant */
   --wordmark:"Cormorant Garamond",Georgia,serif;
   --edge:clamp(18px,4vw,54px);
 }
@@ -405,13 +417,13 @@ html.reveal-ready .plan.feat.in::before{transform:translateY(-50%) scale(1);opac
 .cta .sub{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2vw,25px);color:#cdd6e4;margin:20px 0 40px}
 
 /* ---------- footer ---------- */
-footer{position:relative;z-index:2;text-align:center;padding:64px var(--edge) 48px;border-top:1px solid var(--line)}
-footer .logo{margin-bottom:24px}
-footer .foot-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 28px;margin-bottom:22px;
+.site-foot{position:relative;z-index:2;text-align:center;padding:64px var(--edge) 48px;border-top:1px solid var(--line)}
+.site-foot .logo{margin-bottom:24px}
+.site-foot .foot-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 28px;margin-bottom:22px;
   font-family:var(--disp);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
-footer .foot-links a{color:var(--steel);transition:color .3s ease}
-footer .foot-links a:hover{color:var(--blue)}
-footer .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;color:#4a5364;text-transform:uppercase}
+.site-foot .foot-links a{color:var(--steel);transition:color .3s ease}
+.site-foot .foot-links a:hover{color:var(--blue)}
+.site-foot .foot-legal{font-family:var(--disp);font-size:11px;letter-spacing:.12em;color:#4a5364;text-transform:uppercase}
 
 /* ---------- mention partenaire discrète (Prozis) — bas de Méthode & Formules ---------- */
 .partner-strip{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:48px;padding:22px 0;background:var(--void);isolation:isolate}   /* fond noir isolé -> le mix-blend-mode du logo Prozis se cale toujours sur du sombre (plus de boîte pâle selon l'endroit) */
@@ -466,10 +478,18 @@ html.js,html.js *{cursor:auto}
 html.js a,html.js button,html.js summary,html.js label,html.js [role=button]{cursor:pointer}
 
 /* titres : Georgia, casse normale (comme leurs fiches) — même dans les styles propres aux pages */
-h1,h2,h3{font-family:var(--serif)!important;font-weight:400!important;text-transform:none!important;letter-spacing:-.01em!important;line-height:1.1!important;color:var(--ice)}
+h1,h2,h3{font-family:var(--titre)!important;font-weight:400!important;text-transform:none!important;letter-spacing:-.01em!important;line-height:1.12!important;color:var(--ice)}
+/* même taille par niveau sur TOUTES les pages (les styles propres aux pages ne décident plus) */
+h1{font-size:clamp(34px,5.4vw,60px)!important}
+h2{font-size:clamp(26px,3.4vw,40px)!important}
+h3{font-size:clamp(19px,1.8vw,23px)!important}
+/* plus d'italique d'appoint : une seule graisse / un seul style de texte courant */
+body *:not(h1):not(h1 *):not(h2):not(h2 *){font-style:normal!important}
+body{font-family:var(--texte)}
+input,select,textarea,button{font-family:var(--texte)}
 
 /* en-tête : bande crème, marque ELYSIUM en Cormorant, menu aligné dessus */
-.status{align-items:center;height:64px;padding:0 var(--edge);background:rgba(245,241,232,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.status{align-items:center;height:64px;padding:0 var(--edge);background:var(--voile);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .status .mid,.status .rt{display:none!important}
 nav.menu{top:0;height:64px}
 nav.menu a{font-size:14px;letter-spacing:0;text-transform:none;color:var(--gris)}
@@ -479,8 +499,8 @@ nav.menu a[aria-current="page"]::after{background:var(--brand);height:2px;border
 nav.menu a.go{color:var(--ice);border:1px solid var(--ice);border-radius:999px;padding:8px 16px}
 nav.menu a.go:hover{background:var(--ice);color:#fff}
 .burger{top:19px}
-.msheet{background:rgba(245,241,232,.98)}
-.msheet a{font-family:var(--serif);font-weight:400;text-transform:none}
+.msheet{background:var(--fond)}
+.msheet a{font-family:var(--texte);font-weight:600;text-transform:none}
 .msheet a .mnum{font-family:var(--disp)}
 .logo .elg,.logo.big .elg,.elg{--h:auto;height:auto;padding:0}
 .elg-ring,.elg-sub{display:none!important}
@@ -498,7 +518,7 @@ nav.menu a.go:hover{background:var(--ice);color:#fff}
 .phead::before{background:radial-gradient(700px 420px at 82% 10%,var(--p-bleu),transparent 65%),radial-gradient(520px 360px at 12% 90%,var(--p-jaune),transparent 70%)}
 .phead::after{display:none}
 .phead h1 .l2,.auth-card h1 .l2,.dash-hd h1 span{color:var(--brand)}
-.phead .sub,.cta .sub{font-family:var(--serif);color:var(--gris)}
+.phead .sub,.cta .sub{font-family:var(--texte);color:var(--gris)}
 .sec-head .no{-webkit-text-stroke:1px rgba(46,155,255,.55)}
 .sec-head .trace path{stroke:var(--brand);filter:none}
 .sec-head .trace .tnode{fill:var(--brand);filter:none}
@@ -506,7 +526,7 @@ nav.menu a.go:hover{background:var(--ice);color:#fff}
 /* cartes et surfaces */
 .coach{background:var(--void2)}
 .coach .ph::before{display:none}
-.coach .ph::after{background:linear-gradient(0deg,rgba(245,241,232,.55),transparent 45%)}
+.coach .ph::after{background:linear-gradient(0deg,color-mix(in srgb,var(--fond) 55%,transparent),transparent 45%)}
 .coach .ph .tagph{background:rgba(251,248,242,.85);color:var(--gris)}
 .coach .ph .scanline{display:none}
 .coach:hover,.plan:hover{box-shadow:0 20px 44px -30px rgba(60,45,20,.45)}
@@ -519,15 +539,15 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
 .wrow button{background:var(--brand);color:#111;border-radius:8px}
 .cform input,.cform select,.cform textarea,.auth-form input,.wrow input{background:#fff;border-radius:8px}
 .faq details{border-color:var(--line)}
-.faq summary{font-family:var(--serif);font-weight:400;text-transform:none;font-size:20px}
+.faq summary{font-family:var(--texte);font-weight:600;text-transform:none;font-size:17px;letter-spacing:0}
 .quote{border-left-color:var(--brand)}
 .fill{background:var(--p-bleu)}
 
 /* bandeau d'appel de fin de page : bleu pastel */
 .cta::before{background:#E3EEF8}
-footer .foot-links{letter-spacing:.04em;text-transform:none;font-size:14px}
-footer .foot-legal{color:var(--steel);letter-spacing:.04em;text-transform:none}
-footer .logo{margin-bottom:18px}
+.site-foot .foot-links{letter-spacing:.04em;text-transform:none;font-size:14px}
+.site-foot .foot-legal{color:var(--steel);letter-spacing:.04em;text-transform:none}
+.site-foot .logo{margin-bottom:18px}
 
 /* partenaire : logo posé tel quel (plus de fusion « écran » pensée pour le noir) */
 .partner-strip{background:transparent}
@@ -543,3 +563,8 @@ footer .logo{margin-bottom:18px}
 /* ces règles de l'ancien thème forçaient un fond transparent (bouton contour) : plus précises, on les suit */
 .cform .btn,.auth-form .btn,.locked .btn{background:var(--brand)}
 .coach .ph{background-color:var(--cream2)}
+
+/* pied de page : le VRAI logo (PNG détouré, 10 Ko), même taille et même place sur toutes les pages.
+   L'en-tête garde « Elysium » en texte (décision des coachs, 27/09 16 h 15). */
+.site-foot{text-align:center}
+.site-foot .foot-logo{display:block;width:200px;max-width:60%;height:auto;margin:0 auto 26px}

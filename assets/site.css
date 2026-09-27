@@ -574,12 +574,16 @@ html.reveal-ready .plan.feat.in,.plan.feat{box-shadow:0 0 0 1px rgba(46,155,255,
    fondu (0,45 s). L'en-tête ne bouge pas (seul <main> s'anime). Les transitions natives sont
    COUPÉES pour ne jamais faire doublon. Rien si « réduire les animations ». */
 @view-transition{navigation:none}
-main{animation:page-entree .45s cubic-bezier(.2,.7,.2,1) both}
-@keyframes page-entree{from{opacity:0;transform:translateY(16px)}}
-html.page-sort main{opacity:0;transform:translateY(-10px);transition:opacity .25s ease,transform .25s ease}
+/* arrivée : <main> part invisible (classe `arrivee`, posée dans le <head>) et apparaît quand le
+   script pose `arrive`, APRÈS le premier affichage réel de la page — sinon l'animation se jouait
+   pendant que Chrome montrait encore l'ancienne page, et on ne voyait rien. Filet : `arrive` est
+   posée au plus tard à 1,5 s par le <head> lui-même, même si site.js échoue. */
+html.arrivee main{opacity:0;transform:translateY(24px)}
+html.arrivee.arrive main{opacity:1;transform:none;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+html.page-sort main{opacity:0!important;transform:translateY(-12px)!important;transition:opacity .3s ease,transform .3s ease!important}
 @media(prefers-reduced-motion:reduce){
-  main{animation:none}
-  html.page-sort main{opacity:1;transform:none;transition:none}
+  html.arrivee main,html.page-sort main{opacity:1!important;transform:none!important;transition:none!important}
+}
 }
 }
 

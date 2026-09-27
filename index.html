@@ -52,7 +52,8 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/site.css?v=2709j">
+<script>document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
+<link rel="stylesheet" href="assets/site.css?v=2709k">
 <style>
   @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;
     src:url(assets/fonts/cormorant-garamond-500-normal-latin.woff2) format("woff2")}
@@ -593,20 +594,23 @@
 })();
 </script>
 <script>
-/* TRANSITIONS entre pages (voir site.css) : fondu de sortie 0,25 s au clic sur un lien interne,
-   sur tous les navigateurs. */
+/* TRANSITIONS entre pages (voir site.css) : arrivée après le premier affichage ; sortie 0,3 s au
+   clic sur un lien interne, vers l'adresse FINALE (sans le détour de la redirection .html). */
 (function(){
   var html=document.documentElement;
+  function arrive(){ requestAnimationFrame(function(){ requestAnimationFrame(function(){ html.classList.add('arrive'); }); }); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',arrive,{once:true}); else arrive();
+  addEventListener('pageshow',function(e){ if(e.persisted){ html.classList.remove('page-sort'); html.classList.add('arrive'); } });   // retour arrière
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('a[href]');
     if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||(a.target&&a.target!=='_self')||a.hasAttribute('download')) return;
     var u=new URL(a.href,location.href);
-    if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search)) return;   // autre site, mailto, ancre de la même page
+    if(u.origin!==location.origin||u.protocol==='file:'||(u.pathname===location.pathname&&u.search===location.search)) return;
     e.preventDefault(); html.classList.add('page-sort');
-    setTimeout(function(){ location.href=u.href; },250);
+    var cible=u.pathname.replace(/\/index\.html$/,'/').replace(/\.html$/,'')+u.search+u.hash;   // /methode.html -> /methode
+    setTimeout(function(){ location.href=cible; },300);
   });
-  addEventListener('pageshow',function(e){ if(e.persisted) html.classList.remove('page-sort'); });   // retour arrière
 })();
 </script>
 </body>

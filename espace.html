@@ -1466,7 +1466,7 @@ var PROG = {
     return nomsCharges;
   }
   function chargerMsgs(){
-    return chargerNomsCoachs().then(function(){ return sb.from('messages').select('id,auteur_id,texte,lu_at,created_at').eq('client_id',u.id).order('created_at'); }).then(function(r){
+    return chargerNomsCoachs().then(function(){ return sb.from('messages').select('*').eq('client_id',u.id).order('created_at'); }).then(function(r){
       if(r.error) return;                                      // table pas encore créée : rien à montrer
       var card=document.getElementById('c-msg'); card.hidden=false;
       // CGV v3 art. 7.3 : paiement échoué -> plus de nouvel échange tant que la période n'est pas réglée (l'historique reste lisible)
@@ -1477,11 +1477,11 @@ var PROG = {
         ? 'Ton abonnement est terminé : tu peux relire vos échanges ; pour écrire à tes coachs, reprends une formule.'
         : 'Ton dernier paiement a échoué : la messagerie reprend dès qu’il est réglé (« Mon abonnement » › mettre à jour ta carte).';
       var L=r.data||[], box=document.getElementById('fil-msg');
-      box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id;
+      box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id&&!m.depuis_equipe;   // compte mixte : un message envoyé depuis l'espace coachs reste « équipe »
         return '<div class="b '+(moi?'moi':'eq')+'">'+esc(m.texte)+'<time>'+(moi?'':(NOMS_C[m.auteur_id]?esc(NOMS_C[m.auteur_id])+' · ':'Coach · '))+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
         : '<p class="foot-note">Aucun message pour l’instant.</p>';
       box.scrollTop=box.scrollHeight;
-      var aLire=L.filter(function(m){ return m.auteur_id!==u.id && !m.lu_at; });
+      var aLire=L.filter(function(m){ return (m.auteur_id!==u.id||m.depuis_equipe) && !m.lu_at; });
       // ALERTES : chaque nouvelle réponse d'un coach -> alerte du navigateur (si autorisée)
       if(vusMsg && window.Notification && Notification.permission==='granted') aLire.filter(function(m){ return !vusMsg[m.id]; }).forEach(function(m){
         var n=new Notification('Elysium · tes coachs t’ont répondu',{body:m.texte.slice(0,140),tag:'ely-msg-'+m.id,icon:'assets/apple-touch-icon.png'});

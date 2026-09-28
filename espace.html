@@ -1462,7 +1462,7 @@ var PROG = {
   // tant qu'elle n'existe pas, on garde « Coach »
   var NOMS_C={}, nomsCharges=null;
   function chargerNomsCoachs(){
-    if(!nomsCharges) nomsCharges=sb.rpc('noms_coachs').then(function(r){ (r.data||[]).forEach(function(x){ NOMS_C[x.user_id]=x.prenom; }); }).catch(function(){});
+    if(!nomsCharges) nomsCharges=sb.rpc('noms_coachs').then(function(r){ (r.data||[]).forEach(function(x){ NOMS_C[x.user_id]=x.prenom+' - '+(x.titre||'Coach'); }); }).catch(function(){});
     return nomsCharges;
   }
   function chargerMsgs(){
@@ -1478,7 +1478,7 @@ var PROG = {
         : 'Ton dernier paiement a échoué : la messagerie reprend dès qu’il est réglé (« Mon abonnement » › mettre à jour ta carte).';
       var L=r.data||[], box=document.getElementById('fil-msg');
       box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id;
-        return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':(NOMS_C[m.auteur_id]?esc(NOMS_C[m.auteur_id])+' - Coach · ':'Coach · '))+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
+        return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':(NOMS_C[m.auteur_id]?esc(NOMS_C[m.auteur_id])+' · ':'Coach · '))+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
         : '<p class="foot-note">Aucun message pour l’instant.</p>';
       box.scrollTop=box.scrollHeight;
       var aLire=L.filter(function(m){ return m.auteur_id!==u.id && !m.lu_at; });

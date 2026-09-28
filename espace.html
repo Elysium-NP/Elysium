@@ -269,7 +269,7 @@
   .dash-hd .coachlink[hidden]{display:none}
 </style>
 <script src="assets/vendor/supabase.min.js"></script>
-<script src="assets/ely-auth.js"></script>
+<script src="assets/ely-auth.js?v=stripe1"></script>
 <script>ElyAuth.requireAuth('connexion.html');</script>
 </head>
 <body>
@@ -356,6 +356,14 @@
       <form id="msg-form"><textarea id="msg-txt" placeholder="Ton message…" required maxlength="4000"></textarea><button type="submit">Envoyer</button></form>
       <p id="msg-err" class="foot-note" aria-live="polite"></p>
       <button type="button" id="notif-on" class="ghostb" hidden style="margin-top:6px">Être alerté quand un coach me répond</button>
+    </div>
+
+    <!-- MON ABONNEMENT (Stripe) : formule, prix, échéance ; changer / résilier via le portail Stripe -->
+    <div class="card rv" id="c-abo" hidden>
+      <div class="ch"><h3>Mon abonnement</h3><span class="tag" id="abo-tag">Actif</span></div>
+      <div id="abo-corps"></div>
+      <div class="dashcta"><button type="button" class="btn" id="abo-portail">Changer de formule ou résilier</button></div>
+      <p class="foot-note">Paiement, factures et carte bancaire sont gérés par Stripe, en toute sécurité.</p>
     </div>
 
     <!-- PROFIL -->
@@ -820,6 +828,25 @@ var PROG = {
   }
 
   var bonjour=document.querySelector('.dash-hd h1');
+  var NOM_FORMULE={f1:'Formule 01 · Menu unique',f2:'Formule 02 · Menu mensuel',f3:'Formule 03 · Menu mensuel & recettes'};
+  var STATUT={active:'Actif',trialing:'Actif',past_due:'Paiement en retard',unpaid:'Impayé',canceled:'Résilié',incomplete:'Paiement en attente',incomplete_expired:'Paiement expiré',paused:'En pause'};
+  function renderAbo(){
+    var a=(ElyAuth.user()||{}).abonnement, card=document.getElementById('c-abo');
+    if(!a||!a.stripe_subscription_id){ card.hidden=true; return; }
+    card.hidden=false;
+    var fin=a.periode_fin?new Date(a.periode_fin).toLocaleDateString('fr-FR'):'—';
+    var prix=a.montant_cents!=null?(a.montant_cents/100).toFixed(2).replace('.',',')+' €':'—';
+    document.getElementById('abo-tag').textContent=a.resiliation_prevue?'Résiliation prévue':(STATUT[a.statut]||a.statut);
+    document.getElementById('abo-corps').innerHTML=
+      '<p><b style="color:var(--ice)">'+esc(NOM_FORMULE[a.formule]||'Formule')+'</b></p>'+
+      '<p style="margin-top:6px">'+prix+' toutes les 4 semaines</p>'+
+      '<p style="margin-top:6px">'+(a.statut==='canceled'?'Abonnement terminé.':a.resiliation_prevue?'Se termine le <b style="color:var(--ice)">'+fin+'</b>, sans nouveau prélèvement.':'Prochain prélèvement le <b style="color:var(--ice)">'+fin+'</b>.')+'</p>';
+  }
+  document.getElementById('abo-portail').addEventListener('click',function(){
+    var b=this; b.disabled=true; b.textContent='Ouverture…';
+    ElyAuth.portail().catch(function(e){ b.disabled=false; b.textContent='Changer de formule ou résilier'; alert(e.message); });
+  });
+
   function renderProgram(){
     var uu=ElyAuth.user()||{}, paid=!!uu.paid;
     var quest = ADMIN ? !!uu.quest : REEL.quest;
@@ -844,10 +871,13 @@ var PROG = {
         '<p>Ton programme sur-mesure, au gramme près, façonné à la main par un coach, se débloque ici. Une fois activé, tu réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et on construit ton programme (accès en ligne + PDF par mail).</p>'+
         '<a class="btn" href="#" id="unlock">'+(f ? 'Payer '+(fp||'')+' et débloquer' : 'Débloquer mon programme')+'</a>';
       var ub=document.getElementById('unlock');
-      // En attendant Stripe : le bouton SIMULE le paiement (drapeau local) pour que le
-      // parcours réel (questionnaire -> programme) reste testable de bout en bout.
+      // PAIEMENT STRIPE : formule choisie -> page de paiement Stripe ; sans formule -> choix de la formule
       if(ub) ub.addEventListener('click',function(e){ e.preventDefault();
-        if(confirm('Paiement simulé : Stripe n\'est pas encore branché. Débloquer l\'accès ?')){ ElyAuth.setPaid(true); renderProgram(); } });
+        var code=(String(f||'').match(/([123])/)||[])[1];
+        if(!code){ location.href='choisir.html'; return; }
+        ub.textContent='Ouverture du paiement…'; ub.style.pointerEvents='none';
+        ElyAuth.payer('f'+code).catch(function(err){ ub.textContent='Réessayer le paiement'; ub.style.pointerEvents='';
+          var m=document.createElement('p'); m.className='foot-note'; m.style.color='#b45309'; m.textContent=err.message; c.appendChild(m); }); });
     } else if(quest){
       pill.textContent='Programmation en cours'; pill.className='pill paid';
       c.className='card wide';
@@ -982,6 +1012,18 @@ var PROG = {
       err.textContent=''; t.value=''; chargerMsgs(); });
   });
 
+  if(/[?&]paiement=ok/.test(location.search)){
+    history.replaceState(null,'',location.pathname);
+    var pill=document.getElementById('statuspill'); pill.textContent='Paiement reçu · activation…'; pill.className='pill paid';
+    (function attendre(n){
+      ElyAuth.refresh().then(function(uu){
+        if((uu&&uu.paid)||n>=10){ renderProgram(); renderAbo(); if(uu&&uu.paid&&!ADMIN) chargerReel().then(renderProgram); return; }
+        setTimeout(function(){ attendre(n+1); },2000);
+      });
+    })(0);
+  }
+  renderAbo();
+  ElyAuth.ready.then(function(){ renderAbo(); renderProgram(); });   // état relu en base (abonnement Stripe)
   refresh();
   chargerMens();
   chargerMsgs().then(function(){

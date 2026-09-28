@@ -233,8 +233,8 @@
     <div class="kpi"><div class="k">Formule 2 · 25,90 €</div><div class="v" id="k-f2">—</div><div class="s">Menu mensuel</div></div>
     <div class="kpi"><div class="k">Formule 3 · 29,90 €</div><div class="v" id="k-f3">—</div><div class="s">Menu mensuel &amp; recettes</div></div>
     <div class="kpi"><div class="k">Clients depuis le début</div><div class="v" id="k-total">—</div><div class="s" id="k-total-s">comptes créés sur le site</div></div>
-    <div class="kpi"><div class="k">Montant / 4 semaines</div><div class="v att">—</div><div class="s">en attente de Stripe</div></div>
-    <div class="kpi"><div class="k">Résiliations</div><div class="v att">—</div><div class="s">en attente de Stripe</div></div>
+    <div class="kpi"><div class="k">Montant / 4 semaines</div><div class="v att" id="k-montant">—</div><div class="s" id="k-montant-s">en attente de Stripe</div></div>
+    <div class="kpi"><div class="k">Résiliations</div><div class="v att" id="k-resil">—</div><div class="s" id="k-resil-s">en attente de Stripe</div></div>
   </div>
   <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
 
@@ -342,7 +342,7 @@
 
 <script src="assets/site.js?v=2709zzd"></script>
 <script src="assets/vendor/supabase.min.js"></script>
-<script src="assets/ely-auth.js"></script>
+<script src="assets/ely-auth.js?v=stripe1"></script>
 <script>
 (function(){
   "use strict";
@@ -443,8 +443,26 @@
     });
   }
   /* ---------- abonnements ---------- */
+  var abonnementsOk=false;
   function chargerAbo(){
+    // ABONNEMENTS STRIPE (table abonnements, écrite par le serveur) : abonnés actifs, montant, résiliations
+    sb.from('abonnements').select('formule,statut,montant_cents,resiliation_prevue,stripe_subscription_id').then(function(r){
+      if(r.error) return;
+      var L=(r.data||[]).filter(function(a){ return a.stripe_subscription_id; });
+      var actifs=L.filter(function(a){ return ['active','trialing','past_due'].indexOf(a.statut)>-1; });
+      var n={f1:0,f2:0,f3:0}; actifs.forEach(function(a){ if(n[a.formule]!=null) n[a.formule]++; });
+      $('k-f1').textContent=n.f1; $('k-f2').textContent=n.f2; $('k-f3').textContent=n.f3;
+      var cents=actifs.reduce(function(t,a){ return t+(+a.montant_cents||0); },0);
+      var km=$('k-montant'), kr=$('k-resil');
+      km.textContent=(cents/100).toFixed(2).replace('.',',')+' €'; km.classList.remove('att');
+      kr.textContent=L.filter(function(a){ return a.statut==='canceled'||a.resiliation_prevue; }).length; kr.classList.remove('att');
+      $('k-montant-s').textContent=actifs.length+' abonnement'+(actifs.length>1?'s':'')+' actif'+(actifs.length>1?'s':'');
+      $('k-resil-s').textContent='terminées ou prévues';
+      $('abo-note').textContent='Formules = abonnés actifs (Stripe). Montant = total d’une période de 4 semaines.';
+      abonnementsOk=true;
+    });
     sb.from('profiles').select('id,formule').then(function(r){
+      if(abonnementsOk) return;
       if(r.error){ // colonne pas encore créée : on le dit, on n'invente rien
         $('abo-note').textContent='Répartition par formule : à activer (script supabase/tableau_de_bord_coach.sql).';
         return; }

@@ -55,8 +55,12 @@
     return sb.auth.getSession().then(function (r) {
       var s = r && r.data && r.data.session;
       if (!s) { writeMirror(null); return null; }
-      return sb.from("profiles").select("*").eq("id", s.user.id).maybeSingle()
-        .then(function (q) {
+      return Promise.all([
+        sb.from("profiles").select("*").eq("id", s.user.id).maybeSingle(),
+        // abonnement Stripe (écrit uniquement par le serveur, à partir des confirmations Stripe)
+        sb.from("abonnements").select("*").eq("user_id", s.user.id).maybeSingle()
+      ]).then(function (res) {
+          var q = res[0], ab = (res[1] && !res[1].error && res[1].data) || null;
           var p = (q && q.data) || {};
           var prev = readMirror() || {};
           var u = {
@@ -68,9 +72,11 @@
             sexe: p.sexe || "",
             taille: p.taille_cm || null,
             age: calcAge(p.naissance),
-            // paiement + questionnaire : encore locaux tant que Stripe et le
-            // questionnaire ne sont pas branchés (phases suivantes).
-            paid: !!prev.paid,
+            // PAYÉ = abonnement Stripe en cours (actif, en essai, ou paiement en retard de relance).
+            // demo_paid : bascule du « coin démo » du compte admin, jamais utilisée par un vrai client.
+            abonnement: ab,
+            paid: !!(ab && ["active", "trialing", "past_due"].indexOf(ab.statut) > -1) || !!prev.demo_paid,
+            demo_paid: !!prev.demo_paid,
             quest: !!prev.quest,
             cadence: prev.cadence, confort: prev.confort, abo_apres: prev.abo_apres,
             formule: prev.formule || (s.user.user_metadata || {}).formule,
@@ -189,7 +195,22 @@
 
     /* Démo/transition : gardés en local tant que Stripe et le questionnaire
        ne sont pas câblés côté serveur (ils deviendront des colonnes en base). */
-    setPaid: function (v) { var u = readMirror() || {}; u.paid = !!v; writeMirror(u); },
+    setPaid: function (v) { var u = readMirror() || {}; u.demo_paid = !!v; u.paid = !!v || !!(u.abonnement && ["active", "trialing", "past_due"].indexOf(u.abonnement.statut) > -1); writeMirror(u); },
+    refresh: refresh,
+
+    /* PAIEMENT STRIPE (fonction serveur « stripe-paiement ») : renvoie vers la page Stripe.
+       formule : "f1" | "f2" | "f3". Rien n'est encaissé ici : c'est Stripe qui gère la carte. */
+    payer: function (formule) {
+      return sb.functions.invoke("stripe-paiement", { body: { action: "checkout", formule: formule } })
+        .then(function (r) { if (r.data && r.data.url) { location.href = r.data.url; return; }
+          throw new Error((r.data && r.data.erreur) || "Paiement indisponible pour le moment."); });
+    },
+    /* portail client Stripe : changer de formule (au prorata), résilier, carte, factures */
+    portail: function () {
+      return sb.functions.invoke("stripe-paiement", { body: { action: "portail" } })
+        .then(function (r) { if (r.data && r.data.url) { location.href = r.data.url; return; }
+          throw new Error((r.data && r.data.erreur) || "Portail indisponible pour le moment."); });
+    },
     setQuest: function (v) { var u = readMirror() || {}; u.quest = !!v; writeMirror(u); }
   };
 })();

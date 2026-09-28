@@ -78,7 +78,7 @@
   .fitem:hover{background:rgba(46,155,255,.06)}
   .fitem.on{background:rgba(46,155,255,.1);border-left-color:var(--blue)}
   .fitem .nm{font-family:var(--disp);font-weight:500;font-size:16px;color:var(--ice)}
-  .fitem .mt{font-family:var(--disp);font-size:11px;color:var(--steel);margin-top:4px;display:flex;gap:8px;align-items:center}
+  .fitem .mt{font-family:var(--disp);font-size:11px;color:var(--steel);margin-top:4px;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
   .etat{font-family:var(--disp);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border:1px solid}
   .etat.a_generer{color:#8a5a00;border-color:rgba(232,176,75,.45)}
   .etat.a_relire{color:var(--blue);border-color:rgba(46,155,255,.5)}
@@ -229,7 +229,7 @@
   .bar .bv{font-family:var(--disp);font-size:12px;color:var(--ice);min-width:30px;text-align:right;font-variant-numeric:tabular-nums}
 
   /* abonnements (Damien 27/09) : formules, montant, résiliations — Stripe pour l'argent */
-  .kpis.abo{grid-template-columns:repeat(6,1fr)}
+  .kpis.abo{grid-template-columns:repeat(5,1fr)}
   @media(max-width:1100px){.kpis.abo{grid-template-columns:repeat(3,1fr)}}
   @media(max-width:640px){.kpis.abo{grid-template-columns:repeat(2,1fr)}}   /* Damien 27/09 : illisible sur téléphone */
   .kpi .v.att{font-size:26px;color:var(--steel)}
@@ -712,23 +712,27 @@
     <p class="sous">La file de relecture, et qui recevra quoi dans les 4 prochaines semaines.</p>
   <!-- ── chiffres clés ─────────────────────────────────────────────────── -->
   <div class="kpis">
-    <div class="kpi hot"><div class="k">À relire</div><div class="v" id="k-relire">0</div><div class="s">programmes prêts</div></div>
-    <div class="kpi"><div class="k">À générer</div><div class="v" id="k-gen">0</div><div class="s">questionnaires validés</div></div>
-    <div class="kpi"><div class="k">Validés</div><div class="v" id="k-val">0</div><div class="s">envoyés au client</div></div>
-    <div class="kpi"><div class="k">Clients</div><div class="v" id="k-cli">0</div><div class="s">comptes créés</div></div>
+    <div class="kpi hot"><div class="k">À relire</div><div class="v" id="k-relire">0</div><div class="s" id="k-relire-s">diètes prêtes</div></div>
+    <div class="kpi"><div class="k">À corriger</div><div class="v" id="k-corr">0</div><div class="s">renvoyées ou refusées</div></div>
+    <div class="kpi"><div class="k">Validées ce mois</div><div class="v" id="k-val">—</div><div class="s" id="k-val-s">envoyées aux clients</div></div>
+    <div class="kpi"><div class="k">Délai moyen de relecture</div><div class="v" id="k-delai">—</div><div class="s">du dépôt à la validation, 30 jours</div></div>
     <div class="kpi"><div class="k">Pesées en retard</div><div class="v" id="k-pesee">—</div><div class="s">clients sans pesée depuis 7 jours</div></div>
   </div>
 
-
     <section class="panel file">
       <h2 class="intitule">La file <span class="n" id="filen"></span></h2>
+      <div class="outils" style="padding:12px 14px 0;margin:0">
+        <input type="search" id="f-q" placeholder="Rechercher un nom…" aria-label="Rechercher dans la file" autocomplete="off">
+        <select id="f-tri" aria-label="Trier la file"><option value="ancien">Attend depuis le plus longtemps</option><option value="recent">Plus récentes d’abord</option><option value="nom">Par nom</option></select>
+      </div>
+      <div class="rl-chips" id="f-filtres" role="group" aria-label="Filtrer la file" style="padding:0 14px 8px"></div>
       <div class="body" id="file"></div>
     </section>
     <h3 class="s">Rythme de relecture</h3>
     <div class="grille">
       <div class="carte"><h4>Délai de relecture <span class="n" id="g-delai-n"></span></h4><div id="g-delai"></div>
-        <p class="leg">Temps entre le dépôt d’une diète et la décision d’un coach. Au-delà de 24 h, la barre passe en jaune.</p></div>
-      <div class="carte"><h4>Diètes par type <span class="n" id="g-types-n"></span></h4><div id="g-types"></div></div>
+        <p class="leg">Temps entre le dépôt d’une diète et la décision d’un coach, sur 30 jours. Au-delà de 24 h, la barre passe en jaune.</p></div>
+      <div class="carte"><h4>Validées par type <span class="n" id="g-types-n"></span></h4><div id="g-types"></div></div>
     </div>
     <h3 class="s">Échéancier des 4 prochaines semaines</h3>
     <div class="carte" style="margin-bottom:12px"><h4>Charge à venir <span class="n" id="g-charge-n"></span></h4><div id="g-charge"></div></div>
@@ -845,37 +849,56 @@
 
   <!-- ═════════════ STATISTIQUES ═════════════ -->
   <section class="page" id="p-stats" hidden>
-  <!-- ── statistiques ──────────────────────────────────────────────────── -->
-  <section class="stats">
-    <h2 class="intitule">Vos statistiques</h2>
-    <div class="sgrid" id="stats"></div>
-  </section>
+  <!-- ── statistiques : diètes du site + historique d'avant le site (stats_historique) ── -->
+  <h2 class="t">Statistiques</h2>
+  <p class="sous" id="s-sous">Programmes alimentaires uniquement (l’entraînement n’est pas compté).</p>
+  <div class="kpis q4">
+    <div class="kpi"><div class="k" id="s-an-k">Diètes cette année</div><div class="v" id="s-an">—</div><div class="s" id="s-an-s">&nbsp;</div></div>
+    <div class="kpi"><div class="k">Depuis le début</div><div class="v" id="s-tot">—</div><div class="s" id="s-tot-s">&nbsp;</div></div>
+    <div class="kpi"><div class="k">Hommes / Femmes</div><div class="v" id="s-hf">—</div><div class="s" id="s-hf-s">&nbsp;</div></div>
+    <div class="kpi"><div class="k">Ce mois-ci</div><div class="v" id="s-mois">—</div><div class="s" id="s-mois-s">&nbsp;</div></div>
+  </div>
   <div class="grille" style="margin-top:16px">
-    <div class="carte large"><h4>Diètes validées par mois <span class="n" id="g-mois-n"></span></h4><div id="g-mois"></div><div id="g-mois-l"></div></div>
-    <div class="carte"><h4>Pyramide des âges <span class="n" id="g-pyr-n"></span></h4><div id="g-pyr"></div></div>
-    <div class="carte"><h4>Cumul depuis la première diète <span class="n" id="g-cumul-n"></span></h4><div id="g-cumul"></div>
-      <p class="leg">Diètes validées sur le site. L’historique d’avant le site n’est pas encore compté ici.</p></div>
+    <div class="carte large"><h4>Diètes par mois <span class="n" id="g-mois-n"></span></h4><div id="g-mois"></div><div id="g-mois-l"></div></div>
+    <div class="carte"><h4>Pyramide des âges <span class="n" id="g-pyr-n"></span></h4><div id="g-pyr"></div>
+      <p class="leg">Clients inscrits sur le site (l’historique d’avant ne donne pas les âges).</p></div>
+    <div class="carte"><h4>Cumul depuis le début <span class="n" id="g-cumul-n"></span></h4><div id="g-cumul"></div>
+      <p class="leg" id="g-cumul-l"></p></div>
+    <div class="carte"><h4>Hommes et femmes <span class="n" id="g-hf-n"></span></h4><div id="g-hf"></div></div>
   </div>
 
   </section>
 
   <!-- ═════════════ ÉCONOMIE ═════════════ -->
   <section class="page" id="p-eco" hidden>
-  <!-- ── abonnements (Damien 27/09) : l'argent viendra de Stripe, rien n'est inventé ── -->
-  <h2 class="intitule" style="margin:4px 0 12px">Abonnements</h2>
+  <!-- ── économie : historique des paiements Stripe (table paiements) + abonnements actifs ; rien n'est inventé ── -->
+  <h2 class="t">Économie</h2>
+  <p class="sous" id="e-sous">Chiffres lus dans l’historique des paiements Stripe. Aucune donnée de carte.</p>
+  <div class="kpis q4">
+    <div class="kpi hot"><div class="k">Encaissé ce mois</div><div class="v" id="e-mois">—</div><div class="s" id="e-mois-s">&nbsp;</div></div>
+    <div class="kpi"><div class="k" id="e-an-k">Encaissé cette année</div><div class="v" id="e-an">—</div><div class="s" id="e-an-s">&nbsp;</div></div>
+    <div class="kpi"><div class="k">Revenu récurrent</div><div class="v" id="e-mrr">—</div><div class="s" id="e-mrr-s">par période de 4 semaines</div></div>
+    <div class="kpi"><div class="k" id="e-prev-k">Prévision du mois prochain</div><div class="v" id="e-prev">—</div><div class="s" id="e-prev-s">&nbsp;</div></div>
+  </div>
+  <div class="grille" style="margin:16px 0 18px">
+    <div class="carte large"><h4>Encaissé par mois <span class="n" id="g-eco-n"></span></h4><div id="g-eco"></div><div id="g-eco-l"></div></div>
+    <div class="carte" id="e-abonnes"></div>
+    <div class="carte" id="e-incidents"></div>
+    <div class="carte"><h4>Coût des oppositions <span class="n" id="g-opp-n"></span></h4><div id="g-opp"></div><div id="e-opp"></div></div>
+    <div class="carte"><h4>Répartition par formule <span class="n" id="g-donut-n"></span></h4><div id="g-donut"></div></div>
+    <div class="carte"><h4>Revenu récurrent par formule <span class="n">par période de 4 semaines</span></h4><div id="g-mrr"></div>
+      <p class="leg">Abonnements actifs aujourd’hui (y compris ceux dont le dernier prélèvement a échoué).</p></div>
+  </div>
+  <h3 class="s">Abonnements</h3>
   <div class="kpis abo">
     <div class="kpi"><div class="k">Odyssée · 19,90 €</div><div class="v" id="k-f1">—</div><div class="s">Essentielle</div></div>
     <div class="kpi"><div class="k">Olympe · 25,90 €</div><div class="v" id="k-f2">—</div><div class="s">Confort</div></div>
     <div class="kpi"><div class="k">Elysium · 29,90 €</div><div class="v" id="k-f3">—</div><div class="s">Premium</div></div>
     <div class="kpi"><div class="k">Clients depuis le début</div><div class="v" id="k-total">—</div><div class="s" id="k-total-s">comptes créés sur le site</div></div>
-    <div class="kpi"><div class="k">Montant / 4 semaines</div><div class="v att" id="k-montant">—</div><div class="s" id="k-montant-s">en attente de Stripe</div></div>
     <div class="kpi"><div class="k">Résiliations</div><div class="v att" id="k-resil">—</div><div class="s" id="k-resil-s">en attente de Stripe</div></div>
   </div>
   <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
   <div class="grille" style="margin-bottom:18px">
-    <div class="carte"><h4>Répartition par formule <span class="n" id="g-donut-n"></span></h4><div id="g-donut"></div></div>
-    <div class="carte"><h4>Revenu récurrent par formule <span class="n">par période de 4 semaines</span></h4><div id="g-mrr"></div>
-      <p class="leg">La courbe mois par mois se remplira à partir de l’historique des paiements Stripe.</p></div>
     <div class="carte large"><h4>Du compte créé à l’abonné fidèle</h4><div id="g-funnel"></div>
       <p class="leg">Chaque barre = combien de personnes passent l’étape ; le pourcentage compare à l’étape d’avant. « Encore là » = abonnement actif 1 mois (2e mois) ou 2 mois (3e mois) après la création du compte.</p></div>
   </div>
@@ -1131,7 +1154,7 @@ var REL=(function(){
   var ORDRE=['petit_dejeuner','dejeuner','collation','collation_2','diner'];
   var MEALS={petit_dejeuner:'Petit-déjeuner',dejeuner:'Déjeuner',collation:'Collation',collation_2:'Collation',diner:'Dîner'};
   var PASTEL={petit_dejeuner:'jaune',dejeuner:'vert',collation:'violet',collation_2:'violet',diner:'bleu'};
-  var ETAT={a_relire:'À relire',rectification:'À corriger',valide:'Validée',refuse:'Refusée'};
+  var ETAT={a_relire:'À relire',rectification:'À corriger',valide:'Validée',refuse:'Refusée',remplace:'Remplacée'};
   var MAC=[['kcal','kcal','k',''],['proteines','Protéines','p',' g'],['glucides','Glucides','g',' g'],['lipides','Lipides','l',' g']];
   var TOL=0.05;                                   // ± 5 % autour de la cible = vert
   var CONDIMENT=/^(huile|sauce|sirop|miel|sel|epice|vinaigre)/;
@@ -1184,7 +1207,7 @@ var REL=(function(){
     var c=(R.menu||{}).cible||{}, d=R.diagnostic||{}, sv=d.suivi, TT={'1re diète':'b','Réajustement':'v','Nouveau menu':'j'}, ai=d.a_interpreter||{};
     var nai=(ai.refuses||[]).length+(ai.allergies||[]).length+(ai.conserver||[]).length, SI=servisInterdits(R), ok=joursOk(R), nb=actifs(R.menu).length;
     var h='<div class="rl-top"><button type="button" class="retour-btn" data-act="file">← Retour à la file</button>'+
-      '<span class="tag '+({a_relire:'b',rectification:'r',valide:'v',refuse:'r'}[R.etat]||'')+'">'+e(ETAT[R.etat]||R.etat)+'</span></div>'+
+      '<span class="tag '+({a_relire:'b',rectification:'r',valide:'v',refuse:'r',remplace:''}[R.etat]||'')+'">'+e(ETAT[R.etat]||R.etat)+'</span></div>'+
       '<h2 class="t">Relecture · <span class="nom" tabindex="0" role="button"'+(R.uid?' data-u="'+e(R.uid)+'"':'')+' title="Ouvrir la fiche">'+e(R.nom)+'</span></h2>'+
       '<div class="fmeta"><span class="tag b">'+e(R.formule)+'</span><span class="tag '+(TT[R.type]||'')+'">'+e(R.type)+'</span><span class="tag">v'+e(R.version)+'</span>'+
       ((R.reponses||{}).objectif?'<span class="tag">'+e(R.reponses.objectif)+'</span>':'')+'<span class="tag">déposée '+e(R.depose)+'</span></div>';
@@ -1603,14 +1626,20 @@ var REL=(function(){
       '<datalist id="co-dl-pl">'+X.plats.map(function(a){ return '<option value="'+e(a[0])+'"'+(a[1]&&a[1]!==a[0]?' label="'+e(a[1])+'"':'')+'>'; }).join('')+'</datalist>';
   }
 
-  /* 6c. NOTES INTERNES (entre coachs, gardées sur cet appareil) + JOURNAL de relecture */
-  function notes(R,N,J){
-    return '<h4>Notes internes <span class="n">sur cet appareil</span></h4><p class="leg" style="margin:0 0 8px">Entre coachs, jamais visibles du client. Elles restent sur cet appareil (ce navigateur) tant qu’un partage entre coachs n’est pas en place.</p>'+
-      (N||[]).map(function(x){ return '<div class="jn note">'+e(x.texte)+'<small>'+e(x.par)+' · '+e(x.quand)+'</small></div>'; }).join('')+
-      '<div class="jn-f"><textarea id="rl-note-t" placeholder="Ex. « vu avec Yoann : on garde le chocolat du soir »" aria-label="Nouvelle note interne"></textarea>'+
-      '<div class="rl-btns" style="margin-top:8px"><button type="button" class="mini ed-btn" data-act="note-aj">Ajouter la note</button></div></div>'+
-      '<div class="rl-sub">Relecture</div>'+(J||[]).map(function(x){ return '<div class="jn">'+e(x.texte)+'<small>'+e(x.quand)+'</small></div>'; }).join('')+
-      '<div class="jn">Déposée<small>'+e(R.depose)+'</small></div>';
+  /* 6c. NOTES INTERNES (partagées entre coachs : table notes_coachs ; sur l'appareil tant que le script n'est pas lancé) + JOURNAL de relecture
+     N = [{id, texte, par, quand, v, mien}] ; o = {partage: true|false|null (pas encore su), ta: id du champ de saisie} */
+  function blocNotes(N,o){ o=o||{};
+    return '<h4>Notes internes <span class="n">'+(o.partage==null?'…':o.partage?'partagées entre coachs':'sur cet appareil')+'</span></h4>'+
+      '<p class="leg" style="margin:0 0 8px">Entre coachs, jamais visibles du client.'+(o.partage===false?' Notes gardées sur cet appareil tant que le script supabase/notes_coachs.sql n’est pas lancé.':'')+'</p>'+
+      (N||[]).map(function(x){ return '<div class="jn note">'+e(x.texte)+'<small>'+e(x.par)+' · '+e(x.quand)+(x.v?' · v'+e(x.v):'')+
+        (x.mien&&x.id!=null?' · <button type="button" class="lien" data-act="note-sup" data-id="'+e(x.id)+'">supprimer</button>':'')+'</small></div>'; }).join('')+
+      '<div class="jn-f"><textarea id="'+(o.ta||'rl-note-t')+'" placeholder="Ex. « vu avec Yoann : on garde le chocolat du soir »" aria-label="Nouvelle note interne"></textarea>'+
+      '<div class="rl-btns" style="margin-top:8px"><button type="button" class="mini ed-btn" data-act="note-aj">Ajouter la note</button></div></div>';
+  }
+  // J = journal de relecture tiré de la base (versions, décisions, corrections), du plus récent au plus ancien
+  function notes(R,N,J,o){
+    return blocNotes(N,o)+'<div class="rl-sub">Relecture</div>'+((J&&J.length)?J.map(function(x){ return '<div class="jn">'+e(x.texte)+'<small>'+e(x.quand)+'</small></div>'; }).join('')
+      :'<div class="jn">Déposée<small>'+e(R.depose)+'</small></div>');
   }
 
   /* 6d. BARRE D'OUTILS (collée en haut) : o = {i, edit, plein, suivante, lecture} */
@@ -1640,10 +1669,13 @@ var REL=(function(){
   /* 6c. BARRE DE DÉCISION (collée en bas de l'écran) */
   function decision(R,o){ o=o||{};
     var pr=String(R.nom).split(' ')[0], et='';
-    if(R.etat==='valide') return '<div class="rl-etat"><b>Validée et envoyée à '+e(pr)+'</b> · lecture seule.</div><div class="in" style="grid-template-columns:1fr"><button type="button" class="db" data-act="file">← Retour à la file</button></div>';
+    var su=o.suivante?'<button type="button" class="db ok" data-act="suivante">Suivante : '+e(o.suivante)+' →</button>':'', nc=o.suivante?2:1;
+    // ancienne version (historique du client) : lecture seule, aucune décision possible
+    if(R.archive||R.etat==='remplace') return '<div class="rl-etat"><b>'+(R.etat==='remplace'?'Version remplacée':'Ancienne version')+' (v'+e(R.version)+')</b> · lecture seule.</div><div class="in" style="grid-template-columns:1fr"><button type="button" class="db" data-act="file">← Retour</button></div>';
+    if(R.etat==='valide') return '<div class="rl-etat"><b>Validée et envoyée à '+e(pr)+'</b> · lecture seule.</div><div class="in" style="grid-template-columns:repeat('+nc+',minmax(0,1fr))"><button type="button" class="db" data-act="file">← Retour à la file</button>'+su+'</div>';
     // refusée : on ne valide plus cette version (une nouvelle sera refaite), on peut encore préciser quoi changer
-    if(R.etat==='refuse') return '<div class="rl-etat"><b>Refusée</b> : une nouvelle version sera entièrement refaite.</div><div class="in" style="grid-template-columns:1fr 1fr"><button type="button" class="db rec" data-act="corriger">Ajouter des remarques</button><button type="button" class="db" data-act="file">← Retour à la file</button></div>';
-    if(R.etat==='rectification') et='<div class="rl-etat"><b>Renvoyée en correction</b>'+(o.envoyes?' · '+o.envoyes+' action'+(o.envoyes>1?'s':'')+' envoyée'+(o.envoyes>1?'s':''):'')+'. Tu peux encore valider.</div>';
+    if(R.etat==='refuse') return '<div class="rl-etat"><b>Refusée</b> : une nouvelle version sera entièrement refaite.</div><div class="in" style="grid-template-columns:repeat('+(nc+1)+',minmax(0,1fr))"><button type="button" class="db rec" data-act="corriger">Ajouter des remarques</button><button type="button" class="db" data-act="file">← Retour à la file</button>'+su+'</div>';
+    if(R.etat==='rectification') et='<div class="rl-etat"><b>Renvoyée en correction</b>'+(o.envoyes?' · '+o.envoyes+' action'+(o.envoyes>1?'s':'')+' envoyée'+(o.envoyes>1?'s':''):'')+'. Tu peux encore valider.'+(o.suivante?' <button type="button" class="mini" data-act="suivante">Suivante : '+e(o.suivante)+' →</button>':'')+'</div>';
     return et+'<div class="in"><button type="button" class="db ok" data-act="valider">Valider et envoyer</button><button type="button" class="db rec" data-act="corriger">Renvoyer en correction</button>'+
       '<button type="button" class="db no'+(o.arme?' arme':'')+'" data-act="refuser">'+(o.arme?'Confirmer le refus':'Refuser')+'</button></div>'+
       (o.arme?'<div class="rl-etat" style="margin:8px auto 0">La diète sera entièrement refaite. Ajoute au moins une action pour qu’on sache quoi changer.</div>':'');
@@ -1652,7 +1684,7 @@ var REL=(function(){
   return {MEALS:MEALS,ETAT:ETAT,ML:ML,titre:titre,actifs:actifs,totJour:totJour,somme:somme,ecart:ecart,joursOk:joursOk,repasDe:repasDe,sig:sig,sigJ:sigJ,
     interdits:interdits,refuse:refuse,entete:entete,semaine:semaine,graphe:graphe,jour:jour,jourEdit:jourEdit,equilibreur:equilibreur,controlesDirect:controlesDirect,modifs:modifs,
     listeAliments:listeAliments,listePlats:listePlats,choixJours:choixJours,actionsRapides:actionsRapides,aide:aide,
-    comparer:comparer,controle:controle,apercu:apercu,correction:correction,actionObjet:actionObjet,notes:notes,barreOutils:barreOutils,barreEdition:barreEdition,decision:decision,ml:ml};
+    comparer:comparer,controle:controle,apercu:apercu,correction:correction,actionObjet:actionObjet,notes:notes,blocNotes:blocNotes,barreOutils:barreOutils,barreEdition:barreEdition,decision:decision,ml:ml};
 })();
 
 /* ======================================================================
@@ -1879,22 +1911,37 @@ var ED=(function(){
   function toast(t){ var e=$('toast'); e.textContent=t; e.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(function(){e.classList.remove('on');},2600); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
-  var ETAT={a_generer:'À générer',a_relire:'À relire',valide:'Validé',rectification:'À corriger',refuse:'Refusé'};
+  var ETAT={a_generer:'À produire',a_relire:'À relire',valide:'Validé',rectification:'À corriger',refuse:'Refusé'};
   var MOTIF={quantite_trop_faible:'Quantité trop faible',quantite_trop_elevee:'Quantité trop élevée',
     aliment_deteste:'Aliment détesté servi',association_incoherente:'Association incohérente',
     plat_hors_habitudes:'Plat hors habitudes',repetition:'Répétition',portion_irrealiste:'Portion irréaliste',
     erreur_affichage:'Erreur d\'affichage',autre:'Autre'};
 
   /* ---------- la file ---------- */
+  // filtres de la file : « À corriger » = renvoyées en correction ou refusées ; « Brouillons » = retouche à la main enregistrée sans valider (diagnostic.edition)
+  var FF={f:'tout'}, FILTRES=[['tout','Toutes'],['a_relire','À relire'],['corriger','À corriger'],['brouillon','Brouillons'],['valide','Validées'],['a_generer','À produire']];
+  function brouillon(c){ return c.etape==='a_relire'&&!!(c.diagnostic||{}).edition; }
+  function dansFiltre(c,f){ return f==='tout'||(f==='brouillon'?brouillon(c):f==='corriger'?(c.etape==='rectification'||c.etape==='refuse'):c.etape===f); }
+  function depot(c){ return c.programme_at||c.questionnaire_valide_at||''; }
   function renderFile(){
-    var box=$('file');
-    if(!file.length){ box.innerHTML='<div class="empty"><b>Rien en attente</b>Aucun questionnaire validé pour le moment.</div>'; return; }
-    box.innerHTML=file.map(function(c,idx){
-      var rl=c.menu&&c.programme_id&&['a_relire','rectification','valide'].indexOf(c.etape)>=0;
+    var box=$('file'), q=sansAccent(($('f-q').value||'').trim()), tri=$('f-tri').value, pl=function(n,s){ return n+' '+s+(n>1?'s':''); };
+    $('filen').textContent=file.length||'';
+    $('f-filtres').innerHTML=FILTRES.map(function(x){ var n=file.filter(function(c){ return dansFiltre(c,x[0]); }).length;
+      return '<button type="button" class="rl-chip'+(FF.f===x[0]?' on':'')+'" data-ff="'+x[0]+'" aria-pressed="'+(FF.f===x[0])+'">'+x[1]+' · '+n+'</button>'; }).join('');
+    var L=file.map(function(c,i){ return {c:c,i:i}; }).filter(function(x){ return dansFiltre(x.c,FF.f)&&(!q||sansAccent((x.c.prenom||'')+' '+(x.c.nom||'')).indexOf(q)>=0); })
+      .sort(function(a,b){ if(tri==='nom') return sansAccent((a.c.prenom||'')+' '+(a.c.nom||'')).localeCompare(sansAccent((b.c.prenom||'')+' '+(b.c.nom||'')),'fr');
+        var x=depot(a.c), y=depot(b.c); return (x>y?1:x<y?-1:0)*(tri==='recent'?-1:1); });
+    if(!L.length){ box.innerHTML='<div class="empty"><b>'+(file.length?'Rien dans ce filtre':'Rien en attente')+'</b>'+(file.length?'Change de filtre ou de recherche.':'Aucun questionnaire validé pour le moment.')+'</div>'; return; }
+    var nbA={}; ((D&&D.rc)||[]).forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
+    box.innerHTML=L.map(function(x){ var c=x.c, idx=x.i, ed=(c.diagnostic||{}).edition, br=brouillon(c),
+        rl=c.menu&&c.programme_id&&['a_relire','rectification','valide','refuse'].indexOf(c.etape)>=0,
+        info=c.etape==='a_generer'?'questionnaire validé le '+dateFr(c.questionnaire_valide_at)
+          :c.etape==='rectification'?pl(nbA[c.programme_id]||0,'action')+' de correction envoyée'+((nbA[c.programme_id]||0)>1?'s':'')
+          :br?'modifiée à la main par '+nomCoach(ed.par)+', rien n’est envoyé':'déposée '+depuis(c.programme_at);
       return '<div class="fwrap"><button class="fitem'+(sel===idx?' on':'')+'" data-i="'+idx+'">'+
         '<div class="nm">'+esc(c.prenom)+' '+esc(c.nom)+'</div>'+
-        '<div class="mt"><span class="etat '+c.etape+'">'+(ETAT[c.etape]||c.etape)+'</span>'+
-        '<span>'+(c.questionnaire_valide_at||'').slice(0,10)+'</span></div></button>'+
+        '<div class="mt"><span class="etat '+c.etape+'">'+(br?'Brouillon':ETAT[c.etape]||c.etape)+'</span>'+(c.programme_id?typeDiete(c)+'<span>v'+esc(c.version||1)+'</span>':'')+'</div>'+
+        '<div class="mt">'+esc(info)+'</div></button>'+
         (rl?'<button type="button" class="mini rl-go" data-rel="'+idx+'" aria-label="Relire la diète de '+esc(c.prenom)+'">Relire</button>':'')+'</div>';
     }).join('');
     box.querySelectorAll('.fitem').forEach(function(b){
@@ -1903,8 +1950,9 @@ var ED=(function(){
     box.querySelectorAll('[data-rel]').forEach(function(b){
       b.addEventListener('click',function(){ relire(file[+b.dataset.rel]); });
     });
-    $('filen').textContent=file.length;
   }
+  $('f-filtres').addEventListener('click',function(e){ var b=e.target.closest('[data-ff]'); if(b){ FF.f=b.dataset.ff; renderFile(); } });
+  $('f-q').addEventListener('input',renderFile); $('f-tri').addEventListener('change',renderFile);
 
   /* ---------- fiche client : les réponses, directement à l'écran ---------- */
   // On met EN AVANT ce qui compte pour juger une diète, le reste suit.
@@ -1923,6 +1971,7 @@ var ED=(function(){
       '<span class="idmeta">'+(c.sexe==='HOMME'?'Homme':c.sexe?'Femme':'—')+' · <b>'+age+' ans</b> · <b>'+
       (c.dernier_poids||(c.reponses||{})['Poids (en kg)']||'?')+' kg</b> · '+(c.taille_cm||'?')+' cm</span></div>';
     h+='<div class="suivi" id="suivi"><h4>Suivi</h4><div class="chiffres">Chargement des pesées…</div></div>';
+    h+='<div class="carte" id="f-notes" style="margin:0 0 16px"></div>';
     var rep=c.reponses||{}, vus={};
     if(!Object.keys(rep).length) h+='<div class="empty"><b>Questionnaire pas encore rempli</b>Les réponses apparaîtront ici dès qu’il sera validé.</div>';
     PRIO.forEach(function(p){ Object.keys(rep).forEach(function(k){
@@ -1930,7 +1979,12 @@ var ED=(function(){
     Object.keys(rep).forEach(function(k){ if(!vus[k] && rep[k]) h+=qa(k,rep[k]); });
     box.innerHTML=h;
     renderSuivi(c.user_id);
+    ficheNotes(c.user_id); chargerNotes(c.user_id).then(function(){ ficheNotes(c.user_id); });
   }
+  // notes internes de la fiche (même table que la relecture)
+  $('client').addEventListener('click',function(e){ var b=e.target.closest('[data-act]'); if(!b||!cur) return;
+    if(b.dataset.act==='note-aj') ajouterNote(cur.user_id,cur.programme_id,$('f-note-t'));
+    else if(b.dataset.act==='note-sup') supprimerNote(cur.user_id,b.dataset.id); });
   /* ---------- suivi : pesées (table poids) + dernières mensurations ----------
      C'est la pesée qui fait évoluer la diète : le coach la voit ici, à côté du questionnaire. */
   var JOUR=86400000;
@@ -1977,9 +2031,8 @@ var ED=(function(){
         var menu=(cur&&cur.menu)||{}, titres={};
         (menu.jours||[]).forEach(function(j){ (j.repas||[]).forEach(function(rp){ var k=rp.recette_base||rp.recette; if(k&&!titres[k]) titres[k]=rp.titre||k; }); });
         var nom=function(k){ return esc(titres[k]||k); };
-        var rv=L.filter(function(x){ return x.avis==='revoir'; }).map(function(x){ return nom(x.plat); });
-        var pj=L.filter(function(x){ return x.avis==='plus_jamais'; }).map(function(x){ return nom(x.plat); });
-        z.innerHTML='<b style="color:var(--ice)">Retours sur la diète</b>'+(rv.length?'<br>À revoir : '+rv.join(' · '):'')+(pj.length?'<br>Plus jamais : '+pj.join(' · '):'');
+        var av=function(a){ return L.filter(function(x){ return x.avis===a; }).map(function(x){ return nom(x.plat); }); }, gd=av('garder'), rv=av('revoir'), pj=av('plus_jamais');
+        z.innerHTML='<b style="color:var(--ice)">Retours sur la diète</b>'+(gd.length?'<br><span class="plus">À garder</span> : '+gd.join(' · '):'')+(rv.length?'<br>À revoir : '+rv.join(' · '):'')+(pj.length?'<br>Plus jamais : '+pj.join(' · '):'');
       }).catch(function(){});
       // photos de suivi du client (stockage privé, liens signés d'une heure)
       sb.storage.from('photos-suivi').list(uid,{limit:50,sortBy:{column:'name',order:'desc'}}).then(function(p){
@@ -2036,13 +2089,10 @@ var ED=(function(){
       var actifs=L.filter(function(a){ return ['active','trialing','past_due'].indexOf(a.statut)>-1; });
       var n={f1:0,f2:0,f3:0}; actifs.forEach(function(a){ if(n[a.formule]!=null) n[a.formule]++; });
       $('k-f1').textContent=n.f1; $('k-f2').textContent=n.f2; $('k-f3').textContent=n.f3;
-      var cents=actifs.reduce(function(t,a){ return t+(+a.montant_cents||0); },0);
-      var km=$('k-montant'), kr=$('k-resil');
-      km.textContent=(cents/100).toFixed(2).replace('.',',')+' €'; km.classList.remove('att');
+      var kr=$('k-resil');
       kr.textContent=L.filter(function(a){ return a.statut==='canceled'||a.resiliation_prevue; }).length; kr.classList.remove('att');
-      $('k-montant-s').textContent=actifs.length+' abonnement'+(actifs.length>1?'s':'')+' actif'+(actifs.length>1?'s':'');
       $('k-resil-s').textContent='terminées ou prévues';
-      $('abo-note').textContent='Formules = abonnés actifs (Stripe). Montant = total d’une période de 4 semaines.';
+      $('abo-note').textContent='Formules = abonnés actifs (Stripe) : '+actifs.length+' abonnement'+(actifs.length>1?'s':'')+' actif'+(actifs.length>1?'s':'')+'.';
       abonnementsOk=true;
     });
     sb.from('profiles').select('id,formule').then(function(r){
@@ -2154,7 +2204,7 @@ var ED=(function(){
     }
     var m=c.menu, d=c.diagnostic||{};
     $('progn').textContent='v'+(c.version||1)+(d.jours_ok!=null?' · '+d.jours_ok+'/6 jours':'');
-    var h=c.programme_id?'<div class="rl-lance"><button type="button" class="db ok" data-relire>Relire la diète</button></div>':'';
+    var h=(c.programme_id?'<div class="rl-lance"><button type="button" class="db ok" data-relire>Relire la diète</button></div>':'')+versions(c.user_id);
     // diète déposée par le SUIVI (réajustement ou nouveau menu) : on le dit en tête
     var sv=d.suivi;
     if(sv&&sv.geste){
@@ -2210,14 +2260,43 @@ var ED=(function(){
     dec.hidden = (c.etape!=='a_relire' && c.etape!=='rectification');
   }
 
+  /* historique des versions v1…vN d'un client : statut (remplacée comprise), date, qui ; « Voir » ouvre la relecture (lecture seule si ancienne) */
+  var VST={en_attente:['À relire','b'],valide:['Validée','v'],rectification:['À corriger','r'],refuse:['Refusée','r'],remplace:['Remplacée','']},
+      VVB={valide:'validée',refuse:'refusée',rectification:'renvoyée en correction',remplace:'remplacée'};
+  function versions(uid){ var k=D&&D.par[uid], P=k?k.prog.slice().reverse():[]; if(!P.length) return '';
+    return '<div class="suivi" style="margin-bottom:14px"><h4>Versions de la diète</h4>'+P.map(function(x){ var ed=(x.diagnostic||{}).edition, st=VST[x.statut]||[x.statut,''],
+        lib=x.statut==='en_attente'&&ed?'Brouillon':st[0], qui=x.traite_par?nomCoach(x.traite_par):'';
+      return '<div class="ligne"><span><b>v'+esc(x.version)+'</b> <span class="tag '+st[1]+'">'+lib+'</span> déposée le '+dateFr(x.created_at)+(ed?' (retouche de '+esc(nomCoach(ed.par))+')':'')+
+        (x.traite_at&&VVB[x.statut]?' · '+VVB[x.statut]+' le '+dateFr(x.traite_at)+(qui?' par '+esc(qui):''):'')+'</span><span><button type="button" class="mini" data-voir="'+esc(x.id)+'">Voir</button></span></div>'; }).join('')+'</div>'; }
+  function voirVersion(pid){
+    var uid=cur&&cur.user_id, k=D&&D.par[uid]; if(!k) return;
+    var der=k.prog[k.prog.length-1], f=der&&der.id===pid&&file.filter(function(x){ return x.user_id===uid&&x.programme_id===pid; })[0];
+    if(f){ relire(Object.assign({},f,{retour:uid})); return; }
+    sb.from('programmes').select('id,version,menu,cible,diagnostic,statut,created_at').eq('id',pid).maybeSingle().then(function(r){
+      var p=r.data, q=k.p; if(r.error||!p||!p.menu){ toast('Version introuvable.'); return; }
+      relire({user_id:uid,prenom:q.prenom,nom:q.nom,sexe:q.sexe,naissance:q.naissance,taille_cm:q.taille_cm,reponses:k.rep,programme_id:p.id,version:p.version,
+        created_at:p.created_at,programme_at:p.created_at,menu:p.menu,cible:p.cible,diagnostic:p.diagnostic,statut:p.statut,
+        etape:p.statut==='en_attente'?'a_relire':p.statut,archive:!der||der.id!==p.id,retour:uid}); });
+  }
+
   /* ---------- décisions ---------- */
   function setStatut(st,msg){
     var c=cur; if(!c||!c.programme_id) return;
     majStatut(c.programme_id,st).then(function(err){
         if(err){ toast("Impossible d'enregistrer — réessaie."); return; }
-        c.statut=st; c.etape=st; renderFile(); renderProg(); recount(); toast(msg); chargerTout();
-        if(RL.R&&RL.R.pid===c.programme_id){ RL.R.etat=st; RL.arme=false; tout(); rlNotes(); }
+        c.statut=st; c.etape=st; renderProg(); toast(msg);
+        if(RL.R&&RL.R.pid===c.programme_id){ RL.R.etat=st; RL.arme=false; tout(); }
+        recharger(c.user_id);
       });
+  }
+  // après une décision : la file (v_file_coach), les compteurs et le tableau de bord sont RELUS en base
+  function recharger(uid){
+    return Promise.all([chargerFile(),chargerTout()]).then(function(){
+      var n=file.filter(function(x){ return x.user_id===uid; })[0];
+      if(n&&cur&&cur.user_id===uid&&n.programme_id===cur.programme_id){ cur=n; sel=file.indexOf(n); renderFile(); }
+      if(voir.p==='fiche'&&cur&&cur.user_id===uid){ renderTete(); renderProg(); }
+      if(RL.R&&RL.R.uid===uid&&$('rl-barre')){ rlBarre(); rlNotes(); }
+    });
   }
   $('b-ok').addEventListener('click',function(){ setStatut('valide','Programme validé ✓'); });
   $('b-no').addEventListener('click',function(){
@@ -2260,7 +2339,7 @@ var ED=(function(){
       retours=[]; renderRetours(); $('retour').classList.remove('on');
       if(RL.R&&RL.R.pid===c.programme_id){ RL.envoyes=nb; RL.R.note={par:'toi',texte:pr.attendu||pr.libelle||''}; rlTete(); rlDec(); }
       if(c.etape!=='refuse') setStatut('rectification','Remarques envoyées ✓');
-      else toast('Remarques envoyées ✓');
+      else { toast('Remarques envoyées ✓'); recharger(c.user_id); }
     });
   });
 
@@ -2280,13 +2359,12 @@ var ED=(function(){
     var d=c.diagnostic||{}, g=d.suivi&&d.suivi.geste, rep=c.reponses||{}, k=D&&D.par[c.user_id], fm=k&&((k.a&&k.a.formule)||k.p.formule);
     return {uid:c.user_id, pid:c.programme_id, nom:((c.prenom||'')+' '+(c.nom||'')).trim()||'Client', formule:FORM[fm]||'Sans formule',
       type:g==='reajuster'?'Réajustement':g?'Nouveau menu':'1re diète', version:c.version||1, depose:depuis(c.programme_at||c.created_at),
-      etat:c.etape, menu:avecCible(c.menu,c.cible)||{}, brut:c.menu, sexe:c.sexe==='HOMME'?'H':'F', diagnostic:d, precedent:null, precedentVersion:null, note:null,
+      etat:c.etape, archive:!!c.archive, menu:avecCible(c.menu,c.cible)||{}, brut:c.menu, sexe:c.sexe==='HOMME'?'H':'F', diagnostic:d, precedent:null, precedentVersion:null, note:null,
       reponses:{objectif:rep1(rep,'Quel est ton objectif principal'), refuses:rep1(rep,'Des aliments que tu refuses'), allergies:rep1(rep,'Allergies'),
         regime:rep1(rep,'As-tu un régime particulier'), conserver:rep1(rep,'Y a-t-il des aliments que tu souhaites absolument conserver')}};
   }
   function prenom(){ return String(RL.R.nom).split(' ')[0]; }
   function quand(d){ return (d||new Date()).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
-  function trace(t){ RL.journal.unshift({quand:quand(),texte:t}); }
   function coVide(){ return {ouvert:false,act:null,grav:'a_revoir',portee:null,motif:null,ctx:{},liste:[],envoi:false}; }
   // liste des aliments et des plats du catalogue (fichier tenu par l'équipe qui prépare les diètes)
   function base(){ if(!ALIM) ALIM=fetch('assets/aliments_site.json?v=2026-09-28').then(function(r){ if(!r.ok) throw new Error('aliments '+r.status); return r.json(); })
@@ -2294,7 +2372,7 @@ var ED=(function(){
     return ALIM; }
   // la diète telle qu'on l'affiche : en édition, le menu de la session
   function vue(){ if(!RL.S) return RL.R; var v={}, k; for(k in RL.R) v[k]=RL.R[k]; v.menu=avecCible(RL.S.menu,RL.R.menu.cible); return v; }
-  function lecture(){ var e=RL.R.etat; return e==='valide'?'Diète déjà validée et envoyée : lecture seule.':e==='refuse'?'Diète refusée : elle sera entièrement refaite.':e==='remplace'?'Une version plus récente existe.':null; }
+  function lecture(){ var e=RL.R.etat; return RL.R.archive?'Ancienne version : lecture seule.':e==='valide'?'Diète déjà validée et envoyée : lecture seule.':e==='refuse'?'Diète refusée : elle sera entièrement refaite.':e==='remplace'?'Une version plus récente existe.':null; }
   function suivante(){ var k=file.indexOf(cur); for(var d=1;d<=file.length;d++){ var x=file[(k+d+file.length)%file.length]; if(x&&x!==cur&&x.etape==='a_relire'&&x.menu&&x.programme_id) return x; } return null; }
   function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px'); }
   addEventListener('resize',hauteur);
@@ -2307,14 +2385,13 @@ var ED=(function(){
     var i=file.indexOf(c); cur=c; sel=i>=0?i:null;                 // setStatut vise cette diète
     var R=versR(c);
     RL={R:R,i:0,mode:'coach',hl:null,S:null,swap:null,eq:{mac:'glucides',cle:null},co:coVide(),envoyes:0,arme:false,envoi:false,
-      plein:document.body.classList.contains('rl-plein'),journal:[],consignes:[],consignesAbsentes:false};
+      plein:document.body.classList.contains('rl-plein'),consignes:[],consignesAbsentes:false,retour:c.retour||null};   // retour : ouverte depuis l'historique d'une fiche
     document.body.classList.remove('rl-edit');
-    var ed=(c.diagnostic||{}).edition;
-    if(ed) RL.journal.push({quand:ed.le?quand(new Date(ed.le)):'',texte:'Modifiée à la main depuis la v'+ed.depuis_version+' ('+(ed.changements||[]).length+' changement'+((ed.changements||[]).length>1?'s':'')+')'});
     $('p-relire').innerHTML='<div class="rl-barre" id="rl-barre"></div><div id="rl-tete"></div><div class="rl-cols"><div class="rl-main"><div class="carte" id="rl-sem"></div><div class="carte" id="rl-jour"></div></div>'+
       '<aside class="rl-side"><div class="carte" id="rl-co" hidden></div><div class="carte" id="rl-live" hidden></div><div class="carte" id="rl-modifs" hidden></div><div class="carte" id="rl-ctrl"></div><div class="carte" id="rl-comp" hidden></div><div class="carte" id="rl-notes"></div></aside></div>'+
       '<div class="rl-dec" id="rl-dec"></div>';
     tout(); rlNotes(); renderFile(); voir('relire'); hauteur();
+    chargerNotes(c.user_id).then(function(){ afficherNotes(c.user_id); });
     // en différé, sans bloquer l'écran : la version d'avant (comparaison), la dernière demande de correction, les consignes durables
     if((+c.version||1)>1) sb.from('programmes').select('id,version,menu,cible,diagnostic').eq('user_id',c.user_id).lt('version',c.version)
       .order('version',{ascending:false}).limit(1).then(function(r){
@@ -2343,7 +2420,9 @@ var ED=(function(){
   function tout(){ if(RL.co.ouvert) lireCo(); rlBarre(); rlTete(); rlSem(); rlJour(); rlSide(); rlDec(); rlCo(); }
   function majEd(){ rlBarre(); rlTete(); rlSem(); rlJour(); rlSide(); rlDec(); }
   function rlBarre(){ var s=suivante(); $('rl-barre').innerHTML=REL.barreOutils(RL.R,{i:RL.i,edit:!!RL.S,plein:RL.plein,lecture:lecture(),suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
-  function rlTete(){ $('rl-tete').innerHTML=REL.entete(vue())+(RL.S?'<div class="ed-bandeau"><b>Mode édition</b> · grammes (−/+ ou saisie), aliment (clic sur son nom), plat, jour : tout se recalcule en direct. Rien ne part avant « Enregistrer ».'+
+  function rlTete(){ var ed=(RL.R.diagnostic||{}).edition, nch=ed&&(ed.changements||[]).length;
+    $('rl-tete').innerHTML=REL.entete(vue())+(!RL.S&&ed&&RL.R.etat==='a_relire'&&!RL.R.archive?'<div class="rl-note j"><b>Brouillon</b> : diète modifiée à la main par '+esc(nomCoach(ed.par))+(ed.le?' le '+esc(quand(new Date(ed.le))):'')+
+      (nch?' ('+nch+' changement'+(nch>1?'s':'')+')':'')+' depuis la v'+esc(ed.depuis_version)+'. Rien n’est envoyé au client tant qu’elle n’est pas validée.</div>':'')+(RL.S?'<div class="ed-bandeau"><b>Mode édition</b> · grammes (−/+ ou saisie), aliment (clic sur son nom), plat, jour : tout se recalcule en direct. Rien ne part avant « Enregistrer ».'+
       '<small>À savoir : une retouche d’ingrédient faite ici peut être perdue au prochain réajustement, sauf si elle est aussi envoyée comme consigne durable (« Renvoyer en correction », portée « durablement, pour ce client »).</small></div>':''); }
   function rlSem(){ $('rl-sem').innerHTML=REL.semaine(vue(),{surligne:RL.hl,jour:RL.i,edit:!!RL.S,orig:RL.S?RL.S.orig:null,swap:RL.swap});
     G.mount('rl-graph',function(w){ return REL.graphe(vue(),w); }); }
@@ -2375,11 +2454,70 @@ var ED=(function(){
     if(ed){ $('rl-live').innerHTML=REL.controlesDirect(V,horsReperes(),ED.deplaces(RL.S)); $('rl-modifs').innerHTML=REL.modifs(ED.journal(RL.S),{undo:RL.S.passe.length,redo:RL.S.futur.length}); }
     $('rl-ctrl').innerHTML=REL.controle(V);
     if(RL.R.precedent){ $('rl-comp').innerHTML=REL.comparer(V); $('rl-comp').hidden=false; } }
-  function cleNotes(){ return 'ely_notes_'+RL.R.uid; }
-  function lireNotes(){ try{ return JSON.parse(localStorage.getItem(cleNotes())||'[]')||[]; }catch(e){ return []; } }
-  function rlNotes(){ $('rl-notes').innerHTML=REL.notes(RL.R,lireNotes(),RL.journal); }
+  /* ---- NOTES INTERNES PARTAGÉES (table notes_coachs, supabase/notes_coachs.sql) ----
+     Tant que la table n'existe pas : l'ancien fonctionnement (localStorage ely_notes_<uid>, sur cet appareil), dit à l'écran.
+     Au premier chargement réussi, les notes gardées sur l'appareil sont recopiées dans la table puis effacées de l'appareil. */
+  var NOTES={partage:null,pret:null,brut:{}};          // partage : null = pas encore su ; brut[uid] = lignes de la table ou notes de l'appareil
+  function cleNotes(uid){ return 'ely_notes_'+uid; }
+  function notesLocales(uid){ try{ return JSON.parse(localStorage.getItem(cleNotes(uid))||'[]')||[]; }catch(e){ return []; } }
+  function nomCoach(id){ return !id?'un coach':(COACHS[id]||(moi&&id===moi.id?$('coachname').textContent:'')||'un coach'); }
+  function sonderNotes(){
+    return NOTES.pret=sb.from('notes_coachs').select('id').limit(1).then(function(r){ NOTES.partage=!r.error; if(NOTES.partage) return migrerNotes(); },function(){ NOTES.partage=false; });
+  }
+  function migrerNotes(){
+    var rows=[], cles=[];
+    try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i), uid=k&&k.slice(10); if(!/^ely_notes_[0-9a-f-]{36}$/i.test(k||'')) continue; cles.push(k);
+      notesLocales(uid).forEach(function(x){ if(x&&String(x.texte||'').trim()) rows.push({user_id:uid,texte:String(x.texte).trim()+' (note reprise de l’appareil'+(x.quand?', '+x.quand:'')+(x.par?', '+x.par:'')+')'}); }); } }catch(e){ return; }
+    function vider(){ cles.forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} }); }
+    if(!rows.length){ vider(); return; }
+    return sb.from('notes_coachs').insert(rows).then(function(r){ if(r.error){ if(window.console) console.warn(r.error); return; }   // échec : les notes restent sur l'appareil, on réessaiera
+      vider(); toast(rows.length+' note'+(rows.length>1?'s':'')+' de cet appareil désormais partagée'+(rows.length>1?'s':'')+' entre coachs.'); });
+  }
+  function chargerNotes(uid){
+    return (NOTES.pret||sonderNotes()).then(function(){
+      if(!NOTES.partage){ NOTES.brut[uid]=notesLocales(uid); return; }
+      return sb.from('notes_coachs').select('id,user_id,programme_id,auteur_id,texte,created_at').eq('user_id',uid).order('created_at').then(function(r){
+        if(r.error){ NOTES.partage=false; NOTES.brut[uid]=notesLocales(uid); return; }
+        NOTES.brut[uid]=r.data||[]; }); });
+  }
+  function notesDe(uid){ var c=D&&D.par[uid], V={}; ((c&&c.prog)||[]).forEach(function(x){ V[x.id]=x.version; });
+    return (NOTES.brut[uid]||[]).map(function(x){ return x.created_at?{id:x.id,texte:x.texte,par:nomCoach(x.auteur_id),quand:quand(new Date(x.created_at)),v:V[x.programme_id],mien:!!moi&&x.auteur_id===moi.id}:x; }); }
+  function ficheNotes(uid){ var el=$('f-notes'); if(el&&cur&&cur.user_id===uid) el.innerHTML=REL.blocNotes(NOTES.brut[uid]?notesDe(uid):[],{partage:NOTES.brut[uid]?NOTES.partage:null,ta:'f-note-t'}); }
+  function afficherNotes(uid){ if(RL.R&&RL.R.uid===uid&&$('rl-notes')) rlNotes(); ficheNotes(uid); }
+  function ajouterNote(uid,pid,champ){
+    var t=champ&&champ.value.trim(); if(!t){ toast('Écris ta note d’abord.'); return; }
+    if(NOTES.partage) return sb.from('notes_coachs').insert({user_id:uid,programme_id:pid||null,texte:t}).then(function(r){
+      if(r.error){ toast('Note non enregistrée, réessaie.'); return; }
+      toast('Note ajoutée, visible des deux coachs.'); return chargerNotes(uid).then(function(){ afficherNotes(uid); }); });
+    var N=notesLocales(uid); N.push({par:$('coachname').textContent||'Coach',quand:quand(),texte:t});
+    try{ localStorage.setItem(cleNotes(uid),JSON.stringify(N)); toast('Note ajoutée, sur cet appareil.'); }catch(err){ toast('Impossible de garder la note sur cet appareil (navigation privée ?).'); }
+    NOTES.brut[uid]=N; afficherNotes(uid);
+  }
+  function supprimerNote(uid,id){
+    if(!confirm('Supprimer cette note ?')) return;
+    sb.from('notes_coachs').delete().eq('id',id).then(function(r){ if(r.error){ toast('Suppression impossible, réessaie.'); return; }
+      chargerNotes(uid).then(function(){ afficherNotes(uid); }); });
+  }
+  /* JOURNAL DE RELECTURE tiré de la base (et plus de l'appareil) : versions déposées, retouches à la main
+     (diagnostic.edition), décisions (programmes.traite_par / traite_at), corrections envoyées (retours_coach). */
+  function journal(uid){
+    var c=D&&D.par[uid]; if(!c||!c.prog.length) return null;
+    var L=[], V={}, P=c.prog, DEC={valide:'validée et envoyée',refuse:'refusée',rectification:'renvoyée en correction'};
+    P.forEach(function(x){ V[x.id]=x.version; });
+    P.forEach(function(x,k){ var d=x.diagnostic||{}, ed=d.edition, rc=d.rectification, nx=P[k+1], nch=ed&&(ed.changements||[]).length;
+      if(ed) L.push({t:ed.le||x.created_at,texte:'v'+x.version+' : modifiée à la main par '+nomCoach(ed.par)+' depuis la v'+ed.depuis_version+(nch?' ('+nch+' changement'+(nch>1?'s':'')+')':'')});
+      else L.push({t:x.created_at,texte:'v'+x.version+' déposée'+(rc&&rc.depuis_version?' (corrections de la v'+rc.depuis_version+')':'')});
+      // « remplace » : remplacée par une retouche (déjà dite) ou par la version corrigée (c'était donc un renvoi en correction)
+      var dec=x.statut==='remplace'?(nx&&!(nx.diagnostic||{}).edition?DEC.rectification:null):DEC[x.statut];
+      if(dec&&x.traite_at) L.push({t:x.traite_at,texte:'v'+x.version+' '+dec+(x.traite_par?' par '+nomCoach(x.traite_par):'')}); });
+    var G2={}; (D.rc||[]).forEach(function(r){ if(V[r.programme_id]==null) return; var k=r.programme_id+'|'+r.coach_id+'|'+String(r.created_at).slice(0,16);
+      (G2[k]=G2[k]||{t:r.created_at,pid:r.programme_id,coach:r.coach_id,n:0}).n++; });
+    Object.keys(G2).forEach(function(k){ var g=G2[k]; L.push({t:g.t,texte:g.n+' action'+(g.n>1?'s':'')+' de correction sur la v'+V[g.pid]+' par '+nomCoach(g.coach)}); });
+    return L.sort(function(a,b){ return new Date(b.t)-new Date(a.t); }).map(function(x){ return {quand:quand(new Date(x.t)),texte:x.texte}; });
+  }
+  function rlNotes(){ var u=RL.R.uid; $('rl-notes').innerHTML=REL.notes(RL.R,NOTES.brut[u]?notesDe(u):[],journal(u),{partage:NOTES.brut[u]?NOTES.partage:null}); }
   function rlDec(){ var d=$('rl-dec'); d.className='rl-dec'+(RL.S?' ed-dec':'');
-    d.innerHTML=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes}); }
+    var s=suivante(); d.innerHTML=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
   function allerJour(i,ty){ var n=(RL.R.menu.jours||[]).length; if(!n) return; RL.i=(i+n)%n; RL.eq.cle=null; rlJour(); rlBarre();
     var t=ty&&$('rl-m-'+ty); if(t){ t.scrollIntoView({behavior:'smooth',block:'start'}); t.classList.add('flash'); setTimeout(function(){ t.classList.remove('flash'); },1400); } }
 
@@ -2462,7 +2600,7 @@ var ED=(function(){
     },echec);
   }
   // recharge la file et rouvre la diète du client (sa dernière version)
-  function chargerFile(){ return sb.from('v_file_coach').select('*').then(function(r){ if(!r.error){ file=r.data||[]; renderFile(); recount(); } }); }
+  function chargerFile(){ return sb.from('v_file_coach').select('*').then(function(r){ if(!r.error){ file=r.data||[]; renderFile(); recount(); compterRetards(); } }); }
   function rafraichir(uid,coListe){ return chargerFile().then(function(){ var c=file.filter(function(x){ return x.user_id===uid; })[0]; chargerTout();
     if(c){ relire(c,true); if(coListe&&coListe.length){ RL.co.liste=coListe; ouvrirCo(); } } else voir('dietes'); }); }
   function annuler(){ var c=RL.S&&ED.annuler(RL.S); if(c){ majEd(); toast('Annulé : '+c.texte); } }
@@ -2502,6 +2640,7 @@ var ED=(function(){
   function lireCo(){ var f=$('rl-co'); if(!f) return; Array.prototype.forEach.call(f.querySelectorAll('input[id^="co-"],select[id^="co-"],textarea[id^="co-"]'),function(el){
     if(el.id==='co-motif') RL.co.motif=el.value; else RL.co.ctx[el.id.slice(3)]=el.value.trim(); }); }
   function ouvrirCo(pre){
+    if(RL.R.archive||RL.R.etat==='remplace'){ toast(lecture()||'Version remplacée : lecture seule.'); return; }
     if(RL.co.ouvert) lireCo();
     if(pre){ if(pre.ctx) RL.co.ctx=pre.ctx; RL.co.act=pre.act||RL.co.act; RL.co.portee=pre.portee||null; RL.co.motif=null; }
     RL.co.ouvert=true; rlCo();
@@ -2518,8 +2657,8 @@ var ED=(function(){
     insererRetours(lignesRetours(R.pid,L)).then(function(x){ if(RL.R!==R) return; RL.co.envoi=false;
       if(!x.ok){ if(window.console) console.warn(x.error); toast('Envoi impossible : réessaie.'); rlCo(); return; }
       var nb=L.length, txt=nb+' action'+(nb>1?'s':'')+' envoyée'+(nb>1?'s':'')+(x.sansAction?' comme remarques écrites (base pas encore à jour : préviens Dimitri)':'');
-      RL.envoyes=nb; R.note={par:'toi',texte:L[0].texte+(nb>1?' (+ '+(nb-1)+')':'')}; RL.co=coVide(); trace('Renvoyée en correction : '+nb+' action'+(nb>1?'s':''));
-      if(R.etat!=='refuse') setStatut('rectification',txt); else { toast(txt); tout(); rlNotes(); }
+      RL.envoyes=nb; R.note={par:'toi',texte:L[0].texte+(nb>1?' (+ '+(nb-1)+')':'')}; RL.co=coVide();
+      if(R.etat!=='refuse') setStatut('rectification',txt); else { toast(txt); tout(); recharger(R.uid); }
     });
   }
   // appui long / clic droit sur un aliment : actions rapides
@@ -2538,14 +2677,14 @@ var ED=(function(){
     hauteur(); rlBarre(); }
   function sortiePlein(){ document.body.classList.remove('rl-plein'); RL.plein=false; try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(err){} hauteur(); }
   document.addEventListener('fullscreenchange',function(){ if(!document.fullscreenElement&&document.body.classList.contains('rl-plein')){ document.body.classList.remove('rl-plein'); RL.plein=false; hauteur(); if($('rl-barre')&&RL.R) rlBarre(); } });
-  function valider(){ if(RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification') return; trace('Validée et envoyée'); setStatut('valide','Diète validée et envoyée à '+prenom()+'.'); }
+  function valider(){ if(RL.R.archive||(RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification')) return; setStatut('valide','Diète validée et envoyée à '+prenom()+'.'); }
 
   /* ---- clics ---- */
   $('p-relire').addEventListener('click',function(e){
     if(RL.lp){ RL.lp=false; e.preventDefault(); return; }                       // un appui long vient d'ouvrir les actions rapides
     var b=e.target.closest('[data-act]'); if(!b||b.disabled||!RL.R) return; var a=b.dataset.act, x=ctxDe(b), ing, r;
     switch(a){
-      case 'file': sortir(function(){ sortiePlein(); voir('dietes'); }); break;
+      case 'file': var rt=RL.retour; sortir(function(){ sortiePlein(); if(rt) ouvrir(rt); else voir('dietes'); }); break;
       case 'suivante': var s=suivante(); if(s) relire(s); break;
       case 'jour': allerJour(+b.dataset.i); break;
       case 'prec': allerJour(RL.i-1); break;
@@ -2561,10 +2700,8 @@ var ED=(function(){
       case 'notes': notesFocus(); break;
       case 'plein': plein(); break;
       case 'aide': feuille('Raccourcis et gestes',REL.aide(),null); break;
-      case 'note-aj': var t=$('rl-note-t').value.trim(); if(!t){ toast('Écris ta note d’abord.'); break; }
-        var N=lireNotes(); N.push({par:$('coachname').textContent||'Coach',quand:quand(),texte:t});
-        try{ localStorage.setItem(cleNotes(),JSON.stringify(N)); toast('Note ajoutée, sur cet appareil.'); }catch(err){ toast('Impossible de garder la note sur cet appareil (navigation privée ?).'); }
-        rlNotes(); break;
+      case 'note-aj': ajouterNote(RL.R.uid,RL.R.pid,$('rl-note-t')); break;
+      case 'note-sup': supprimerNote(RL.R.uid,b.dataset.id); break;
       // renvoi en correction
       case 'co-act': lireCo(); RL.co.act=b.dataset.a; RL.co.portee=null; RL.co.motif=null; rlCo(); var f1=$('rl-co').querySelector('.co-box input,.co-box select'); if(f1) f1.focus({preventScroll:true}); break;
       case 'co-portee': lireCo(); RL.co.portee=b.dataset.v; rlCo(); break;
@@ -2579,7 +2716,7 @@ var ED=(function(){
       case 'valider': valider(); break;
       case 'refuser': clearTimeout(RL.t);
         if(!RL.arme){ RL.arme=true; rlDec(); RL.t=setTimeout(function(){ if(RL.arme){ RL.arme=false; rlDec(); } },6000); break; }
-        RL.arme=false; trace('Refusée'); setStatut('refuse','Diète refusée : ajoute tes actions pour qu’on sache quoi changer.'); ouvrirCo(); break;
+        RL.arme=false; setStatut('refuse','Diète refusée : ajoute tes actions pour qu’on sache quoi changer.'); ouvrirCo(); break;
       // édition
       case 'ed-moins': case 'ed-plus': ing=ingDe(x); if(!ing) break;
         faire('grammes',{i:x.i,ty:x.ty,k:x.k,g:ED.voisin(ing.ingredient,Math.round(+ing.grammes||0),a==='ed-plus'?1:-1)}); break;
@@ -2656,7 +2793,7 @@ var ED=(function(){
     else if(K==='n'){ e.preventDefault(); notesFocus(); }
     else if(K==='f') plein();
     else if(k==='?') feuille('Raccourcis et gestes',REL.aide(),null);
-    else if(K==='v'){ if(!RL.S&&RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification') return;
+    else if(K==='v'){ if(RL.R.archive||(!RL.S&&RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification')) return;
       if(RL.vArme){ RL.vArme=false; if(RL.S) enregistrer('valider'); else valider(); }
       else { RL.vArme=true; toast(RL.S?'Appuie encore sur V pour enregistrer et valider.':'Appuie encore sur V pour valider et envoyer.'); setTimeout(function(){ RL.vArme=false; },2500); } }
   });
@@ -2786,7 +2923,7 @@ var ED=(function(){
   });
 
   /* ================= les données de toutes les pages ================= */
-  var D=null, FORM={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Elysium'},
+  var D=null, COACHS={}, FORM={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Elysium'},
       ABO={active:'Abonné',trialing:'Abonné',past_due:'Impayé',canceled:'Résilié',aucun:'Sans abonnement'}, ABOTAG={active:'v',trialing:'v',past_due:'r'};
   function cleFormule(v){ v=String(v||''); if(/^f[123]$/.test(v)) return v; var m=v.match(/Formule\s*0?([123])/i); if(m) return 'f'+m[1]; return /odyss/i.test(v)?'f1':/olympe/i.test(v)?'f2':/lysium/i.test(v)?'f3':null; }
   function sansAccent(x){ return String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
@@ -2808,7 +2945,7 @@ var ED=(function(){
   // (formule, statut, échéance : fonction coach_abonnements_suivi de supabase/mfa_coachs.sql ;
   //  repli tant que le script n'est pas lancé : la table, sans jamais demander les montants)
   function abosLecture(){
-    if(AAL2) return sb.from('abonnements').select('user_id,formule,statut,montant_cents,periode_fin,resiliation_prevue');
+    if(AAL2) return sb.from('abonnements').select('user_id,formule,statut,montant_cents,periode_fin,resiliation_prevue,resilie_le');
     return sb.rpc('coach_abonnements_suivi').then(function(r){
       return r.error ? sb.from('abonnements').select('user_id,formule,statut,periode_fin,resiliation_prevue') : r; });
   }
@@ -2818,21 +2955,28 @@ var ED=(function(){
       abosLecture(),
       sb.from('poids').select('user_id,date,kg').order('date'),   // ponytail: toutes les pesées ; une vue agrégée quand il y aura des centaines de clients
       sb.from('questionnaires').select('user_id,statut,reponses'),
-      sb.from('admins').select('user_id'),
-      sb.from('programmes').select('id,user_id,version,statut,diagnostic,created_at,traite_at').order('version'),
-      sb.from('retours').select('user_id,plat,created_at').eq('avis','plus_jamais').order('created_at',{ascending:false}).limit(8)
+      sb.from('admins').select('user_id,nom'),
+      sb.from('programmes').select('id,user_id,version,statut,diagnostic,created_at,traite_at,traite_par').order('version'),
+      sb.from('retours').select('user_id,plat,created_at').eq('avis','plus_jamais').order('created_at',{ascending:false}).limit(8),
+      sb.from('retours_coach').select('programme_id,coach_id,created_at'),   // ponytail: tout l'historique des corrections ; filtrer par date au-delà de quelques milliers de lignes
+      // ARGENT et historique d'avant le site : seulement en double vérification (la base refuserait de toute façon, supabase/mfa_coachs.sql)
+      AAL2?sb.from('paiements').select('id,user_id,stripe_customer_id,formule,montant_cents,frais_cents,rembourse_cents,statut,periode_debut,periode_fin,paye_le,echoue_le,litige_frais_cents,created_at'):Promise.resolve({data:null}),
+      AAL2?sb.from('stats_historique').select('annee,mois,prog_alimentaires,hommes,femmes'):Promise.resolve({data:null})
     ]).then(function(r){
       var par=function(rows,multi){ var o={}; (rows||[]).forEach(function(x){ if(multi)(o[x.user_id]=o[x.user_id]||[]).push(x); else o[x.user_id]=x; }); return o; };
-      var coach={}; (r[4].data||[]).forEach(function(a){ coach[a.user_id]=1; });
+      var coach={}; (r[4].data||[]).forEach(function(a){ coach[a.user_id]=1; if(a.nom) COACHS[a.user_id]=a.nom; });
       var ab=par(r[1].data), pd=par(r[2].data,1), qs=par(r[3].data), pr=par(r[5].data,1);
-      D={retours:r[6].data||[], abos:r[1].data||[], par:{}, clients:(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
+      D={retours:r[6].data||[], abos:r[1].data||[], rc:r[7].data||[], par:{},
+        pay:AAL2&&!r[8].error?(r[8].data||[]):null, payErr:!!r[8].error,
+        histo:AAL2&&!r[9].error?(r[9].data||[]):null, clients:(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
         p.formule=cleFormule(p.formule);
         var q=qs[p.id], rep=(q&&q.statut==='valide'&&q.reponses)||{}, w=pd[p.id]||[];
         return {id:p.id, p:p, nom:((p.prenom||'')+' '+(p.nom||'')).trim()||'Sans nom', a:ab[p.id]||null, w:w, der:w[w.length-1]||null,
           q:!!(q&&q.statut==='valide'), rep:rep, obj:objectif(rep), prog:pr[p.id]||[]}; })};
       D.clients.forEach(function(c){ D.par[c.id]=c; });
       $('g-noms').innerHTML=D.clients.map(function(c){ return '<option value="'+esc(c.nom)+'">'; }).join('');
-      renderJour(); renderTable(); renderResultats(); renderEcheancier(); renderGraphes();
+      renderFile(); renderJour(); renderTable(); renderResultats(); renderEcheancier(); renderGraphes(); renderEco(); renderStats();
+      if(cur) ficheNotes(cur.user_id); if(RL.R&&$('rl-notes')) rlNotes();    // noms des coachs et journal à jour
     }).catch(function(e){ console.error(e); toast('Tableau de bord indisponible, recharge la page.'); });
   }
 
@@ -2861,7 +3005,16 @@ var ED=(function(){
     var msgs=Object.keys(nl).map(function(id){ var t=nl[id].texte;
       return ligne('<b class="nom" role="button" tabindex="0" data-msg="'+esc(id)+'">'+esc(cl(id).nom)+'</b>', '« '+esc(t.slice(0,46))+(t.length>46?'…':'')+' »'); });
     var pj=D.retours.map(function(x){ return ligne(nomLien(cl(x.user_id)), esc(String(x.plat).replace(/_/g,' '))); });
-    $('jour-cartes').innerHTML=carte('Diètes à relire',relire.length,relire,'Rien à relire.')+carte('Nouveaux questionnaires',nouveaux.length,nouveaux,'Aucun nouveau questionnaire.')+
+    // corrections en cours : renvoyée en correction (nouvelle version attendue), ou version corrigée déposée et pas encore relue
+    var nbA={}; D.rc.forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
+    var pa=function(n,s){ return n+' '+s+(n>1?'s':''); };
+    var corr=C.map(function(c){ var x=c.prog[c.prog.length-1], rc=x&&(x.diagnostic||{}).rectification; if(!x) return null;
+      if(x.statut==='rectification') return ligne(nomLien(c),'v'+x.version+' · '+pa(nbA[x.id]||0,'action')+' posée'+((nbA[x.id]||0)>1?'s':'')+' · nouvelle version attendue');
+      if(x.statut==='en_attente'&&rc){ var ap=(rc.actions||[]).length, na=(rc.non_appliquees||[]).length, nl=(rc.notes_libres||[]).length;
+        return ligne(nomLien(c),'v'+x.version+' à relire · '+pa(nbA[rc.depuis_programme]||ap+na+nl,'action')+' · '+ap+' appliquée'+(ap>1?'s':'')+
+          (na?' · <span class="retard">'+na+' non appliquée'+(na>1?'s':'')+'</span>':'')+(nl?' · '+pa(nl,'note')+' à lire':'')); }
+      return null; }).filter(Boolean);
+    $('jour-cartes').innerHTML=carte('Diètes à relire',relire.length,relire,'Rien à relire.')+carte('Corrections en cours',corr.length,corr,'Aucune correction en cours.')+carte('Nouveaux questionnaires',nouveaux.length,nouveaux,'Aucun nouveau questionnaire.')+
       carte('Pesées en retard',retard.length,retard,'Tout le monde est à jour.')+carte('Impayés en cours',impayes.length,impayes,'Aucun impayé.')+
       carte('Messages non lus',msgs.length,msgs,'Tout est lu.')+carte('Retours « plus jamais »',pj.length,pj,'Aucun retour pour l’instant.');
 
@@ -2937,6 +3090,7 @@ var ED=(function(){
     var v=e.target.closest('[data-mfa]'); if(v){ MFA.cible=v.getAttribute('data-mfa'); voir('mfa'); return; }
     var m=e.target.closest('[data-msg]'); if(m){ filOuvert=m.getAttribute('data-msg'); voir('msgs'); return; }
     if(e.target.closest('[data-relire]')){ relire(cur); return; }
+    var vv=e.target.closest('[data-voir]'); if(vv){ voirVersion(+vv.getAttribute('data-voir')); return; }
     var u=e.target.closest('[data-u]'); if(u) ouvrir(u.getAttribute('data-u'));
   });
   document.addEventListener('keydown',function(e){ var n=e.target.closest&&e.target.closest('.nom[role="button"]'); if(n&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); n.click(); } });
@@ -2955,7 +3109,7 @@ var ED=(function(){
     var sem=[0,1,2,3].map(function(i){ var d=new Date(lundi); d.setDate(lundi.getDate()+7*i); return {d:d,L:[]}; }), fin=new Date(lundi.getTime()+28*JOUR);
     var jm=function(d){ return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); };
     D.clients.forEach(function(c){
-      var r=c.a&&RYTHME[c.a.formule]; if(!r||!actif(c)) return;
+      var r=c.a&&RYTHME[c.a.formule], imp=!!(c.a&&c.a.statut==='past_due'); if(!r||(!actif(c)&&!imp)) return;   // impayé : montré, mais bloqué
       if(c.prog.some(function(x){ return x.statut==='en_attente'||x.statut==='rectification'; })) return;   // une version attend déjà les coachs
       var val=c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at; }).sort(function(a,b){ return a.traite_at>b.traite_at?1:-1; }); if(!val.length) return;
       var T=new Date(val[val.length-1].traite_at), menus=val.filter(function(x){ return geste(x)!=='reajuster'; }), N=new Date((menus.length?menus[menus.length-1]:val[0]).traite_at);
@@ -2965,17 +3119,20 @@ var ED=(function(){
       if(r.reajuster) for(d=new Date(T.getTime()+r.reajuster*JOUR); d<fin; d=new Date(d.getTime()+r.reajuster*JOUR)){ var dd=d;
         if(!ev.some(function(e){ return Math.abs(e.d-dd)<7*JOUR; })) ev.push({d:dd,g:'reaj'}); }      // le nouveau menu recalcule aussi les grammes
       ev.sort(function(a,b){ return a.d-b.d; }).forEach(function(e,i){
-        var k=Math.max(0,Math.floor((e.d-lundi)/(7*JOUR))); if(k<=3) sem[k].L.push({c:c,g:e.g,d:e.d,bloque:i===0&&!pese}); });
+        var k=Math.max(0,Math.floor((e.d-lundi)/(7*JOUR))); if(k<=3) sem[k].L.push({c:c,g:e.g,d:e.d,bloque:imp?'bloqué : impayé':i===0&&!pese?'en attente d’une pesée':null}); });
     });
+    // 1res diètes : questionnaires validés, diète encore à produire (cette semaine)
+    file.filter(function(f){ return f.etape==='a_generer'; }).forEach(function(f){ var c=D.par[f.user_id]; if(c) sem[0].L.push({c:c,g:'premiere',d:auj}); });
     $('echeancier').innerHTML=sem.map(function(s){ return carte('Semaine du '+jm(s.d), s.L.length, s.L.sort(function(a,b){ return a.d-b.d; }).map(function(x){
-      return ligne(nomLien(x.c), x.bloque?'<span class="retard">en attente d’une pesée</span>':(x.g==='menu'?'<span class="tag j">Nouveau menu</span>':'<span class="tag v">Réajustement</span>')+
+      if(x.g==='premiere') return ligne(nomLien(x.c),'<span class="tag b">1re diète</span> · à produire');
+      return ligne(nomLien(x.c), x.bloque?'<span class="retard">'+x.bloque+'</span>':(x.g==='menu'?'<span class="tag j">Nouveau menu</span>':'<span class="tag v">Réajustement</span>')+
         ' · '+(FORM[x.c.a.formule]||'')+' · '+(x.d<auj?'<span class="retard">en retard</span>':jm(x.d))); }),'Rien de prévu.'); }).join('');
     // charge des 4 semaines, en barres empilées (mêmes couleurs que les étiquettes)
-    var nR=sem.map(function(s){ return s.L.filter(function(x){ return x.g!=='menu'; }).length; }), nM=sem.map(function(s){ return s.L.filter(function(x){ return x.g==='menu'; }).length; }), tot=som(nR)+som(nM);
+    var nb=function(g){ return sem.map(function(s){ return s.L.filter(function(x){ return x.g===g; }).length; }); }, nR=nb('reaj'), nM=nb('menu'), n1=nb('premiere'), tot=som(nR)+som(nM)+som(n1);
     $('g-charge-n').textContent=tot?tot+' diète'+(tot>1?'s':''):'';
     G.mount('g-charge',function(w){ return tot?G.barres(w,{h:180,x:sem.map(function(s){ return 'sem. du '+jm(s.d); }),lw:70,empile:true,valeurs:true,entier:true,
-      series:[{nom:'Réajustement',v:nR,c:'var(--b-vert)'},{nom:'Nouveau menu',v:nM,c:'var(--b-jaune)'}],f:function(v){ return v+' diète'+(v>1?'s':''); },
-      label:'Charge des 4 prochaines semaines : '+sem.map(function(s,i){ return nR[i]+nM[i]; }).join(', ')+' diètes'})+G.leg([['Réajustement','var(--b-vert)'],['Nouveau menu','var(--b-jaune)']])
+      series:[{nom:'Réajustement',v:nR,c:'var(--b-vert)'},{nom:'Nouveau menu',v:nM,c:'var(--b-jaune)'},{nom:'1re diète',v:n1,c:'var(--b-bleu)'}],f:function(v){ return v+' diète'+(v>1?'s':''); },
+      label:'Charge des 4 prochaines semaines : '+sem.map(function(s,i){ return nR[i]+nM[i]+n1[i]; }).join(', ')+' diètes'})+G.leg([['Réajustement','var(--b-vert)'],['Nouveau menu','var(--b-jaune)'],['1re diète','var(--b-bleu)']])
       :G.vide('Rien de prévu sur les 4 prochaines semaines : l’échéancier se remplira avec les premières diètes validées.'); });
   }
   function som(L){ return L.reduce(function(t,x){ return t+(+x||0); },0); }
@@ -3011,17 +3168,25 @@ var ED=(function(){
     var VAL=P.filter(function(x){ return x.statut==='valide'&&x.traite_at; });
 
     // ---- DIÈTES : délai de relecture + répartition par type
-    var DEL=['< 2 h','2-6 h','6-12 h','12-24 h','24-48 h','> 48 h'], BO=[2,6,12,24,48,Infinity], dv=[0,0,0,0,0,0], nd=0;
-    P.forEach(function(x){ if(!x.traite_at||!x.created_at||x.statut==='en_attente') return; var h=(ms(x.traite_at)-ms(x.created_at))/3600000; if(h<0) return;
-      for(var i=0;i<BO.length;i++) if(h<BO[i]){ dv[i]++; nd++; break; } });
+    // (30 derniers jours ; une retouche enregistrée remplace la version déposée : « remplace » n'est pas une décision sur le fond)
+    var DEL=['< 2 h','2-6 h','6-12 h','12-24 h','24-48 h','> 48 h'], BO=[2,6,12,24,48,Infinity], dv=[0,0,0,0,0,0], nd=0, j30=Date.now()-30*JOUR, j60=j30-30*JOUR, hV=[], hV0=[];
+    P.forEach(function(x){ if(!x.traite_at||!x.created_at||['valide','refuse','rectification'].indexOf(x.statut)<0) return; var t=ms(x.traite_at), h=(t-ms(x.created_at))/3600000; if(h<0) return;
+      if(x.statut==='valide'){ if(t>=j30) hV.push(h); else if(t>=j60) hV0.push(h); }
+      if(t<j30) return; for(var i=0;i<BO.length;i++) if(h<BO[i]){ dv[i]++; nd++; break; } });
     $('g-delai-n').textContent=nd?pl(nd,'diète'):'';
     G.mount('g-delai',function(w){ return nd?G.barres(w,{h:190,x:DEL,valeurs:true,entier:true,series:[{v:dv,cs:[0,0,0,0,1,1].map(function(j){ return j?'var(--b-jaune)':'var(--brand)'; })}],
-      tx:function(i){ return 'Décidées en '+DEL[i]; },f:function(v){ return pl(v,'diète'); },label:'Délai de relecture : '+DEL.map(function(l,i){ return dv[i]+' en '+l; }).join(', ')}):G.vide(); });
-    var TY=[['1re diète',0,'var(--b-bleu)'],['Réajustement',0,'var(--b-vert)'],['Nouveau menu',0,'var(--b-jaune)']];
-    VAL.forEach(function(x){ var g=geste(x); TY[g==='reajuster'?1:g?2:0][1]++; });
-    $('g-types-n').textContent=VAL.length?pl(VAL.length,'validée'):'';
-    G.mount('g-types',function(w){ return VAL.length?G.donut(w,{parts:TY,sous:'validées',f:function(v){ return pl(v,'diète'); },
-      label:'Diètes validées par type : '+TY.map(function(t){ return t[1]+' '+t[0]; }).join(', ')}):G.vide(); });
+      tx:function(i){ return 'Décidées en '+DEL[i]; },f:function(v){ return pl(v,'diète'); },label:'Délai de relecture sur 30 jours : '+DEL.map(function(l,i){ return dv[i]+' en '+l; }).join(', ')}):G.vide('Aucune diète décidée ces 30 derniers jours.'); });
+    var moy=function(L){ return L.length?L.reduce(function(t,x){ return t+x; },0)/L.length:null; }, dm=moy(hV);
+    $('k-delai').innerHTML=dm==null?'—':G.n(dm,dm<10?1:0)+' <small>h</small>';
+    G.kpi($('k-delai').parentNode,dm!=null&&hV0.length?{cur:dm,prev:moy(hV0),inv:1,vs:'vs les 30 jours d’avant'}:{});
+    var V30=VAL.filter(function(x){ return ms(x.traite_at)>=j30; }), TY=[['1re diète',0,'var(--b-bleu)'],['Réajustement',0,'var(--b-vert)'],['Nouveau menu',0,'var(--b-jaune)']];
+    V30.forEach(function(x){ var g=geste(x); TY[g==='reajuster'?1:g?2:0][1]++; });
+    $('g-types-n').textContent=V30.length?pl(V30.length,'validée')+' · 30 jours':'';
+    G.mount('g-types',function(w){ return V30.length?G.donut(w,{parts:TY,sous:'validées',f:function(v){ return pl(v,'diète'); },
+      label:'Diètes validées sur 30 jours par type : '+TY.map(function(t){ return t[1]+' '+t[0]; }).join(', ')}):G.vide('Aucune diète validée ces 30 derniers jours.'); });
+    var d1=new Date(maintenant.getFullYear(),maintenant.getMonth(),1).getTime(), dp=new Date(maintenant.getFullYear(),maintenant.getMonth()-1,1).getTime(),
+        vM=VAL.filter(function(x){ return ms(x.traite_at)>=d1; }).length, vP=VAL.filter(function(x){ var t=ms(x.traite_at); return t>=dp&&t<d1; }).length;
+    $('k-val').textContent=vM; G.kpi($('k-val').parentNode,vP?{cur:vM,prev:vP,vs:'vs le mois dernier'}:{});
 
     // ---- SUIVI : évolution moyenne par objectif (pesée la plus proche de chaque semaine, à ±3,5 jours)
     var S13=[]; for(var k=0;k<=12;k++) S13.push(k?'s'+k:'départ');
@@ -3048,40 +3213,36 @@ var ED=(function(){
       t:function(i,j){ var x=RV[i][j]; return R[i].nom+' · semaine au '+jm(FIN[j])+'\n'+(x?pl(x,'pesée'):'aucune pesée'); },
       label:'Régularité des pesées de '+pl(R.length,'client')+' sur 12 semaines'}):G.vide(); });
 
-    // ---- STATISTIQUES : diètes validées par mois (cette année / l'an dernier), pyramide des âges, cumul
-    var an=maintenant.getFullYear(), m1=[0,0,0,0,0,0,0,0,0,0,0,0], m0=m1.slice();
+    // ---- STATISTIQUES : diètes par mois (cette année / l'an dernier), pyramide des âges, cumul — historique d'avant le site compris (stats_historique)
+    var an=maintenant.getFullYear(), mo=maintenant.getMonth(), m1=[0,0,0,0,0,0,0,0,0,0,0,0], m0=m1.slice(), HI=D.histo||[], nH=0;
     VAL.forEach(function(x){ var d=new Date(x.traite_at); if(d.getFullYear()===an) m1[d.getMonth()]++; else if(d.getFullYear()===an-1) m0[d.getMonth()]++; });
-    var m1v=m1.map(function(v,i){ return i>maintenant.getMonth()?null:v; }), ML=G.M.map(function(m,i){ return new Date(an,i,1).toLocaleDateString('fr-FR',{month:'long'}); });
-    $('g-mois-n').textContent=VAL.length?an+' face à '+(an-1):'';
-    $('g-mois-l').innerHTML=VAL.length?G.leg([[String(an),'var(--brand)'],[String(an-1),'color-mix(in srgb,var(--steel) 45%,transparent)']]):'';
-    G.mount('g-mois',function(w){ return VAL.length?G.barres(w,{h:210,x:G.M,tx:function(i){ return ML[i]; },entier:true,
+    HI.forEach(function(h){ var v=+h.prog_alimentaires||0; nH+=v; if(+h.annee===an) m1[h.mois-1]+=v; else if(+h.annee===an-1) m0[h.mois-1]+=v; });
+    var nD=VAL.length+nH, m1v=m1.map(function(v,i){ return i>mo?null:v; }), ML=G.M.map(function(m,i){ return new Date(an,i,1).toLocaleDateString('fr-FR',{month:'long'}); });
+    $('g-mois-n').textContent=nD?an+' face à '+(an-1):'';
+    $('g-mois-l').innerHTML=nD?G.leg([[String(an),'var(--brand)'],[String(an-1),'color-mix(in srgb,var(--steel) 45%,transparent)']])+(nH?'<p class="leg">Diètes validées sur le site + historique d’avant le site ('+pl(nH,'diète')+').</p>':''):'';
+    G.mount('g-mois',function(w){ return nD?G.barres(w,{h:210,x:G.M,tx:function(i){ return ML[i]; },entier:true,
       series:[{nom:String(an),v:m1v,c:'var(--brand)'},{nom:String(an-1),v:m0,c:'var(--steel)',op:.4}],f:function(v){ return pl(v,'diète'); },
-      label:'Diètes validées par mois : '+som(m1)+' en '+an+', '+som(m0)+' en '+(an-1)}):G.vide(); });
+      label:'Diètes par mois : '+som(m1)+' en '+an+', '+som(m0)+' en '+(an-1)}):G.vide(); });
+    D.stats={an:an,mo:mo,m1:m1,m0:m0,nH:nH,nD:nD};
     var TR=['16-25','26-35','36-45','46-55','56-65','66+'], H=[0,0,0,0,0,0], Fm=H.slice(), np=0;
     C.forEach(function(c){ var nsc=c.p.naissance, sx=c.p.sexe; if(!nsc||!sx) return; var b=new Date(String(nsc).slice(0,10)+'T12:00:00'); if(isNaN(b)) return;
       var a=an-b.getFullYear()-((maintenant.getMonth()<b.getMonth()||(maintenant.getMonth()===b.getMonth()&&maintenant.getDate()<b.getDate()))?1:0);
       var i=a<=25?0:a<=35?1:a<=45?2:a<=55?3:a<=65?4:5; (sx==='HOMME'?H:Fm)[i]++; np++; });
     $('g-pyr-n').textContent=np?pl(np,'client'):'';
     G.mount('g-pyr',function(w){ return np?G.pyramide(w,{t:TR,h:H,f:Fm,label:'Pyramide des âges : '+som(H)+' hommes, '+som(Fm)+' femmes'}):G.vide(); });
-    var CU=[], CX=[], CL=[];
-    if(VAL.length){ var prem=new Date(Math.min.apply(null,VAL.map(function(x){ return ms(x.traite_at); }))), cum=0;
+    // cumul mois par mois : diètes du site + historique d'avant le site, depuis le premier mois connu
+    var CU=[], CX=[], CL=[], dep=VAL.map(function(x){ return ms(x.traite_at); }).concat(HI.map(function(h){ return new Date(+h.annee,h.mois-1,15).getTime(); }));
+    if(nD){ var prem=new Date(Math.min.apply(null,dep)), cum=0;
       for(var dm=new Date(prem.getFullYear(),prem.getMonth(),1); dm<=maintenant; dm=new Date(dm.getFullYear(),dm.getMonth()+1,1)){
-        var y=dm.getFullYear(), mo=dm.getMonth(); cum+=VAL.filter(function(x){ var d=new Date(x.traite_at); return d.getFullYear()===y&&d.getMonth()===mo; }).length;
-        CU.push(cum); CX.push(G.M[mo]+(mo?'':' '+String(y).slice(2))); CL.push(dm.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})); } }
-    $('g-cumul-n').textContent=VAL.length?pl(VAL.length,'diète'):'';
-    G.mount('g-cumul',function(w){ return VAL.length?G.ligne(w,{h:200,x:CX,lw:50,entier:true,tx:function(i){ return 'Fin '+CL[i]; },series:[{nom:'',v:CU,c:'var(--brand)',aire:true}],
-      f:function(v){ return pl(v,'diète')+' au total'; },label:'Cumul des diètes validées : '+VAL.length}):G.vide(); });
+        var y=dm.getFullYear(), mm=dm.getMonth(); cum+=VAL.filter(function(x){ var d=new Date(x.traite_at); return d.getFullYear()===y&&d.getMonth()===mm; }).length+
+          HI.reduce(function(t,h){ return t+(+h.annee===y&&+h.mois===mm+1?+h.prog_alimentaires||0:0); },0);
+        CU.push(cum); CX.push(G.M[mm]+(mm?'':' '+String(y).slice(2))); CL.push(dm.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})); } }
+    $('g-cumul-n').textContent=nD?pl(nD,'diète'):'';
+    $('g-cumul-l').textContent=nH?'Diètes validées sur le site + '+pl(nH,'diète')+' de l’historique d’avant le site.':'Diètes validées sur le site. Historique d’avant le site : à importer.';
+    G.mount('g-cumul',function(w){ return nD?G.ligne(w,{h:200,x:CX,lw:50,entier:true,tx:function(i){ return 'Fin '+CL[i]; },series:[{nom:'',v:CU,c:'var(--brand)',aire:true}],
+      f:function(v){ return pl(v,'diète')+' au total'; },label:'Cumul des diètes : '+nD}):G.vide(); });
 
-    // ---- ÉCONOMIE : répartition par formule, revenu récurrent par formule, entonnoir
-    var act=D.abos.filter(function(a){ return ['active','trialing','past_due'].indexOf(a.statut)>=0; }), nf={f1:0,f2:0,f3:0}, ef={f1:0,f2:0,f3:0};
-    act.forEach(function(a){ if(nf[a.formule]!=null){ nf[a.formule]++; ef[a.formule]+=(+a.montant_cents||0)/100; } });
-    var nA=nf.f1+nf.f2+nf.f3, mrr=ef.f1+ef.f2+ef.f3, FF=['f1','f2','f3'];
-    $('g-donut-n').textContent=nA?pl(nA,'abonné'):'';
-    G.mount('g-donut',function(w){ return nA?G.donut(w,{parts:FF.map(function(f){ return [FORM[f].replace('Formule ',''),nf[f],FCOUL[f]]; }),centre:euros(mrr*100)+' €',sous:'toutes les 4 sem.',
-      f:function(v){ return pl(v,'abonné'); },label:'Abonnés par formule : '+FF.map(function(f){ return nf[f]+' '+FORM[f]; }).join(', ')}):G.vide(); });
-    G.mount('g-mrr',function(w){ return mrr?G.barres(w,{h:190,x:FF.map(function(f){ return FORM[f].replace('Formule ',''); }),valeurs:true,ml:52,fy:function(v){ return G.n(v)+' €'; },fv:function(v){ return G.n(v,2)+' €'; },
-      series:[{v:FF.map(function(f){ return ef[f]; }),cs:FF.map(function(f){ return FCOUL[f]; })}],tx:function(i){ return FORM[FF[i]]; },f:function(v){ return G.n(v,2)+' € / 4 semaines'; },
-      label:'Revenu récurrent par formule : '+FF.map(function(f){ return FORM[f]+' '+G.n(ef[f],2)+' €'; }).join(', ')}):G.vide(); });
+    // ---- ÉCONOMIE (sans argent) : entonnoir
     // chaque étape est un sous-ensemble de la précédente (l'ordre réel d'inscription peut varier)
     var eQ=C.filter(function(c){ return c.q; }), eA=eQ.filter(function(c){ return !!c.a; }),
         e2=eA.filter(function(c){ return actif(c)&&c.p.created_at&&jours(c.p.created_at)>=30; }), e3=e2.filter(function(c){ return jours(c.p.created_at)>=60; });
@@ -3091,30 +3252,134 @@ var ED=(function(){
 
   /* ---------- chiffres + statistiques ---------- */
   function recount(){
-    var n={a_generer:0,a_relire:0,valide:0};
-    file.forEach(function(c){ if(n[c.etape]!=null) n[c.etape]++; });
-    $('k-relire').textContent=n.a_relire; $('k-gen').textContent=n.a_generer; $('k-val').textContent=n.valide;
+    var n=function(f){ return file.filter(function(c){ return dansFiltre(c,f); }).length; }, b=n('brouillon');
+    $('k-relire').textContent=n('a_relire'); $('k-relire-s').textContent=b?'dont '+b+' brouillon'+(b>1?'s':''):'diètes prêtes'; $('k-corr').textContent=n('corriger');
   }
-  function renderStats(rows,nbClients){
-    $('k-cli').textContent=nbClients;
-    var box=$('stats');
-    if(!rows||!rows.length){ box.innerHTML='<div class="scard"><div class="st">Pas encore de données</div><div class="soon">Les statistiques se rempliront toutes seules à mesure des inscriptions.</div></div>'; return; }
-    var tot=rows.reduce(function(a,r){return a+ +r.inscriptions;},0);
-    var h=rows.reduce(function(a,r){return a+ +r.hommes;},0), f=rows.reduce(function(a,r){return a+ +r.femmes;},0);
-    var ages=[['16-25','a16_25'],['26-35','a26_35'],['36-45','a36_45'],['46-55','a46_55'],['56-65','a56_65'],['66+','a66_plus']]
-      .map(function(x){ return [x[0], rows.reduce(function(a,r){return a+ +(r[x[1]]||0);},0)]; });
-    box.innerHTML=
-      card('Inscriptions','<div class="v" style="font-family:var(--disp);font-weight:700;font-size:38px;color:var(--ice)">'+tot+'</div>')+
-      card('Hommes / Femmes', bars([['Hommes',h],['Femmes',f]], Math.max(h,f,1)))+
-      card('Âges', bars(ages, Math.max.apply(null,ages.map(function(a){return a[1];}).concat([1]))))+
-      card('Ce mois-ci','<div class="v" style="font-family:var(--disp);font-weight:700;font-size:38px;color:var(--blue)">'+(rows[0]?rows[0].inscriptions:0)+'</div>');
+  /* ---------- STATISTIQUES : chiffres clés (diètes du site + historique d'avant le site, stats_historique) ----------
+     Onglet ouvert seulement en double vérification ; l'historique n'est lisible qu'en aal2 (supabase/mfa_coachs.sql). */
+  function renderStats(){
+    if(!D||!D.stats) return;
+    var S=D.stats, HI=D.histo||[], nomM=function(m){ return new Date(S.an,m,1).toLocaleDateString('fr-FR',{month:'long'}); }, pl=function(n,s){ return n+' '+s+(n>1?'s':''); };
+    $('s-sous').textContent='Programmes alimentaires uniquement (l’entraînement n’est pas compté). '+(HI.length?'Historique d’avant le site compris ('+pl(S.nH,'diète')+').':'Historique d’avant le site : à importer (script supabase/stats_historique_import.sql).');
+    var an1=som(S.m1), an0=som(S.m0.slice(0,S.mo+1));
+    $('s-an-k').textContent='Diètes en '+S.an; $('s-an').textContent=an1; $('s-an-s').textContent='de janvier à '+nomM(S.mo);
+    G.kpi($('s-an').parentNode,an1?{v:S.m1.slice(0,S.mo+1),x:G.M.slice(0,S.mo+1),cur:an1,prev:an0,vs:'vs '+(S.an-1)+' à la même date',f:function(v){ return pl(v,'diète'); },label:'Diètes par mois en '+S.an}:{});
+    $('s-tot').textContent=S.nD; $('s-tot-s').textContent=S.nH?'dont '+S.nH+' avant le site':'sur le site (historique d’avant à importer)';
+    var h=0, f=0; D.clients.forEach(function(c){ if(c.p.sexe==='HOMME') h++; else if(c.p.sexe==='FEMME') f++; });
+    var hH=0, fH=0; HI.forEach(function(x){ hH+=+x.hommes||0; fH+=+x.femmes||0; }); h+=hH; f+=fH;
+    $('s-hf').innerHTML=h+f?Math.round(h/(h+f)*100)+' <small>% / '+(100-Math.round(h/(h+f)*100))+' %</small>':'—';
+    $('s-hf-s').textContent=h+f?pl(h+f,'client')+' depuis le début'+(hH+fH?' (dont '+(hH+fH)+' avant le site)':' (site seulement)'):'aucun client pour l’instant';
+    $('s-mois').textContent=S.m1[S.mo]; $('s-mois-s').textContent=nomM(S.mo)+' '+(S.an-1)+' : '+S.m0[S.mo];
+    $('g-hf-n').textContent=h+f?pl(h+f,'client'):'';
+    G.mount('g-hf',function(w){ return h+f?G.donut(w,{parts:[['Hommes',h,'var(--brand)'],['Femmes',f,'var(--b-violet)']],sous:'clients',f:function(v){ return pl(v,'client'); },
+      label:'Hommes et femmes depuis le début : '+h+' hommes, '+f+' femmes'}):G.vide(); });
   }
-  function card(t,inner){ return '<div class="scard"><div class="st">'+t+'</div>'+inner+'</div>'; }
-  function bars(list,max){
-    return '<div class="bars">'+list.map(function(x){
-      return '<div class="bar"><span class="bl">'+x[0]+'</span><span class="bt"><i class="bf" style="width:'+
-        Math.round(x[1]/max*100)+'%"></i></span><span class="bv">'+x[1]+'</span></div>';
-    }).join('')+'</div>';
+
+  /* ---------- ÉCONOMIE : historique des paiements Stripe (table paiements, supabase/paiements.sql) ----------
+     EN DOUBLE VÉRIFICATION SEULEMENT : sans aal2, aucun montant n'est demandé ni affiché (tout est vidé ici).
+     Mêmes définitions que la vue v_economie_mensuelle : mois d'un paiement = payé le, sinon échoué le, sinon créé le ;
+     brut = montants payés (échecs exclus) ; net = brut − frais Stripe − remboursements − frais d'opposition − montants perdus en opposition. */
+  var PERIODE=28*JOUR;
+  function eur(c){ return G.n((+c||0)/100,2)+' €'; }
+  function eurK(c){ var v=(+c||0)/100; return G.n(v,Math.abs(v)>=100?0:2)+' <small>€</small>'; }   // grand chiffre : sans centimes au-delà de 100 €
+  function renderEco(){
+    var K=['e-mois','e-an','e-mrr','e-prev'];
+    if(!AAL2||!D){
+      K.forEach(function(id){ $(id).textContent='—'; G.kpi($(id).parentNode,{}); });
+      ['e-mois-s','e-an-s','e-prev-s'].forEach(function(id){ $(id).innerHTML='&nbsp;'; });
+      ['e-abonnes','e-incidents','e-opp','g-eco-l','g-eco-n','g-opp-n','g-donut-n'].forEach(function(id){ $(id).innerHTML=''; });
+      ['g-eco','g-opp','g-donut','g-mrr'].forEach(function(id){ G.mount(id,function(){ return ''; }); });
+      return; }
+    var P=D.pay||[], A=D.abos||[], now=new Date(), an=now.getFullYear(), mo=now.getMonth(), pl=function(n,s){ return n+' '+s+(n>1?'s':''); };
+    var nomM=function(y,m){ return new Date(y,m,1).toLocaleDateString('fr-FR',{month:'long'}); }, vide='Se remplira avec les premiers paiements.';
+    $('e-sous').textContent=D.payErr?'Historique des paiements à activer : script supabase/paiements.sql (Dimitri). Les abonnements actifs s’affichent déjà.'
+      :'Chiffres lus dans l’historique des paiements Stripe. Aucune donnée de carte.';
+    function quand(x){ return new Date(x.paye_le||x.echoue_le||x.created_at); }
+    function brut(x){ return x.statut==='failed'?0:+x.montant_cents||0; }
+    function net(x){ var m=+x.montant_cents||0, r=+x.rembourse_cents||0; return brut(x)-(+x.frais_cents||0)-r-(+x.litige_frais_cents||0)-(x.statut==='dispute_lost'?m-r:0); }
+    function somme(L,f){ return L.reduce(function(t,x){ return t+f(x); },0); }
+    function entre(a,b){ return P.filter(function(x){ var t=quand(x); return t>=a&&t<=b; }); }
+    var ilya=new Date(now); ilya.setFullYear(an-1);                                            // l'an passé à la même date
+    var M=entre(new Date(an,mo,1),now), M0=entre(new Date(an-1,mo,1),ilya), Y=entre(new Date(an,0,1),now), Y0=entre(new Date(an-1,0,1),ilya);
+    var OK=P.filter(function(x){ return x.statut!=='failed'; });
+
+    // chiffres clés : encaissé du mois et de l'année (brut, net, frais), l'an passé à la même date
+    var bM=somme(M,brut), bY=somme(Y,brut), mens=[];
+    for(var k=0;k<=mo;k++) mens.push(somme(entre(new Date(an,k,1),new Date(an,k+1,1,0,0,0,-1)),brut)/100);
+    if(P.length){
+      $('e-mois').innerHTML=eurK(bM); $('e-mois-s').textContent='brut '+eur(bM)+' · net '+eur(somme(M,net))+' · frais Stripe '+eur(somme(M,function(x){ return +x.frais_cents||0; }));
+      G.kpi($('e-mois').parentNode,{cur:bM,prev:somme(M0,brut),vs:'vs '+nomM(an-1,mo)+' '+(an-1)+' à la même date'});
+      $('e-an-k').textContent='Encaissé en '+an; $('e-an').innerHTML=eurK(bY); $('e-an-s').textContent='brut '+eur(bY)+' · net '+eur(somme(Y,net))+' · frais Stripe '+eur(somme(Y,function(x){ return +x.frais_cents||0; }));
+      G.kpi($('e-an').parentNode,{cur:bY,prev:somme(Y0,brut),vs:'vs '+(an-1)+' à la même date',v:mens.length>1?mens:null,x:G.M.slice(0,mo+1),f:function(v){ return G.n(v,2)+' €'; },label:'Encaissé par mois en '+an});
+    } else { ['e-mois','e-an'].forEach(function(id){ $(id).textContent='—'; G.kpi($(id).parentNode,{}); }); $('e-mois-s').textContent=vide; $('e-an-s').textContent=vide; }
+
+    // revenu récurrent (abonnements actifs, y compris impayé en cours) + répartition par formule
+    var act=A.filter(function(a){ return ['active','trialing','past_due'].indexOf(a.statut)>=0; }), nf={f1:0,f2:0,f3:0}, ef={f1:0,f2:0,f3:0};
+    act.forEach(function(a){ if(nf[a.formule]!=null){ nf[a.formule]++; ef[a.formule]+=(+a.montant_cents||0); } });
+    var nA=nf.f1+nf.f2+nf.f3, mrr=ef.f1+ef.f2+ef.f3, FF=['f1','f2','f3'];
+    $('e-mrr').innerHTML=nA?eurK(mrr):'—'; $('e-mrr-s').textContent=nA?eur(mrr)+' par période de 4 semaines · '+pl(nA,'abonné'):'se remplira avec les premiers abonnés';
+    $('g-donut-n').textContent=nA?pl(nA,'abonné'):'';
+    G.mount('g-donut',function(w){ return nA?G.donut(w,{parts:FF.map(function(f){ return [FORM[f].replace('Formule ',''),nf[f],FCOUL[f]]; }),centre:G.n(mrr/100,2)+' €',sous:'toutes les 4 sem.',
+      f:function(v){ return pl(v,'abonné'); },label:'Abonnés par formule : '+FF.map(function(f){ return nf[f]+' '+FORM[f]; }).join(', ')}):G.vide('Se remplira avec les premiers abonnés.'); });
+    G.mount('g-mrr',function(w){ return mrr?G.barres(w,{h:190,x:FF.map(function(f){ return FORM[f].replace('Formule ',''); }),valeurs:true,ml:52,fy:function(v){ return G.n(v)+' €'; },fv:function(v){ return G.n(v,2)+' €'; },
+      series:[{v:FF.map(function(f){ return ef[f]/100; }),cs:FF.map(function(f){ return FCOUL[f]; })}],tx:function(i){ return FORM[FF[i]]; },f:function(v){ return G.n(v,2)+' € / 4 semaines'; },
+      label:'Revenu récurrent par formule : '+FF.map(function(f){ return FORM[f]+' '+eur(ef[f]); }).join(', ')}):G.vide('Se remplira avec les premiers abonnés.'); });
+
+    // prévision du mois prochain : échéances connues des abonnements actifs (résiliations prévues exclues), renouvelés tous les 28 jours
+    var p1=new Date(an,mo+1,1).getTime(), p2=new Date(an,mo+2,1).getTime(), prev=0, nE=0;
+    A.forEach(function(a){ if((a.statut!=='active'&&a.statut!=='trialing')||a.resiliation_prevue||!a.periode_fin||!a.montant_cents) return;
+      for(var d=new Date(a.periode_fin).getTime(); d<p2; d+=PERIODE) if(d>=p1){ prev+=+a.montant_cents; nE++; } });
+    $('e-prev-k').textContent='Prévision '+nomM(an,mo+1);
+    $('e-prev').innerHTML=nE?eurK(prev):'—'; $('e-prev-s').textContent=nE?eur(prev)+' · '+pl(nE,'échéance')+' connue'+(nE>1?'s':'')+' · résiliations prévues exclues':'aucune échéance connue pour l’instant';
+
+    // encaissé mois par mois : cette année face à l'an passé
+    var e1=[], e0=[]; for(k=0;k<12;k++){ e1.push(k>mo?null:somme(entre(new Date(an,k,1),new Date(an,k+1,1,0,0,0,-1)),brut)/100); e0.push(somme(entre(new Date(an-1,k,1),new Date(an-1,k+1,1,0,0,0,-1)),brut)/100); }
+    var ML=G.M.map(function(m,i){ return nomM(an,i); });
+    $('g-eco-n').textContent=OK.length?an+' face à '+(an-1):'';
+    $('g-eco-l').innerHTML=OK.length?G.leg([[String(an),'var(--brand)'],[String(an-1),'color-mix(in srgb,var(--steel) 45%,transparent)']])+'<p class="leg">Montants payés (brut), au mois du paiement. Le net et les frais sont dans les chiffres clés.</p>':'';
+    G.mount('g-eco',function(w){ return OK.length?G.barres(w,{h:220,x:G.M,tx:function(i){ return ML[i]; },ml:52,fy:function(v){ return G.n(v)+' €'; },
+      series:[{nom:String(an),v:e1,c:'var(--brand)'},{nom:String(an-1),v:e0,c:'var(--steel)',op:.4}],f:function(v){ return G.n(v,2)+' €'; },
+      label:'Encaissé par mois : '+G.n(som(e1),2)+' € en '+an+', '+G.n(som(e0),2)+' € en '+(an-1)}):G.vide(vide); });
+
+    // abonnés du mois : nouveaux (1er paiement ce mois), résiliations, taux de départ, durée moyenne, revenu moyen
+    var cli=function(x){ return x.user_id||x.stripe_customer_id||x.id; }, prem={}, duree={}, tot={};
+    OK.forEach(function(x){ var c=cli(x), t=quand(x); if(!prem[c]||t<prem[c]) prem[c]=t; tot[c]=(tot[c]||0)+brut(x);
+      if(x.statut!=='refunded') duree[c]=(duree[c]||0)+(x.periode_debut&&x.periode_fin?Math.max(0,new Date(x.periode_fin)-new Date(x.periode_debut)):PERIODE); });
+    var d0=new Date(an,mo,1), nouv=Object.keys(prem).filter(function(c){ return prem[c]>=d0; }).length,
+        resil=A.filter(function(a){ return a.resilie_le&&new Date(a.resilie_le)>=d0; }).length,
+        prevu=A.filter(function(a){ return a.resiliation_prevue&&a.statut!=='canceled'; }).length,
+        base=act.length-nouv+resil, nC=Object.keys(tot).length, dm=nC?Object.keys(duree).reduce(function(t,c){ return t+duree[c]; },0)/Math.max(1,Object.keys(duree).length)/(30.44*JOUR):null;
+    $('e-abonnes').innerHTML='<h4>Abonnés ce mois <span class="n">'+nomM(an,mo)+'</span></h4>'+(P.length||A.length?
+      ligne('Nouveaux abonnés',P.length?nouv:'—')+ligne('Résiliations',resil+(prevu?' <small>(+ '+prevu+' prévue'+(prevu>1?'s':'')+')</small>':''))+
+      ligne('Taux de départ',base>0?G.n(resil/base*100,1)+' %':'—')+ligne('Durée moyenne payée',dm!=null?G.n(dm,1)+' mois':'—')+
+      ligne('Revenu moyen par client',nC?eur(som(Object.keys(tot).map(function(c){ return tot[c]; }))/nC):'—')+
+      '<p class="leg" style="margin-left:0">Nouveaux = premier paiement ce mois. Taux de départ = résiliations du mois ÷ abonnés au 1er du mois. Revenu moyen = total encaissé ÷ '+pl(nC,'client')+' payant'+(nC>1?'s':'')+'.</p>'
+      :'<p class="rien">'+vide+'</p>');
+
+    // incidents : impayés en cours / récupérés, remboursements, oppositions
+    var monA={}; A.forEach(function(a){ monA[a.user_id]=+a.montant_cents||0; });
+    var ech=P.filter(function(x){ return x.statut==='failed'; }), echM=somme(ech,function(x){ return monA[x.user_id]||0; }), echInc=ech.filter(function(x){ return !monA[x.user_id]; }).length,
+        rec=OK.filter(function(x){ return x.echoue_le; }), recM=rec.filter(function(x){ return x.paye_le&&new Date(x.paye_le)>=d0; }),
+        remb=P.filter(function(x){ return (+x.rembourse_cents||0)>0; }),
+        LIT=['disputed','dispute_won','dispute_lost'], opp=P.filter(function(x){ return LIT.indexOf(x.statut)>=0; }),
+        cout=function(x){ var m=+x.montant_cents||0, r=+x.rembourse_cents||0; return (+x.litige_frais_cents||0)+(x.statut==='dispute_lost'?m-r:0); };
+    $('e-incidents').innerHTML='<h4>Incidents de paiement</h4>'+(P.length?
+      ligne('Impayés en cours',ech.length?'<span class="retard">'+ech.length+(echM?' · '+eur(echM):'')+'</span>'+(echInc?' <small>('+echInc+' montant inconnu)</small>':''):'0')+
+      ligne('Impayés récupérés',rec.length?rec.length+' · '+eur(somme(rec,brut))+(recM.length?' <small>(dont '+recM.length+' ce mois)</small>':''):'0')+
+      ligne('Remboursements',remb.length?remb.length+' · '+eur(somme(remb,function(x){ return +x.rembourse_cents||0; })):'0')+
+      ligne('Oppositions',opp.length?'<span class="retard">'+opp.length+' · '+eur(somme(opp,cout))+' de coût</span>':'0')+
+      '<p class="leg" style="margin-left:0">Impayé en cours = prélèvement échoué, pas encore rattrapé (montant = celui de l’abonnement). Récupéré = échoué puis payé.</p>'
+      :'<p class="rien">'+vide+'</p>');
+
+    // oppositions : coût mois par mois cette année (frais + montants perdus), au mois du paiement contesté
+    var oM=[]; for(k=0;k<=mo;k++) oM.push(somme(opp.filter(function(x){ var t=quand(x); return t.getFullYear()===an&&t.getMonth()===k; }),cout)/100);
+    var oY=opp.filter(function(x){ return quand(x).getFullYear()===an; }), nb=function(s){ return opp.filter(function(x){ return x.statut===s; }).length; };
+    $('g-opp-n').textContent=oY.length?G.n(som(oM),2)+' € en '+an:'';
+    G.mount('g-opp',function(w){ return oY.length?G.barres(w,{h:150,x:G.M.slice(0,mo+1),tx:function(i){ return ML[i]; },ml:48,series:[{v:oM,c:'var(--b-jaune)'}],fy:function(v){ return G.n(v)+' €'; },
+      f:function(v){ return G.n(v,2)+' € de coût'; },label:'Coût des oppositions en '+an+' : '+G.n(som(oM),2)+' €'}):G.vide(P.length?'Aucune opposition cette année.':vide); });
+    $('e-opp').innerHTML=opp.length?ligne('En cours',nb('disputed'))+ligne('Gagnées',nb('dispute_won'))+ligne('Perdues',nb('dispute_lost'))+
+      ligne('Frais d’opposition',eur(somme(opp,function(x){ return +x.litige_frais_cents||0; })))+ligne('Montants perdus',eur(somme(opp.filter(function(x){ return x.statut==='dispute_lost'; }),function(x){ return (+x.montant_cents||0)-(+x.rembourse_cents||0); })))+
+      '<p class="leg" style="margin-left:0">Chaque opposition coûte 20 € de frais, même gagnée ; 40 € si elle est perdue après contestation. Un libellé clair sur le relevé bancaire les évite.</p>':'';
   }
 
   /* ---------- démarrage ---------- */
@@ -3138,16 +3403,12 @@ var ED=(function(){
       $('app').hidden=false;
       return Promise.all([
         sb.from('v_file_coach').select('*'),
-        sb.from('v_stats_mensuelles').select('*').limit(24),
-        sb.from('profiles').select('id'),
         lireNiveau()                                   // code déjà tapé dans cette session ?
       ]).then(function(res){
-        majMfaEtat();
+        majMfaEtat(); sonderNotes();
         file=(res[0].data)||[]; renderFile(); recount(); compterRetards(); chargerAbo(); chargerMessages();
-        renderStats((res[1].data)||[], ((res[2].data)||[]).length);
         chargerTout();
         var h=location.hash.slice(1); voir(['jour','clients','dietes','msgs','suivi','stats','eco'].indexOf(h)>=0?h:'jour');
-        requestAnimationFrame(function(){ document.querySelectorAll('.bf').forEach(function(b){ b.style.width=b.style.width; }); });
       });
     });
   }).catch(function(){ $('gate').classList.add('on'); });

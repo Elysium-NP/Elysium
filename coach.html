@@ -61,7 +61,7 @@
   .kpi .s{font-family:var(--disp);font-size:11px;color:var(--steel);margin-top:6px}
 
   /* ---- cockpit 3 colonnes ---- */
-  .cock{display:grid;grid-template-columns:290px minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start}
+  .cock{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start}
   @media(max-width:1240px){.cock{grid-template-columns:1fr}}
   .panel{border:1px solid var(--line);background:var(--void2);display:flex;flex-direction:column;max-height:calc(100vh - 230px)}
   .panel > h2{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
@@ -86,13 +86,74 @@
   .etat.refuse{color:#9b1c1c;border-color:rgba(240,160,160,.4)}
   .etat.sans_questionnaire{color:var(--steel);border-color:var(--line)}
 
-  /* ---- tous les clients ---- */
-  .panel.clients{margin-bottom:22px;max-height:none}
-  .cli-outils{padding:12px 18px;border-bottom:1px solid var(--line)}
-  .cli-outils input{width:100%;max-width:360px;font:15px/1.2 var(--texte);color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:999px;padding:10px 16px}
-  #cli-liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));max-height:340px}
-  #cli-liste .empty{grid-column:1/-1}
   .fitem .retard{color:#b45309}
+
+  /* ==== TABLEAU DE BORD EN ONGLETS (maquette validée par Dimitri le 28/09) ==== */
+  .kpi,.panel,.decide,.scard,.msgs,.suivi{border-radius:14px}
+  .panel,.msgs{overflow:hidden}
+  .onglets{display:flex;gap:6px;overflow-x:auto;padding:0 0 4px;margin:0 0 18px;scrollbar-width:none}
+  .onglets::-webkit-scrollbar{display:none}
+  .onglets button{flex:none;font:600 14px/1 var(--texte);color:var(--gris);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .onglets button[aria-selected="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+  .pastille-n{background:var(--blue);color:#fff;border-radius:99px;font:700 11px/1 var(--texte);padding:4px 7px}
+  .onglets button[aria-selected="true"] .pastille-n{background:#fff;color:var(--blue)}
+  .cherche{margin-left:auto}
+  .cherche input{font:14px/1.2 var(--texte);color:var(--ice);background:var(--void2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;width:220px;max-width:40vw}
+  .chead .who{margin-left:0}
+  @media(max-width:560px){.cherche input{width:130px}}
+  h2.t{font:400 26px/1.2 var(--titre);color:var(--ice);margin:0 0 4px;text-transform:none;letter-spacing:0}
+  p.sous{color:var(--steel);font-size:14px;margin:0 0 18px}
+  h3.s{font:600 11px/1 var(--texte);letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin:26px 0 10px}
+  .kpis.q4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:900px){.kpis.q4{grid-template-columns:repeat(2,1fr)}}
+  .kpi .v small{font-size:15px;font-weight:600;color:var(--steel)}
+  .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+  @media(max-width:400px){.grille{grid-template-columns:1fr}}
+  .carte{border:1px solid var(--line);background:var(--void2);border-radius:14px;padding:14px 16px;min-width:0}
+  .carte h4{font:600 15px/1.3 var(--texte);color:var(--ice);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+  .carte h4 .n{margin-left:auto;font-size:13px;color:var(--blue)}
+  .ligne{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px;color:var(--gris)}
+  .carte h4 + .ligne{border-top:0}
+  .ligne > span:last-child{text-align:right;color:var(--steel);font-size:13px}
+  .rien,.leg{font-size:13px;color:var(--steel);margin:4px 0 0}
+  .tag{display:inline-block;font:600 11px/1 var(--texte);border-radius:999px;padding:4px 8px;border:1px solid var(--line);color:var(--gris);white-space:nowrap}
+  .tag.j{background:var(--p-jaune);border-color:var(--b-jaune);color:#111}
+  .tag.v{background:var(--p-vert);border-color:var(--b-vert);color:#111}
+  .tag.b{background:var(--p-bleu);border-color:var(--b-bleu);color:#111}
+  .tag.r{background:#f6dcdc;border-color:#d98c8c;color:#7a1f1f}
+  .retard{color:#b45309;font-weight:600}
+  html[data-theme="obscur"] .tag.j,html[data-theme="obscur"] .tag.v,html[data-theme="obscur"] .tag.b{color:var(--ice)}
+  html[data-theme="obscur"] .retard{color:#f0b35a}
+  .nom{color:var(--ice);font-weight:600;cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px;transition:color .15s,text-decoration-color .15s}
+  .nom:hover,.nom:focus-visible{color:var(--blue);text-decoration-color:var(--blue)}
+  .mini{font:600 12px/1 var(--texte);border:1px solid var(--line);background:none;border-radius:999px;padding:7px 11px;cursor:pointer;color:var(--gris)}
+  .mini:hover{border-color:var(--blue);color:var(--blue)}
+  .retour-btn{font:600 13px/1 var(--texte);background:none;border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;color:var(--gris);margin-bottom:12px}
+  .fmeta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 14px}
+  /* clients : tableau qui défile dans son cadre sur téléphone, jamais la page */
+  .outils{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .outils input,.outils select{font:14px/1.2 var(--texte);color:var(--ice);background:var(--void2);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+  .outils input{flex:1;min-width:180px;max-width:320px}
+  .tab{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  .tab table{width:100%;border-collapse:collapse;font-size:14px;min-width:780px}
+  .tab th{font:600 11px/1.2 var(--texte);letter-spacing:.1em;text-transform:uppercase;color:var(--steel);text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap}
+  .tab th[aria-sort]::after{content:" ↓";color:var(--blue)}
+  .tab th[aria-sort="ascending"]::after{content:" ↑"}
+  .tab td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--gris)}
+  .tab td small{color:var(--steel);font-size:12px}
+  .tab tbody tr{cursor:pointer}
+  .tab tbody tr:hover td{background:rgba(46,155,255,.06)}
+  .tab tr:last-child td{border-bottom:0}
+  /* la file, pleine largeur */
+  .panel.file{max-height:none}
+  #file{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  #file .empty{grid-column:1/-1}
+  /* progression vers le palier du questionnaire */
+  .pbars{display:flex;flex-direction:column;gap:9px}
+  .pbar{display:grid;grid-template-columns:minmax(0,120px) 1fr auto;align-items:center;gap:10px;font-size:13px}
+  .pbar .bt{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+  .pbar .bt i{display:block;height:100%;background:var(--brand);border-radius:99px}
+  .pbar .bv{color:var(--ice);font-weight:600;white-space:nowrap}
 
   /* ---- fiche client ---- */
   .idcard{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
@@ -220,6 +281,7 @@
 <header class="chead">
   <a class="logo" href="index.html" aria-label="Elysium"><span class="elg" style="--h:52px"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span></span></a>
   <span class="ctag">Espace coachs</span>
+  <span class="cherche"><input type="search" id="g-q" list="g-noms" placeholder="Chercher un client…" aria-label="Chercher un client" autocomplete="off"><datalist id="g-noms"></datalist></span>
   <span class="who"><b id="coachname">—</b>
     <!-- Retour vers l'espace client : réservé au compte « mixte » (Dimitri).
          Un coach pur n'a rien à faire dans l'espace client, le lien reste caché. -->
@@ -229,6 +291,49 @@
 
 <div class="cwrap" id="app" hidden>
 
+  <nav class="onglets" role="tablist" aria-label="Pages de l'espace coachs">
+    <button role="tab" data-p="jour" aria-selected="true">Aujourd’hui</button>
+    <button role="tab" data-p="clients">Clients</button>
+    <button role="tab" data-p="dietes">Diètes</button>
+    <button role="tab" data-p="msgs">Messages <span class="pastille-n" id="nav-nl" hidden></span></button>
+    <button role="tab" data-p="suivi">Suivi &amp; résultats</button>
+    <button role="tab" data-p="stats">Statistiques</button>
+    <button role="tab" data-p="eco">Économie</button>
+  </nav>
+
+  <!-- ═════════════ AUJOURD'HUI : ce qui attend une action ═════════════ -->
+  <section class="page" id="p-jour">
+    <h2 class="t">À faire aujourd’hui</h2>
+    <p class="sous">Ce qui attend une action de votre part. Un clic sur un nom ouvre sa fiche.</p>
+    <div class="kpis q4">
+      <div class="kpi"><div class="k">Clients actifs</div><div class="v" id="j-actifs">—</div><div class="s">abonnement en cours</div></div>
+      <div class="kpi"><div class="k">Diètes du mois</div><div class="v" id="j-dietes">—</div><div class="s">validées depuis le 1er</div></div>
+      <div class="kpi hot"><div class="k">Revenu récurrent</div><div class="v" id="j-mrr">—</div><div class="s">par période de 4 semaines</div></div>
+      <div class="kpi"><div class="k">Pesées de la semaine</div><div class="v" id="j-pesees">—</div><div class="s" id="j-pesees-s">&nbsp;</div></div>
+    </div>
+    <div class="grille" id="jour-cartes" style="margin-top:16px"><div class="carte"><p class="rien">Chargement…</p></div></div>
+  </section>
+
+  <!-- ═════════════ CLIENTS ═════════════ -->
+  <section class="page" id="p-clients" hidden>
+    <h2 class="t">Clients <span class="n" id="clin" style="font:600 15px var(--texte);color:var(--steel)"></span></h2>
+    <p class="sous">Tous les clients. Filtrez, triez (clic sur un en-tête), puis cliquez sur une ligne pour ouvrir la fiche.</p>
+    <div class="outils">
+      <input type="search" id="c-q" placeholder="Rechercher un nom…" aria-label="Rechercher un client" autocomplete="off">
+      <select id="c-f" aria-label="Formule"><option value="">Toutes les formules</option><option value="f1">Formule 1</option><option value="f2">Formule 2</option><option value="f3">Formule 3</option></select>
+      <select id="c-s" aria-label="Abonnement"><option value="">Tous les statuts</option><option>Abonné</option><option>Impayé</option><option>Résilié</option><option>Sans abonnement</option></select>
+      <select id="c-o" aria-label="Objectif"><option value="">Tous les objectifs</option><option>Perte</option><option>Prise</option><option>Maintien</option></select>
+    </div>
+    <div class="tab"><table><thead><tr>
+      <th data-k="nom">Client</th><th data-k="formule">Formule</th><th data-k="abo">Abonnement</th><th data-k="obj">Objectif</th>
+      <th data-k="pesee">Dernière pesée</th><th data-k="ech">Prochaine échéance</th><th data-k="insc" aria-sort="descending">Inscription</th>
+    </tr></thead><tbody id="c-tb"><tr><td colspan="7">Chargement…</td></tr></tbody></table></div>
+  </section>
+
+  <!-- ═════════════ DIÈTES : la file + l'échéancier ═════════════ -->
+  <section class="page" id="p-dietes" hidden>
+    <h2 class="t">Diètes</h2>
+    <p class="sous">La file de relecture, et qui recevra quoi dans les 4 prochaines semaines.</p>
   <!-- ── chiffres clés ─────────────────────────────────────────────────── -->
   <div class="kpis">
     <div class="kpi hot"><div class="k">À relire</div><div class="v" id="k-relire">0</div><div class="s">programmes prêts</div></div>
@@ -238,56 +343,34 @@
     <div class="kpi"><div class="k">Pesées en retard</div><div class="v" id="k-pesee">—</div><div class="s">clients sans pesée depuis 7 jours</div></div>
   </div>
 
-  <!-- ── abonnements (Damien 27/09) : l'argent viendra de Stripe, rien n'est inventé ── -->
-  <h2 class="intitule" style="margin:4px 0 12px">Abonnements</h2>
-  <div class="kpis abo">
-    <div class="kpi"><div class="k">Formule 1 · 19,90 €</div><div class="v" id="k-f1">—</div><div class="s">Menu unique</div></div>
-    <div class="kpi"><div class="k">Formule 2 · 25,90 €</div><div class="v" id="k-f2">—</div><div class="s">Menu mensuel</div></div>
-    <div class="kpi"><div class="k">Formule 3 · 29,90 €</div><div class="v" id="k-f3">—</div><div class="s">Menu mensuel &amp; recettes</div></div>
-    <div class="kpi"><div class="k">Clients depuis le début</div><div class="v" id="k-total">—</div><div class="s" id="k-total-s">comptes créés sur le site</div></div>
-    <div class="kpi"><div class="k">Montant / 4 semaines</div><div class="v att" id="k-montant">—</div><div class="s" id="k-montant-s">en attente de Stripe</div></div>
-    <div class="kpi"><div class="k">Résiliations</div><div class="v att" id="k-resil">—</div><div class="s" id="k-resil-s">en attente de Stripe</div></div>
-  </div>
-  <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
 
-  <!-- ── messagerie : les coachs répondent à la main ── -->
-  <h2 class="intitule" style="margin:4px 0 12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">Messages <span id="msg-nl" style="color:var(--blue)"></span>
-    <button type="button" id="notif-on" hidden style="margin-left:auto;font:600 12px/1 var(--texte);letter-spacing:0;text-transform:none;background:var(--brand);color:#111;border:0;border-radius:999px;padding:9px 14px;cursor:pointer">Activer les alertes de messages</button></h2>
-  <div class="msgs" id="msgs"><div class="empty" style="grid-column:1/-1">Chargement…</div></div>
-
-  <!-- ── tous les clients : la file ne montre que le travail à faire ── -->
-  <section class="panel clients">
-    <h2 class="intitule">Tous les clients <span class="n" id="clin"></span></h2>
-    <div class="cli-outils">
-      <input type="search" id="cli-q" placeholder="Rechercher un nom…" aria-label="Rechercher un client" autocomplete="off">
-    </div>
-    <div class="body" id="cli-liste"><div class="empty">Chargement…</div></div>
-  </section>
-
-  <!-- ── cockpit ───────────────────────────────────────────────────────── -->
-  <div class="cock" id="cock">
-
-    <section class="panel">
+    <section class="panel file">
       <h2 class="intitule">La file <span class="n" id="filen"></span></h2>
       <div class="body" id="file"></div>
     </section>
+    <h3 class="s">Échéancier des 4 prochaines semaines</h3>
+    <div class="grille" id="echeancier"><div class="carte"><p class="rien">Chargement…</p></div></div>
+    <p class="sous" style="margin-top:12px">Rythme : Formule 1 = réajustement 4 semaines après la dernière diète · Formule 2 = nouveau menu toutes les 4 semaines · Formule 3 = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif. Les dates suivantes supposent que chaque diète est validée le jour prévu.</p>
+  </section>
 
-    <section class="panel">
-      <h2 class="intitule">Le client</h2>
-      <div class="body pad" id="client">
-        <div class="empty"><b>Personne de sélectionné</b>Choisis un client dans la file, à gauche.</div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h2 class="intitule">Son programme <span class="n" id="progn"></span></h2>
-      <div class="body pad" id="prog">
-        <div class="empty"><b>Aucun programme affiché</b>Il apparaîtra ici, à côté des réponses.</div>
-      </div>
-    </section>
-
-  </div>
-
+  <!-- ═════════════ FICHE CLIENT (ouverte depuis n'importe quel nom) ═════════════ -->
+  <section class="page" id="p-fiche" hidden>
+    <button type="button" class="retour-btn" id="f-retour">← Retour</button>
+    <div class="fmeta" id="fiche-tete"></div>
+    <div class="cock" id="cock">
+      <section class="panel">
+        <h2 class="intitule">Le client</h2>
+        <div class="body pad" id="client">
+          <div class="empty"><b>Personne de sélectionné</b>Choisis un client dans la liste ou dans la file.</div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2 class="intitule">Son programme <span class="n" id="progn"></span></h2>
+        <div class="body pad" id="prog">
+          <div class="empty"><b>Aucun programme affiché</b>Il apparaîtra ici, à côté des réponses.</div>
+        </div>
+      </section>
+    </div>
   <!-- ── décision ──────────────────────────────────────────────────────── -->
   <section class="decide" id="decide" hidden>
     <h2 class="intitule">Ta décision</h2>
@@ -336,10 +419,59 @@
     </div>
   </section>
 
+  </section>
+
+  <!-- ═════════════ MESSAGES ═════════════ -->
+  <section class="page" id="p-msgs" hidden>
+  <!-- ── messagerie : les coachs répondent à la main ── -->
+  <h2 class="intitule" style="margin:4px 0 12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">Messages <span id="msg-nl" style="color:var(--blue)"></span>
+    <button type="button" id="notif-on" hidden style="margin-left:auto;font:600 12px/1 var(--texte);letter-spacing:0;text-transform:none;background:var(--brand);color:#111;border:0;border-radius:999px;padding:9px 14px;cursor:pointer">Activer les alertes de messages</button></h2>
+  <div class="msgs" id="msgs"><div class="empty" style="grid-column:1/-1">Chargement…</div></div>
+
+  </section>
+
+  <!-- ═════════════ SUIVI & RÉSULTATS ═════════════ -->
+  <section class="page" id="p-suivi" hidden>
+    <h2 class="t">Suivi &amp; résultats</h2>
+    <p class="sous">Est-ce que les clients se pèsent, et est-ce que ça avance.</p>
+    <div class="kpis q4">
+      <div class="kpi"><div class="k">Taux de pesée</div><div class="v" id="r-taux">—</div><div class="s" id="r-taux-s">&nbsp;</div></div>
+      <div class="kpi"><div class="k">Perte de poids</div><div class="v" id="r-Perte">—</div><div class="s" id="r-Perte-s">&nbsp;</div></div>
+      <div class="kpi"><div class="k">Prise de masse</div><div class="v" id="r-Prise">—</div><div class="s" id="r-Prise-s">&nbsp;</div></div>
+      <div class="kpi"><div class="k">Maintien</div><div class="v" id="r-Maintien">—</div><div class="s" id="r-Maintien-s">&nbsp;</div></div>
+    </div>
+    <div class="grille" style="margin-top:16px">
+      <div class="carte"><h4>Vers l’objectif du questionnaire</h4><div id="r-prog"></div>
+        <p class="leg">Kilos perdus (ou pris) depuis la première pesée, sur l’objectif annoncé au questionnaire (« 1 à 4 kilos » → 4 kg).</p></div>
+      <div class="carte" id="r-stag"></div>
+    </div>
+  </section>
+
+  <!-- ═════════════ STATISTIQUES ═════════════ -->
+  <section class="page" id="p-stats" hidden>
   <!-- ── statistiques ──────────────────────────────────────────────────── -->
   <section class="stats">
     <h2 class="intitule">Vos statistiques</h2>
     <div class="sgrid" id="stats"></div>
+  </section>
+
+  </section>
+
+  <!-- ═════════════ ÉCONOMIE ═════════════ -->
+  <section class="page" id="p-eco" hidden>
+  <!-- ── abonnements (Damien 27/09) : l'argent viendra de Stripe, rien n'est inventé ── -->
+  <h2 class="intitule" style="margin:4px 0 12px">Abonnements</h2>
+  <div class="kpis abo">
+    <div class="kpi"><div class="k">Formule 1 · 19,90 €</div><div class="v" id="k-f1">—</div><div class="s">Menu unique</div></div>
+    <div class="kpi"><div class="k">Formule 2 · 25,90 €</div><div class="v" id="k-f2">—</div><div class="s">Menu mensuel</div></div>
+    <div class="kpi"><div class="k">Formule 3 · 29,90 €</div><div class="v" id="k-f3">—</div><div class="s">Menu mensuel &amp; recettes</div></div>
+    <div class="kpi"><div class="k">Clients depuis le début</div><div class="v" id="k-total">—</div><div class="s" id="k-total-s">comptes créés sur le site</div></div>
+    <div class="kpi"><div class="k">Montant / 4 semaines</div><div class="v att" id="k-montant">—</div><div class="s" id="k-montant-s">en attente de Stripe</div></div>
+    <div class="kpi"><div class="k">Résiliations</div><div class="v att" id="k-resil">—</div><div class="s" id="k-resil-s">en attente de Stripe</div></div>
+  </div>
+  <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
+
+    <p class="sous">Cette page sera protégée par la double vérification (un code à 6 chiffres sur votre téléphone) dès qu’elle sera activée.</p>
   </section>
 
 </div>
@@ -389,7 +521,7 @@
         '<span>'+(c.questionnaire_valide_at||'').slice(0,10)+'</span></div></button>';
     }).join('');
     box.querySelectorAll('.fitem').forEach(function(b){
-      b.addEventListener('click',function(){ sel=+b.dataset.i; cur=file[sel]; renderFile(); renderClients(); renderClient(); renderProg(); });
+      b.addEventListener('click',function(){ ouvrir(file[+b.dataset.i].user_id); });
     });
     $('filen').textContent=file.length;
   }
@@ -542,16 +674,18 @@
   function nonLus(cid){ return MSG.filter(function(m){ return m.client_id===cid && m.auteur_id===cid && !m.lu_at; }).length; }
   var TITRE=document.title;
   function majNonLus(){ var n=MSG.filter(function(m){ return m.auteur_id===m.client_id&&!m.lu_at; }).length;
-    $('msg-nl').textContent=n?'· '+n+' non lu'+(n>1?'s':''):''; document.title=(n?'('+n+') ':'')+TITRE; }
+    $('msg-nl').textContent=n?'· '+n+' non lu'+(n>1?'s':''):''; document.title=(n?'('+n+') ':'')+TITRE;
+    var p=$('nav-nl'); p.textContent=n; p.hidden=!n; renderJour(); }
   function renderMessages(){
     var fils={}; MSG.forEach(function(m){ fils[m.client_id]=m; });   // dernier message de chaque fil
     var ids=Object.keys(fils).sort(function(a,b){ return (nonLus(b)-nonLus(a)) || (fils[b].created_at>fils[a].created_at?1:-1); });
     majNonLus();
-    if(!ids.length){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Aucun message</b>Les messages des clients arriveront ici.</div>'; return; }
-    if(!filOuvert||!fils[filOuvert]) filOuvert=ids[0];
+    if(!ids.length && !filOuvert){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Aucun message</b>Les messages des clients arriveront ici.</div>'; return; }
+    if(!filOuvert||(!fils[filOuvert]&&!NOMS[filOuvert])) filOuvert=ids[0];
+    if(filOuvert&&!fils[filOuvert]) ids.unshift(filOuvert);     // fil encore vide : le coach écrit le premier
     var h='<div class="fils">'+ids.map(function(id){ var n=nonLus(id);
       return '<button type="button" class="fil'+(id===filOuvert?' on':'')+'" data-fil="'+id+'"><span>'+esc(NOMS[id]||'Client')+
-        '<small>'+esc(fils[id].texte)+'</small></span>'+(n?'<span class="nl">'+n+'</span>':'')+'</button>'; }).join('')+'</div>';
+        '<small>'+esc(fils[id]?fils[id].texte:'Nouveau message')+'</small></span>'+(n?'<span class="nl">'+n+'</span>':'')+'</button>'; }).join('')+'</div>';
     h+='<div class="conv"><div class="bulles" id="bulles">'+MSG.filter(function(m){ return m.client_id===filOuvert; }).map(function(m){
       var lui=m.auteur_id===m.client_id;
       return '<div class="b '+(lui?'lui':'nous')+'">'+esc(m.texte)+'<time>'+(lui?'':'Coach · ')+heure(m.created_at)+'</time></div>'; }).join('')+'</div>'+
@@ -560,7 +694,7 @@
     var b=$('bulles'); b.scrollTop=b.scrollHeight;
     // ouvrir un fil = lire ses messages
     var aLire=MSG.filter(function(m){ return m.client_id===filOuvert && m.auteur_id===filOuvert && !m.lu_at; }).map(function(m){ return m.id; });
-    if(aLire.length && document.visibilityState==='visible') sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(r){
+    if(aLire.length && document.visibilityState==='visible' && voir.p==='msgs') sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(r){
       if(r.error) return;
       MSG.forEach(function(m){ if(aLire.indexOf(m.id)>=0) m.lu_at=new Date().toISOString(); });
       majNonLus(); document.querySelectorAll('.fil.on .nl').forEach(function(x){ x.remove(); }); });
@@ -581,7 +715,7 @@
       if(window.Notification && Notification.permission==='granted') neufs.forEach(function(m){
         var prenom=((NOMS[m.client_id]||'').trim().split(' ')[0])||'un client';
         var n=new Notification('Elysium · message de '+prenom,{body:m.texte.slice(0,140),tag:'ely-msg-'+m.id,icon:'assets/apple-touch-icon.png'});
-        n.onclick=function(){ window.focus(); filOuvert=m.client_id; renderMessages(); $('msgs').scrollIntoView({block:'center'}); n.close(); };
+        n.onclick=function(){ window.focus(); filOuvert=m.client_id; voir('msgs'); n.close(); };
       });
     });
   }
@@ -673,7 +807,7 @@
     sb.from('programmes').update({statut:st,traite_par:moi.id,traite_at:new Date().toISOString()})
       .eq('id',c.programme_id).then(function(r){
         if(r.error){ toast("Impossible d'enregistrer — réessaie."); return; }
-        c.statut=st; c.etape=st; renderFile(); renderProg(); recount(); toast(msg);
+        c.statut=st; c.etape=st; renderFile(); renderProg(); recount(); toast(msg); chargerTout();
       });
   }
   $('b-ok').addEventListener('click',function(){ setStatut('valide','Programme validé ✓'); });
@@ -716,62 +850,193 @@
     });
   });
 
-  /* ---------- tous les clients : recherche, clic = la fiche (questionnaire, suivi, photos, retours, diète) ---------- */
-  var CLIENTS=[], FORM={f1:'Formule 1',f2:'Formule 2',f3:'Formule 3'},
-      ABO={active:'Abonné',trialing:'Abonné',past_due:'Impayé',canceled:'Résilié',aucun:'Pas d’abonnement'};
-  function chargerClients(){
+  /* ================= TABLEAU DE BORD : navigation ================= */
+  function voir(p){
+    document.querySelectorAll('.onglets button').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.p===p); });
+    document.querySelectorAll('.page').forEach(function(x){ x.hidden=x.id!=='p-'+p; });
+    if(p!=='fiche') voir.retour=p;
+    voir.p=p; scrollTo(0,0);
+    var on=document.querySelector('.onglets [aria-selected="true"]');     // onglet actif visible sur téléphone
+    if(on) on.parentNode.scrollLeft=on.offsetLeft-(on.parentNode.clientWidth-on.offsetWidth)/2;
+    if(p==='msgs'&&sb) renderMessages();
+    try{ history.replaceState(null,'',p==='fiche'?location.pathname:'#'+p); }catch(e){}
+  }
+  voir.p='jour'; voir.retour='jour';
+  document.querySelector('.onglets').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) voir(b.dataset.p); });
+  $('f-retour').addEventListener('click',function(){ voir(voir.retour); });
+
+  /* ================= les données de toutes les pages ================= */
+  var D=null, FORM={f1:'Formule 1',f2:'Formule 2',f3:'Formule 3'},
+      ABO={active:'Abonné',trialing:'Abonné',past_due:'Impayé',canceled:'Résilié',aucun:'Sans abonnement'}, ABOTAG={active:'v',trialing:'v',past_due:'r'};
+  function sansAccent(x){ return String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
+  function jours(d){ return Math.floor((Date.now()-new Date(String(d).length<=10?d+'T12:00:00':d).getTime())/JOUR); }
+  function dateFr(d){ return d?new Date(String(d).length<=10?d+'T12:00:00':d).toLocaleDateString('fr-FR'):'—'; }
+  function euros(c){ return ((+c||0)/100).toFixed(2).replace('.',','); }
+  function actif(c){ return !!(c.a&&(c.a.statut==='active'||c.a.statut==='trialing')); }
+  function rep1(rep,deb){ var k=Object.keys(rep||{}).filter(function(x){ return x.indexOf(deb)===0; })[0]; return k?String(rep[k]):''; }
+  function objectif(rep){ var o=rep1(rep,'Quel est ton objectif principal'); return /perte/i.test(o)?'Perte':/prise/i.test(o)?'Prise':o?'Maintien':''; }
+  function palier(rep){ var n=rep1(rep,'Si l’aspect du poids est important').match(/\d+/g); return n?+n[n.length-1]:null; }   // « 5 à 8 kilos » -> 8
+  function nomLien(c){ return '<b class="nom" role="button" tabindex="0" data-u="'+esc(c.id)+'">'+esc(c.nom)+'</b>'; }
+  function ligne(g,d){ return '<div class="ligne"><span>'+g+'</span><span>'+d+'</span></div>'; }
+  function carte(t,n,L,vide){ return '<div class="carte"><h4>'+t+' <span class="n">'+n+'</span></h4>'+(L.length?L.join(''):'<p class="rien">'+(vide||'Rien à signaler.')+'</p>')+'</div>'; }
+  function geste(x){ return x&&x.diagnostic&&x.diagnostic.suivi&&x.diagnostic.suivi.geste; }
+  function typeDiete(x){ var g=geste(x); return g==='reajuster'?'<span class="tag v">Réajustement</span>':g?'<span class="tag j">Nouveau menu</span>':'<span class="tag b">1re diète</span>'; }
+  function suivis(){ var act=D.clients.filter(actif); return act.length?act:D.clients.filter(function(c){ return c.q; }); }
+
+  function chargerTout(){
     return Promise.all([
-      sb.from('profiles').select('id,prenom,nom,sexe,naissance,taille_cm,formule,created_at').order('created_at',{ascending:false}),
-      sb.from('abonnements').select('user_id,formule,statut,resiliation_prevue'),
-      sb.from('poids').select('user_id,date,kg').order('date'),   // ponytail: toutes les pesées, une vue « dernière pesée » quand il y aura des centaines de clients
-      sb.from('questionnaires').select('user_id,statut'),
-      sb.from('admins').select('user_id')
+      sb.from('profiles').select('id,prenom,nom,sexe,naissance,taille_cm,formule,created_at'),
+      sb.from('abonnements').select('user_id,formule,statut,montant_cents,periode_fin,resiliation_prevue'),
+      sb.from('poids').select('user_id,date,kg').order('date'),   // ponytail: toutes les pesées ; une vue agrégée quand il y aura des centaines de clients
+      sb.from('questionnaires').select('user_id,statut,reponses'),
+      sb.from('admins').select('user_id'),
+      sb.from('programmes').select('id,user_id,version,statut,diagnostic,created_at,traite_at').order('version'),
+      sb.from('retours').select('user_id,plat,created_at').eq('avis','plus_jamais').order('created_at',{ascending:false}).limit(8)
     ]).then(function(r){
-      var ab={}, pd={}, qv={}, coach={};
-      (r[1].data||[]).forEach(function(a){ ab[a.user_id]=a; });
-      (r[2].data||[]).forEach(function(w){ pd[w.user_id]=w; });
-      (r[3].data||[]).forEach(function(q){ if(q.statut==='valide') qv[q.user_id]=1; });
-      (r[4].data||[]).forEach(function(a){ coach[a.user_id]=1; });
-      CLIENTS=(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
-        return {p:p, a:ab[p.id], w:pd[p.id], q:!!qv[p.id], nom:((p.prenom||'')+' '+(p.nom||'')).trim()}; });
-      renderClients();
-    }).catch(function(){ $('cli-liste').innerHTML='<div class="empty">Liste indisponible pour le moment.</div>'; });
+      var par=function(rows,multi){ var o={}; (rows||[]).forEach(function(x){ if(multi)(o[x.user_id]=o[x.user_id]||[]).push(x); else o[x.user_id]=x; }); return o; };
+      var coach={}; (r[4].data||[]).forEach(function(a){ coach[a.user_id]=1; });
+      var ab=par(r[1].data), pd=par(r[2].data,1), qs=par(r[3].data), pr=par(r[5].data,1);
+      D={retours:r[6].data||[], par:{}, clients:(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
+        var q=qs[p.id], rep=(q&&q.statut==='valide'&&q.reponses)||{}, w=pd[p.id]||[];
+        return {id:p.id, p:p, nom:((p.prenom||'')+' '+(p.nom||'')).trim()||'Sans nom', a:ab[p.id]||null, w:w, der:w[w.length-1]||null,
+          q:!!(q&&q.statut==='valide'), rep:rep, obj:objectif(rep), prog:pr[p.id]||[]}; })};
+      D.clients.forEach(function(c){ D.par[c.id]=c; });
+      $('g-noms').innerHTML=D.clients.map(function(c){ return '<option value="'+esc(c.nom)+'">'; }).join('');
+      renderJour(); renderTable(); renderResultats(); renderEcheancier();
+    }).catch(function(e){ console.error(e); toast('Tableau de bord indisponible, recharge la page.'); });
   }
-  function sansAccent(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
-  function renderClients(){
-    var t=sansAccent($('cli-q').value.trim()), box=$('cli-liste');
-    var L=CLIENTS.filter(function(c){ return !t||sansAccent(c.nom).indexOf(t)>=0; });
-    $('clin').textContent=CLIENTS.length;
-    if(!L.length){ box.innerHTML='<div class="empty">'+(CLIENTS.length?'Aucun client à ce nom.':'Aucun client pour le moment.')+'</div>'; return; }
-    box.innerHTML=L.map(function(c){
-      var f=(c.a&&c.a.formule)||c.p.formule, st=c.a?c.a.statut:'aucun', j=c.w?Math.floor((Date.now()-new Date(c.w.date+'T12:00:00'))/JOUR):null;
-      return '<button type="button" class="fitem'+(cur&&cur.user_id===c.p.id?' on':'')+'" data-u="'+esc(c.p.id)+'">'+
-        '<div class="nm">'+esc(c.nom||'Sans nom')+'</div>'+
-        '<div class="mt"><span>'+(FORM[f]||'Sans formule')+' · '+(ABO[st]||st)+(c.a&&c.a.resiliation_prevue?' (fin prévue)':'')+'</span></div>'+
-        '<div class="mt"><span'+(j!=null&&j>=7?' class="retard"':'')+'>'+(c.w?'Pesée : '+fr(c.w.kg)+' kg, '+(j?'il y a '+j+' j':'aujourd’hui'):'Aucune pesée')+'</span>'+
-        (c.q?'':'<span>· questionnaire à remplir</span>')+'</div></button>';
-    }).join('');
+
+  /* ---------- AUJOURD'HUI ---------- */
+  function renderJour(){
+    if(!D) return;
+    var C=D.clients, base=suivis(), d=new Date(), mois=new Date(d.getFullYear(),d.getMonth(),1).toISOString();
+    var cl=function(id){ return D.par[id]||{id:id,nom:(NOMS[id]||'Client').trim()}; };
+    $('j-actifs').textContent=C.filter(actif).length;
+    $('j-dietes').textContent=C.reduce(function(t,c){ return t+c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at&&x.traite_at>=mois; }).length; },0);
+    $('j-mrr').innerHTML=euros(C.reduce(function(t,c){ return t+(c.a&&['active','trialing','past_due'].indexOf(c.a.statut)>=0?(+c.a.montant_cents||0):0); },0))+' <small>€</small>';
+    var pes=base.filter(function(c){ return c.der&&jours(c.der.date)<7; }).length;
+    $('j-pesees').innerHTML=pes+'<small> / '+base.length+'</small>';
+    $('j-pesees-s').textContent=base.length?Math.round(pes/base.length*100)+' % des clients suivis':'aucun client suivi pour l’instant';
+    var relire=file.filter(function(c){ return c.etape==='a_relire'||c.etape==='rectification'; }).map(function(c){
+      return ligne(nomLien(cl(c.user_id)), c.etape==='rectification'?'<span class="tag r">À corriger</span>':typeDiete(c)); });
+    var nouveaux=file.filter(function(c){ return c.etape==='a_generer'; }).map(function(c){ return ligne(nomLien(cl(c.user_id)), c.questionnaire_valide_at?heure(c.questionnaire_valide_at):''); });
+    var retard=C.filter(function(c){ return c.prog.some(function(x){ return x.statut==='valide'; }); })
+      .map(function(c){ return {c:c, j:c.der?jours(c.der.date):null}; }).filter(function(x){ return x.j==null||x.j>=7; })
+      .sort(function(a,b){ return (b.j==null?999:b.j)-(a.j==null?999:a.j); })
+      .map(function(x){ return ligne(nomLien(x.c), x.j==null?'<span class="retard">aucune pesée</span>':'<span'+(x.j>=14?' class="retard"':'')+'>'+x.j+' jours</span>'); });
+    var impayes=C.filter(function(c){ return c.a&&c.a.statut==='past_due'; }).map(function(c){ return ligne(nomLien(c), (FORM[c.a.formule]||'')+' · '+euros(c.a.montant_cents)+' €'); });
+    var nl={}; MSG.forEach(function(m){ if(m.auteur_id===m.client_id&&!m.lu_at) nl[m.client_id]=m; });
+    var msgs=Object.keys(nl).map(function(id){ var t=nl[id].texte;
+      return ligne('<b class="nom" role="button" tabindex="0" data-msg="'+esc(id)+'">'+esc(cl(id).nom)+'</b>', '« '+esc(t.slice(0,46))+(t.length>46?'…':'')+' »'); });
+    var pj=D.retours.map(function(x){ return ligne(nomLien(cl(x.user_id)), esc(String(x.plat).replace(/_/g,' '))); });
+    $('jour-cartes').innerHTML=carte('Diètes à relire',relire.length,relire,'Rien à relire.')+carte('Nouveaux questionnaires',nouveaux.length,nouveaux,'Aucun nouveau questionnaire.')+
+      carte('Pesées en retard',retard.length,retard,'Tout le monde est à jour.')+carte('Impayés en cours',impayes.length,impayes,'Aucun impayé.')+
+      carte('Messages non lus',msgs.length,msgs,'Tout est lu.')+carte('Retours « plus jamais »',pj.length,pj,'Aucun retour pour l’instant.');
   }
-  $('cli-q').addEventListener('input',renderClients);
-  $('cli-liste').addEventListener('click',function(e){
-    var b=e.target.closest('.fitem'); if(!b) return;
-    var id=b.dataset.u, i=file.findIndex(function(x){ return x.user_id===id; });
-    function montrer(){ renderFile(); renderClients(); renderClient(); renderProg(); $('cock').scrollIntoView({behavior:'smooth',block:'start'}); }
-    if(i>=0){ sel=i; cur=file[i]; montrer(); return; }       // déjà dans la file : même fiche, décisions comprises
-    var c=CLIENTS.filter(function(x){ return x.p.id===id; })[0]; if(!c) return;
-    Promise.all([
-      sb.from('questionnaires').select('reponses,statut').eq('user_id',id).order('created_at',{ascending:false}).limit(1),
-      sb.from('programmes').select('id,version,menu,cible,diagnostic,statut').eq('user_id',id).order('version',{ascending:false}).limit(1)
-    ]).then(function(r){
-      var q=(r[0].data||[])[0], pr=(r[1].data||[])[0], p=c.p;
-      sel=null;
-      cur={user_id:id, prenom:p.prenom, nom:p.nom, sexe:p.sexe, naissance:p.naissance, taille_cm:p.taille_cm,
-        reponses:(q&&q.statut==='valide'&&q.reponses)||{}, dernier_poids:c.w?c.w.kg:null,
+
+  /* ---------- CLIENTS : tableau filtrable et triable ---------- */
+  var tri={k:'insc',s:-1};
+  var VAL={nom:function(c){ return sansAccent(c.nom); }, formule:function(c){ return (c.a&&c.a.formule)||c.p.formule||'z'; }, abo:function(c){ return ABO[c.a?c.a.statut:'aucun']||'z'; },
+    obj:function(c){ return c.obj||'z'; }, pesee:function(c){ return c.der?c.der.date:''; }, ech:function(c){ return (c.a&&c.a.statut!=='canceled'&&c.a.periode_fin)||''; }, insc:function(c){ return c.p.created_at||''; }};
+  function renderTable(){
+    if(!D) return;
+    var q=sansAccent($('c-q').value.trim()), f=$('c-f').value, st=$('c-s').value, o=$('c-o').value;
+    var L=D.clients.filter(function(c){ var fm=(c.a&&c.a.formule)||c.p.formule;
+      return (!q||sansAccent(c.nom).indexOf(q)>=0)&&(!f||fm===f)&&(!st||ABO[c.a?c.a.statut:'aucun']===st)&&(!o||c.obj===o); })
+      .sort(function(a,b){ var x=VAL[tri.k](a), y=VAL[tri.k](b); return (x>y?1:x<y?-1:0)*tri.s; });
+    $('clin').textContent=D.clients.length;
+    $('c-tb').innerHTML=L.map(function(c){ var s2=c.a?c.a.statut:'aucun', j=c.der?jours(c.der.date):null, fm=(c.a&&c.a.formule)||c.p.formule;
+      return '<tr data-u="'+esc(c.id)+'"><td><b class="nom">'+esc(c.nom)+'</b>'+(c.q?'':'<br><small>questionnaire à remplir</small>')+'</td><td>'+(FORM[fm]||'—')+'</td>'+
+        '<td><span class="tag '+(ABOTAG[s2]||'')+'">'+(ABO[s2]||s2)+'</span>'+(c.a&&c.a.resiliation_prevue?' <small>fin prévue</small>':'')+'</td><td>'+(c.obj||'—')+'</td>'+
+        '<td'+(j!=null&&j>=7?' class="retard"':'')+'>'+(c.der?fr(c.der.kg)+' kg · '+(j?'il y a '+j+' j':'aujourd’hui'):'aucune')+'</td>'+
+        '<td>'+(c.a&&s2!=='canceled'&&c.a.periode_fin?dateFr(c.a.periode_fin):'—')+'</td><td>'+dateFr(c.p.created_at)+'</td></tr>'; }).join('')
+      || '<tr><td colspan="7">'+(D.clients.length?'Aucun client ne correspond.':'Aucun client pour le moment.')+'</td></tr>';
+  }
+  ['c-q','c-f','c-s','c-o'].forEach(function(id){ $(id).addEventListener('input',renderTable); });
+  document.querySelectorAll('.tab th[data-k]').forEach(function(th){ th.addEventListener('click',function(){
+    tri.s = tri.k===th.dataset.k ? -tri.s : 1; tri.k=th.dataset.k;
+    document.querySelectorAll('.tab th').forEach(function(x){ x.removeAttribute('aria-sort'); });
+    th.setAttribute('aria-sort',tri.s>0?'ascending':'descending'); renderTable(); }); });
+
+  /* ---------- FICHE : depuis la file, la liste, un nom, la recherche ---------- */
+  function ouvrir(id){
+    function montrer(){ renderFile(); renderTete(); renderClient(); renderProg(); voir('fiche'); }
+    var i=file.findIndex(function(x){ return x.user_id===id; });
+    if(i>=0){ sel=i; cur=file[i]; montrer(); return; }        // dans la file : même fiche, décisions comprises
+    var c=D&&D.par[id]; if(!c) return;
+    sb.from('programmes').select('id,version,menu,cible,diagnostic,statut').eq('user_id',id).order('version',{ascending:false}).limit(1).then(function(r){
+      var pr=(r.data||[])[0], p=c.p; sel=null;
+      cur={user_id:id, prenom:p.prenom, nom:p.nom, sexe:p.sexe, naissance:p.naissance, taille_cm:p.taille_cm, reponses:c.rep, dernier_poids:c.der?c.der.kg:null,
         programme_id:pr&&pr.id, version:pr&&pr.version, menu:pr&&pr.menu, cible:pr&&pr.cible, diagnostic:pr&&pr.diagnostic, statut:pr&&pr.statut,
-        etape: pr ? (pr.statut==='en_attente'?'a_relire':pr.statut) : (q&&q.statut==='valide'?'a_generer':'sans_questionnaire')};
+        etape: pr ? (pr.statut==='en_attente'?'a_relire':pr.statut) : (c.q?'a_generer':'sans_questionnaire')};
       montrer();
     });
+  }
+  function renderTete(){
+    var c=D&&D.par[cur.user_id], h='';
+    if(c){ var st=c.a?c.a.statut:'aucun', fm=(c.a&&c.a.formule)||c.p.formule;
+      h='<span class="tag b">'+(FORM[fm]||'Sans formule')+'</span><span class="tag '+(ABOTAG[st]||'')+'">'+(ABO[st]||st)+'</span>'+
+        (c.obj?'<span class="tag">'+c.obj+'</span>':'')+(c.a&&st!=='canceled'&&c.a.periode_fin?'<span class="tag">échéance '+dateFr(c.a.periode_fin)+'</span>':'')+
+        '<span class="tag">inscrit le '+dateFr(c.p.created_at)+'</span>'; }
+    $('fiche-tete').innerHTML=h+'<button type="button" class="mini" data-msg="'+esc(cur.user_id)+'">Écrire un message</button>';
+  }
+  document.addEventListener('click',function(e){
+    if(!e.target.closest) return;
+    var m=e.target.closest('[data-msg]'); if(m){ filOuvert=m.getAttribute('data-msg'); voir('msgs'); return; }
+    var u=e.target.closest('[data-u]'); if(u) ouvrir(u.getAttribute('data-u'));
   });
+  document.addEventListener('keydown',function(e){ var n=e.target.closest&&e.target.closest('.nom[role="button"]'); if(n&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); n.click(); } });
+  $('g-q').addEventListener('change',function(){
+    var v=sansAccent(this.value.trim()); if(!D||!v) return;
+    var c=D.clients.filter(function(x){ return sansAccent(x.nom).indexOf(v)===0; })[0]||D.clients.filter(function(x){ return sansAccent(x.nom).indexOf(v)>=0; })[0];
+    if(c){ ouvrir(c.id); this.value=''; this.blur(); } else toast('Aucun client à ce nom.');
+  });
+
+  /* ---------- DIÈTES : échéancier des 4 prochaines semaines ----------
+     ⚠️ MÊME RÈGLE que suivi.py côté moteur (RYTHME, STATUTS_ACTIFS) : toute modification doit toucher LES DEUX. */
+  var RYTHME={f1:{reajuster:28,nouveau_menu:null},f2:{reajuster:null,nouveau_menu:28},f3:{reajuster:7,nouveau_menu:28}};
+  function renderEcheancier(){
+    var auj=new Date(); auj.setHours(0,0,0,0);
+    var lundi=new Date(auj); lundi.setDate(auj.getDate()-((auj.getDay()+6)%7));
+    var sem=[0,1,2,3].map(function(i){ var d=new Date(lundi); d.setDate(lundi.getDate()+7*i); return {d:d,L:[]}; }), fin=new Date(lundi.getTime()+28*JOUR);
+    var jm=function(d){ return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); };
+    D.clients.forEach(function(c){
+      var r=c.a&&RYTHME[c.a.formule]; if(!r||!actif(c)) return;
+      if(c.prog.some(function(x){ return x.statut==='en_attente'||x.statut==='rectification'; })) return;   // une version attend déjà les coachs
+      var val=c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at; }).sort(function(a,b){ return a.traite_at>b.traite_at?1:-1; }); if(!val.length) return;
+      var T=new Date(val[val.length-1].traite_at), menus=val.filter(function(x){ return geste(x)!=='reajuster'; }), N=new Date((menus.length?menus[menus.length-1]:val[0]).traite_at);
+      var pese=c.w.some(function(w){ return new Date(w.date+'T23:59:59')>=T; }), ev=[], d;
+      // ponytail: projection naïve, chaque diète supposée validée le jour prévu
+      if(r.nouveau_menu) for(d=new Date(N.getTime()+r.nouveau_menu*JOUR); d<fin; d=new Date(d.getTime()+r.nouveau_menu*JOUR)) ev.push({d:d,g:'menu'});
+      if(r.reajuster) for(d=new Date(T.getTime()+r.reajuster*JOUR); d<fin; d=new Date(d.getTime()+r.reajuster*JOUR)){ var dd=d;
+        if(!ev.some(function(e){ return Math.abs(e.d-dd)<7*JOUR; })) ev.push({d:dd,g:'reaj'}); }      // le nouveau menu recalcule aussi les grammes
+      ev.sort(function(a,b){ return a.d-b.d; }).forEach(function(e,i){
+        var k=Math.max(0,Math.floor((e.d-lundi)/(7*JOUR))); if(k<=3) sem[k].L.push({c:c,g:e.g,d:e.d,bloque:i===0&&!pese}); });
+    });
+    $('echeancier').innerHTML=sem.map(function(s){ return carte('Semaine du '+jm(s.d), s.L.length, s.L.sort(function(a,b){ return a.d-b.d; }).map(function(x){
+      return ligne(nomLien(x.c), x.bloque?'<span class="retard">en attente d’une pesée</span>':(x.g==='menu'?'<span class="tag j">Nouveau menu</span>':'<span class="tag v">Réajustement</span>')+
+        ' · '+(FORM[x.c.a.formule]||'')+' · '+(x.d<auj?'<span class="retard">en retard</span>':jm(x.d))); }),'Rien de prévu.'); }).join('');
+  }
+
+  /* ---------- SUIVI & RÉSULTATS ---------- */
+  function renderResultats(){
+    var C=D.clients, base=suivis(), pes=base.filter(function(c){ return c.der&&jours(c.der.date)<7; }).length;
+    $('r-taux').innerHTML=(base.length?Math.round(pes/base.length*100):0)+' <small>%</small>';
+    $('r-taux-s').textContent=pes+' sur '+base.length+' pesé'+(pes>1?'s':'')+' depuis 7 jours';
+    var grp={Perte:[],Prise:[],Maintien:[]};
+    C.forEach(function(c){ if(c.w.length<2||!grp[c.obj]) return; var a=c.w[0], b=c.der, sem=(new Date(b.date)-new Date(a.date))/(7*JOUR); if(sem>=1) grp[c.obj].push((b.kg-a.kg)/sem); });
+    Object.keys(grp).forEach(function(o){ var L=grp[o], m=L.length?L.reduce(function(t,x){ return t+x; },0)/L.length:null;
+      $('r-'+o).innerHTML=m==null?'—':(m>0?'+':m<0?'−':'')+fr(Math.abs(m))+' <small>kg / sem.</small>';
+      $('r-'+o+'-s').textContent=L.length?'moyenne sur '+L.length+' client'+(L.length>1?'s':''):'au moins une semaine de pesées nécessaire'; });
+    var P=C.filter(function(c){ return c.w.length>=2&&palier(c.rep); }).map(function(c){ var ev=c.der.kg-c.w[0].kg, pal=palier(c.rep);
+      return {c:c, ev:ev, pal:pal, pct:Math.max(0,Math.min(100,Math.round(ev*(c.obj==='Prise'?1:-1)/pal*100)))}; }).sort(function(a,b){ return b.pct-a.pct; });
+    $('r-prog').innerHTML=P.length?'<div class="pbars">'+P.map(function(x){ return '<div class="pbar">'+nomLien(x.c)+'<span class="bt"><i style="width:'+x.pct+'%"></i></span><span class="bv">'+
+      (x.ev>0?'+':'')+fr(x.ev)+' / '+x.pal+' kg</span></div>'; }).join('')+'</div>':'<p class="rien">Il faut au moins 2 pesées et un objectif de poids au questionnaire.</p>';
+    var stag=C.filter(function(c){ if(c.w.length<3) return false; var t=c.w.slice(-3).map(function(x){ return +x.kg; }); return Math.max.apply(null,t)-Math.min.apply(null,t)<=0.3; })
+      .map(function(c){ return ligne(nomLien(c), c.w.slice(-3).map(function(x){ return fr(x.kg); }).join(' · ')+' kg'); });
+    $('r-stag').innerHTML='<h4>Poids stable sur 3 pesées <span class="n">'+stag.length+'</span></h4>'+(stag.join('')||'<p class="rien">Aucun client concerné.</p>')+
+      '<p class="leg">Affichage seulement : vos règles pour ces cas viendront plus tard.</p>';
+  }
 
   /* ---------- chiffres + statistiques ---------- */
   function recount(){
@@ -827,8 +1092,8 @@
       ]).then(function(res){
         file=(res[0].data)||[]; renderFile(); recount(); compterRetards(); chargerAbo(); chargerMessages();
         renderStats((res[1].data)||[], ((res[2].data)||[]).length);
-        chargerClients();
-        if(file.length){ sel=0; cur=file[0]; renderFile(); renderClient(); renderProg(); }
+        chargerTout();
+        var h=location.hash.slice(1); voir(['jour','clients','dietes','msgs','suivi','stats','eco'].indexOf(h)>=0?h:'jour');
         requestAnimationFrame(function(){ document.querySelectorAll('.bf').forEach(function(b){ b.style.width=b.style.width; }); });
       });
     });

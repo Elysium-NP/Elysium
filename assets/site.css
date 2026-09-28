@@ -710,7 +710,7 @@ html[data-theme="obscur"] .btn.line:hover{color:var(--fond)}
 /* ===== CARTES DE FORMULE : survol / toucher (Yoann 28/09) =====
    F1 : pas de néon, la carte se soulève simplement. F2 et F3 : leur néon s'amplifie. */
 .plan{transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease}
-.plan:not(.feat):hover,.plan:not(.feat):active{border-color:var(--line);transform:translateY(-6px);box-shadow:0 22px 40px -28px rgba(60,45,20,.45)}
+.plan:not(.feat):hover,.plan:not(.feat):active,html.reveal-ready .plan.reveal.in:not(.feat):hover,html.reveal-ready .plan.reveal.in:not(.feat):active{border-color:var(--line);transform:translateY(-6px);box-shadow:0 22px 40px -28px rgba(60,45,20,.45)}
 html .plan.feat:hover,html .plan.feat:active,html.reveal-ready .plan.feat.in:hover{transform:translateY(-6px);
   box-shadow:0 0 0 2px rgba(46,155,255,.65),0 0 64px -4px rgba(46,155,255,.7),0 34px 70px -34px rgba(20,102,184,.75)}
 html .plan.feat.complet:hover,html .plan.feat.complet:active,html.reveal-ready .plan.feat.complet.in:hover{

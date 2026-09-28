@@ -249,6 +249,27 @@
           throw new Error((r.data && r.data.erreur) || "Paiement indisponible pour le moment."); });
       });
     },
+    /* ACHAT À L'UNITÉ (boutique, 28/09 ; e-book d'abord) : même garde-fou que payer, puis page Stripe.
+       L'appelant a déjà fait cocher la case « accès immédiat / perte du droit de rétractation ».
+       Les refus du serveur (« Pas encore disponible », « Tu l'as déjà »…) remontent en message d'erreur. */
+    acheter: function (produit) {
+      if (!sb) return Promise.reject(new Error("Paiement indisponible pour le moment."));
+      return sb.auth.getUser().then(function (r) {
+        var usr = r && r.data && r.data.user, ici = location.pathname.split("/").pop() || "espace.html";
+        if (!usr) { location.href = "connexion.html"; throw new Error("Connecte-toi pour acheter."); }
+        if (!aDeclare(usr.user_metadata)) {
+          location.href = "precautions.html?retour=" + encodeURIComponent(ici);
+          throw new Error("Une étape reste à valider avant le paiement.");
+        }
+        return sb.functions.invoke("stripe-paiement", { body: { action: "achat", produit: produit, renonciation: true } })
+        .then(function (r) {
+          if (r.data && r.data.url) { location.href = r.data.url; return; }
+          var c = r.error && r.error.context;          // réponse non 2xx : le message est dans son corps JSON
+          return (c && c.json ? c.json().catch(function () { return {}; }) : Promise.resolve(r.data || {}))
+            .then(function (d) { throw new Error((d && d.erreur) || "Paiement indisponible pour le moment."); });
+        });
+      });
+    },
     /* Précautions : liste affichée (inscription.html, precautions.html) + déclaration à enregistrer. */
     situations: SITUATIONS,
     declaration: declaration,

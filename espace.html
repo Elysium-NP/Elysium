@@ -213,6 +213,14 @@
   /* ===== TOUTE LA PAGE AU MÊME STYLE (Dimitri 28/09 « cohérent jusqu'au bout ») =====
      blocs : coins arrondis 14 px ; blocs à titre : en-tête pastel (jaune, vert, violet, bleu en alternance) */
   .cat,.acard,.dayoff,.stat,.phd,.pesee-rappel,.drop{border-radius:14px}
+  /* galerie des photos de suivi */
+  .galerie{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:12px}
+  .galerie:empty{display:none}
+  .ph-item{margin:0}
+  .ph-item img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+  .ph-item figcaption{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--steel);margin-top:4px}
+  .ph-suppr{border:0;background:none;color:var(--steel);font-size:16px;line-height:1;cursor:pointer;padding:2px 4px}
+  .ph-suppr:hover{color:#b45309}
   .chart-empty{border-radius:12px}
   .cat,.acard{padding:0 0 10px;overflow:hidden}
   .cat h4,.acard h4{margin:0 0 6px;padding:10px 16px;border-bottom:1px solid var(--bc);background:var(--pc);color:var(--ice);font:600 13px/1.25 var(--texte);letter-spacing:.06em}
@@ -345,7 +353,8 @@
       <label class="drop" id="drop">Glisse une photo ici, ou clique pour choisir
         <input type="file" accept="image/*" hidden id="photo">
       </label>
-      <p id="photomsg" class="foot-note"></p>
+      <p id="photomsg" class="foot-note" aria-live="polite"></p>
+      <div class="galerie" id="galerie"></div>
     </div>
 
     <!-- MESSAGES avec les coachs (table messages) -->
@@ -913,10 +922,46 @@ var PROG = {
   document.getElementById('wgoal').addEventListener('click',askGoal);
   document.getElementById('seeddata').addEventListener('click',seedDemo);
 
-  // ---- photo (démo) ----
-  var photo=document.getElementById('photo');
-  document.getElementById('drop').addEventListener('click',function(){ photo.click(); });
-  photo.addEventListener('change',function(){ if(photo.files&&photo.files[0]) document.getElementById('photomsg').textContent='« '+photo.files[0].name+' » sélectionnée (l\'upload réel viendra avec Supabase Storage).'; });
+  // ---- PHOTOS DE SUIVI : stockage PRIVÉ Supabase (bucket photos-suivi, dossier du client) ----
+  // Réduites dans le navigateur (1 600 px, JPEG) avant l'envoi. Affichage par liens signés d'une heure.
+  var photo=document.getElementById('photo'), pmsg=document.getElementById('photomsg'), BUCKET='photos-suivi';
+  function reduire(f){ return new Promise(function(ok,ko){
+    var img=new Image(), url=URL.createObjectURL(f);
+    img.onload=function(){ var k=Math.min(1,1600/Math.max(img.width,img.height)), c=document.createElement('canvas');
+      c.width=Math.round(img.width*k); c.height=Math.round(img.height*k); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url); c.toBlob(function(b){ b?ok(b):ko(new Error('image')); },'image/jpeg',.85); };
+    img.onerror=function(){ URL.revokeObjectURL(url); ko(new Error('image')); }; img.src=url; }); }
+  function chargerPhotos(){
+    return sb.storage.from(BUCKET).list(u.id,{limit:100,sortBy:{column:'name',order:'desc'}}).then(function(r){
+      var g=document.getElementById('galerie');
+      if(r.error){ g.innerHTML=''; return; }
+      var L=(r.data||[]).filter(function(f){ return /\.(jpe?g|png|webp)$/i.test(f.name); });
+      if(!L.length){ g.innerHTML=''; return; }
+      return sb.storage.from(BUCKET).createSignedUrls(L.map(function(f){ return u.id+'/'+f.name; }),3600).then(function(s){
+        g.innerHTML=(s.data||[]).map(function(x,i){ var d=L[i].name.slice(0,10).split('-').reverse().join('/');
+          return '<figure class="ph-item"><img src="'+esc(x.signedUrl)+'" alt="Photo du '+d+'" loading="lazy"><figcaption>'+d+
+            '<button type="button" class="ph-suppr" data-p="'+esc(u.id+'/'+L[i].name)+'" aria-label="Supprimer la photo du '+d+'">×</button></figcaption></figure>'; }).join('');
+      });
+    }).catch(function(){});
+  }
+  photo.addEventListener('change',function(){
+    var f=photo.files&&photo.files[0]; if(!f) return;
+    if(!/^image\//.test(f.type)){ pmsg.textContent='Choisis une image (JPEG, PNG…).'; return; }
+    pmsg.textContent='Envoi de ta photo…';
+    reduire(f).then(function(b){
+      var d=new Date(), j=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      return sb.storage.from(BUCKET).upload(u.id+'/'+j+'_'+Math.random().toString(36).slice(2,8)+'.jpg',b,{contentType:'image/jpeg',upsert:false});
+    }).then(function(r){
+      photo.value='';
+      if(r.error){ pmsg.textContent='Photo non enregistrée, réessaie dans un instant.'; return; }
+      pmsg.textContent='Photo enregistrée : elle reste privée, seuls tes coachs peuvent la voir.'; chargerPhotos();
+    }).catch(function(){ photo.value=''; pmsg.textContent='Cette image n’a pas pu être lue. Essaie une autre photo.'; });
+  });
+  document.getElementById('galerie').addEventListener('click',function(e){
+    var b=e.target.closest('.ph-suppr'); if(!b) return;
+    if(!confirm('Supprimer cette photo ? Elle sera effacée définitivement.')) return;
+    sb.storage.from(BUCKET).remove([b.getAttribute('data-p')]).then(function(r){ pmsg.textContent=r.error?'Suppression impossible pour le moment.':'Photo supprimée.'; chargerPhotos(); });
+  });
 
   // ---- mensurations (démo : dernière saisie mémorisée dans le navigateur) ----
   var MK='ely_mens'+UID, mfields=['epaules','poitrine','taille','hanches','cuisse','bras'];
@@ -1025,7 +1070,7 @@ var PROG = {
   renderAbo();
   ElyAuth.ready.then(function(){ renderAbo(); renderProgram(); });   // état relu en base (abonnement Stripe)
   refresh();
-  chargerMens();
+  chargerMens(); chargerPhotos();
   chargerMsgs().then(function(){
     if(document.getElementById('c-msg').hidden) return;          // messagerie pas active : pas de relève
     setInterval(chargerMsgs,30000);                               // relève toutes les 30 s

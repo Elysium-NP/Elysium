@@ -47,6 +47,9 @@
   .suivi svg path{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
   .suivi svg circle{fill:var(--blue)}
   .suivi .mens{font-size:13px;color:var(--steel);margin-top:8px}
+  .ph-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:6px}
+  .ph-grille a{display:block;text-decoration:none;color:var(--steel);font-size:11px}
+  .ph-grille img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
   @media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}}
   .kpi{position:relative;border:1px solid var(--line);background:linear-gradient(180deg,rgba(46,155,255,.05),rgba(60,45,20,0));
     padding:16px 18px;overflow:hidden}
@@ -429,7 +432,16 @@
       if(m){ var L={epaules:'Épaules',poitrine:'Poitrine',taille:'Taille',hanches:'Hanches',cuisse:'Cuisse',bras:'Bras'};
         var t=Object.keys(L).filter(function(k){ return m[k]!=null; }).map(function(k){ return L[k]+' '+fr(m[k])+' cm'; });
         if(t.length) h+='<div class="mens">Mensurations du '+new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR')+' : '+t.join(' · ')+'</div>'; }
-      el.innerHTML=h;
+      el.innerHTML=h+'<div class="ph-coach" id="ph-coach"></div>';
+      // photos de suivi du client (stockage privé, liens signés d'une heure)
+      sb.storage.from('photos-suivi').list(uid,{limit:50,sortBy:{column:'name',order:'desc'}}).then(function(p){
+        var L=((p&&p.data)||[]).filter(function(f){ return /\.(jpe?g|png|webp)$/i.test(f.name); }); if(!L.length) return;
+        return sb.storage.from('photos-suivi').createSignedUrls(L.map(function(f){ return uid+'/'+f.name; }),3600).then(function(s){
+          var c=$('ph-coach'); if(!c||!file[sel]||file[sel].user_id!==uid) return;
+          c.innerHTML='<div class="mens">Photos ('+L.length+')</div><div class="ph-grille">'+(s.data||[]).map(function(x,i){
+            return '<a href="'+esc(x.signedUrl)+'" target="_blank" rel="noopener"><img src="'+esc(x.signedUrl)+'" alt="Photo du '+L[i].name.slice(0,10)+'" loading="lazy"><span>'+L[i].name.slice(0,10).split('-').reverse().join('/')+'</span></a>'; }).join('')+'</div>';
+        });
+      }).catch(function(){});
     }).catch(function(){ var el=$('suivi'); if(el) el.innerHTML='<h4>Suivi</h4><div class="chiffres">Pesées indisponibles pour le moment.</div>'; });
   }
   // compteur : clients de la file dont la dernière pesée a 7 jours ou plus (ou aucune pesée)

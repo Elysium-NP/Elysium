@@ -857,7 +857,7 @@ var PROG = {
   }
 
   var bonjour=document.querySelector('.dash-hd h1');
-  var NOM_FORMULE={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Élysium'};
+  var NOM_FORMULE={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Elysium'};
   function cleFormule(v){ v=String(v||''); if(/^f[123]$/.test(v)) return v; var m=v.match(/Formule\s*0?([123])/i); if(m) return 'f'+m[1]; return /odyss/i.test(v)?'f1':/olympe/i.test(v)?'f2':/lysium/i.test(v)?'f3':null; }
   var STATUT={active:'Actif',trialing:'Actif',past_due:'Paiement en retard',unpaid:'Impayé',canceled:'Résilié',incomplete:'Paiement en attente',incomplete_expired:'Paiement expiré',paused:'En pause'};
   function renderAbo(){

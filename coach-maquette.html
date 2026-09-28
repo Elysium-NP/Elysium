@@ -201,7 +201,7 @@
   <p class="sous">Tous les clients, filtrables et triables (clic sur un en-tête). Un clic sur un nom ouvre sa fiche : questionnaire, courbe de poids, mensurations, photos, retours, versions de diètes, messages.</p>
   <div class="outils">
     <input type="search" id="c-q" placeholder="Rechercher un nom…" aria-label="Rechercher un client">
-    <select id="c-f" aria-label="Formule"><option value="">Toutes les formules</option><option>Formule Odyssée</option><option>Formule Olympe</option><option>Formule Élysium</option></select>
+    <select id="c-f" aria-label="Formule"><option value="">Toutes les formules</option><option>Formule Odyssée</option><option>Formule Olympe</option><option>Formule Elysium</option></select>
     <select id="c-s" aria-label="Abonnement"><option value="">Tous les statuts</option><option>Abonné</option><option>Impayé</option><option>Résilié</option></select>
     <select id="c-o" aria-label="Objectif"><option value="">Tous les objectifs</option><option>Perte</option><option>Prise</option><option>Maintien</option></select>
   </div>
@@ -239,23 +239,23 @@
   <h3 class="s">Échéancier des 4 prochaines semaines</h3>
   <div class="grille">
     <div class="carte"><h4>Semaine du 29/09 <span class="n">9</span></h4>
-      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span> · Élysium</span></div>
+      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span> · Elysium</span></div>
       <div class="ligne"><b>Emma G.</b><span><span class="tag j">Nouveau menu</span> · Olympe</span></div>
       <div class="ligne"><b>Nadia F.</b><span class="retard">en attente d’une pesée</span></div>
       <div class="ligne"><span>+ 6 autres</span><span></span></div></div>
     <div class="carte"><h4>Semaine du 06/10 <span class="n">7</span></h4>
-      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span> · Élysium</span></div>
+      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span> · Elysium</span></div>
       <div class="ligne"><b>Léa C.</b><span><span class="tag v">Réajustement</span> · Odyssée</span></div>
       <div class="ligne"><span>+ 5 autres</span><span></span></div></div>
     <div class="carte"><h4>Semaine du 13/10 <span class="n">11</span></h4>
-      <div class="ligne"><b>Sarah L.</b><span><span class="tag j">Nouveau menu</span> · Élysium</span></div>
+      <div class="ligne"><b>Sarah L.</b><span><span class="tag j">Nouveau menu</span> · Elysium</span></div>
       <div class="ligne"><b>Marc V.</b><span class="retard">bloqué : impayé</span></div>
       <div class="ligne"><span>+ 9 autres</span><span></span></div></div>
     <div class="carte"><h4>Semaine du 20/10 <span class="n">8</span></h4>
       <div class="ligne"><b>Camille R.</b><span><span class="tag v">Réajustement</span> · Odyssée</span></div>
       <div class="ligne"><span>+ 7 autres</span><span></span></div></div>
   </div>
-  <p class="sous" style="margin-top:12px">Rythme : Formule Odyssée = réajustement 4 semaines après la dernière diète · Formule Olympe = nouveau menu toutes les 4 semaines · Formule Élysium = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif.</p>
+  <p class="sous" style="margin-top:12px">Rythme : Formule Odyssée = réajustement 4 semaines après la dernière diète · Formule Olympe = nouveau menu toutes les 4 semaines · Formule Elysium = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif.</p>
 </section>
 
 <!-- ═════════════ MESSAGES ═════════════ -->
@@ -326,7 +326,7 @@
     <div class="carte"><h4>Par formule</h4><div class="bars">
       <div class="bar"><span>Odyssée</span><span class="bt"><i class="bf" style="width:38%"></i></span><span class="bv">16</span></div>
       <div class="bar"><span>Olympe</span><span class="bt"><i class="bf" style="width:100%"></i></span><span class="bv">19</span></div>
-      <div class="bar"><span>Élysium</span><span class="bt"><i class="bf" style="width:37%"></i></span><span class="bv">7</span></div></div></div>
+      <div class="bar"><span>Elysium</span><span class="bt"><i class="bf" style="width:37%"></i></span><span class="bv">7</span></div></div></div>
   </div>
 </section>
 
@@ -346,7 +346,7 @@
     <div class="carte"><h4>Revenu récurrent par formule</h4><div class="bars">
       <div class="bar"><span>Odyssée</span><span class="bt"><i class="bf" style="width:65%"></i></span><span class="bv">318 €</span></div>
       <div class="bar"><span>Olympe</span><span class="bt"><i class="bf" style="width:100%"></i></span><span class="bv">492 €</span></div>
-      <div class="bar"><span>Élysium</span><span class="bt"><i class="bf" style="width:43%"></i></span><span class="bv">209 €</span></div></div></div>
+      <div class="bar"><span>Elysium</span><span class="bt"><i class="bf" style="width:43%"></i></span><span class="bv">209 €</span></div></div></div>
     <div class="carte"><h4>Abonnés ce mois</h4>
       <div class="ligne"><span>Nouveaux abonnés</span><b>9</b></div>
       <div class="ligne"><span>Résiliations</span><b>3</b></div>
@@ -382,11 +382,11 @@
   new MutationObserver(function(){ marquer(); }).observe(document.querySelector('.cwrap'),{childList:true,subtree:true});
 
   // --- clients (exemple) : [nom, formule, abonnement, objectif, jours depuis pesée, échéance, inscription]
-  var C=[['Camille R.','Formule Odyssée','Abonné','Perte',2,'2026-10-12','2026-06-02'],['Julien M.','Formule Élysium','Abonné','Perte',1,'2026-10-04','2026-05-18'],
-    ['Sarah L.','Formule Élysium','Abonné','Prise',3,'2026-10-09','2026-07-21'],['Thomas B.','Formule Olympe','Abonné','Perte',5,'2026-10-15','2026-08-03'],
+  var C=[['Camille R.','Formule Odyssée','Abonné','Perte',2,'2026-10-12','2026-06-02'],['Julien M.','Formule Elysium','Abonné','Perte',1,'2026-10-04','2026-05-18'],
+    ['Sarah L.','Formule Elysium','Abonné','Prise',3,'2026-10-09','2026-07-21'],['Thomas B.','Formule Olympe','Abonné','Perte',5,'2026-10-15','2026-08-03'],
     ['Nadia F.','Formule Olympe','Abonné','Perte',16,'2026-10-01','2026-04-11'],['Lucas P.','Formule Odyssée','Abonné','Maintien',15,'2026-10-20','2026-03-29'],
     ['Emma G.','Formule Olympe','Abonné','Perte',9,'2026-10-02','2026-07-02'],['Marc V.','Formule Olympe','Impayé','Prise',4,'2026-09-25','2026-02-14'],
-    ['Hugo T.','Formule Odyssée','Résilié','Perte',8,'—','2026-01-08'],['Inès D.','Formule Élysium','Abonné','Perte',null,'2026-10-26','2026-09-27'],
+    ['Hugo T.','Formule Odyssée','Résilié','Perte',8,'—','2026-01-08'],['Inès D.','Formule Elysium','Abonné','Perte',null,'2026-10-26','2026-09-27'],
     ['Léa C.','Formule Odyssée','Abonné','Perte',7,'2026-10-06','2026-06-16'],['Karim A.','Formule Olympe','Abonné','Prise',null,'2026-10-26','2026-09-28']];
   // détails de fiche (exemple) : âge, départ, actuel, idéal
   var D={'Camille R.':[29,78,70.8,68],'Julien M.':[34,92,85.4,80],'Sarah L.':[26,52,55.1,58],'Thomas B.':[41,98,92,85],'Nadia F.':[38,71,67.9,62],

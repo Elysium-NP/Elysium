@@ -719,3 +719,8 @@ html .plan.feat.complet:hover,html .plan.feat.complet:active,html.reveal-ready .
 
 /* mode nuit : le halo du bas des titres passe du jaune au VIOLET (Yoann 28/09 : le jaune jure la nuit) */
 html[data-theme="obscur"] .phead::before{background:radial-gradient(700px 420px at 82% 10%,var(--p-bleu),transparent 65%),radial-gradient(520px 360px at 12% 90%,var(--p-violet),transparent 70%)}
+/* survol / toucher des formules : effet IMMÉDIAT (Damien 28/09 « il y a un délai avant le néon »).
+   Les délais de l'apparition au défilement (.35 s, .d1/.d2) ne s'appliquent plus au survol. */
+html .plan:hover,html .plan:active,html.reveal-ready .plan.reveal.in:hover,html.reveal-ready .plan.reveal.in:active,
+html.reveal-ready .plan.feat.in:hover,html.reveal-ready .plan.feat.in:active{
+  transition:transform .18s ease-out,box-shadow .12s ease-out,border-color .12s ease-out;transition-delay:0s}

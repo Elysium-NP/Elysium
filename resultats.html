@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://elysium-x57.pages.dev/assets/og-creme.jpg">
 <meta property="og:url" content="https://elysium-x57.pages.dev/resultats.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="assets/site.css?v=2809k">
+<link rel="stylesheet" href="assets/site.css?v=2909g">
 <style>
   /* ===== Résultats / transformations, charte « instrument », version compacte ===== */
   .rstats{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(22px,4.5vw,60px);margin:0 auto 4px;padding:0 var(--edge)}
@@ -81,6 +81,11 @@
   .wcard .wq b{font-style:normal;font-weight:600;color:var(--ice)}
   .wcard .wa{margin-top:auto;display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
   .wcard .wa::before{content:"";width:16px;height:1px;background:var(--blue);opacity:.75}
+  /* finitions 29/09 : cartes arrondies comme le reste du site, chiffres clés en pastilles */
+  .tcard,.wcard{border-radius:16px}
+  .rstat{min-width:190px;padding:20px 26px 18px;border:1px solid var(--line);border-top:3px solid var(--rc,var(--b-bleu));border-radius:16px;background:var(--void2)}
+  .rstat:nth-child(1){--rc:var(--b-vert)} .rstat:nth-child(2){--rc:var(--b-jaune)} .rstat:nth-child(3){--rc:var(--b-violet)}
+  @media(max-width:600px){.rstats{gap:10px}.rstat{flex:1 1 100%;min-width:0;padding:16px 18px}}
 </style>
 </head>
 <body>

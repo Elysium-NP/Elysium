@@ -755,6 +755,109 @@ html .plan.feat.complet:hover,html .plan.feat.complet:active,html.reveal-ready .
 
 /* mode nuit : le halo du bas des titres passe du jaune au VIOLET (Yoann 28/09 : le jaune jure la nuit) */
 html[data-theme="obscur"] .phead::before{background:radial-gradient(700px 420px at 82% 10%,var(--p-bleu),transparent 65%),radial-gradient(520px 360px at 12% 90%,var(--p-violet),transparent 70%)}
+
+/* ═══════════════════ FINITIONS VITRINE (29/09, « glow up » demandé par Dimitri) ═══════════════════
+   Présentation seulement (aucun texte changé). Clair ET obscur passent par les tokens.
+   Portée volontairement étroite : `.team .coach` (et pas `.coach`, qui est aussi une bulle de
+   message côté espaces), `.sec .figures` (l'accueil garde sa bande), `.faq` = faq.html seule. */
+
+/* ---- FAQ : une carte par question, pastille numérotée aux couleurs du repas de la catégorie,
+   « + » qui pivote en « × », réponse dans une zone légèrement teintée ---- */
+.faq{display:flex;flex-direction:column;gap:12px;counter-reset:q}
+.faq details{counter-increment:q;padding:0;border:1px solid var(--line);border-radius:16px;background:var(--void2);
+  transition:border-color .25s ease,box-shadow .25s ease}
+.faq details:hover{border-color:color-mix(in srgb,var(--line) 55%,var(--brand))}
+.faq details[open]{padding:0;border-color:color-mix(in srgb,var(--line) 40%,var(--brand));box-shadow:0 18px 40px -30px rgba(60,45,20,.45)}
+.faq summary{justify-content:flex-start;gap:16px;padding:18px 18px 18px 20px;border-radius:16px;
+  font-family:var(--titre);font-weight:400;font-size:clamp(17px,1rem + .35vw,20px);line-height:1.35;color:var(--ice)}
+.faq summary::before{content:counter(q,decimal-leading-zero);flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:var(--pt,var(--p-bleu));border:1px solid var(--pc,var(--b-bleu));font:700 12px/1 var(--texte);color:var(--ice)}
+.faq summary::after{content:"";flex:none;margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);color:var(--blue);
+  background:linear-gradient(currentColor,currentColor) center/12px 2px no-repeat,linear-gradient(currentColor,currentColor) center/2px 12px no-repeat;
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),background-color .25s ease,border-color .25s ease,color .25s ease}
+.faq summary:hover::after{border-color:var(--brand)}
+.faq details[open] summary::after{transform:rotate(45deg);background-color:var(--brand);border-color:var(--brand);color:#111}
+.faq summary:focus-visible{outline-offset:-3px}
+.faq details>p{margin:0 18px 18px;padding:16px 20px;max-width:none;border-radius:12px;border-left:3px solid var(--pc,var(--b-bleu));
+  background:color-mix(in srgb,var(--pt,var(--p-bleu)) 55%,var(--void2));font-size:16.5px;line-height:1.75;color:var(--gris)}
+.faq details>p b{color:var(--ice);font-weight:600}
+.faq details[open]>p{animation:faq-in .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes faq-in{from{opacity:0;transform:translateY(-6px)}}
+@media(max-width:600px){
+  .faq summary{gap:12px;padding:15px 14px}
+  .faq summary::before{width:28px;height:28px;font-size:11px}
+  .faq summary::after{width:30px;height:30px}
+  .faq details>p{margin:0 12px 12px;padding:14px 15px;font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){.faq details[open]>p{animation:none}.faq summary::after,.faq details{transition:none}}
+
+/* catégories : sur grand écran, le titre (« 01 » compris) reste collé à gauche pendant qu'on lit ses questions */
+.faq-sec{scroll-margin-top:64px}
+/* téléphone : le grand numéro au-dessus du titre, toujours (avant : à côté ou au-dessus selon la longueur du titre) */
+@media(max-width:600px){.sec-head{flex-direction:column;align-items:flex-start;gap:10px}}
+@media(min-width:1000px){
+  .faq-sec .wrap{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(40px,5vw,80px);align-items:start}
+  .faq-sec .sec-head{position:sticky;top:104px;flex-direction:column;align-items:flex-start;gap:12px;margin:0}
+  .faq-sec .faq{max-width:none;margin:0}
+}
+/* sommaire des catégories (en-tête de la FAQ) */
+.faq-toc{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.faq-toc a{display:inline-flex;align-items:center;gap:10px;padding:10px 16px 10px 13px;border:1px solid var(--line);border-radius:999px;
+  background:var(--void2);color:var(--ice);font-size:15px;line-height:1.2;transition:border-color .2s ease,transform .2s ease}
+.faq-toc a:hover{border-color:var(--brand);transform:translateY(-1px)}
+.faq-toc i{flex:none;width:12px;height:12px;border-radius:50%;background:var(--pc)}
+.faq-toc span{font-size:12.5px;color:var(--steel)}
+
+/* ---- grands numéros de section : un peu plus présents de nuit ---- */
+html[data-theme="obscur"] .sec-head .no{-webkit-text-stroke:1px rgba(93,180,255,.7)}
+
+/* ---- bandeau d'appel de fin de page : une grande carte arrondie, pastels de leurs fiches ---- */
+.cta{border-top:0;padding:clamp(80px,13vh,140px) var(--edge)}
+.cta::before{inset:0 clamp(10px,2.4vw,32px) clamp(10px,2.4vw,32px);border-radius:clamp(22px,3vw,34px);
+  background:radial-gradient(560px 320px at 6% 100%,var(--p-jaune),transparent 70%),
+             radial-gradient(560px 340px at 96% 0%,var(--p-violet),transparent 72%),#E3EEF8}
+html[data-theme="obscur"] .cta::before{border:1px solid var(--line);
+  background:radial-gradient(560px 320px at 6% 100%,var(--p-violet),transparent 70%),radial-gradient(560px 340px at 96% 0%,var(--p-bleu),transparent 72%),var(--cream2)}
+.cta-in .btn{font-size:16px;padding:16px 34px}   /* .cta-in : bienvenue.html a aussi une .cta (rangée de boutons), non concernée */
+@media(max-width:600px){.cta{padding:72px calc(var(--edge) + 14px)}}
+
+/* ---- chiffres (méthode, coachs) : des cartes, un liseré aux couleurs des repas ---- */
+.sec .figures{border:0;padding:0;gap:14px;margin:36px 0 10px}
+.sec .figures .fg{padding:22px 20px 20px;border:1px solid var(--line);border-top:3px solid var(--fc,var(--b-bleu));border-radius:16px;background:var(--void2)}
+.sec .figures .fg:nth-child(1){--fc:var(--b-jaune)} .sec .figures .fg:nth-child(2){--fc:var(--b-vert)}
+.sec .figures .fg:nth-child(3){--fc:var(--b-violet)} .sec .figures .fg:nth-child(4){--fc:var(--b-bleu)}
+@media(max-width:640px){.sec .figures{gap:10px}.sec .figures .fg{padding:18px 15px 16px}}
+
+/* ---- citation : un encart posé, en Georgia ---- */
+.sec .quote{margin:34px 0;padding:26px 30px;border-left:3px solid var(--brand);border-radius:0 16px 16px 0;background:var(--void2)}
+.sec .quote blockquote{font-family:var(--titre);font-size:clamp(21px,2.4vw,30px);line-height:1.35}
+@media(max-width:600px){.sec .quote{padding:20px}}
+
+/* ---- coachs : cartes arrondies comme le reste du site ---- */
+.team .coach{border-radius:18px}
+
+/* ---- contact : les coordonnées dans une carte, séparées par des filets ---- */
+.cinfo{gap:0;padding:8px 26px;border:1px solid var(--line);border-radius:18px;background:var(--void2)}
+.cinfo .ci{padding:20px 0;border-top:1px solid var(--line)}
+.cinfo .ci:first-child{border-top:0}
+
+/* ---- pages légales : colonne de lecture, intertitres à pastille, sommaire ancré ---- */
+.legal{max-width:760px}
+.legal .intro{font-size:16.5px;padding:22px 24px;margin-bottom:6px;border:1px solid var(--line);border-radius:16px;background:var(--void2)}
+.legal h3{align-items:center;scroll-margin-top:88px;margin:44px 0 14px;padding-top:28px;border-top:1px solid var(--line)}
+.legal .toc + h3,.legal .intro + h3{border-top:0;padding-top:4px}
+.legal h3 .num{flex:none;display:inline-grid;place-items:center;min-width:36px;height:36px;padding:0 8px;border-radius:999px;
+  background:var(--p-bleu);font:700 13px/1 var(--texte);color:var(--blue)}
+.legal p,.legal li{font-size:16px}
+.legal .toc{margin:26px 0 10px;padding:22px 24px 16px;border:1px solid var(--line);border-radius:16px;background:var(--void2)}
+.legal .toc .toc-k{margin:0 0 10px;font:700 12px/1.2 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+.legal .toc ol{list-style:none;margin:0;padding:0;columns:2 250px;column-gap:34px;max-width:none}
+.legal .toc li{break-inside:avoid;margin:0;padding:0;font-size:15px;line-height:1.4}
+.legal .toc li::before{display:none}
+.legal .toc a{display:flex;gap:10px;padding:6px 0;border:0;color:var(--gris)}
+.legal .toc a:hover{color:var(--ice)}
+.legal .toc a b{flex:none;min-width:22px;color:var(--blue);font-weight:700}
+@media(max-width:600px){.legal .intro,.legal .toc{padding:18px 18px 14px}}
 /* survol / toucher des formules : effet IMMÉDIAT (Damien 28/09 « il y a un délai avant le néon »).
    Les délais de l'apparition au défilement (.35 s, .d1/.d2) ne s'appliquent plus au survol. */
 html .plan:hover,html .plan:active,html.reveal-ready .plan.reveal.in:hover,html.reveal-ready .plan.reveal.in:active,

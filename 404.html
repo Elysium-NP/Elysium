@@ -14,19 +14,25 @@
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2809k">
+<link rel="stylesheet" href="assets/site.css?v=2909g">
 <style>
-  .e404{min-height:78vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px var(--edge)}
-  .e404 .code{font-family:var(--disp);font-weight:600;font-size:clamp(90px,20vw,220px);line-height:.9;color:var(--ice);letter-spacing:.02em}
-  .e404 .code b{color:var(--blue)}
-  .e404 h1{font-family:var(--disp);font-weight:600;font-size:clamp(24px,4vw,44px);color:var(--ice);text-transform:uppercase;letter-spacing:.01em;margin:14px 0 0}
-  .e404 p{font-family:var(--disp);font-size:14px;color:var(--gris);max-width:46ch;margin:18px auto 34px;line-height:1.6}
-  .e404 .qlinks{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;margin-top:30px}
-  .e404 .qlinks a{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .3s ease}
-  .e404 .qlinks a:hover{color:var(--blue)}
+  /* 404 : même voile pastel que les en-têtes de page, le « 0 » en assiette (pastille bleue), liens en pastilles */
+  .e404{position:relative;isolation:isolate;overflow:hidden;min-height:82vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px var(--edge) 70px}
+  .e404::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(640px 420px at 78% 12%,var(--p-bleu),transparent 66%),radial-gradient(520px 380px at 14% 92%,var(--p-jaune),transparent 70%)}
+  html[data-theme="obscur"] .e404::before{background:radial-gradient(640px 420px at 78% 12%,var(--p-bleu),transparent 66%),radial-gradient(520px 380px at 14% 92%,var(--p-violet),transparent 70%)}
+  .e404 .code{display:flex;align-items:center;gap:.06em;font-family:var(--texte);font-weight:700;font-size:clamp(96px,19vw,210px);line-height:1;color:var(--ice);letter-spacing:-.02em}
+  .e404 .code b{display:inline-grid;place-items:center;width:.82em;height:.82em;border-radius:50%;border:.07em solid var(--brand);background:var(--void2);color:transparent;font-size:1em;position:relative}
+  .e404 .code b::after{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--brand) 55%,transparent)}
+  .e404 h1{margin:18px 0 0}
+  .e404 p{font-size:17px;color:var(--gris);max-width:44ch;margin:16px auto 30px;line-height:1.65}
+  .e404 .qlinks{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:30px}
+  .e404 .qlinks a{padding:9px 17px;border:1px solid var(--line);border-radius:999px;background:var(--void2);font-size:14.5px;color:var(--gris);transition:border-color .2s ease,color .2s ease}
+  .e404 .qlinks a:hover{border-color:var(--brand);color:var(--ice)}
 </style>
 </head>
 <body>
+
+<a class="skip" href="#main">Aller au contenu</a>
 
 <div class="frame" aria-hidden="true"><span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span></div>
 <div class="ambscan" aria-hidden="true"></div>
@@ -38,6 +44,25 @@
   <span class="mid">Erreur 404 · signal perdu</span>
   <span class="rt"><span class="dot"></span>Système actif</span>
 </header>
+<nav class="menu" aria-label="Navigation principale">
+  <a href="index.html">Accueil</a>
+  <a href="methode.html">Méthode</a>
+  <a href="qui-sommes-nous.html">Coachs</a>
+  <a href="resultats.html">Résultats</a>
+  <a href="formules.html">Formules</a>
+  <a href="faq.html">FAQ</a>
+  <a class="go" href="connexion.html">Connexion</a>
+</nav>
+<button class="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+<nav class="msheet" aria-label="Navigation mobile">
+  <a href="index.html"><span class="mnum">01</span>Accueil</a>
+  <a href="methode.html"><span class="mnum">02</span>Méthode</a>
+  <a href="qui-sommes-nous.html"><span class="mnum">03</span>Coachs</a>
+  <a href="resultats.html"><span class="mnum">04</span>Résultats</a>
+  <a href="formules.html"><span class="mnum">05</span>Formules</a>
+  <a href="faq.html"><span class="mnum">06</span>FAQ</a>
+  <a class="go-m" href="connexion.html"><span class="mnum">→</span>Connexion</a>
+</nav>
 
 <main id="main">
   <section class="e404">
@@ -46,7 +71,7 @@
     <p class="reveal in d2">Cette page n'existe pas, ou plus. Rien n'est cassé, revenons simplement en terrain connu.</p>
     <a class="btn" href="index.html">Retour à l'accueil</a>
     <nav class="qlinks reveal in">
-      <a href="index.html#methode">Méthode</a>
+      <a href="methode.html">Méthode</a>
       <a href="qui-sommes-nous.html">Coachs</a>
       <a href="formules.html">Formules</a>
       <a href="contact.html">Contact</a>

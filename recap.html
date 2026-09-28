@@ -172,7 +172,7 @@
   $('f-rythme').innerHTML=f.rythme;
   $('p-montant').textContent=f.prix+' €';
   if(MANQUE[k].length){
-    $('f-manque').innerHTML=MANQUE[k].map(function(m){ return '<li>'+m[0]+' <span class="ou">· avec '+(m[1].indexOf(',')>0?'les formules ':'la formule ')+m[1]+'</span></li>'; }).join('');
+    $('f-manque').innerHTML=MANQUE[k].map(function(m){ return '<li>'+m[0]+' <span class="ou">· avec '+(m[1].indexOf(',')>0?'les formules ':'la formule ')+m[1].replace(', ',' et ')+'</span></li>'; }).join('');
     $('f-monter').innerHTML='<p><b>La Formule Elysium</b> comprend tout cela, pour 29,90&nbsp;€ toutes les 4 semaines.</p><a href="recap.html?formule=f3'+(q.get('demo')==='1'?'&demo=1':'')+'">Voir la Formule Elysium</a>';
   } else {
     $('f-manque').innerHTML='<li style="list-style:none;margin-left:-20px">Rien&nbsp;: tu as choisi la formule la plus complète.</li>'; $('f-monter').remove();

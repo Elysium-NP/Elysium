@@ -78,6 +78,7 @@
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  html,body{overflow-x:clip}   /* le halo animé ne doit jamais élargir la page sur mobile (barre du bas coupée) */
   body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 var(--texte);-webkit-font-smoothing:antialiased}
   img{max-width:100%;display:block}
   a{color:inherit}

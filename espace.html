@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2809j">
+<link rel="stylesheet" href="assets/site.css?v=2809k">
 <style>
   /* ===== Espace membre v2, tableau de bord « télémétrie » (styles propres à la page) ===== */
   .dash-grid .wide{grid-column:1/-1}
@@ -271,7 +271,7 @@
   .fil-msg{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;margin:12px 0}
   .fil-msg .b{max-width:85%;padding:9px 12px;border-radius:12px;font-size:14.5px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
   .fil-msg .b.moi{align-self:flex-end;background:var(--p-bleu)}
-  .fil-msg .b.coach{align-self:flex-start;background:#fff;border:1px solid var(--line)}
+  .fil-msg .b.eq{align-self:flex-start;background:#fff;border:1px solid var(--line)}
   .fil-msg .b time{display:block;font-size:11px;color:var(--steel);margin-top:4px}
   #msg-form{display:flex;gap:8px}
   #msg-form textarea{flex:1;min-height:46px;resize:vertical;font:16px/1.4 var(--texte);border:1px solid var(--line);padding:9px 11px;background:#fff;color:var(--ice)}
@@ -1478,7 +1478,7 @@ var PROG = {
         : 'Ton dernier paiement a échoué : la messagerie reprend dès qu’il est réglé (« Mon abonnement » › mettre à jour ta carte).';
       var L=r.data||[], box=document.getElementById('fil-msg');
       box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id;
-        return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':(NOMS_C[m.auteur_id]?esc(NOMS_C[m.auteur_id])+' · ':'Coach · '))+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
+        return '<div class="b '+(moi?'moi':'eq')+'">'+esc(m.texte)+'<time>'+(moi?'':(NOMS_C[m.auteur_id]?esc(NOMS_C[m.auteur_id])+' · ':'Coach · '))+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
         : '<p class="foot-note">Aucun message pour l’instant.</p>';
       box.scrollTop=box.scrollHeight;
       var aLire=L.filter(function(m){ return m.auteur_id!==u.id && !m.lu_at; });
@@ -1540,7 +1540,7 @@ var PROG = {
     // messagerie : un échange d'exemple, envoi désactivé
     var il=function(j,h){ var d=new Date(Date.now()-j*JOUR_MS); d.setHours(h,12,0,0); return d.toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); };
     document.getElementById('fil-msg').innerHTML=
-      '<div class="b coach">Bonjour Sophie, ton programme est en ligne. Pense à ta pesée du lundi matin, à jeun : c’est elle qui nous sert à ajuster tes quantités.<time>Damien - Coach · '+il(6,9)+'</time></div>'+
+      '<div class="b eq">Bonjour Sophie, ton programme est en ligne. Pense à ta pesée du lundi matin, à jeun : c’est elle qui nous sert à ajuster tes quantités.<time>Damien - Coach · '+il(6,9)+'</time></div>'+
       '<div class="b moi">Merci ! Je commence dès lundi.<time>'+il(6,12)+'</time></div>';
     document.getElementById('msg-txt').disabled=true;
     document.getElementById('msg-txt').placeholder='Désactivé en démonstration';

@@ -709,7 +709,7 @@ html[data-theme="obscur"] body{background:radial-gradient(900px 520px at 85% 0%,
 html[data-theme="obscur"] h1,html[data-theme="obscur"] h2{color:#fff}
 /* espace client / coachs : onglet actif et bulles de messages */
 html[data-theme="obscur"] .tab.on{background:#1466b8;border-color:#1466b8}
-html[data-theme="obscur"] .b.lui,html[data-theme="obscur"] .b.coach{background:var(--void2)}
+html[data-theme="obscur"] .b.lui,html[data-theme="obscur"] .b.coach,html[data-theme="obscur"] .b.eq{background:var(--void2)}
 html[data-theme="obscur"] .msgs textarea,html[data-theme="obscur"] #msg-form textarea{background:var(--void2)}
 /* ce qui était écrit en dur pour le fond clair */
 html[data-theme="obscur"] .cform input,html[data-theme="obscur"] .cform select,html[data-theme="obscur"] .cform textarea,

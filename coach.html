@@ -432,7 +432,20 @@
       if(m){ var L={epaules:'Épaules',poitrine:'Poitrine',taille:'Taille',hanches:'Hanches',cuisse:'Cuisse',bras:'Bras'};
         var t=Object.keys(L).filter(function(k){ return m[k]!=null; }).map(function(k){ return L[k]+' '+fr(m[k])+' cm'; });
         if(t.length) h+='<div class="mens">Mensurations du '+new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR')+' : '+t.join(' · ')+'</div>'; }
-      el.innerHTML=h+'<div class="ph-coach" id="ph-coach"></div>';
+      el.innerHTML=h+'<div class="mens" id="retours-plats"></div><div class="ph-coach" id="ph-coach"></div>';
+      // retours du client sur ses plats (table retours), diète la plus récente
+      var pid=file[sel]&&file[sel].programme_id;
+      sb.from('retours').select('plat,avis,programme_id').eq('user_id',uid).then(function(rr){
+        var z=$('retours-plats'); if(!z||rr.error||!file[sel]||file[sel].user_id!==uid) return;
+        var L=(rr.data||[]).filter(function(x){ return !pid||x.programme_id===pid; });
+        if(!L.length){ z.textContent='Retours sur la diète : aucun pour l’instant.'; return; }
+        var menu=(file[sel]&&file[sel].menu)||{}, titres={};
+        (menu.jours||[]).forEach(function(j){ (j.repas||[]).forEach(function(rp){ var k=rp.recette_base||rp.recette; if(k&&!titres[k]) titres[k]=rp.titre||k; }); });
+        var nom=function(k){ return esc(titres[k]||k); };
+        var rv=L.filter(function(x){ return x.avis==='revoir'; }).map(function(x){ return nom(x.plat); });
+        var pj=L.filter(function(x){ return x.avis==='plus_jamais'; }).map(function(x){ return nom(x.plat); });
+        z.innerHTML='<b style="color:var(--ice)">Retours sur la diète</b>'+(rv.length?'<br>À revoir : '+rv.join(' · '):'')+(pj.length?'<br>Plus jamais : '+pj.join(' · '):'');
+      }).catch(function(){});
       // photos de suivi du client (stockage privé, liens signés d'une heure)
       sb.storage.from('photos-suivi').list(uid,{limit:50,sortBy:{column:'name',order:'desc'}}).then(function(p){
         var L=((p&&p.data)||[]).filter(function(f){ return /\.(jpe?g|png|webp)$/i.test(f.name); }); if(!L.length) return;
@@ -579,6 +592,14 @@
     var m=c.menu, d=c.diagnostic||{};
     $('progn').textContent='v'+(c.version||1)+(d.jours_ok!=null?' · '+d.jours_ok+'/6 jours':'');
     var h='';
+    // diète déposée par le SUIVI (réajustement ou nouveau menu) : on le dit en tête
+    var sv=d.suivi;
+    if(sv&&sv.geste){
+      var nbr=Array.isArray(sv.retours)?sv.retours.length:(+sv.retours||0);
+      h+='<div class="suivi" style="margin-bottom:14px"><h4>Suivi</h4><div class="chiffres"><span><b>'+
+        (sv.geste==='reajuster'?'Réajustement des grammes':'Nouveau menu')+'</b>'+(sv.poids!=null?' à <b>'+esc(String(sv.poids).replace('.',','))+' kg</b>':'')+'</span>'+
+        '<span>'+nbr+' retour'+(nbr>1?'s':'')+' du client pris en compte</span></div></div>';
+    }
 
     // ---- CE QUE LE CLIENT A ÉCRIT ET QUI N'EST PAS DANS LA BASE ----
     // Ces mots n'ont PAS été exclus du menu : ils demandent une lecture humaine

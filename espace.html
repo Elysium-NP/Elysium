@@ -213,6 +213,18 @@
   /* ===== TOUTE LA PAGE AU MÊME STYLE (Dimitri 28/09 « cohérent jusqu'au bout ») =====
      blocs : coins arrondis 14 px ; blocs à titre : en-tête pastel (jaune, vert, violet, bleu en alternance) */
   .cat,.acard,.dayoff,.stat,.phd,.pesee-rappel,.drop{border-radius:14px}
+  /* avis sur les plats */
+  .avis-liste{margin-top:10px}
+  .avis-l{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .avis-l:last-child{border-bottom:0}
+  .avis-t{font:600 15px/1.35 var(--texte);color:var(--ice)}
+  .avis-t small{display:block;font-weight:400;font-size:12px;color:var(--steel);margin-bottom:2px}
+  .avis-b{display:flex;gap:6px;flex:none}
+  .avis-b button{font:600 13px/1 var(--texte);border:1px solid var(--line);background:none;color:var(--gris);border-radius:999px;padding:8px 12px;cursor:pointer}
+  .avis-b button[data-a="revoir"].on{background:var(--p-jaune);border-color:var(--b-jaune);color:var(--ice)}
+  .avis-b button[data-a="plus_jamais"].on{background:#f6dcdc;border-color:#d98c8c;color:#7a1f1f}
+  html[data-theme="obscur"] .avis-b button[data-a="plus_jamais"].on{background:#3a1b1b;border-color:#8a3a3a;color:#f3b4b4}
+  @media(max-width:520px){.avis-l{flex-direction:column;align-items:flex-start}}
   /* galerie des photos de suivi */
   .galerie{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:12px}
   .galerie:empty{display:none}
@@ -355,6 +367,14 @@
       </label>
       <p id="photomsg" class="foot-note" aria-live="polite"></p>
       <div class="galerie" id="galerie"></div>
+    </div>
+
+    <!-- AVIS SUR LES PLATS (table retours) : lu par le suivi pour la prochaine diète -->
+    <div class="card wide rv" id="c-avis" hidden>
+      <div class="ch"><h3>Ton avis sur tes plats</h3><span class="tag">Prochaine diète</span></div>
+      <p>Un plat à revoir, ou que tu ne veux plus jamais manger&nbsp;? Dis-le ici&nbsp;: tes coachs en tiennent compte pour ta prochaine diète. Tu peux changer d'avis jusque-là.</p>
+      <div class="avis-liste" id="avis-liste"></div>
+      <p id="avis-msg" class="foot-note" aria-live="polite"></p>
     </div>
 
     <!-- MESSAGES avec les coachs (table messages) -->
@@ -827,12 +847,12 @@ var PROG = {
     var sb=ElyAuth.client, id=u.id;
     return Promise.all([
       sb.from('questionnaires').select('statut,reponses').eq('user_id',id).eq('type','nutrition').maybeSingle(),
-      sb.from('programmes').select('version,menu,cible').eq('user_id',id).eq('statut','valide')
+      sb.from('programmes').select('id,version,menu,cible').eq('user_id',id).eq('statut','valide')
         .order('version',{ascending:false}).limit(1)
     ]).then(function(r){
       var q=r[0]&&r[0].data, p=r[1]&&r[1].data&&r[1].data[0];
       REEL.quest=!!(q&&q.statut==='valide');
-      if(p&&p.menu){ PROG=depuisBase(p, q&&q.reponses); REEL.prog=true; }
+      if(p&&p.menu){ PROG=depuisBase(p, q&&q.reponses); REEL.prog=true; REEL.pid=p.id; REEL.menu=p.menu; }
     }).catch(function(){});
   }
 
@@ -921,6 +941,42 @@ var PROG = {
   document.getElementById('wval').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('wadd').click(); });
   document.getElementById('wgoal').addEventListener('click',askGoal);
   document.getElementById('seeddata').addEventListener('click',seedDemo);
+
+  // ---- AVIS SUR LES PLATS (table retours) ----
+  // Un plat = sa CLÉ MOTEUR (recette_base, sinon recette) : c'est ce que le suivi relit. Le titre n'est qu'affiché.
+  var AVIS={};
+  function chargerAvis(){
+    var card=document.getElementById('c-avis');
+    if(ADMIN||!REEL.pid||!REEL.menu){ card.hidden=true; return; }
+    return sb.from('retours').select('plat,avis').eq('user_id',u.id).eq('programme_id',REEL.pid).then(function(r){
+      if(r.error){ card.hidden=true; return; }                       // table pas encore créée
+      AVIS={}; (r.data||[]).forEach(function(x){ AVIS[x.plat]=x.avis; });
+      var vus={}, ordre={petit_dejeuner:0,dejeuner:1,collation:2,collation_2:2,diner:3}, L=[];
+      (REEL.menu.jours||[]).forEach(function(j){ if(j.off) return; (j.repas||[]).forEach(function(rp){
+        var k=rp.recette_base||rp.recette; if(!k||vus[k]) return; vus[k]=1;
+        L.push({k:k,t:rp.titre||k,type:MEALS[rp.type]||'',o:ordre[rp.type]!=null?ordre[rp.type]:9}); }); });
+      if(!L.length){ card.hidden=true; return; }
+      L.sort(function(a,b){ return a.o-b.o; });
+      document.getElementById('avis-liste').innerHTML=L.map(function(p){
+        return '<div class="avis-l"><span class="avis-t"><small>'+esc(p.type)+'</small>'+esc(p.t)+'</span><div class="avis-b">'+
+          '<button type="button" data-a="revoir" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='revoir'?' class="on"':'')+'>À revoir</button>'+
+          '<button type="button" data-a="plus_jamais" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='plus_jamais'?' class="on"':'')+'>Plus jamais</button></div></div>'; }).join('');
+      card.hidden=false;
+    }).catch(function(){ card.hidden=true; });
+  }
+  document.getElementById('avis-liste').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-a]'); if(!b) return;
+    var k=b.getAttribute('data-k'), a=b.getAttribute('data-a'), msg=document.getElementById('avis-msg');
+    var req = AVIS[k]===a
+      ? sb.from('retours').delete().eq('user_id',u.id).eq('programme_id',REEL.pid).eq('plat',k)          // re-clic = neutre
+      : sb.from('retours').upsert({user_id:u.id,programme_id:REEL.pid,plat:k,avis:a},{onConflict:'user_id,programme_id,plat'});
+    b.disabled=true;
+    req.then(function(r){ b.disabled=false;
+      if(r.error){ msg.textContent='Avis non enregistré, réessaie dans un instant.'; return; }
+      if(AVIS[k]===a) delete AVIS[k]; else AVIS[k]=a;
+      b.parentNode.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',AVIS[k]===x.getAttribute('data-a')); });
+      msg.textContent='Avis enregistré : tes coachs le verront pour ta prochaine diète.'; });
+  });
 
   // ---- PHOTOS DE SUIVI : stockage PRIVÉ Supabase (bucket photos-suivi, dossier du client) ----
   // Réduites dans le navigateur (1 600 px, JPEG) avant l'envoi. Affichage par liens signés d'une heure.
@@ -1018,7 +1074,7 @@ var PROG = {
       document.getElementById('demobanner').style.display='';
       renderProgram(); return;
     }
-    return chargerReel().then(renderProgram);
+    return chargerReel().then(renderProgram).then(chargerAvis);
   });
   document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
   document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });

@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("ely_theme")==="obscur")document.documentElement.setAttribute("data-theme","obscur")}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F3EE">
+<title>ELYSIUM · Tableau de bord (maquette)</title>
+<meta name="robots" content="noindex, nofollow">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
+<link rel="stylesheet" href="assets/site.css?v=2809h">
+<style>
+  /* MAQUETTE du tableau de bord coachs (28/09) : données d'EXEMPLE, rien n'est branché.
+     Sert à montrer la navigation à Damien & Yoann avant de brancher Supabase / Stripe. */
+  body{overflow-x:hidden}
+  .chead{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:18px;padding:14px var(--edge);background:var(--voile);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+  .ctag{font-family:var(--disp);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue)}
+  .chead .who{margin-left:auto;display:flex;align-items:center;gap:14px}
+  @media(max-width:560px){.chead .ctag{display:none}.chead{gap:8px}.chead .elg-name{font-size:17px!important;letter-spacing:.14em!important}}
+  .bandeau{background:var(--p-jaune);border-bottom:1px solid var(--b-jaune);color:#111;font:600 13px/1.4 var(--texte);text-align:center;padding:9px 16px}
+  .ex{display:inline-block;font:700 10px/1 var(--texte);letter-spacing:.12em;text-transform:uppercase;color:#7a5a00;background:var(--p-jaune);border:1px solid var(--b-jaune);border-radius:999px;padding:3px 8px;vertical-align:middle;margin-left:8px}
+
+  .onglets{display:flex;gap:6px;overflow-x:auto;padding:14px var(--edge) 0;max-width:1680px;margin:0 auto;scrollbar-width:none}
+  .onglets::-webkit-scrollbar{display:none}
+  .onglets button{flex:none;font:600 14px/1 var(--texte);color:var(--gris);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer}
+  .onglets button[aria-selected="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+  .onglets button .cad{margin-left:6px;vertical-align:-1px}
+  .cwrap{padding:18px var(--edge) 60px;max-width:1680px;margin:0 auto}
+  .page[hidden]{display:none}
+  h2.t{font:400 26px/1.2 var(--titre);color:var(--ice);margin:6px 0 4px}
+  p.sous{color:var(--steel);font-size:14px;margin:0 0 18px}
+  h3.s{font:600 11px/1 var(--texte);letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin:26px 0 10px}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{border:1px solid var(--line);background:var(--void2);border-radius:14px;padding:14px 16px}
+  .kpi .k{font:600 10.5px/1.3 var(--texte);letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
+  .kpi .v{font:700 32px/1 var(--texte);color:var(--ice);margin-top:8px}
+  .kpi .v small{font-size:15px;font-weight:600;color:var(--steel)}
+  .kpi .s{font-size:12px;color:var(--steel);margin-top:6px}
+  .kpi.hot .v{color:var(--blue)}
+
+  .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+  .carte{border:1px solid var(--line);background:var(--void2);border-radius:14px;padding:14px 16px}
+  .carte h4{font:600 15px/1.3 var(--texte);color:var(--ice);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+  .carte h4 .n{margin-left:auto;font-size:13px;color:var(--blue)}
+  .ligne{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px;color:var(--gris)}
+  .ligne:first-of-type{border-top:0}
+  .ligne b{color:var(--ice);font-weight:600}
+  .ligne span:last-child{text-align:right;color:var(--steel);font-size:13px}
+  .tag{display:inline-block;font:600 11px/1 var(--texte);border-radius:999px;padding:4px 8px;border:1px solid var(--line);color:var(--gris);white-space:nowrap}
+  .tag.j{background:var(--p-jaune);border-color:var(--b-jaune);color:#111}
+  .tag.v{background:var(--p-vert);border-color:var(--b-vert);color:#111}
+  .tag.b{background:var(--p-bleu);border-color:var(--b-bleu);color:#111}
+  .tag.r{background:#f6dcdc;border-color:#d98c8c;color:#7a1f1f}
+  .retard{color:#b45309;font-weight:600}
+
+  /* tableau clients : défile horizontalement sur téléphone, jamais la page */
+  .outils{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .outils input,.outils select{font:14px/1.2 var(--texte);color:var(--ice);background:var(--void2);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+  .outils input{flex:1;min-width:180px;max-width:320px}
+  .tab{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}
+  th{font:600 11px/1.2 var(--texte);letter-spacing:.1em;text-transform:uppercase;color:var(--steel);text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap}
+  th[aria-sort]::after{content:" ↓";color:var(--blue)}
+  td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--gris)}
+  tr:last-child td{border-bottom:0}
+  td b{color:var(--ice);font-weight:600}
+
+  /* barres */
+  .bars{display:flex;flex-direction:column;gap:8px}
+  .bar{display:grid;grid-template-columns:92px 1fr 54px;align-items:center;gap:10px;font-size:13px;color:var(--gris)}
+  .bar .bt{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+  .bar .bf{display:block;height:100%;background:var(--brand);border-radius:99px}
+  .bar .bf.old{background:var(--steel);opacity:.45}
+  .bar .bv{text-align:right;color:var(--ice);font-weight:600}
+  .mois{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;align-items:end;height:170px;padding-top:10px}
+  .mois div{display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;font-size:11px;color:var(--steel)}
+  .mois .cols{display:flex;gap:2px;align-items:flex-end;height:130px;width:100%;justify-content:center}
+  .mois i{display:block;width:40%;border-radius:4px 4px 0 0;background:var(--brand)}
+  .mois i.old{background:var(--steel);opacity:.4}
+  .leg{font-size:12px;color:var(--steel);margin-top:8px}
+  .leg i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--brand);margin:0 4px 0 10px;vertical-align:-1px}
+  .leg i.old{background:var(--steel);opacity:.45}
+
+  /* écran de double vérification (maquette) */
+  .verrou{max-width:460px;margin:30px auto;text-align:center;border:1px solid var(--line);background:var(--void2);border-radius:18px;padding:28px 22px}
+  .verrou h2{font:400 24px/1.2 var(--titre);color:var(--ice);margin:0 0 8px}
+  .verrou p{color:var(--gris);font-size:14px;line-height:1.55}
+  .code{display:flex;justify-content:center;gap:8px;margin:18px 0}
+  .code span{width:40px;height:50px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;font:700 22px var(--texte);color:var(--ice);background:var(--void)}
+  .btn-p{font:600 15px/1 var(--texte);background:var(--brand);color:#111;border:0;border-radius:999px;padding:13px 22px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="bandeau">Maquette : tous les chiffres et les noms de cette page sont des EXEMPLES. Rien n’est encore branché.</div>
+<header class="chead">
+  <a class="logo" href="index.html" aria-label="Elysium"><span class="elg" style="--h:52px"><span class="elg-name">Elysium</span></span></a>
+  <span class="ctag">Espace coachs</span>
+  <span class="who"></span>
+</header>
+
+<nav class="onglets" role="tablist" aria-label="Pages du tableau de bord">
+  <button role="tab" data-p="jour" aria-selected="true">Aujourd’hui</button>
+  <button role="tab" data-p="clients">Clients</button>
+  <button role="tab" data-p="dietes">Diètes</button>
+  <button role="tab" data-p="suivi">Suivi &amp; résultats</button>
+  <button role="tab" data-p="stats">Statistiques<svg class="cad" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-label="protégé"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+  <button role="tab" data-p="eco">Économie<svg class="cad" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-label="protégé"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+</nav>
+
+<div class="cwrap">
+
+<!-- ═════════════ 1. AUJOURD'HUI ═════════════ -->
+<section class="page" id="p-jour">
+  <h2 class="t">À faire aujourd’hui <span class="ex">exemple</span></h2>
+  <p class="sous">La page d’ouverture : ce qui attend une action de votre part, rien d’autre.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Clients actifs</div><div class="v">42</div><div class="s">abonnement en cours</div></div>
+    <div class="kpi"><div class="k">Diètes du mois</div><div class="v">31</div><div class="s">validées depuis le 1er</div></div>
+    <div class="kpi hot"><div class="k">Revenu récurrent</div><div class="v">1 087 <small>€</small></div><div class="s">par période de 4 semaines</div></div>
+    <div class="kpi"><div class="k">Pesées de la semaine</div><div class="v">35<small> / 42</small></div><div class="s">83 % des clients</div></div>
+  </div>
+  <div class="grille" style="margin-top:16px">
+    <div class="carte"><h4>Diètes à relire <span class="n">4</span></h4>
+      <div class="ligne"><b>Camille R.</b><span><span class="tag b">1re diète</span></span></div>
+      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span></span></div>
+      <div class="ligne"><b>Sarah L.</b><span><span class="tag j">Nouveau menu</span></span></div>
+      <div class="ligne"><b>Thomas B.</b><span><span class="tag r">À corriger</span></span></div></div>
+    <div class="carte"><h4>Nouveaux questionnaires <span class="n">2</span></h4>
+      <div class="ligne"><b>Inès D.</b><span>hier, 21:14</span></div>
+      <div class="ligne"><b>Karim A.</b><span>aujourd’hui, 08:02</span></div></div>
+    <div class="carte"><h4>Pesées en retard <span class="n">5</span></h4>
+      <div class="ligne"><b>Nadia F.</b><span class="retard">16 jours</span></div>
+      <div class="ligne"><b>Lucas P.</b><span class="retard">15 jours</span></div>
+      <div class="ligne"><b>Emma G.</b><span>9 jours</span></div>
+      <div class="ligne"><b>Hugo T.</b><span>8 jours</span></div>
+      <div class="ligne"><b>Léa C.</b><span>7 jours</span></div></div>
+    <div class="carte"><h4>Impayés en cours <span class="n">1</span></h4>
+      <div class="ligne"><b>Marc V.</b><span>Formule 2 · 25,90 € · depuis 3 jours</span></div></div>
+    <div class="carte"><h4>Messages non lus <span class="n">3</span></h4>
+      <div class="ligne"><b>Sarah L.</b><span>« Je peux remplacer le saumon ? »</span></div>
+      <div class="ligne"><b>Julien M.</b><span>« Pesée faite, −0,8 kg »</span></div>
+      <div class="ligne"><b>Inès D.</b><span>« Merci ! »</span></div></div>
+    <div class="carte"><h4>Retours clients « plus jamais » <span class="n">2</span></h4>
+      <div class="ligne"><b>Camille R.</b><span>Wrap thon-avocat</span></div>
+      <div class="ligne"><b>Hugo T.</b><span>Porridge banane</span></div></div>
+  </div>
+</section>
+
+<!-- ═════════════ 2. CLIENTS ═════════════ -->
+<section class="page" id="p-clients" hidden>
+  <h2 class="t">Clients <span class="ex">exemple</span></h2>
+  <p class="sous">Tous les clients, filtrables et triables (clic sur un en-tête). Un clic sur un nom ouvre sa fiche : questionnaire, courbe de poids, mensurations, photos, retours, versions de diètes, messages.</p>
+  <div class="outils">
+    <input type="search" id="c-q" placeholder="Rechercher un nom…" aria-label="Rechercher un client">
+    <select id="c-f" aria-label="Formule"><option value="">Toutes les formules</option><option>Formule 1</option><option>Formule 2</option><option>Formule 3</option></select>
+    <select id="c-s" aria-label="Abonnement"><option value="">Tous les statuts</option><option>Abonné</option><option>Impayé</option><option>Résilié</option></select>
+    <select id="c-o" aria-label="Objectif"><option value="">Tous les objectifs</option><option>Perte</option><option>Prise</option><option>Maintien</option></select>
+  </div>
+  <div class="tab"><table><thead><tr>
+    <th data-k="0">Client</th><th data-k="1">Formule</th><th data-k="2">Abonnement</th><th data-k="3">Objectif</th>
+    <th data-k="4" aria-sort="descending">Dernière pesée</th><th data-k="5">Prochaine échéance</th><th data-k="6">Inscription</th>
+  </tr></thead><tbody id="c-tb"></tbody></table></div>
+</section>
+
+<!-- ═════════════ 3. DIÈTES ═════════════ -->
+<section class="page" id="p-dietes" hidden>
+  <h2 class="t">Diètes <span class="ex">exemple</span></h2>
+  <p class="sous">La file de relecture, et qui recevra quoi dans les 4 prochaines semaines.</p>
+  <div class="kpis">
+    <div class="kpi hot"><div class="k">À relire</div><div class="v">4</div></div>
+    <div class="kpi"><div class="k">À corriger</div><div class="v">1</div></div>
+    <div class="kpi"><div class="k">Validées ce mois</div><div class="v">31</div></div>
+    <div class="kpi"><div class="k">Délai moyen de validation</div><div class="v">14 <small>h</small></div><div class="s">entre le dépôt et votre validation</div></div>
+  </div>
+  <h3 class="s">Échéancier des 4 prochaines semaines</h3>
+  <div class="grille">
+    <div class="carte"><h4>Semaine du 29/09 <span class="n">9</span></h4>
+      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span> · F3</span></div>
+      <div class="ligne"><b>Emma G.</b><span><span class="tag j">Nouveau menu</span> · F2</span></div>
+      <div class="ligne"><b>Nadia F.</b><span class="retard">en attente d’une pesée</span></div>
+      <div class="ligne"><span>+ 6 autres</span><span></span></div></div>
+    <div class="carte"><h4>Semaine du 06/10 <span class="n">7</span></h4>
+      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span> · F3</span></div>
+      <div class="ligne"><b>Léa C.</b><span><span class="tag v">Réajustement</span> · F1</span></div>
+      <div class="ligne"><span>+ 5 autres</span><span></span></div></div>
+    <div class="carte"><h4>Semaine du 13/10 <span class="n">11</span></h4>
+      <div class="ligne"><b>Sarah L.</b><span><span class="tag j">Nouveau menu</span> · F3</span></div>
+      <div class="ligne"><b>Marc V.</b><span class="retard">bloqué : impayé</span></div>
+      <div class="ligne"><span>+ 9 autres</span><span></span></div></div>
+    <div class="carte"><h4>Semaine du 20/10 <span class="n">8</span></h4>
+      <div class="ligne"><b>Camille R.</b><span><span class="tag v">Réajustement</span> · F1</span></div>
+      <div class="ligne"><span>+ 7 autres</span><span></span></div></div>
+  </div>
+  <p class="sous" style="margin-top:12px">Rythme : Formule 1 = réajustement 4 semaines après la dernière diète · Formule 2 = nouveau menu toutes les 4 semaines · Formule 3 = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif.</p>
+</section>
+
+<!-- ═════════════ 4. SUIVI & RÉSULTATS ═════════════ -->
+<section class="page" id="p-suivi" hidden>
+  <h2 class="t">Suivi &amp; résultats <span class="ex">exemple</span></h2>
+  <p class="sous">Est-ce que les clients se pèsent, et est-ce que ça avance.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Taux de pesée</div><div class="v">83 <small>%</small></div><div class="s">clients pesés cette semaine</div></div>
+    <div class="kpi"><div class="k">Perte de poids</div><div class="v">−0,6 <small>kg / sem.</small></div><div class="s">moyenne, 28 clients</div></div>
+    <div class="kpi"><div class="k">Prise de masse</div><div class="v">+0,3 <small>kg / sem.</small></div><div class="s">moyenne, 9 clients</div></div>
+    <div class="kpi"><div class="k">Maintien</div><div class="v">±0,2 <small>kg</small></div><div class="s">écart moyen, 5 clients</div></div>
+  </div>
+  <div class="grille" style="margin-top:16px">
+    <div class="carte"><h4>Vers le poids idéal</h4>
+      <div class="bars">
+        <div class="bar"><span>Camille R.</span><span class="bt"><i class="bf" style="width:72%"></i></span><span class="bv">72 %</span></div>
+        <div class="bar"><span>Julien M.</span><span class="bt"><i class="bf" style="width:55%"></i></span><span class="bv">55 %</span></div>
+        <div class="bar"><span>Sarah L.</span><span class="bt"><i class="bf" style="width:40%"></i></span><span class="bv">40 %</span></div>
+        <div class="bar"><span>Hugo T.</span><span class="bt"><i class="bf" style="width:18%"></i></span><span class="bv">18 %</span></div>
+      </div>
+      <p class="leg">Départ → poids actuel → poids idéal du questionnaire. Ex. Camille : 78 → 70,8 kg, idéal 68 kg.</p></div>
+    <div class="carte"><h4>Poids stable sur 3 pesées <span class="n">3</span></h4>
+      <div class="ligne"><b>Lucas P.</b><span>81,2 · 81,0 · 81,1 kg</span></div>
+      <div class="ligne"><b>Emma G.</b><span>63,4 · 63,5 · 63,3 kg</span></div>
+      <div class="ligne"><b>Thomas B.</b><span>92,0 · 91,9 · 92,1 kg</span></div>
+      <p class="leg" style="margin-left:0">Affichage seulement : vos règles pour ces cas viendront plus tard.</p></div>
+  </div>
+</section>
+
+<!-- ═════════════ 5 & 6. PAGES PROTÉGÉES ═════════════ -->
+<section class="page" id="p-verrou" hidden>
+  <div class="verrou">
+    <h2>Double vérification</h2>
+    <p>Les statistiques et l’économie demandent un code à 6 chiffres, généré par une application sur ton téléphone (Google Authenticator, par exemple). Sans ce code, même connecté, ces chiffres restent illisibles.</p>
+    <div class="code" aria-hidden="true"><span>•</span><span>•</span><span>•</span><span>•</span><span>•</span><span>•</span></div>
+    <button type="button" class="btn-p" id="deverrouiller">Voir la page (maquette)</button>
+    <p style="font-size:12.5px;color:var(--steel);margin-top:14px">Première fois&nbsp;: un QR code à scanner une seule fois pour relier ton téléphone.</p>
+  </div>
+</section>
+
+<section class="page" id="p-stats" hidden>
+  <h2 class="t">Statistiques <span class="ex">exemple</span></h2>
+  <p class="sous">Programmes alimentaires uniquement, historique d’avant le site compris.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Diètes en 2026</div><div class="v">214</div><div class="s">+18 % sur 2025 à la même date</div></div>
+    <div class="kpi"><div class="k">Depuis le début</div><div class="v">593</div><div class="s">cumul, historique compris</div></div>
+    <div class="kpi"><div class="k">Hommes / Femmes</div><div class="v">64 <small>% / 36 %</small></div></div>
+    <div class="kpi"><div class="k">Ce mois-ci</div><div class="v">31</div><div class="s">septembre 2025 : 24</div></div>
+  </div>
+  <div class="grille" style="margin-top:16px">
+    <div class="carte" style="grid-column:1/-1"><h4>Diètes vendues par mois</h4>
+      <div class="mois" id="g-mois"></div>
+      <p class="leg"><i></i>2026<i class="old"></i>2025</p></div>
+    <div class="carte"><h4>Tranches d’âge</h4><div class="bars" id="g-ages"></div></div>
+    <div class="carte"><h4>Par formule</h4><div class="bars">
+      <div class="bar"><span>Formule 1</span><span class="bt"><i class="bf" style="width:38%"></i></span><span class="bv">16</span></div>
+      <div class="bar"><span>Formule 2</span><span class="bt"><i class="bf" style="width:100%"></i></span><span class="bv">19</span></div>
+      <div class="bar"><span>Formule 3</span><span class="bt"><i class="bf" style="width:37%"></i></span><span class="bv">7</span></div></div></div>
+  </div>
+</section>
+
+<section class="page" id="p-eco" hidden>
+  <h2 class="t">Économie <span class="ex">exemple</span></h2>
+  <p class="sous">Chiffres agrégés, lus depuis Stripe. Aucune donnée de carte.</p>
+  <div class="kpis">
+    <div class="kpi hot"><div class="k">Encaissé ce mois</div><div class="v">1 164 <small>€</small></div><div class="s">frais Stripe déduits : 1 121 €</div></div>
+    <div class="kpi"><div class="k">Encaissé en 2026</div><div class="v">9 842 <small>€</small></div></div>
+    <div class="kpi"><div class="k">Revenu récurrent</div><div class="v">1 087 <small>€</small></div><div class="s">par période de 4 semaines</div></div>
+    <div class="kpi"><div class="k">Prévision octobre</div><div class="v">1 140 <small>€</small></div><div class="s">échéances déjà connues</div></div>
+  </div>
+  <div class="grille" style="margin-top:16px">
+    <div class="carte"><h4>Revenu récurrent par formule</h4><div class="bars">
+      <div class="bar"><span>Formule 1</span><span class="bt"><i class="bf" style="width:65%"></i></span><span class="bv">318 €</span></div>
+      <div class="bar"><span>Formule 2</span><span class="bt"><i class="bf" style="width:100%"></i></span><span class="bv">492 €</span></div>
+      <div class="bar"><span>Formule 3</span><span class="bt"><i class="bf" style="width:43%"></i></span><span class="bv">209 €</span></div></div></div>
+    <div class="carte"><h4>Abonnés ce mois</h4>
+      <div class="ligne"><span>Nouveaux abonnés</span><b>9</b></div>
+      <div class="ligne"><span>Résiliations</span><b>3</b></div>
+      <div class="ligne"><span>Taux de départ</span><b>7 %</b></div>
+      <div class="ligne"><span>Durée moyenne d’abonnement</span><b>4,2 mois</b></div>
+      <div class="ligne"><span>Revenu moyen par client</span><b>118 €</b></div></div>
+    <div class="carte"><h4>Incidents de paiement</h4>
+      <div class="ligne"><span>Impayés en cours</span><b>1 · 25,90 €</b></div>
+      <div class="ligne"><span>Impayés récupérés ce mois</span><b>2 · 45,80 €</b></div>
+      <div class="ligne"><span>Remboursements</span><b>0</b></div>
+      <div class="ligne"><span>Oppositions (litiges)</span><b class="retard">1 · 20 € de frais</b></div>
+      <p class="leg" style="margin-left:0">Chaque opposition coûte 20 € de frais Stripe, même gagnée.</p></div>
+  </div>
+</section>
+
+</div>
+
+<script src="assets/site.js?v=2809h"></script>
+<script>
+(function(){
+  "use strict";
+  var $=function(id){ return document.getElementById(id); }, ouvert=false;
+  function voir(p){
+    document.querySelectorAll('.onglets button').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.p===p); });
+    var cible=((p==='stats'||p==='eco')&&!ouvert)?'verrou':p;
+    document.querySelectorAll('.page').forEach(function(s){ s.hidden=s.id!=='p-'+cible; });
+    voir.p=p; scrollTo(0,0);
+  }
+  document.querySelector('.onglets').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) voir(b.dataset.p); });
+  $('deverrouiller').addEventListener('click',function(){ ouvert=true; voir(voir.p); });
+
+  // --- clients (exemple) : [nom, formule, abonnement, objectif, jours depuis pesée, échéance, inscription]
+  var C=[['Camille R.','Formule 1','Abonné','Perte',2,'2026-10-12','2026-06-02'],['Julien M.','Formule 3','Abonné','Perte',1,'2026-10-04','2026-05-18'],
+    ['Sarah L.','Formule 3','Abonné','Prise',3,'2026-10-09','2026-07-21'],['Thomas B.','Formule 2','Abonné','Perte',5,'2026-10-15','2026-08-03'],
+    ['Nadia F.','Formule 2','Abonné','Perte',16,'2026-10-01','2026-04-11'],['Lucas P.','Formule 1','Abonné','Maintien',15,'2026-10-20','2026-03-29'],
+    ['Emma G.','Formule 2','Abonné','Perte',9,'2026-10-02','2026-07-02'],['Marc V.','Formule 2','Impayé','Prise',4,'2026-09-25','2026-02-14'],
+    ['Hugo T.','Formule 1','Résilié','Perte',8,'—','2026-01-08'],['Inès D.','Formule 3','Abonné','Perte',null,'2026-10-26','2026-09-27']];
+  var tri=4, sens=-1;
+  function fd(d){ return d==='—'?d:d.slice(8)+'/'+d.slice(5,7)+'/'+d.slice(0,4); }
+  function renderC(){
+    var q=$('c-q').value.trim().toLowerCase(), f=$('c-f').value, s=$('c-s').value, o=$('c-o').value;
+    var L=C.filter(function(c){ return (!q||c[0].toLowerCase().indexOf(q)>=0)&&(!f||c[1]===f)&&(!s||c[2]===s)&&(!o||c[3]===o); })
+      .sort(function(a,b){ var x=a[tri],y=b[tri]; if(x==null) return 1; if(y==null) return -1; return (x>y?1:x<y?-1:0)*sens; });
+    var tg={Abonné:'v',Impayé:'r',Résilié:''};
+    $('c-tb').innerHTML=L.map(function(c){
+      return '<tr><td><b>'+c[0]+'</b></td><td>'+c[1]+'</td><td><span class="tag '+tg[c[2]]+'">'+c[2]+'</span></td><td>'+c[3]+'</td><td'+(c[4]>=7?' class="retard"':'')+'>'+
+        (c[4]==null?'aucune':'il y a '+c[4]+' j')+'</td><td>'+fd(c[5])+'</td><td>'+fd(c[6])+'</td></tr>'; }).join('')||'<tr><td colspan="7">Aucun client ne correspond.</td></tr>';
+  }
+  ['c-q','c-f','c-s','c-o'].forEach(function(id){ $(id).addEventListener('input',renderC); });
+  document.querySelectorAll('th[data-k]').forEach(function(th){ th.addEventListener('click',function(){
+    var k=+th.dataset.k; sens = tri===k ? -sens : 1; tri=k;
+    document.querySelectorAll('th').forEach(function(x){ x.removeAttribute('aria-sort'); }); th.setAttribute('aria-sort','x'); renderC(); }); });
+  renderC();
+
+  // --- statistiques (exemple)
+  var M=['J','F','M','A','M','J','J','A','S','O','N','D'], a26=[18,21,26,24,27,22,19,25,31], a25=[12,15,19,20,22,18,14,20,24,26,23,17], mx=31;
+  $('g-mois').innerHTML=M.map(function(m,i){
+    return '<div><span class="cols"><i class="old" style="height:'+(a25[i]/mx*100)+'%"></i>'+(a26[i]!=null?'<i style="height:'+(a26[i]/mx*100)+'%"></i>':'')+'</span>'+m+'</div>'; }).join('');
+  var AG=[['16-25',38],['26-35',92],['36-45',71],['46-55',33],['56-65',12],['66+',3]];
+  $('g-ages').innerHTML=AG.map(function(a){ return '<div class="bar"><span>'+a[0]+' ans</span><span class="bt"><i class="bf" style="width:'+(a[1]/92*100)+'%"></i></span><span class="bv">'+a[1]+'</span></div>'; }).join('');
+})();
+</script>
+</body>
+</html>

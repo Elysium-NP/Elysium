@@ -1446,6 +1446,14 @@ var REL=(function(){
       bl.map(function(b){ return '<span class="k">'+b[0]+'</span>'+b[1].map(function(w){ return '<span class="w">'+e(w)+'</span>'; }).join(''); }).join('')+
       '<p>Ces mots n’ont <b>pas</b> été retirés du menu. À toi de juger ce que ça implique (une famille entière ? une source à remplacer ?) et de le signaler si le menu doit changer.</p></div>'
       :'<p class="leg" style="margin-left:0">Rien à interpréter : tout ce que le client a écrit est connu.</p>';
+    // plats imposés (suivi, coach, client) retirés car ils contenaient un aliment refusé : diagnostic.alertes_impose (28/09 soir)
+    var ali=(R.diagnostic||{}).alertes_impose;
+    if(ali&&(!Array.isArray(ali)||ali.length)) h+='<p class="rl-ko">Plat imposé écarté (aliment refusé) : '+[].concat(ali).map(function(a){
+      return e(typeof a==='string'?a:[a.jour?'J'+a.jour:'',a.repas,a.plat||a.titre,a.aliment?'('+a.aliment+')':'',a.raison].filter(Boolean).join(' '));
+    }).join(' · ')+'. La case a été remplie par un autre plat.</p>';
+    // corrections demandées que la préparation n'a pas pu appliquer : diagnostic.rectification.non_appliquees
+    var na=((R.diagnostic||{}).rectification||{}).non_appliquees;
+    if(Array.isArray(na)&&na.length) h+='<p class="rl-ko">Corrections non appliquées : '+na.map(function(x){ return e(typeof x==='string'?x:(x.raison||JSON.stringify(x))); }).join(' · ')+'. À reprendre à la main.</p>';
     return h;
   }
 

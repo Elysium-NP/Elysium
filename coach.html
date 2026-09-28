@@ -1234,7 +1234,7 @@ var REL=(function(){
   function norm(s){ return String(s||'').toLowerCase().replace(/œ/g,'oe').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
   function mots(s){ return norm(s).split(' ').filter(function(w){ return w.length>2; }).map(function(w){ return w.replace(/[sx]$/,''); }); }
   function cap(s){ s=String(s||''); return s.charAt(0).toUpperCase()+s.slice(1); }
-  function ingLabel(i){ return i.affichage||(gx(i.grammes)+' g '+(/^[aeiouyhéœ]/i.test(i.ingredient)?'d’':'de ')+i.ingredient); }
+  function ingLabel(i){ return i.ligne||i.affichage||(gx(i.grammes)+' g '+(/^[aeiouyhéœ]/i.test(i.ingredient)?'d’':'de ')+i.ingredient); }
   function joursOk(R){ var c=(R.menu||{}).cible||{}; return actifs(R.menu).filter(function(j){ return Math.abs(ecart(totJour(j).kcal,c.kcal))<=TOL; }).length; }
 
   // aliments INTERDITS = refus + allergies du questionnaire + detestes du menu ;
@@ -1744,6 +1744,7 @@ var REL=(function(){
     return '<button type="button" class="tb" data-act="file" title="Retour à la file de relecture" aria-label="Retour à la file">'+ico(IC.back)+'<span class="tl">File</span></button><span class="sep"></span>'+
       '<span class="tb-j"><button type="button" class="tb ic" data-act="prec" aria-label="Jour précédent" title="Jour précédent (J ou ←)">'+ico(IC.prev)+'</button><span class="tb jr" aria-live="polite">'+(j.off?'Jour OFF':'Jour '+(j.jour||''))+'</span><button type="button" class="tb ic" data-act="suiv" aria-label="Jour suivant" title="Jour suivant (K ou →)">'+ico(IC.next)+'</button></span><span class="sep"></span>'+
       '<button type="button" class="tb '+(o.edit?'on':'p')+'" data-act="edition"'+(o.lecture&&!o.edit?' disabled title="'+e(o.lecture)+'"':'')+'>'+ico(IC.edit)+'<span>'+(o.edit?'Terminer l’édition':'Modifier')+'</span> <kbd>E</kbd></button>'+
+      (!R.archive&&/^(a_relire|rectification|valide)$/.test(R.etat)?'<button type="button" class="tb" data-act="pdf" title="Ouvrir la fiche PDF de cette version">'+ico(IC.note)+'<span class="tl">Aperçu PDF</span></button>':'')+
       '<button type="button" class="tb" data-act="notes" aria-label="Notes internes">'+ico(IC.note)+'<span class="tl">Notes</span> <kbd>N</kbd></button>'+
       '<button type="button" class="tb ic'+(o.plein?' on':'')+'" data-act="plein" aria-label="Plein écran" title="Plein écran (F)">'+ico(IC.plein)+'</button>'+
       '<button type="button" class="tb ic" data-act="aide" aria-label="Raccourcis clavier" title="Raccourcis (?)">?</button>'+
@@ -1850,7 +1851,7 @@ var ED=(function(){
   function p100(ref,id){
     if(ref&&cle(ref.ingredient)===cle(id)&&+ref.grammes>0) return MAC.map(function(m){ return (+ref[m]||0)/ref.grammes*100; });
     var al=aliment(id); if(!al||!al.p100) return null; return [al.p100.kcal,al.p100.p,al.p100.g,al.p100.l].map(function(v){ return +v||0; }); }
-  function regrammer(x,ref,g){ var v=p100(ref,x.ingredient), al=aliment(x.ingredient), p=al&&al.piece; x.grammes=g;
+  function regrammer(x,ref,g){ var v=p100(ref,x.ingredient), al=aliment(x.ingredient), p=al&&al.piece; x.grammes=g; delete x.ligne;   // libellé de la fiche = ancienne quantité : le worker le réécrit
     if(v) MAC.forEach(function(m,k){ x[m]=r1(v[k]*g/100); });
     if(p){ x.unites=Math.round(g/p.g*100)/100; x.affichage=affichage(x.ingredient,g); } else if(x.affichage!=null) x.affichage=null; }
   function nouvelleLigne(al,g){ var x={ingredient:al.id,aliment:al.nom,grammes:g,unites:null,affichage:null,kcal:0,proteines:0,glucides:0,lipides:0}; regrammer(x,null,g); return x; }
@@ -2681,8 +2682,8 @@ var ED=(function(){
   function rlDec(){ var d=$('rl-dec'), t=$('rl-dec-top'), s=suivante(), sn=s&&((s.prenom||'')+' '+(s.nom||'')).trim(), h;
     d.className='rl-dec rl-dec-fin'+(RL.S?' ed-dec':'');
     if(!RL.S&&RL.R.xid&&RL.R.etat==='valide'&&!RL.R.archive)          // Google Form : rien n'est « envoyé » (pas de compte) ; la fiche PDF viendra ici
-      h='<div class="rl-etat"><b>Validée</b> · lecture seule. Client sans compte : la fiche PDF se téléchargera ici (bientôt).</div><div class="in"><button type="button" class="db" data-act="file">← Retour à la file</button>'+
-        '<button type="button" class="db" disabled title="Bientôt disponible">Télécharger la fiche PDF · bientôt</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(sn)+' →</button>':'')+'</div>';
+      h='<div class="rl-etat"><b>Validée</b> · lecture seule. Client sans compte : sa fiche PDF s’ouvre ici.</div><div class="in"><button type="button" class="db" data-act="file">← Retour à la file</button>'+
+        '<button type="button" class="db" data-act="pdf">Aperçu de la fiche PDF</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(sn)+' →</button>':'')+'</div>';
     else h=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:sn,attente:(RL.co.liste||[]).length});
     d.innerHTML='<h4 class="rl-h">Ta décision</h4>'+h;
     if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML=h; } }
@@ -2856,6 +2857,12 @@ var ED=(function(){
     switch(a){
       case 'file': var rt=RL.retour, rx=!!RL.R.xid; sortir(function(){ sortiePlein(); if(rt){ if(rx) ouvrirExt(rt); else ouvrir(rt); } else voir('dietes'); }); break;
       case 'suivante': var s=suivante(); if(s) relire(s); break;
+      case 'pdf': var pf=(RL.R.diagnostic||{}).pdf;   // fiche de CETTE version seulement : une version retouchée hérite du diagnostic de la précédente
+        if(!pf||!pf.chemin||+pf.version!==+RL.R.version){ toast('PDF en préparation'); break; }
+        var w=window.open('','_blank');
+        sb.storage.from('fiches').createSignedUrl(pf.chemin,300).then(function(r){
+          if(r.error||!r.data){ if(w) w.close(); toast('PDF en préparation'); return; }
+          if(w){ w.opener=null; w.location=r.data.signedUrl; } else location.href=r.data.signedUrl; }); break;
       case 'jour': allerJour(+b.dataset.i); break;
       case 'prec': allerJour(RL.i-1); break;
       case 'suiv': allerJour(RL.i+1); break;

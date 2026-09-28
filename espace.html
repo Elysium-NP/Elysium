@@ -1135,10 +1135,13 @@ var PROG = {
       counts();
     })();
 
-    // Impression : AUCUNE génération ici. En prod, le PDF (versions claire ET sombre) est créé à
-    // l'inscription, en même temps que la version en ligne ; ce bouton va juste chercher le fichier prêt.
+    // Impression : la fiche PDF de la dernière version validée (bucket privé « fiches », lien signé 5 min)
     var pb=host.querySelector('.acc-print'); if(pb) pb.addEventListener('click',function(){
-      alert("Impression\n\nTon programme est déjà en PDF (version claire ET sombre), généré à ton inscription en même temps que ta version en ligne. Ici on récupère juste le fichier prêt, sans rien recalculer.\n\n(Maquette : le PDF n'est pas encore branché au back-end.)");
+      if(!REEL.pdf){ alert('Ta fiche PDF est en préparation : elle sera disponible ici très vite.'); return; }
+      var uu=moi(), nm=('Programme Elysium - '+(uu.prenom||'')+' '+(uu.nom||'')).trim()+'.pdf';
+      ElyAuth.client.storage.from('fiches').createSignedUrl(REEL.pdf,300,{download:nm}).then(function(r){
+        if(r.error||!r.data) alert('Ta fiche PDF est en préparation : elle sera disponible ici très vite.'); else location.href=r.data.signedUrl;
+      });
     });
 
     // lien direct vers un onglet (#courses, #conseils, #j3…)
@@ -1201,7 +1204,7 @@ var PROG = {
           cle:r.recette||'',               // …elle sert seulement à retrouver la recette : menu.recettes[repas.recette]
           seas:'', m:[r0(m.proteines),r0(m.glucides),r0(m.lipides)],
           ings:(r.ingredients||[]).map(function(i){
-            return i.affichage ? [esc(i.affichage),''] : [r0(i.grammes)+' g', esc(i.aliment||i.ingredient||'')]; })};
+            return (i.ligne||i.affichage) ? [esc(i.ligne||i.affichage),''] : [r0(i.grammes)+' g', esc(i.aliment||i.ingredient||'')]; })};
       })}; }),
       courses:coursesDepuis(p.menu),       // liste du moteur si déposée, sinon somme du menu
       recettes:(p.menu||{}).recettes||null, // Formule Elysium seulement (spec 28/09) : {clé: {nom, temps, etapes, astuce, photo_url, ingredients, jours, variantes?}}
@@ -1213,12 +1216,13 @@ var PROG = {
     var sb=ElyAuth.client, id=u.id;
     return Promise.all([
       sb.from('questionnaires').select('statut,reponses').eq('user_id',id).eq('type','nutrition').maybeSingle(),
-      sb.from('programmes').select('id,version,menu,cible').eq('user_id',id).eq('statut','valide')
+      sb.from('programmes').select('id,version,menu,cible,pdf:diagnostic->pdf').eq('user_id',id).eq('statut','valide')
         .order('version',{ascending:false}).limit(1)
     ]).then(function(r){
       var q=r[0]&&r[0].data, p=r[1]&&r[1].data&&r[1].data[0];
       REEL.quest=!!(q&&q.statut==='valide');
-      if(p&&p.menu){ PROG=depuisBase(p, q&&q.reponses); REEL.prog=true; REEL.pid=p.id; REEL.menu=p.menu; }
+      if(p&&p.menu){ PROG=depuisBase(p, q&&q.reponses); REEL.prog=true; REEL.pid=p.id; REEL.menu=p.menu;
+        REEL.pdf=p.pdf&&p.pdf.chemin&&+p.pdf.version===+p.version?p.pdf.chemin:null; }   // fiche de CETTE version seulement (une version retouchée hérite du diagnostic)
     }).catch(function(){});
   }
 

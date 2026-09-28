@@ -37,6 +37,21 @@ if(!ELY_CHOIX) location.replace('formules.html#les-formules');
   /* aide sous un champ — texte normal (pas de capitales : le <label> parent les impose) */
   .auth-form .fhint{font-family:var(--disp);font-size:11.5px;line-height:1.55;color:var(--steel);
     letter-spacing:0;text-transform:none;margin-top:-2px}
+  /* « Avant de continuer » (précautions, 28/09) — même bloc que precautions.html */
+  .precau{margin:10px 0 0;padding:20px 18px;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  .precau h2{font-family:var(--titre);font-weight:400;font-size:22px;line-height:1.25;text-transform:none;letter-spacing:0;color:var(--ice);margin:0 0 8px}
+  .precau>p{font-family:var(--texte);font-size:15px;line-height:1.55;color:var(--gris);margin:0 0 14px}
+  .precau ol{list-style:none;counter-reset:pc;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:9px}
+  .precau li{counter-increment:pc;display:flex;gap:10px;align-items:flex-start;font-family:var(--texte);font-size:15px;line-height:1.45;color:var(--ice);overflow-wrap:anywhere}
+  .precau li::before{content:counter(pc);flex:0 0 24px;height:24px;border-radius:50%;background:var(--p-bleu);color:var(--blue);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:-1px}
+  .auth-form label.pcase,label.pcase{display:flex;flex-direction:row;align-items:center;gap:12px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--void);cursor:pointer;font-family:var(--texte);font-size:15px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ice)}
+  .auth-form label.pcase input,label.pcase input{flex:0 0 22px;width:22px;height:22px;margin:0;padding:0;accent-color:var(--blue);cursor:pointer}
+  .pconc{display:block;width:100%;min-height:44px;margin-top:12px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--gris);font-family:var(--texte);font-size:15px;cursor:pointer}
+  .pconc:hover{border-color:var(--blue);color:var(--ice)}
+  .pmsg{padding:20px 18px;border:1px solid var(--line);border-left:3px solid var(--b-bleu);border-radius:14px;background:var(--void2)}
+  .pmsg p{font-family:var(--texte);font-size:16px;line-height:1.6;color:var(--ice);margin:0 0 12px}
+  .pmsg .pliens{display:flex;flex-wrap:wrap;gap:10px 18px;margin:16px 0 0;font-size:15px}
+  .pmsg a{color:var(--blue);display:inline-flex;align-items:center;min-height:44px}
 </style>
 </head>
 <body>
@@ -76,11 +91,22 @@ if(!ELY_CHOIX) location.replace('formules.html#les-formules');
       <label>Mot de passe<input type="password" name="password" autocomplete="new-password" minlength="10" required>
         <span class="fhint">10 caractères minimum. Une phrase courte est plus sûre et plus facile à retenir qu'un mot compliqué.</span></label>
       <label>Confirme le mot de passe<input type="password" name="password2" autocomplete="new-password" minlength="10" required></label>
+      <section class="precau" aria-labelledby="precau-t">
+        <h2 id="precau-t">Avant de continuer</h2>
+        <p>Damien &amp; Yoann ne prennent pas en charge les situations suivantes&nbsp;:</p>
+        <ol id="precau-liste"></ol>
+        <label class="pcase"><input type="checkbox" name="aucune">Je ne suis dans aucune de ces situations</label>
+        <button type="button" class="pconc" id="concerne">Je suis concerné(e)</button>
+      </section>
       <p class="auth-note">Nom, prénom, date de naissance, sexe et taille ne seront plus modifiables ensuite (hors correction exceptionnelle). Seul ton poids évolue au fil du suivi.</p>
       <button type="submit" class="btn">Créer mon compte</button>
     </form>
+    <div class="pmsg" id="pmsg" hidden tabindex="-1">
+      <p>Merci pour ta franchise. Dans ta situation, un accompagnement nutritionnel doit être suivi par un professionnel de santé (médecin, diététicien)&nbsp;: nous ne sommes pas en mesure de t'accompagner, et c'est pour ta sécurité. N'hésite pas à en parler à ton médecin.</p>
+      <div class="pliens"><a href="index.html">Retour à l'accueil</a><a href="contact.html">Une question&nbsp;? Écris-nous</a></div>
+    </div>
     <p class="auth-msg" id="msg" role="alert"></p>
-    <p class="auth-alt">Déjà inscrit ? <a href="connexion.html">Se connecter</a></p>
+    <p class="auth-alt" id="alt">Déjà inscrit ? <a href="connexion.html">Se connecter</a></p>
   </div>
 </main>
 
@@ -92,7 +118,7 @@ if(!ELY_CHOIX) location.replace('formules.html#les-formules');
 
 <script src="assets/site.js?v=2809h"></script>
 <script src="assets/vendor/supabase.min.js"></script>
-<script src="assets/ely-auth.js?v=stripe1"></script>
+<script src="assets/ely-auth.js?v=avant1"></script>
 <script>
 (function(){
   var f=document.getElementById('signup');
@@ -101,8 +127,18 @@ if(!ELY_CHOIX) location.replace('formules.html#les-formules');
   // programmations réservées aux majeurs -> borne la date de naissance à il y a 18 ans
   var d=new Date(); d.setFullYear(d.getFullYear()-18);
   f.naissance.max=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  // « Avant de continuer » : liste lue dans ElyAuth (une seule source, versionnée)
+  document.getElementById('precau-liste').innerHTML=ElyAuth.situations.map(function(t){return '<li>'+t+'</li>';}).join('');
+  f.aucune.addEventListener('change',function(){ f.aucune.setCustomValidity(''); });
+  // Concerné(e) : aucun compte créé, RIEN d'enregistré (ni la situation, ni le clic)
+  document.getElementById('concerne').addEventListener('click',function(){
+    f.reset(); f.hidden=true; ['alt','choix'].forEach(function(id){document.getElementById(id).hidden=true;}); document.querySelector('.auth-card .sub').hidden=true;
+    document.querySelector('.auth-card h1').innerHTML='Avant de<span class="l2">continuer.</span>'; document.getElementById('msg').className='auth-msg';
+    var m=document.getElementById('pmsg'); m.hidden=false; m.focus(); window.scrollTo(0,0);
+  });
   f.addEventListener('submit',function(e){
     e.preventDefault();
+    if(!f.aucune.checked){ f.aucune.setCustomValidity('Coche cette case pour continuer, ou choisis « Je suis concerné(e) ».'); f.aucune.reportValidity(); return; }
     if(f.password.value!==f.password2.value){ f.password2.setCustomValidity('Les mots de passe ne correspondent pas.'); f.password2.reportValidity(); return; }
     f.password2.setCustomValidity('');
     var dob=new Date(f.naissance.value), n=new Date();
@@ -127,7 +163,8 @@ if(!ELY_CHOIX) location.replace('formules.html#les-formules');
     btn.disabled=true; btn.textContent='Création…';
     ElyAuth.signup({prenom:f.prenom.value, nom:f.nom.value, email:f.email.value, password:f.password.value,
                     naissance:f.naissance.value, sexe:f.sexe.value, taille:f.taille.value,
-                    formule:new URLSearchParams(location.search).get('formule'), formule_prix:ELY_CHOIX.prix})
+                    formule:new URLSearchParams(location.search).get('formule'), formule_prix:ELY_CHOIX.prix,
+                    declaration:f.aucune.checked})
       .then(function(res){
         if(res.needsEmailConfirm){
           // Confirmation d'adresse activée : pas de session tant que le lien n'est pas cliqué.

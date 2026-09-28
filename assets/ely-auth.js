@@ -91,6 +91,33 @@
 
   var ready = refresh();
 
+  /* PRÉCAUTIONS « Avant de continuer » (validé par Damien & Yoann, 28/09). Liste MOT POUR MOT.
+     ⛔ Aucune donnée de santé : on ne garde QUE la déclaration « aucune situation » (booléen + date +
+     version de la liste), comme preuve. Une personne concernée ne laisse AUCUNE trace.
+     Changer la liste = changer LISTE_PRECAUTIONS (les déclarations d'une autre version ne comptent plus). */
+  var LISTE_PRECAUTIONS = "2026-09-28";
+  var SITUATIONS = [
+    "Moins de 18 ans",
+    "Grossesse ou allaitement",
+    "Régime végétarien ou vegan",
+    "Diabète (type 1, ou type 2 sous traitement)",
+    "Maladie des reins ou du foie",
+    "Maladie cardiaque ou cardiovasculaire sous traitement",
+    "Trouble du comportement alimentaire (anorexie, boulimie, hyperphagie), actuel ou récent",
+    "Chirurgie de l'obésité (sleeve, bypass…)",
+    "Maladie inflammatoire de l'intestin (Crohn, RCH)",
+    "Cancer en cours de traitement",
+    "Toute pathologie pour laquelle un médecin t'a prescrit une alimentation particulière"
+  ];
+  function declaration() {
+    return { declaration_aucune_situation: true,
+             declaration_aucune_situation_le: new Date().toISOString(),
+             declaration_liste: LISTE_PRECAUTIONS };
+  }
+  function aDeclare(meta) {
+    return !!meta && meta.declaration_aucune_situation === true && meta.declaration_liste === LISTE_PRECAUTIONS;
+  }
+
   window.ElyAuth = {
     ready: ready,          // Promesse : résolue quand session + profil sont chargés
     client: sb,            // client Supabase brut (poids, mensurations…)
@@ -101,6 +128,18 @@
     /* Inscription. Renvoie {user, needsEmailConfirm}. */
     signup: function (data) {
       if (!sb) return Promise.reject(new Error("Supabase indisponible"));
+      // la case « Je ne suis dans aucune de ces situations » est obligatoire pour créer un compte
+      if (data.declaration !== true) return Promise.reject(new Error("Déclaration manquante"));
+      var meta = {
+        prenom: (data.prenom || "").trim(),
+        nom: (data.nom || "").trim(),
+        naissance: (data.naissance || "").trim(),
+        sexe: (data.sexe || "").trim().toUpperCase(),
+        taille_cm: data.taille ? parseInt(data.taille, 10) : null,
+        // formule choisie AVANT la création du compte (parcours « comme dans le commerce », 27/09)
+        formule: data.formule || null, formule_prix: data.formule_prix || null
+      };
+      var d = declaration(); for (var k in d) meta[k] = d[k];
       return sb.auth.signUp({
         email: (data.email || "").trim(),
         password: data.password,
@@ -109,15 +148,7 @@
           // Supabase le renvoyait sur la racine du site SANS aucun message — il ne savait
           // même pas si ça avait marché (relevé par Dimitri le 27/07).
           emailRedirectTo: location.origin + "/bienvenue",
-          data: {
-            prenom: (data.prenom || "").trim(),
-            nom: (data.nom || "").trim(),
-            naissance: (data.naissance || "").trim(),
-            sexe: (data.sexe || "").trim().toUpperCase(),
-            taille_cm: data.taille ? parseInt(data.taille, 10) : null,
-            // formule choisie AVANT la création du compte (parcours « comme dans le commerce », 27/09)
-            formule: data.formule || null, formule_prix: data.formule_prix || null
-          }
+          data: meta
         }
       }).then(function (r) {
         if (r.error) throw r.error;
@@ -201,10 +232,27 @@
     /* PAIEMENT STRIPE (fonction serveur « stripe-paiement ») : renvoie vers la page Stripe.
        formule : "f1" | "f2" | "f3". Rien n'est encaissé ici : c'est Stripe qui gère la carte. */
     payer: function (formule) {
-      return sb.functions.invoke("stripe-paiement", { body: { action: "checkout", formule: formule } })
+      if (!sb) return Promise.reject(new Error("Paiement indisponible pour le moment."));
+      // GARDE-FOU CENTRAL : pas de Stripe sans la déclaration « aucune situation » (comptes créés
+      // avant le 28/09 compris ; le compte admin « mixte » aussi, c'est un vrai paiement).
+      // getUser() relit le compte sur le serveur (pas une copie locale périmée).
+      return sb.auth.getUser().then(function (r) {
+        var usr = r && r.data && r.data.user;
+        if (!usr || !aDeclare(usr.user_metadata)) {
+          var ici = location.pathname.split("/").pop() || "espace.html";
+          location.href = "precautions.html?formule=" + encodeURIComponent(formule || "") +
+                          "&retour=" + encodeURIComponent(ici);
+          throw new Error("Une étape reste à valider avant le paiement.");
+        }
+        return sb.functions.invoke("stripe-paiement", { body: { action: "checkout", formule: formule } })
         .then(function (r) { if (r.data && r.data.url) { location.href = r.data.url; return; }
           throw new Error((r.data && r.data.erreur) || "Paiement indisponible pour le moment."); });
+      });
     },
+    /* Précautions : liste affichée (inscription.html, precautions.html) + déclaration à enregistrer. */
+    situations: SITUATIONS,
+    declaration: declaration,
+    aDeclare: aDeclare,
     /* portail client Stripe : changer de formule (au prorata), résilier, carte, factures */
     portail: function () {
       return sb.functions.invoke("stripe-paiement", { body: { action: "portail" } })

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("ely_theme")==="obscur")document.documentElement.setAttribute("data-theme","obscur")}catch(e){}</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F3EE">
+<title>ELYSIUM · Avant de continuer</title>
+<meta name="description" content="Avant le paiement : les situations que Damien &amp; Yoann ne prennent pas en charge.">
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js');try{sessionStorage.removeItem('ely_tr')}catch(e){}document.documentElement.classList.add('arrivee');setTimeout(function(){document.documentElement.classList.add('arrive')},1500)</script>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
+<link rel="stylesheet" href="assets/site.css?v=2809i">
+<style>
+  /* « Avant de continuer » (précautions, 28/09) — même bloc que precautions.html */
+  .precau{margin:10px 0 0;padding:20px 18px;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  .precau h2{font-family:var(--titre);font-weight:400;font-size:22px;line-height:1.25;text-transform:none;letter-spacing:0;color:var(--ice);margin:0 0 8px}
+  .precau>p{font-family:var(--texte);font-size:15px;line-height:1.55;color:var(--gris);margin:0 0 14px}
+  .precau ol{list-style:none;counter-reset:pc;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:9px}
+  .precau li{counter-increment:pc;display:flex;gap:10px;align-items:flex-start;font-family:var(--texte);font-size:15px;line-height:1.45;color:var(--ice);overflow-wrap:anywhere}
+  .precau li::before{content:counter(pc);flex:0 0 24px;height:24px;border-radius:50%;background:var(--p-bleu);color:var(--blue);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:-1px}
+  .auth-form label.pcase,label.pcase{display:flex;flex-direction:row;align-items:center;gap:12px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--void);cursor:pointer;font-family:var(--texte);font-size:15px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ice)}
+  .auth-form label.pcase input,label.pcase input{flex:0 0 22px;width:22px;height:22px;margin:0;padding:0;accent-color:var(--blue);cursor:pointer}
+  .pconc{display:block;width:100%;min-height:44px;margin-top:12px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--gris);font-family:var(--texte);font-size:15px;cursor:pointer}
+  .pconc:hover{border-color:var(--blue);color:var(--ice)}
+  .pmsg{padding:20px 18px;border:1px solid var(--line);border-left:3px solid var(--b-bleu);border-radius:14px;background:var(--void2)}
+  .pmsg p{font-family:var(--texte);font-size:16px;line-height:1.6;color:var(--ice);margin:0 0 12px}
+  .pmsg .pliens{display:flex;flex-wrap:wrap;gap:10px 18px;margin:16px 0 0;font-size:15px}
+  .pmsg a{color:var(--blue);display:inline-flex;align-items:center;min-height:44px}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>
+
+<div class="qtop" style="position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;padding:16px var(--edge)">
+  <a class="logo" href="index.html" aria-label="Elysium · Nutrition & Performance"><span class="elg"><svg class="elg-ring" viewBox="0 0 300 300" fill="none" aria-hidden="true"><defs><linearGradient id="egt" x1="0.1" x2="0.9"><stop offset="0" stop-color="#e3edfb"/><stop offset=".55" stop-color="#2E9BFF"/><stop offset="1" stop-color="#7ea6df"/></linearGradient><linearGradient id="egb" x1="0.1" x2="0.9"><stop offset="0" stop-color="#2E9BFF"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M23 104A135 135 0 0 1 277 104" stroke="url(#egt)" stroke-width="2.6" stroke-linecap="round"/><path d="M277 196A135 135 0 0 1 23 196" stroke="url(#egb)" stroke-width="2.6" stroke-linecap="round"/></svg><span class="elg-name">Elysium</span><span class="elg-sub"><i class="l"></i>Nutrition <b>&amp;</b> Performance<i class="r"></i></span></span></a>
+  <a class="back" href="espace.html" style="font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none">Mon espace ›</a>
+</div>
+
+<main class="auth-wrap">
+  <div class="auth-card">
+    <div class="kick">Espace membre</div>
+    <h1>Une dernière<span class="l2">vérification.</span></h1>
+    <p class="sub" id="sub">Avant le paiement, pour ta sécurité.</p>
+    <form id="pform" novalidate>
+      <section class="precau" aria-labelledby="precau-t">
+        <h2 id="precau-t">Avant de continuer</h2>
+        <p>Damien &amp; Yoann ne prennent pas en charge les situations suivantes&nbsp;:</p>
+        <ol id="precau-liste"></ol>
+        <label class="pcase"><input type="checkbox" name="aucune">Je ne suis dans aucune de ces situations</label>
+        <button type="submit" class="btn" style="width:100%;margin-top:14px;min-height:44px;cursor:pointer">Continuer</button>
+        <button type="button" class="pconc" id="concerne">Je suis concerné(e)</button>
+      </section>
+    </form>
+    <div class="pmsg" id="pmsg" hidden tabindex="-1">
+      <p>Merci pour ta franchise. Dans ta situation, un accompagnement nutritionnel doit être suivi par un professionnel de santé (médecin, diététicien)&nbsp;: nous ne sommes pas en mesure de t'accompagner, et c'est pour ta sécurité. N'hésite pas à en parler à ton médecin.</p>
+      <div class="pliens"><a href="index.html">Retour à l'accueil</a><a href="contact.html">Une question&nbsp;? Écris-nous</a></div>
+    </div>
+    <p class="auth-msg" id="msg" role="alert"></p>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <img class="foot-logo" src="assets/logo-pied.png" alt="Elysium · Nutrition &amp; Performance" width="200" height="105" loading="lazy" decoding="async">
+  <div class="foot-links"><a href="index.html">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
+  <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
+</footer>
+
+<script src="assets/site.js?v=2809h"></script>
+<script src="assets/vendor/supabase.min.js"></script>
+<script src="assets/ely-auth.js?v=avant1"></script>
+<script>
+(function(){
+  // compte DÉJÀ créé (avant le 28/09, ou renvoyé ici par ElyAuth.payer) ; sans connexion -> connexion
+  if(!ElyAuth.requireAuth('connexion.html')) return;
+  var q=new URLSearchParams(location.search);
+  var formule=/^f[123]$/.test(q.get('formule')||'')?q.get('formule'):null;
+  var r=q.get('retour')||'', retour=/^[a-z0-9-]+(\.html)?$/i.test(r)?r:'espace.html';   // pas de redirection vers un autre site
+  var f=document.getElementById('pform'), msg=document.getElementById('msg'), btn=f.querySelector('button[type=submit]');
+  function say(txt,kind){ msg.textContent=txt; msg.className='auth-msg on '+(kind||'err'); }
+  document.getElementById('precau-liste').innerHTML=ElyAuth.situations.map(function(t){return '<li>'+t+'</li>';}).join('');
+  f.aucune.addEventListener('change',function(){ msg.className='auth-msg'; });
+  // Concerné(e) : aucun paiement, RIEN d'enregistré (ni la situation, ni le clic)
+  document.getElementById('concerne').addEventListener('click',function(){
+    f.hidden=true; document.getElementById('sub').hidden=true; msg.className='auth-msg';
+    var m=document.getElementById('pmsg'); m.hidden=false; m.focus(); window.scrollTo(0,0);
+  });
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!f.aucune.checked){ say("Coche « Je ne suis dans aucune de ces situations » pour continuer, ou choisis « Je suis concerné(e) ».","ok"); return; }
+    btn.disabled=true; btn.textContent='Un instant…'; msg.className='auth-msg';
+    ElyAuth.client.auth.updateUser({data:ElyAuth.declaration()})
+      .then(function(res){
+        if(res.error) throw res.error;
+        if(formule) return ElyAuth.payer(formule);   // relit le compte : la déclaration est là -> Stripe
+        location.href=retour;
+      })
+      .catch(function(err){
+        btn.disabled=false; btn.textContent='Continuer';
+        say((err&&err.message)&&/paiement/i.test(err.message)?err.message:"Enregistrement impossible pour le moment. Réessaie dans un instant.");
+      });
+  });
+})();
+</script>
+</body>
+</html>

@@ -471,12 +471,156 @@
   .fwrap .rl-go{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
   .fwrap:has(.rl-go) .fitem{padding-right:92px}
   .rl-lance{margin:0 0 14px}
-  #rl-form:not(:has(.retour.on)){display:none}
-  #rl-form h4 .mini{margin-left:auto}
-  #rl-form .retour{margin-top:0;border-top:0;padding-top:0}
-  #rl-form .rgrid{grid-template-columns:1fr}
-  #rl-form .dbtn{padding:12px 18px}
-  .rl-on .toast{bottom:120px}
+  .rl-on .toast{bottom:120px;z-index:150}
+
+  /* ==== POSTE DE TRAVAIL (repris de coach-maquette.html) : barre d'outils collante, édition, correction, feuille d'actions ==== */
+  .rl-barre{position:sticky;top:var(--hh,0px);z-index:35;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1*var(--edge)) 14px;padding:8px var(--edge);background:var(--voile);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .rl-barre::-webkit-scrollbar{display:none}
+  .rl-barre .sep{flex:none;width:1px;height:24px;background:var(--line);margin:0 2px}
+  .rl-barre .fin{margin-left:auto}
+  .tb{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;font:600 13px/1 var(--texte);color:var(--gris);background:var(--void2);border:1px solid var(--line);border-radius:999px;padding:0 13px;cursor:pointer;white-space:nowrap}
+  .tb:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+  .tb.p{background:var(--brand);border-color:var(--brand);color:#111}
+  .tb.p:hover{color:#111;filter:brightness(1.05)}
+  .tb.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .tb.on:hover{color:#fff}
+  .tb:disabled{opacity:.4;cursor:default}
+  .tb.jr{min-width:74px;cursor:default}
+  .tb.ic{min-width:38px;padding:0 10px}
+  kbd{font:600 10.5px/1 var(--texte);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:2px 5px;color:var(--steel);background:var(--void)}
+  .tb.p kbd{background:rgba(255,255,255,.55);border-color:rgba(0,0,0,.18);color:#111}
+  .tb.on kbd{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);color:#fff}
+  @media(max-width:760px){.tb kbd{display:none}}
+  @media(pointer:coarse){.tb,.db,.mini,.rl-chip,.ed-btn,.rl-jtabs button,.rl-mode button,.seg button,.ed-add,.ed-titre input,.retour-btn,.rl-t thead button,.rl-f select,.rl-f input{min-height:44px}.tb kbd{display:none}}
+  body.rl-plein .chead,body.rl-plein .onglets,body.rl-plein .site-foot{display:none}
+  body.rl-plein .cwrap{max-width:none}
+  .rl-side>.carte,#rl-sem{scroll-margin-top:calc(var(--hh,0px) + 70px)}
+  .rl-meal{scroll-margin-top:calc(var(--hh,0px) + 70px)}
+  /* mode édition */
+  .ed-bandeau{margin-top:12px;border:1px solid var(--blue);background:color-mix(in srgb,var(--brand) 9%,var(--void2));border-radius:12px;padding:10px 14px;font-size:14px;line-height:1.45;color:var(--ice)}
+  .ed-bandeau b{color:var(--blue)}
+  .ed-bandeau small{display:block;margin-top:6px;font-size:13px;color:var(--gris)}
+  .ed-swap{margin:0 0 10px;border:1px dashed var(--blue);border-radius:10px;padding:9px 12px;font-size:13.5px;color:var(--ice);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+  .rl-cel[draggable="true"]{cursor:grab}
+  .rl-cel.mod::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+  .rl-cel.src{outline:2px solid var(--blue);outline-offset:1px}
+  .rl-cel.drop{outline:2px dashed var(--blue);outline-offset:1px;filter:brightness(.94)}
+  .rl-meal.ed.mod{border-color:color-mix(in srgb,var(--blue) 55%,var(--line))}
+  .ed-jt{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+  .ed-titre{padding:8px 8px 2px}
+  .ed-titre input{width:100%;box-sizing:border-box;font:400 18px/1.25 var(--titre);color:var(--ice);background:transparent;border:1px dashed var(--line);border-radius:8px;padding:6px 8px}
+  .ed-titre input:hover{border-color:var(--steel)}
+  .ed-titre input:focus{border-style:solid;border-color:var(--blue);outline:none;background:var(--void)}
+  .ed-warn{margin:6px 12px 0;font-size:12.5px;line-height:1.45;color:#7a5a00;background:var(--p-jaune);border:1px solid var(--b-jaune);border-radius:8px;padding:6px 9px}
+  .ed-ing{display:grid;grid-template-columns:minmax(0,1fr) auto 50px 30px 30px 30px 34px;gap:4px;align-items:center;padding:5px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--gris);-webkit-touch-callout:none}
+  .ed-ing>span:not(.st){text-align:right;font-variant-numeric:tabular-nums}
+  .ed-ing.h{border-top:0;font:600 10px/1.2 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel);padding-bottom:2px}
+  .ed-ing.h>span:nth-child(2){text-align:center}
+  .ed-ing>span:first-child{text-align:left}
+  .ed-ing .u2{display:none}
+  .ed-ing.ref{background:#f6dcdc;border-radius:6px;padding-left:6px}
+  .ed-ing.ref .n,.ed-ing.ref .n small{color:#7a1f1f}
+  .ed-nom{background:none;border:0;padding:5px 0;text-align:left;font:600 13.5px/1.3 var(--texte);color:var(--ice);cursor:pointer;min-width:0;min-height:36px;overflow-wrap:anywhere}
+  .ed-nom:hover{color:var(--blue);text-decoration:underline dotted;text-underline-offset:3px}
+  .ed-nom small{display:block;font-weight:400;font-size:11.5px;color:var(--steel);text-decoration:none}
+  .ed-nom small.bw{color:#8a5a00;font-weight:600}
+  .ed-ing.mod .ed-nom::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--blue);margin-right:6px;vertical-align:2px}
+  .st{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:var(--void);overflow:hidden}
+  .st button{width:32px;height:32px;border:0;background:none;font:700 17px/1 var(--texte);color:var(--ice);cursor:pointer;flex:none}
+  .st button:hover{background:color-mix(in srgb,var(--brand) 14%,transparent)}
+  .st input{width:46px;border:0;background:transparent;text-align:right;font:700 14px/1 var(--texte);color:var(--ice);padding:0;-moz-appearance:textfield;appearance:textfield}
+  .st input::-webkit-inner-spin-button,.st input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  .st input:focus{outline:none}
+  .st:focus-within{border-color:var(--blue)}
+  .st .u{font-size:12px;color:var(--steel);padding:0 2px}
+  .ed-x{width:30px;height:30px;border-radius:50%;border:1px solid transparent;background:none;color:var(--steel);font:600 17px/1 var(--texte);cursor:pointer;justify-self:end}
+  .ed-x:hover{border-color:#d98c8c;color:#9b1c1c}
+  .ed-add{display:block;width:100%;margin:6px 0 2px;font:600 13px/1 var(--texte);color:var(--blue);background:none;border:1px dashed var(--line);border-radius:10px;padding:11px;cursor:pointer}
+  .ed-add:hover{border-color:var(--blue)}
+  .ed-vide{font-size:13px;color:var(--steel);padding:10px 0;border-top:1px solid var(--line)}
+  .ed-tools{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px 12px;justify-content:flex-start!important}
+  @media(pointer:coarse){.st button{width:44px;height:44px}.ed-x{width:44px;height:44px}.ed-nom{min-height:44px}}
+  @media(max-width:560px){
+    .ed-ing{grid-template-columns:auto minmax(0,1fr) 44px;grid-template-areas:"n n n" "s k x";row-gap:2px;padding:7px 0}
+    .ed-ing .n{grid-area:n}.ed-ing .st{grid-area:s}.ed-ing .kc{grid-area:k}.ed-ing .x{grid-area:x}
+    .ed-ing .pm,.ed-ing .gm,.ed-ing .lm,.ed-ing.h{display:none}.ed-ing .u2{display:inline}
+  }
+  .ed-eq{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--void)}
+  .ed-eqf{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:13.5px;color:var(--gris)}
+  .ed-eqf label{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0;max-width:100%}
+  .ed-eqf select{font:14px/1.2 var(--texte);color:var(--ice);background:var(--void2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;max-width:100%;min-height:38px}
+  .ed-eqr{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:10px;font-size:13.5px;color:var(--ice)}
+  .ed-eqr .rl-e{margin-right:2px}
+  .ed-ck{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;line-height:1.45;color:var(--gris)}
+  .ed-ck:first-of-type{border-top:0}
+  .ed-ck i{flex:none;width:10px;height:10px;border-radius:50%;margin-top:5px;background:var(--b-vert)}
+  .ed-ck.ko i{background:#d98c8c}.ed-ck.av i{background:var(--b-jaune)}
+  .ed-ck b{color:var(--ice)}
+  .ed-ck .rl-chip{padding:5px 8px;margin:4px 4px 0 0}
+  .ed-log{margin:0;padding:0;list-style:none;max-height:300px;overflow:auto}
+  .ed-log li{display:flex;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--ice);line-height:1.4}
+  .ed-log li:first-child{border-top:0}
+  .ed-log li span{flex:none;font:700 11px/1.6 var(--texte);color:var(--steel);min-width:22px}
+  .ed-dec .rl-etat{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:center}
+  .ed-dec .in{grid-template-columns:auto auto repeat(3,minmax(0,1fr))}
+  .db.ic{width:46px;padding:0;font-size:19px}
+  .db:disabled{opacity:.4;cursor:default}
+  @media(max-width:560px){.ed-dec .rl-etat{display:none}.ed-dec .in{gap:6px}.ed-dec .db{font-size:12px;padding:11px 4px}.db.ic{width:40px;font-size:18px}}
+  .sm{display:none}
+  @media(max-width:560px){.lg{display:none}.sm{display:inline}}
+  /* renvoi en correction */
+  .co-grp{font:600 10.5px/1.3 var(--texte);letter-spacing:.12em;text-transform:uppercase;color:var(--steel);margin:12px 0 0}
+  .co-box{margin-top:14px;border:1px solid var(--blue);border-radius:12px;padding:12px;background:var(--void)}
+  .co-t{font:400 18px/1.25 var(--titre);color:var(--ice);margin:0 0 10px}
+  .co-lab{display:block;font:600 11px/1.3 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel);margin:12px 0 5px}
+  .co-plat{font-size:13.5px;color:var(--ice);padding:9px 0 0}
+  .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:18px;padding:3px;gap:2px;max-width:100%}
+  .seg button{font:600 12.5px/1 var(--texte);border:0;background:none;color:var(--gris);border-radius:999px;padding:8px 11px;cursor:pointer}
+  .seg button.on{background:var(--blue);color:#fff}
+  .seg button.on.bl{background:#9b1c1c}
+  .co-it{display:flex;gap:10px;align-items:flex-start;padding:9px 0 9px 10px;border-top:1px solid var(--line);border-left:3px solid var(--b-bleu);font-size:13.5px;color:var(--ice);margin-top:6px}
+  .co-it.detail{border-left-color:var(--line)}.co-it.bloquant{border-left-color:#d98c8c}
+  .co-it>div{flex:1;min-width:0;overflow-wrap:anywhere}
+  .co-it small{display:block;color:var(--steel);font-size:12.5px;margin-top:2px}
+  .co-sum{margin-top:12px;font-size:13.5px;color:var(--gris)}
+  .co-sum b{color:var(--ice)}
+  /* notes internes + journal */
+  .jn{padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;line-height:1.45;color:var(--ice);overflow-wrap:anywhere}
+  .jn small{display:block;color:var(--steel);font-size:12px}
+  .jn.note{border-top:0;margin-top:6px;border-left:3px solid var(--b-jaune);background:color-mix(in srgb,var(--p-jaune) 55%,transparent);border-radius:0 8px 8px 0;padding:7px 10px}
+  .jn-f textarea{width:100%;box-sizing:border-box;min-height:64px;resize:vertical;font:14px/1.35 var(--texte);color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:10px;padding:9px 10px;margin-top:10px}
+  /* feuille d'actions : en bas d'écran sur téléphone, fenêtre centrée sur ordinateur */
+  .sh-bg{position:fixed;inset:0;z-index:140;background:rgba(17,17,17,.36);opacity:0;pointer-events:none;transition:opacity .18s}
+  .sh-bg.on{opacity:1;pointer-events:auto}
+  .sh{position:fixed;left:50%;bottom:0;z-index:141;width:min(640px,100%);max-height:min(86vh,760px);display:flex;flex-direction:column;background:var(--void2);border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.18);transform:translate(-50%,104%);visibility:hidden;transition:transform .22s cubic-bezier(.2,.7,.2,1),visibility 0s .22s;padding-bottom:env(safe-area-inset-bottom)}
+  .sh.on{transform:translate(-50%,0);visibility:visible;transition:transform .22s cubic-bezier(.2,.7,.2,1),visibility 0s}
+  .sh::before{content:"";display:block;width:40px;height:4px;border-radius:9px;background:var(--line);margin:8px auto 0}
+  .sh>header{display:flex;align-items:center;gap:10px;padding:8px 16px 10px;border-bottom:1px solid var(--line)}
+  .sh>header h3{font:400 20px/1.25 var(--titre);color:var(--ice);margin:0;flex:1;min-width:0}
+  .sh .sb{overflow:auto;padding:12px 16px 18px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  @media(min-width:760px){.sh{bottom:auto;top:50%;border-bottom:1px solid var(--line);border-radius:18px;transform:translate(-50%,-47%);opacity:0;transition:opacity .16s,transform .16s,visibility 0s .16s}
+    .sh.on{transform:translate(-50%,-50%);opacity:1;transition:opacity .16s,transform .16s,visibility 0s}.sh::before{display:none}.sh>header{padding-top:14px}}
+  @media(prefers-reduced-motion:reduce){.sh,.sh.on,.sh-bg{transition:none}}
+  .sh-q{width:100%;box-sizing:border-box;font:16px/1.3 var(--texte);color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:999px;padding:11px 16px}
+  .al{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:9px 6px;cursor:pointer;font:600 14px/1.3 var(--texte);color:var(--ice);min-height:48px}
+  .al:first-child{border-top:0}
+  .al:hover,.al:focus-visible{background:var(--void);border-radius:8px}
+  .al small{grid-column:1/-1;font-weight:400;color:var(--steel);font-size:12.5px;overflow-wrap:anywhere}
+  .al .tag{font-weight:600}
+  .al.ref{color:#9b1c1c}
+  .al-l{margin-top:10px}
+  .aide{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;font-size:14px;color:var(--gris);align-items:center}
+  .aide dt{text-align:right;white-space:nowrap}
+  .aide dd{margin:0}
+  html[data-theme="obscur"] .ed-ing.ref{background:color-mix(in srgb,#06080C 78%,#d98c8c)}
+  html[data-theme="obscur"] .ed-ing.ref .n,html[data-theme="obscur"] .ed-ing.ref .n small,html[data-theme="obscur"] .al.ref{color:#f6c9c9}
+  html[data-theme="obscur"] .ed-warn{color:var(--ice)}
+  html[data-theme="obscur"] .ed-nom small.bw{color:#f0b35a}
+  html[data-theme="obscur"] .st input{background:transparent}
+  .toast{width:max-content;max-width:calc(100vw - 32px);box-sizing:border-box;text-align:center;line-height:1.45}
+  html[data-theme="obscur"] .toast{background:var(--void2)}
+  html[data-theme="obscur"] .sh-bg{background:rgba(0,0,0,.6)}
+  html[data-theme="obscur"] .seg button.on.bl{background:#b33a3a}
   /* ==== DOUBLE VÉRIFICATION (condition de Yoann) : Statistiques, Économie, chiffres d'argent ==== */
   .mfa{max-width:560px;margin:0 auto}
   .mfa .carte{padding:22px 20px}
@@ -763,7 +907,7 @@
 
 <script src="assets/site.js?v=2809h"></script>
 <script src="assets/vendor/supabase.min.js"></script>
-<script src="assets/ely-auth.js?v=stripe1"></script>
+<script src="assets/ely-auth.js?v=avant1"></script>
 <script>
 /* ======================================================================
    BOÎTE À OUTILS GRAPHIQUES : SVG faits main, aucune librairie, aucun CDN.
@@ -991,6 +1135,7 @@ var REL=(function(){
   var MAC=[['kcal','kcal','k',''],['proteines','Protéines','p',' g'],['glucides','Glucides','g',' g'],['lipides','Lipides','l',' g']];
   var TOL=0.05;                                   // ± 5 % autour de la cible = vert
   var CONDIMENT=/^(huile|sauce|sirop|miel|sel|epice|vinaigre)/;
+  var ML={kcal:'calories',proteines:'protéines',glucides:'glucides',lipides:'lipides'};
 
   function ml(t){ return MEALS[t]||String(t||'Repas'); }
   function titre(r){ return r.titre||r.recette||r.recette_base||'Plat'; }
@@ -1059,6 +1204,8 @@ var REL=(function(){
   function semaine(R,o){ o=o||{};
     var m=R.menu||{}, c=m.cible||{}, J=m.jours||[], T=types(m), F=frequences(m), INT=interdits(R), hl=o.surligne, act=o.jour;
     var h='<h4>La semaine <span class="n">'+joursOk(R)+'/'+actifs(m).length+' jours à ±5 % de la cible</span></h4>'+
+      (o.swap?'<div class="ed-swap"><span>Échange en cours : touche le repas qui doit prendre la place de <b>'+e(titre(repasDe(J[o.swap.i],o.swap.ty)||{}))+'</b>.</span><button type="button" class="mini" data-act="ed-swap-stop">Annuler l’échange</button></div>':
+       o.edit?'<p class="leg" style="margin:0 0 8px">Glisse un plat sur un autre pour les échanger, ou utilise « Échanger » sous le repas. Point bleu = modifié.</p>':'')+
       '<div class="rl-sem"><table class="rl-t"><colgroup><col class="h">'+J.map(function(){ return '<col>'; }).join('')+'</colgroup><thead><tr><th></th>'+J.map(function(j,i){ return '<th><button type="button" data-act="jour" data-i="'+i+'"'+(i===act?' class="on"':'')+'>'+(j.off?'OFF':'Jour '+j.jour)+'</button></th>'; }).join('')+'</tr></thead><tbody>';
     T.forEach(function(t,k){
       h+='<tr><th>'+ml(t)+'</th>';
@@ -1066,8 +1213,9 @@ var REL=(function(){
         if(j.off){ if(!k) h+='<td class="rl-off" rowspan="'+T.length+'"><b>Jour OFF</b>Repas libres<br>+ 1 cheat meal possible</td>'; return; }
         var r=repasDe(j,t); if(!r){ h+='<td></td>'; return; }
         var ti=titre(r), p=F.plats[ti], ref=(r.ingredients||[]).some(function(x){ return refuse(x.ingredient,INT); }),
-            a=hl&&(r.ingredients||[]).some(function(x){ return x.ingredient===hl; });
-        h+='<td><button type="button" class="rl-cel m-'+PASTEL[t]+(ref?' ref':'')+(a?' hl':'')+'" data-act="repas" data-i="'+i+'" data-ty="'+t+'" title="'+e(ti)+' · '+g0((r.macros||{}).kcal)+' kcal">'+e(ti)+
+            a=hl&&(r.ingredients||[]).some(function(x){ return x.ingredient===hl; }),
+            oj=o.orig&&(o.orig.jours||[])[i], md=oj&&sig(repasDe(oj,t))!==sig(r), sw=o.swap&&o.swap.i===i&&o.swap.ty===t;
+        h+='<td><button type="button" class="rl-cel m-'+(PASTEL[t]||'bleu')+(ref?' ref':'')+(a?' hl':'')+(md?' mod':'')+(sw?' src':'')+'" data-act="repas" data-i="'+i+'" data-ty="'+t+'"'+(o.edit?' draggable="true"':'')+' title="'+e(ti)+' · '+g0((r.macros||{}).kcal)+' kcal'+(md?' · modifié':'')+'">'+e(ti)+
           (p.n>1?'<br><span class="rl-x'+(repetition(t)?'':' v')+'" title="servi '+p.n+' fois dans la semaine">×'+p.n+'</span>':'')+(ref?'<span class="rl-r">aliment refusé</span>':'')+'</button></td>';
       });
       h+='</tr>';
@@ -1097,41 +1245,169 @@ var REL=(function(){
       series:S,f:function(v){ return v+' % de la cible'; },fy:function(v){ return v+' %'; },
       label:'Calories et macros de chaque jour en pourcentage de la cible'}); }
 
-  /* 3. VUE DÉTAILLÉE D'UN JOUR (i = index dans menu.jours, OFF compris) ; mode 'coach' | 'client' */
-  function jour(R,i,mode){
-    var m=R.menu||{}, J=m.jours||[], j=J[i]||J[0], c=m.cible||{};
-    var h='<div class="rl-jtabs" role="tablist" aria-label="Jours de la diète">'+J.map(function(x,k){ var cl=x.off?'off':Math.abs(ecart(totJour(x).kcal,c.kcal))<=TOL?'':'ko';
+  /* 3. VUE DÉTAILLÉE D'UN JOUR (i = index dans menu.jours, OFF compris) ; mode 'coach' | 'client' | 'orig' */
+  // onglets des jours + choix d'affichage (commun à la lecture et à l'édition)
+  function barreJour(R,i,mode,edit){
+    var m=R.menu||{}, J=m.jours||[], c=m.cible||{};
+    var M=edit?[['coach','Modifier'],['orig','Avant'],['client','Aperçu client']]:[['coach','Vue coach'],['client','Aperçu client']];
+    return '<div class="rl-jtabs" role="tablist" aria-label="Jours de la diète">'+J.map(function(x,k){ var cl=x.off?'off':Math.abs(ecart(totJour(x).kcal,c.kcal))<=TOL?'':'ko';
       return '<button type="button" role="tab" data-act="jour" data-i="'+k+'" aria-selected="'+(k===i)+'"><i class="'+cl+'"></i>'+(x.off?'OFF':'Jour '+x.jour)+'</button>'; }).join('')+'</div>'+
-      '<div class="rl-bar2"><div class="rl-mode" role="group" aria-label="Affichage"><button type="button" data-act="mode" data-m="coach"'+(mode!=='client'?' class="on"':'')+'>Vue coach</button><button type="button" data-act="mode" data-m="client"'+(mode==='client'?' class="on"':'')+'>Aperçu client</button></div>'+
-      '<span class="rl-aide">← → ou glisser pour changer de jour</span></div>';
+      '<div class="rl-bar2"><div class="rl-mode" role="group" aria-label="Affichage">'+M.map(function(b){ return '<button type="button" data-act="mode" data-m="'+b[0]+'"'+(mode===b[0]?' class="on"':'')+(b[0]==='orig'?' title="La diète telle qu’elle a été déposée"':'')+'>'+b[1]+'</button>'; }).join('')+'</div>'+
+      '<span class="rl-aide">'+(mode==='orig'?'Version déposée, avant tes modifications':'J / K ou ← → pour changer de jour · clic droit ou appui long sur un aliment : actions rapides')+'</span></div>';
+  }
+  // barres « total du jour face à la cible »
+  function cibles(tot,c,nj){
+    return '<div class="rl-sub" style="margin-top:18px">Total du jour '+nj+' face à la cible</div><div class="rl-cib">'+MAC.map(function(k,x){
+      var v=tot[k[0]], cc=c[k[0]]||1, r1=v/cc, col=['var(--brand)','#cc0000','#3d85c6','#f1c232'][x];
+      return '<div class="rl-cb"><span><i class="mac '+k[2]+'"></i>'+k[1]+'</span><span class="tr"><em></em><i style="width:'+(Math.min(r1,1.3)/1.3*100).toFixed(1)+'%;background:'+col+'"></i><u></u></span>'+
+        '<span class="v">'+g0(v)+' / '+g0(cc)+k[3]+'<small>'+pastille(ecart(v,cc))+'</small></span></div>'; }).join('')+'</div>'+
+      '<p class="leg" style="margin-left:0">Trait vertical = la cible ; bande verte = ±5 %.</p>';
+  }
+  function stk(ma){ var ek=(ma.proteines*4+ma.glucides*4+ma.lipides*9)||1;
+    return '<div class="rl-stk" title="Part des calories : protéines, glucides, lipides"><i style="width:'+(ma.proteines*4/ek*100).toFixed(1)+'%;background:#cc0000"></i><i style="width:'+(ma.glucides*4/ek*100).toFixed(1)+'%;background:#3d85c6"></i><i style="width:'+(ma.lipides*9/ek*100).toFixed(1)+'%;background:#f1c232"></i></div>'; }
+  // empreinte d'un repas (titre + aliments + grammes) : sert à repérer ce qui a été modifié
+  function sig(r){ return r?titre(r)+'|'+(r.recette||'')+'|'+(r.ingredients||[]).map(function(x){ return x.ingredient+':'+Math.round(+x.grammes||0); }).join(','):''; }
+  function sigJ(j){ return (j.repas||[]).map(sig).join('#'); }
+
+  function jour(R,i,mode,o){ o=o||{};
+    var m=R.menu||{}, J=m.jours||[], j=J[i]||J[0], c=m.cible||{};
+    var h=barreJour(R,i,mode,o.edit);
+    if(!j) return h;
     if(mode==='client') return h+apercu(R,i);
     if(j.off) return h+'<div class="rl-ap"><h5>Jour OFF</h5><p class="s">Repas libres + 1 cheat meal possible. Profitez &amp; rechargez !</p><p class="leg" style="text-align:center;margin:0">Rien à relire : ce jour n’est ni pesé ni compté.</p></div>';
     var tot=totJour(j), INT=interdits(R), F=frequences(m), P=R.precedent&&(R.precedent.jours||[])[i];
     h+='<div class="rl-meals">'+(j.repas||[]).map(function(r){
-      var ma=r.macros||somme(r.ingredients||[]), part=tot.kcal?Math.round(ma.kcal/tot.kcal*100):0, ti=titre(r), p=F.plats[ti], ek=(ma.proteines*4+ma.glucides*4+ma.lipides*9)||1;
-      var s='<article class="rl-meal" id="rl-m-'+r.type+'"><header class="m-'+(PASTEL[r.type]||'bleu')+'"><span>'+ml(r.type)+'</span><span>'+part+' % de la journée</span></header>'+
+      var ma=r.macros||somme(r.ingredients||[]), part=tot.kcal?Math.round(ma.kcal/tot.kcal*100):0, ti=titre(r), p=F.plats[ti];
+      return '<article class="rl-meal" id="rl-m-'+r.type+'" data-i="'+i+'" data-ty="'+r.type+'"><header class="m-'+(PASTEL[r.type]||'bleu')+'"><span>'+ml(r.type)+'</span><span>'+part+' % de la journée</span></header>'+
         '<h5>'+e(ti)+(p&&p.n>1?'<small>×'+p.n+' dans la semaine</small>':'')+'</h5><div class="rl-ings">'+
         '<div class="rl-ing h"><span>Ingrédient</span><span>Grammes</span><span>kcal</span><span class="pm">P</span><span class="gm">G</span><span class="lm">L</span></div>'+
-        (r.ingredients||[]).map(function(x){ var rf=refuse(x.ingredient,INT), fa=F.aliments[x.ingredient];
-          return '<div class="rl-ing'+(rf?' ref':'')+'"'+(rf?' title="Refusé par le client : '+e(rf)+'"':'')+'><span>'+e(cap(x.ingredient))+(fa&&fa.jours>3?'<span class="rl-fq">'+fa.jours+' j</span>':'')+
+        (r.ingredients||[]).map(function(x,k){ var rf=refuse(x.ingredient,INT), fa=F.aliments[x.ingredient];
+          return '<div class="rl-ing'+(rf?' ref':'')+'" data-k="'+k+'"'+(rf?' title="Refusé par le client : '+e(rf)+'"':'')+'><span>'+e(cap(x.ingredient))+(fa&&fa.jours>3?'<span class="rl-fq">'+fa.jours+' j</span>':'')+
             (x.affichage?'<small>'+e(x.affichage)+'</small>':'')+(rf?'<small>refusé : « '+e(rf)+' »</small>':'')+'</span><span class="gr">'+gx(x.grammes)+' g</span><span>'+gx(x.kcal)+'</span>'+
-            '<span class="pm">'+gx(x.proteines)+'</span><span class="gm">'+gx(x.glucides)+'</span><span class="lm">'+gx(x.lipides)+'</span></div>'; }).join('')+'</div>'+
-        '<div class="rl-mm">'+macrosTxt(ma)+'</div>'+
-        '<div class="rl-stk" title="Part des calories : protéines, glucides, lipides"><i style="width:'+(ma.proteines*4/ek*100).toFixed(1)+'%;background:#cc0000"></i><i style="width:'+(ma.glucides*4/ek*100).toFixed(1)+'%;background:#3d85c6"></i><i style="width:'+(ma.lipides*9/ek*100).toFixed(1)+'%;background:#f1c232"></i></div>'+
+            '<span class="pm">'+gx(x.proteines)+'</span><span class="gm">'+gx(x.glucides)+'</span><span class="lm">'+gx(x.lipides)+'</span></div>'; }).join('')+
+        (!(r.ingredients||[]).length?'<p class="ed-vide">Repas vidé.</p>':'')+'</div>'+
+        '<div class="rl-mm">'+macrosTxt(ma)+'</div>'+stk(ma)+
         (P?'<div class="rl-cmp">'+compRepas(repasDe(P,r.type),r,R.precedentVersion)+'</div>':'')+
-        '<footer><button type="button" class="mini" data-act="signaler" data-i="'+i+'" data-ty="'+r.type+'">Signaler</button></footer></article>';
-      return s; }).join('')+'</div>';
-    h+='<div class="rl-sub" style="margin-top:18px">Total du jour '+j.jour+' face à la cible</div><div class="rl-cib">'+MAC.map(function(k){
-      var v=tot[k[0]], cc=c[k[0]]||1, r1=v/cc, col=['var(--brand)','#cc0000','#3d85c6','#f1c232'][MAC.indexOf(k)];
-      return '<div class="rl-cb"><span><i class="mac '+k[2]+'"></i>'+k[1]+'</span><span class="tr"><em></em><i style="width:'+(Math.min(r1,1.3)/1.3*100).toFixed(1)+'%;background:'+col+'"></i><u></u></span>'+
-        '<span class="v">'+g0(v)+' / '+g0(cc)+k[3]+'<small>'+pastille(ecart(v,cc))+'</small></span></div>'; }).join('')+'</div>'+
-      '<p class="leg" style="margin-left:0">Trait vertical = la cible ; bande verte = ±5 %.</p>';
-    return h;
+        '<footer><button type="button" class="mini" data-act="signaler">Signaler</button></footer></article>'; }).join('')+'</div>';
+    return h+cibles(tot,c,j.jour);
+  }
+
+  /* 3b. ÉDITION D'UN JOUR : même lecture, mais tout est modifiable. Rendu pur : l'état vit dans ED.
+     o = {orig: menu déposé, refRepas(r), refLigne(r,x), pas(x) -> libellé du pas, alertes(x) -> [textes], swap:{i,ty}|null, eq: rendu de l'équilibreur} */
+  function jourEdit(R,i,o){ o=o||{};
+    var m=R.menu||{}, J=m.jours||[], j=J[i]||J[0], c=m.cible||{}, INT=interdits(R), F=frequences(m), OJ=o.orig&&(o.orig.jours||[])[i];
+    var h=barreJour(R,i,'coach',true);
+    if(!j) return h;
+    if(j.off) return h+'<div class="rl-ap"><h5>Jour OFF</h5><p class="s">Repas libres + 1 cheat meal possible.</p><p class="leg" style="text-align:center;margin:0">Rien à modifier : ce jour n’est ni pesé ni compté.</p></div>';
+    var tot=totJour(j);
+    h+='<div class="ed-jt"><button type="button" class="mini ed-btn" data-act="ed-copierjour">Copier ce jour vers…</button>'+
+      '<button type="button" class="mini ed-btn" data-act="ed-restjour"'+(OJ&&sigJ(OJ)!==sigJ(j)?'':' disabled')+'>Remettre le jour déposé</button></div>';
+    h+='<div class="rl-meals">'+(j.repas||[]).map(function(r){
+      var ma=r.macros||somme(r.ingredients||[]), part=tot.kcal?Math.round(ma.kcal/tot.kcal*100):0, ti=titre(r), p=F.plats[ti],
+          or=OJ&&repasDe(OJ,r.type), ref=o.refRepas?o.refRepas(r):or, md=!or||sig(or)!==sig(r), rep=p&&p.n>1&&!repetition(r.type),
+          sw=o.swap&&o.swap.i===i&&o.swap.ty===r.type, vide=!(r.ingredients||[]).length, neuf=!ref;
+      return '<article class="rl-meal ed'+(md?' mod':'')+'" id="rl-m-'+r.type+'" data-i="'+i+'" data-ty="'+r.type+'"><header class="m-'+(PASTEL[r.type]||'bleu')+'"><span>'+ml(r.type)+(md?' · modifié':'')+'</span><span>'+g0(ma.kcal)+' kcal · '+part+' %</span></header>'+
+        '<div class="ed-titre"><input type="text" data-ed="titre" value="'+e(ti)+'" aria-label="Nom du plat" enterkeyhint="done" autocomplete="off"></div>'+
+        (neuf?'<p class="ed-warn">Plat pris dans le catalogue : quantités de départ, à ajuster (l’équilibreur, plus bas, calcule la bonne quantité).</p>':'')+
+        (rep?'<p class="ed-warn">Plat servi '+p.n+' fois (jours '+p.jours.join(', ')+') : la répétition n’est acceptée qu’au petit-déjeuner et à la collation.</p>':'')+
+        '<div class="rl-ings"><div class="ed-ing h"><span>Aliment</span><span>Grammes</span><span>kcal</span><span class="pm">P</span><span class="gm">G</span><span class="lm">L</span><span></span></div>'+
+        (r.ingredients||[]).map(function(x,k){ var rf=refuse(x.ingredient,INT), rl=o.refLigne?o.refLigne(r,x):null,
+            mo=!rl||rl.ingredient!==x.ingredient||Math.round(+rl.grammes||0)!==Math.round(+x.grammes||0), al=mo&&o.alertes?o.alertes(x):[], st=o.pas?o.pas(x):'5 g';
+          return '<div class="ed-ing'+(rf?' ref':'')+(mo?' mod':'')+'" data-k="'+k+'"><button type="button" class="ed-nom n" data-act="ed-remplacer" title="Remplacer cet aliment">'+e(cap(x.ingredient))+
+              (x.affichage?'<small>'+e(x.affichage)+'</small>':'')+(rf?'<small>refusé : « '+e(rf)+' »</small>':'')+al.map(function(t){ return '<small class="bw">'+e(t)+'</small>'; }).join('')+'</button>'+
+            '<span class="st"><button type="button" data-act="ed-moins" aria-label="Moins ('+e(st)+')">−</button><input type="number" inputmode="numeric" min="0" max="3000" value="'+Math.round(+x.grammes||0)+'" data-ed="g" aria-label="Grammes de '+e(x.ingredient)+'"><span class="u">g</span><button type="button" data-act="ed-plus" aria-label="Plus ('+e(st)+')">+</button></span>'+
+            '<span class="kc">'+gx(x.kcal)+'<small class="u2"> kcal</small></span><span class="pm">'+gx(x.proteines)+'</span><span class="gm">'+gx(x.glucides)+'</span><span class="lm">'+gx(x.lipides)+'</span>'+
+            '<button type="button" class="ed-x x" data-act="ed-suppr" aria-label="Retirer '+e(x.ingredient)+' du repas" title="Retirer">×</button></div>'; }).join('')+
+        (vide?'<p class="ed-vide">Repas vidé : ajoute des aliments ou restaure-le.</p>':'')+
+        '<button type="button" class="ed-add" data-act="ed-ajouter">+ Ajouter un aliment</button></div>'+
+        '<div class="rl-mm">'+macrosTxt(ma)+'</div>'+stk(ma)+
+        (md&&or?'<div class="rl-cmp">'+compRepas(or,r,'la version déposée')+'</div>':'')+
+        '<footer class="ed-tools"><button type="button" class="mini ed-btn" data-act="ed-plat">Remplacer le plat</button><button type="button" class="mini ed-btn" data-act="ed-dupl">Dupliquer vers…</button>'+
+          '<button type="button" class="mini ed-btn'+(sw?' rl-chip on':'')+'" data-act="ed-swap">'+(sw?'Choisis l’autre repas…':'Échanger')+'</button>'+
+          (vide?'':'<button type="button" class="mini ed-btn" data-act="ed-vider">Vider</button>')+(md&&or?'<button type="button" class="mini ed-btn" data-act="ed-restrepas">Restaurer</button>':'')+
+          '<button type="button" class="mini ed-btn" data-act="signaler">Signaler</button></footer></article>';
+    }).join('')+'</div>';
+    return h+cibles(tot,c,j.jour)+(o.eq||'');
+  }
+
+  /* 3c. ÉQUILIBREUR : q = {mac, cle, choix:[[cle,libellé]], prop (ED.proposer)} */
+  function equilibreur(R,q){
+    var c=(R.menu||{}).cible||{}, p=q.prop;
+    var h='<div class="ed-eq"><div class="rl-sub" style="margin-top:0">Équilibreur</div><p class="leg" style="margin:0 0 10px">Choisis la cible à atteindre et l’aliment à ajuster : la quantité est calculée pour que le total du jour tombe juste.</p>'+
+      '<div class="ed-eqf"><label>Atteindre la cible de <select data-ed="eq-mac">'+MAC.map(function(k){ return '<option value="'+k[0]+'"'+(k[0]===q.mac?' selected':'')+'>'+ML[k[0]]+'</option>'; }).join('')+'</select></label>'+
+      '<label>en ajustant <select data-ed="eq-ing">'+q.choix.map(function(x){ return '<option value="'+e(x[0])+'"'+(x[0]===q.cle?' selected':'')+'>'+e(x[1])+'</option>'; }).join('')+'</select></label></div>';
+    if(!p) return h+'</div>';
+    if(p.impossible) return h+'<p class="rl-ko">'+e(cap(p.aliment))+' n’apporte presque pas de '+ML[q.mac]+' : choisis un autre aliment.</p></div>';
+    return h+'<div class="ed-eqr"><span><b>'+e(cap(p.aliment))+'</b> : '+g0(p.avant)+' → <b>'+g0(p.apres)+' g</b></span><span>'+
+      MAC.map(function(k){ return (k[0]==='kcal'?'kcal':k[1].charAt(0))+' '+pastille(ecart(p.tot[k[0]],c[k[0]])); }).join(' ')+'</span>'+
+      '<button type="button" class="db ok" data-act="ed-eq"'+(p.apres===p.avant?' disabled':'')+'>Appliquer</button></div>'+
+      (p.borne?'<p class="leg" style="margin-left:0">Même à 0 g, la cible reste dépassée : retire plutôt un autre aliment.</p>':'')+'</div>';
+  }
+
+  /* 3d. CONTRÔLES EN DIRECT pendant l'édition ; B = [{lieu, aliment, textes}] (quantités hors repères), D = nombre de repas déplacés */
+  function controlesDirect(R,B,D){
+    var m=R.menu||{}, c=m.cible||{}, SI=servisInterdits(R), F=frequences(m), J=m.jours||[], hors=[], vides=[];
+    J.forEach(function(j,k){ if(j.off) return; var x=ecart(totJour(j).kcal,c.kcal); if(Math.abs(x)>TOL) hors.push([k,j.jour,x]);
+      (j.repas||[]).forEach(function(r){ if(!(r.ingredients||[]).length) vides.push([k,'J'+j.jour+' '+ml(r.type).toLowerCase()]); }); });
+    var rep=Object.keys(F.plats).filter(function(t){ return F.plats[t].n>1&&!repetition(F.plats[t].type); });
+    var L=[[!SI.length,'Aliments refusés et allergènes',SI.length?SI.map(function(x){ return e(cap(x.ing))+' (J'+x.jour+' '+ml(x.type).toLowerCase()+')'; }).join(', '):'aucun servi',1],
+      [!hors.length,'Jours à ±5 % des calories',hors.length?hors.map(function(h){ return '<button type="button" class="rl-chip" data-act="jour" data-i="'+h[0]+'">J'+h[1]+' '+pct(h[2])+'</button>'; }).join(''):'tous dans la cible',1],
+      [!(B||[]).length,'Quantités modifiées hors repères',(B||[]).length?B.map(function(b){ return e(b.lieu)+' : '+e(b.aliment)+' '+e(b.textes.join(', ')); }).join(' · ')+' (repère seulement : c’est toi qui décides)':'rien à signaler',0],
+      [!rep.length,'Déjeuners et dîners répétés',rep.length?rep.map(function(t){ return e(t)+' ×'+F.plats[t].n; }).join(', '):'aucun',0],
+      [!vides.length,'Repas vides',vides.length?vides.map(function(v){ return '<button type="button" class="rl-chip" data-act="jour" data-i="'+v[0]+'">'+v[1]+'</button>'; }).join(''):'aucun',0]];
+    if(D) L.push([false,'Repas déplacés',D+' repas changé'+(D>1?'s':'')+' de place : vérifie le batch cooking (le dîner d’un jour sert souvent de déjeuner le lendemain).',0]);
+    var nb=L.filter(function(x){ return !x[0]; }).length;
+    return '<h4>Contrôles en direct <span class="n">'+(nb?nb+' à regarder':'tout est bon')+'</span></h4>'+
+      L.map(function(x){ return '<div class="ed-ck '+(x[0]?'ok':x[3]?'ko':'av')+'"><i></i><div><b>'+x[1]+'</b> : '+x[2]+'</div></div>'; }).join('');
+  }
+
+  /* 3e. JOURNAL DES MODIFICATIONS (L = changements, du plus ancien au plus récent) */
+  function modifs(L,o){ o=o||{};
+    return '<h4>Mes modifications <span class="n">'+L.length+'</span></h4>'+
+      (L.length?'<ol class="ed-log">'+L.map(function(c,k){ return '<li><span>'+(k+1)+'.</span>'+e(c.texte)+'</li>'; }).reverse().join('')+'</ol>'
+        :'<p class="leg" style="margin:0">Aucune modification pour l’instant. Tout se recalcule en direct.</p>')+
+      '<div class="rl-btns"><button type="button" class="mini ed-btn" data-act="ed-undo"'+(o.undo?'':' disabled')+'>Annuler <kbd>Ctrl Z</kbd></button><button type="button" class="mini ed-btn" data-act="ed-redo"'+(o.redo?'':' disabled')+'>Rétablir <kbd>Ctrl Y</kbd></button>'+
+      '<button type="button" class="mini ed-btn" data-act="ed-tout"'+(L.length?'':' disabled')+'>Tout annuler</button></div>';
+  }
+
+  /* 3f. LISTES DES FEUILLES D'ACTIONS */
+  // L = aliments du fichier [{id, nom, p100}] ; data-sh = id (valeur du champ « ingredient »)
+  function listeAliments(L,q,R){ var INT=interdits(R), w=norm(q);
+    var M=L.filter(function(a){ return !w||norm(a.nom+' '+a.id).indexOf(w)>=0; }).slice(0,80);
+    return M.length?M.map(function(a){ var rf=refuse(a.id,INT)||refuse(a.nom,INT), v=a.p100||{};
+      return '<button type="button" class="al'+(rf?' ref':'')+'" data-sh="'+e(a.id)+'"><span>'+e(cap(a.nom))+'</span><span class="tag">'+g0(v.kcal)+' kcal</span>'+
+        '<small>pour 100 g : P '+n(+v.p||0,1)+' · G '+n(+v.g||0,1)+' · L '+n(+v.l||0,1)+(a.piece?' · à la pièce ('+g0(a.piece.g)+' g)':'')+(rf?' · refusé par le client (« '+e(rf)+' »)':'')+'</small></button>'; }).join('')
+      :'<p class="leg">Aucun aliment ne correspond.</p>';
+  }
+  // L = plats du catalogue [{cle, titre, repas, ingredients}] ; ty = type du repas à remplacer (les plats de ce repas d'abord)
+  function listePlats(L,q,ty,R){ var w=norm(q), INT=interdits(R);
+    var M=L.map(function(p,k){ return [p,k]; }).filter(function(x){ return !w||norm(x[0].titre+' '+x[0].cle+' '+x[0].ingredients.join(' ')).indexOf(w)>=0; })
+      .sort(function(a,b){ return ((b[0].repas||[]).indexOf(ty)>=0)-((a[0].repas||[]).indexOf(ty)>=0)||String(a[0].titre).localeCompare(b[0].titre,'fr'); }).slice(0,80);
+    return M.length?M.map(function(x){ var p=x[0], rf=(p.ingredients||[]).map(function(i){ return refuse(i,INT); }).filter(Boolean);
+      return '<button type="button" class="al'+(rf.length?' ref':'')+'" data-sh="'+x[1]+'"><span>'+e(p.titre)+'</span><span class="tag">'+e((p.repas||[]).map(function(t){ return ml(t); }).join(' · '))+'</span>'+
+        '<small>'+(p.cle!==p.titre?e(p.cle)+' · ':'')+e((p.ingredients||[]).join(', '))+(rf.length?' · contient un aliment refusé':'')+'</small></button>'; }).join('')
+      :'<p class="leg">Aucun plat ne correspond.</p>';
+  }
+  // choix d'un jour de destination (dupliquer un repas, copier un jour)
+  function choixJours(R,i,ty){ var J=(R.menu||{}).jours||[];
+    return J.map(function(j,k){ if(j.off||k===i) return ''; var r=ty&&repasDe(j,ty);
+      return '<button type="button" class="al" data-sh="'+k+'"><span>Jour '+j.jour+'</span><span class="tag">'+g0(totJour(j).kcal)+' kcal</span><small>'+(ty?'remplace « '+e(titre(r||{}))+' »':'remplace les '+(j.repas||[]).length+' repas du jour')+'</small></button>'; }).join(''); }
+  function actionsRapides(nom,edit){
+    var L=(edit?[['ed-remplacer','Remplacer dans la diète','je choisis moi-même un autre aliment'],['ed-suppr','Retirer de ce repas','']]:[])
+      .concat([['q-remplacer','Demander de remplacer cet aliment','renvoyer en correction'],['q-exclure','Exclure pour ce client','ne plus jamais le servir'],
+        ['q-minmax','Fixer un minimum / maximum','de grammes pour cet aliment'],['signaler','Signaler ce repas','autre demande de correction']]);
+    return '<p class="leg" style="margin:0 0 6px">'+e(cap(nom))+'</p>'+L.map(function(a){ return '<button type="button" class="al" data-sh="'+a[0]+'"><span>'+a[1]+'</span><span></span>'+(a[2]?'<small>'+a[2]+'</small>':'')+'</button>'; }).join('');
+  }
+  function aide(){
+    var K=[['J  ou  ←','Jour précédent'],['K  ou  →','Jour suivant'],['E','Entrer / sortir du mode édition'],['V','Valider et envoyer (appuyer deux fois)'],['C','Renvoyer en correction'],
+      ['N','Écrire une note interne'],['F','Plein écran'],['Ctrl Z','Annuler la dernière modification'],['Ctrl Y','Rétablir'],['Échap','Fermer une fenêtre, annuler un échange'],['?','Cette aide']];
+    return '<dl class="aide">'+K.map(function(k){ return '<dt>'+k[0].split('  ou  ').map(function(x){ return '<kbd>'+e(x)+'</kbd>'; }).join(' ou ')+'</dt><dd>'+k[1]+'</dd>'; }).join('')+'</dl>'+
+      '<div class="rl-sub">Au doigt et à la souris</div><p class="leg" style="margin:0">Glisser le jour à gauche ou à droite pour changer de jour · appui long (ou clic droit) sur un aliment : actions rapides · en mode édition, glisser un plat de la grille sur un autre pour les échanger.</p>';
   }
 
   /* 5. COMPARAISON avec la version précédente */
   function compRepas(a,b,vp){
-    var lab='v'+(vp||'précédente');
+    var lab=vp&&isNaN(vp)?vp:'v'+(vp||'précédente');
     if(!a) return '<b>Nouveau repas</b> par rapport à '+lab+'.';
     if(titre(a)!==titre(b)) return '<b>Plat remplacé</b> : <s>'+e(titre(a))+'</s> → '+e(titre(b));
     var G1={}, G2={}, D=[];
@@ -1182,21 +1458,404 @@ var REL=(function(){
         (r.ingredients||[]).map(function(x){ return '<li>'+e(ingLabel(x))+'</li>'; }).join('')+'</ul></div>'; }).join('')+'</div>';
   }
 
+  /* 6b. RENVOI EN CORRECTION : actions structurées, empilables (format validé le 28/09, colonne retours_coach.action).
+     motif = le POURQUOI (9 valeurs, statistiques) ; action = le QUOI FAIRE ; sans action = note libre, lue par un humain.
+     f = champs du panneau ; po = portées proposées (null = aucune). */
+  var MOTIF={quantite_trop_faible:'Quantité trop faible',quantite_trop_elevee:'Quantité trop élevée',
+    aliment_deteste:'Aliment détesté servi',association_incoherente:'Association incohérente',
+    plat_hors_habitudes:'Plat hors habitudes',repetition:'Répétition',portion_irrealiste:'Portion irréaliste',
+    erreur_affichage:'Erreur d’affichage',autre:'Autre'};
+  var GRAV={detail:'Détail',a_revoir:'À revoir',bloquant:'Bloquant'};
+  var PORTEE={repas:'Ce repas seulement',diete:'Toute cette diète',client:'Durablement, pour ce client'};
+  var ACTIONS=[
+    {id:'remplacer_aliment',g:'Aliments',lib:'Remplacer un aliment par un autre',motif:'association_incoherente',f:['lieu','aliment','par_aliment'],po:['repas','diete','client']},
+    {id:'exclure_aliment',g:'Aliments',lib:'Exclure un aliment pour ce client',motif:'aliment_deteste',f:['aliment'],po:['client']},
+    {id:'bornes_aliment',g:'Aliments',lib:'Fixer un minimum / maximum de grammes',motif:'quantite_trop_faible',f:['aliment','repas_opt','min','max'],po:['diete','client']},
+    {id:'remplacer_plat',g:'Plats',lib:'Remplacer un plat',motif:'plat_hors_habitudes',f:['lieu','par_plat'],po:['diete','client']},
+    {id:'verrouiller_plat',g:'Plats',lib:'Garder ce plat tel quel',motif:'autre',f:['lieu'],po:null},
+    {id:'plus_simple',g:'Plats',lib:'Repas plus simple / plus rapide',motif:'plat_hors_habitudes',f:['lieu'],po:null},
+    {id:'refaire_jour',g:'Jour et macros',lib:'Refaire un jour entier',motif:'plat_hors_habitudes',f:['jour','quels'],po:null},
+    {id:'reequilibrer',g:'Jour et macros',lib:'Rééquilibrer les macros',motif:'autre',f:['jour_opt'],po:null},
+    {id:'changer_cible',g:'Jour et macros',lib:'Changer la cible',motif:'autre',f:['cible'],po:['client']},
+    {id:'plus_de_variete',g:'Semaine',lib:'Plus de variété',motif:'repetition',f:['multi'],po:['client']},
+    {id:'budget_serre',g:'Semaine',lib:'Budget serré',motif:'portion_irrealiste',f:[],po:['client']},
+    {id:'lever',g:'Consignes durables',lib:'Lever une consigne durable',motif:'autre',f:['ref'],po:null},
+    {id:'note',g:'Autre',lib:'Note libre',motif:'autre',f:['lieu_opt'],po:null}];
+  var ACT={}; ACTIONS.forEach(function(a){ ACT[a.id]=a; });
+  var VARIETE=['petit_dejeuner','collation','dejeuner','diner'];
+
+  // champs lus dans le panneau -> {obj} ou {erreur}. X = aides de lecture (voir correction)
+  function actionObjet(C,X){ var A=ACT[C.act], x=C.ctx||{}; if(!A) return {erreur:'Choisis d’abord une action.'};
+    function num(v){ return v===''||v==null||isNaN(+v)?null:+v; }
+    var f=A.f, po=A.po?(A.po.indexOf(C.portee)>=0?C.portee:A.po[0]):null, jour=num(x.jour), repas=x.repas||null, note=String(x.note||'').trim()||null,
+        lieu=f.indexOf('lieu')>=0, sl=null, act=null, t='', mo=C.motif||A.motif;
+    if(lieu&&!(A.id==='remplacer_aliment'&&po!=='repas')){
+      if(!jour||!repas) return {erreur:'Choisis le jour et le repas.'};
+      sl=X.plat(jour,repas); if(!sl) return {erreur:'Ce repas n’existe pas ce jour-là.'}; }
+    if(f.indexOf('lieu_opt')>=0&&jour&&repas) sl=X.plat(jour,repas);
+    function al(k,oblig){ var v=X.aliment(x[k]); if(!v&&oblig) return null; return v; }
+    switch(A.id){
+      case 'remplacer_aliment': var de=al('aliment'), par=al('par_aliment');
+        if(!de||!par) return {erreur:'Choisis les deux aliments dans la liste (ou écris une note libre).'};
+        if(de===par) return {erreur:'Les deux aliments sont identiques.'};
+        act={type:A.id,de:de,par:par,jour:po==='repas'?jour:null,repas:po==='repas'?repas:null,portee:po==='client'?'client':'diete'};
+        t='Remplacer '+de+' par '+par+(po==='repas'?'':po==='client'?' partout, et dans les prochaines diètes':' partout dans la diète'); if(po!=='repas') sl=null; break;
+      case 'exclure_aliment': var ex=al('aliment'); if(!ex) return {erreur:'Choisis l’aliment dans la liste (un mot absent de la liste passe en note libre).'};
+        act={type:A.id,aliment:ex,portee:'client'}; t='Exclure '+ex+' définitivement'; break;
+      case 'bornes_aliment': var ba=al('aliment'), mn=num(x.min), mx=num(x.max);
+        if(!ba) return {erreur:'Choisis l’aliment dans la liste.'};
+        if(mn==null&&mx==null) return {erreur:'Indique un minimum, un maximum, ou les deux.'};
+        if(mn!=null&&mx!=null&&mn>mx) return {erreur:'Le minimum dépasse le maximum.'};
+        act={type:A.id,aliment:ba,min:mn,max:mx,repas:repas,portee:po}; if(!C.motif) mo=mn!=null?'quantite_trop_faible':'quantite_trop_elevee';
+        t=ba+' : '+[mn!=null?'minimum '+mn+' g':'',mx!=null?'maximum '+mx+' g':''].filter(Boolean).join(' · ')+(repas?' ('+ml(repas).toLowerCase()+')':'')+(po==='client'?', durablement':''); repas=null; break;
+      case 'remplacer_plat': var pp=x.par_plat?X.platCat(x.par_plat):null;
+        if(x.par_plat&&!pp) return {erreur:'Choisis le plat dans le catalogue (ou laisse vide pour « propose autre chose »).'};
+        act={type:A.id,jour:jour,repas:repas,plat:sl.cle,par:pp?pp.cle:null,portee:po};
+        t='Remplacer le plat'+(pp?' par « '+pp.titre+' »':' : propose autre chose')+(po==='client'?(pp?', durablement':' (plus jamais pour ce client)'):''); break;
+      case 'verrouiller_plat': act={type:A.id,jour:jour,repas:repas,plat:sl.cle}; t='Garder ce plat tel quel'; break;
+      case 'plus_simple': act={type:A.id,jour:jour,repas:repas,plat:sl.cle}; t='Plus simple, plus rapide'; break;
+      case 'refaire_jour': if(!jour) return {erreur:'Quel jour faut-il refaire ?'};
+        var qr=x.quels==='tout'?X.typesJour(jour):['dejeuner','diner']; act={type:A.id,jour:jour,repas:qr};
+        t='Refaire le jour '+jour+' ('+qr.map(function(q){ return ml(q).toLowerCase(); }).join(', ')+')'; repas=null; break;
+      case 'reequilibrer': act={type:A.id,jour:jour||null}; t='Rééquilibrer '+(jour?'le jour '+jour:'toute la semaine'); repas=null; break;
+      case 'changer_cible': act={type:A.id,portee:'client'}; var cc=[];
+        [['kcal',' kcal'],['proteines',' g de protéines'],['lipides',' g de lipides']].forEach(function(k){ var v=num(x['c_'+k[0]]); if(v!=null){ act[k[0]]=v; cc.push(v+k[1]); } });
+        if(!cc.length) return {erreur:'Indique au moins une valeur.'}; t='Nouvelle cible : '+cc.join(' · ')+' (glucides = le reste)'; jour=null; repas=null; break;
+      case 'plus_de_variete': var mu=(x.multi||[]).slice(); if(!mu.length) return {erreur:'Choisis au moins un repas.'};
+        act={type:A.id,repas:mu,portee:'client'}; t='Plus de variété : '+mu.map(function(q){ return ml(q).toLowerCase(); }).join(', '); jour=null; repas=null; break;
+      case 'budget_serre': act={type:A.id,portee:'client'}; t='Budget serré'; jour=null; repas=null; break;
+      case 'lever': var rf=num(x.ref), cs=rf&&X.consigne(rf); if(!cs) return {erreur:'Choisis la consigne à lever.'};
+        act={type:A.id,ref:rf}; t='Lever la consigne « '+cs+' »'; jour=null; repas=null; break;
+      default: if(!note) return {erreur:'Écris ta note.'}; t='Note';
+    }
+    // colonnes jour / repas / plat de retours_coach : le repas visé (plat = CLÉ moteur), sinon ce que porte l'action
+    var cj=sl?jour:act&&typeof act.jour==='number'?act.jour:null, cr=sl?repas:act&&typeof act.repas==='string'?act.repas:null;
+    return {obj:{action:act,motif:mo,gravite:C.grav||'a_revoir',jour:cj,repas:cr,plat:sl?sl.cle:null,
+      lieu:sl?'J'+jour+' '+ml(repas)+' — '+sl.titre:cj?'J'+cj:'',texte:t,note:note}};
+  }
+
+  // C = {act, grav, portee, motif, ctx, liste, avecEdition:n}
+  // X = {jours:[n°], types:[types], typesJour(n), plat(n,ty)->{cle,titre}, aliments:[[id,nom]], plats:[[cle,titre]], cible, consignes:[{id,texte}], consigne(id), aliment(v), platCat(v)}
+  function correction(C,X){
+    var A=ACT[C.act], x=C.ctx||{}, grp=[];
+    ACTIONS.forEach(function(a){ if(grp.indexOf(a.g)<0) grp.push(a.g); });
+    function v(k){ return x[k]==null?'':e(x[k]); }
+    function champ(lab,inp,full){ return '<div'+(full?' class="full"':'')+'><label>'+lab+'</label>'+inp+'</div>'; }
+    function sel(id,opts,cur){ return '<select id="co-'+id+'">'+opts.map(function(o){ return '<option value="'+e(o[0])+'"'+(String(o[0])===String(cur==null?'':cur)?' selected':'')+'>'+e(o[1])+'</option>'; }).join('')+'</select>'; }
+    var h='<h4>Renvoyer en correction <span class="n">'+C.liste.length+' action'+(C.liste.length>1?'s':'')+' dans la liste</span></h4>'+
+      (C.avecEdition?'<div class="ed-bandeau" style="margin:0 0 10px">Tes <b>'+C.avecEdition+' modification'+(C.avecEdition>1?'s':'')+'</b> seront d’abord enregistrées (nouvelle version de la diète), puis ces actions lui seront attachées.</div>':'')+
+      '<p class="leg" style="margin:0">Choisis ce qui doit changer, précise, ajoute à la liste. Empile autant d’actions que nécessaire, puis envoie tout d’un coup.</p>'+
+      grp.map(function(g){ return '<div class="co-grp">'+g+'</div><div class="rl-chips">'+ACTIONS.filter(function(a){ return a.g===g; }).map(function(a){
+        return '<button type="button" class="rl-chip'+(a.id===C.act?' on':'')+'" data-act="co-act" data-a="'+a.id+'">'+a.lib+'</button>'; }).join('')+'</div>'; }).join('');
+    if(A){
+      var F=A.f, fh='', po=A.po?(A.po.indexOf(C.portee)>=0?C.portee:A.po[0]):null, jours=[['','—']].concat(X.jours.map(function(n1){ return [n1,'Jour '+n1]; })),
+          reps=[['','—']].concat(X.types.map(function(t){ return [t,ml(t)]; }));
+      if(F.indexOf('lieu')>=0||F.indexOf('lieu_opt')>=0){
+        fh+=champ('Jour',sel('jour',jours,x.jour))+champ('Repas',sel('repas',reps,x.repas));
+        var sl=x.jour&&x.repas?X.plat(+x.jour,x.repas):null;
+        if(sl) fh+='<div class="full co-plat">Plat : <b>'+e(sl.titre)+'</b></div>';
+        else if(x.jour&&x.repas) fh+='<div class="full co-plat">Pas de '+e(ml(x.repas).toLowerCase())+' ce jour-là.</div>'; }
+      if(F.indexOf('jour')>=0) fh+=champ('Jour',sel('jour',jours,x.jour),1);
+      if(F.indexOf('jour_opt')>=0) fh+=champ('Jour',sel('jour',[['','Toute la semaine']].concat(jours.slice(1)),x.jour),1);
+      if(F.indexOf('aliment')>=0) fh+=champ('Aliment','<input type="text" id="co-aliment" list="co-dl-al" value="'+v('aliment')+'" placeholder="Ex. riz" autocomplete="off">',F.indexOf('par_aliment')<0);
+      if(F.indexOf('par_aliment')>=0) fh+=champ('Le remplacer par','<input type="text" id="co-par_aliment" list="co-dl-al" value="'+v('par_aliment')+'" placeholder="Ex. quinoa" autocomplete="off">');
+      if(F.indexOf('repas_opt')>=0) fh+=champ('Repas',sel('repas',[['','Tous les repas']].concat(reps.slice(1)),x.repas),1);
+      if(F.indexOf('min')>=0) fh+=champ('Minimum (g)','<input type="number" id="co-min" inputmode="numeric" min="0" value="'+v('min')+'" placeholder="Ex. 25">')+champ('Maximum (g)','<input type="number" id="co-max" inputmode="numeric" min="0" value="'+v('max')+'" placeholder="facultatif">');
+      if(F.indexOf('par_plat')>=0) fh+=champ('Le remplacer par','<input type="text" id="co-par_plat" list="co-dl-pl" value="'+v('par_plat')+'" placeholder="Vide = propose autre chose" autocomplete="off">',1);
+      if(F.indexOf('quels')>=0) fh+=champ('Repas à refaire',sel('quels',[['','Déjeuner et dîner'],['tout','Toute la journée']],x.quels),1);
+      if(F.indexOf('cible')>=0) fh+=[['kcal','Calories'],['proteines','Protéines (g)'],['lipides','Lipides (g)']].map(function(k){ var cur=x['c_'+k[0]]!=null?x['c_'+k[0]]:Math.round((X.cible||{})[k[0]]||0)||'';
+        return champ(k[1],'<input type="number" id="co-c_'+k[0]+'" inputmode="numeric" min="0" value="'+e(cur)+'">'); }).join('')+'<p class="leg full" style="margin:0">Glucides : le reste des calories.</p>';
+      if(F.indexOf('multi')>=0){ var mu=x.multi||[]; fh+='<div class="full"><label>Repas concernés</label><div class="seg" role="group" aria-label="Repas concernés">'+VARIETE.map(function(t){
+        return '<button type="button" data-act="co-multi" data-v="'+t+'" aria-pressed="'+(mu.indexOf(t)>=0)+'"'+(mu.indexOf(t)>=0?' class="on"':'')+'>'+ml(t)+'</button>'; }).join('')+'</div></div>'; }
+      if(F.indexOf('ref')>=0) fh+=X.consignes.length?champ('Consigne à lever',sel('ref',[['','—']].concat(X.consignes.map(function(c){ return [c.id,c.texte]; })),x.ref),1)
+        :'<p class="leg full" style="margin:0">'+(X.consignesAbsentes?'Les consignes durables ne sont pas encore lisibles (base pas encore à jour).':'Aucune consigne durable pour ce client.')+'</p>';
+      h+='<div class="co-box"><div class="co-t">'+A.lib+'</div><div class="rl-f">'+fh+'</div>'+
+        (A.po&&A.po.length>1?'<span class="co-lab">Portée</span><div class="seg" role="group" aria-label="Portée">'+A.po.map(function(k){ return '<button type="button" data-act="co-portee" data-v="'+k+'"'+(k===po?' class="on"':'')+'>'+PORTEE[k]+'</button>'; }).join('')+'</div>'
+          :po?'<p class="leg" style="margin:10px 0 0">Portée : <b>'+PORTEE[po].toLowerCase()+'</b> (relue à chaque nouvelle diète, suivi compris).</p>':'')+
+        '<div class="rl-f" style="margin-top:12px"><div><label for="co-motif">Pourquoi</label>'+sel('motif',Object.keys(MOTIF).map(function(k){ return [k,MOTIF[k]]; }),C.motif||A.motif)+'</div></div>'+
+        '<span class="co-lab">Gravité</span><div class="seg" role="group" aria-label="Gravité">'+Object.keys(GRAV).map(function(k){ return '<button type="button" data-act="co-grav" data-v="'+k+'" class="'+(k===(C.grav||'a_revoir')?'on':'')+(k==='bloquant'?' bl':'')+'">'+GRAV[k]+'</button>'; }).join('')+'</div>'+
+        '<label class="co-lab" for="co-note">'+(A.id==='note'?'Ta note (comme à un stagiaire)':'Précision (facultatif)')+'</label><div class="rl-f"><div class="full"><textarea id="co-note" placeholder="Ex. « 25 g de riz minimum par wrap, sinon ça ne ressemble à rien ».">'+v('note')+'</textarea></div></div>'+
+        '<div class="rl-btns"><button type="button" class="db rec" data-act="co-ajouter">+ Ajouter à la liste</button></div></div>';
+    }
+    if(C.liste.length){ var nb=C.liste.filter(function(a){ return a.gravite==='bloquant'; }).length;
+      h+='<div class="rl-sub">À envoyer</div>'+C.liste.map(function(a,k){
+        return '<div class="co-it '+a.gravite+'"><div><b>'+e(a.texte)+'</b><small>'+(a.lieu?e(a.lieu)+' · ':'')+GRAV[a.gravite]+' · '+MOTIF[a.motif]+'</small>'+(a.note?'<small>« '+e(a.note)+' »</small>':'')+'</div>'+
+          '<button type="button" class="mini" data-act="co-retirer" data-k="'+k+'" aria-label="Retirer cette action">Retirer</button></div>'; }).join('')+
+        '<p class="co-sum"><b>'+C.liste.length+' action'+(C.liste.length>1?'s':'')+'</b>'+(nb?', dont <b>'+nb+' bloquante'+(nb>1?'s':'')+'</b>':'')+'. La diète revient dans la file une fois corrigée.</p>';
+    }
+    return h+'<div class="rl-btns"><button type="button" class="db ok" data-act="co-envoyer"'+(C.liste.length&&!C.envoi?'':' disabled')+'>'+(C.avecEdition?'Enregistrer et envoyer en correction':'Envoyer en correction')+'</button><button type="button" class="db" data-act="co-fermer">Fermer</button></div>'+
+      '<datalist id="co-dl-al">'+X.aliments.map(function(a){ return '<option value="'+e(a[0])+'"'+(a[1]&&a[1]!==a[0]?' label="'+e(a[1])+'"':'')+'>'; }).join('')+'</datalist>'+
+      '<datalist id="co-dl-pl">'+X.plats.map(function(a){ return '<option value="'+e(a[0])+'"'+(a[1]&&a[1]!==a[0]?' label="'+e(a[1])+'"':'')+'>'; }).join('')+'</datalist>';
+  }
+
+  /* 6c. NOTES INTERNES (entre coachs, gardées sur cet appareil) + JOURNAL de relecture */
+  function notes(R,N,J){
+    return '<h4>Notes internes <span class="n">sur cet appareil</span></h4><p class="leg" style="margin:0 0 8px">Entre coachs, jamais visibles du client. Elles restent sur cet appareil (ce navigateur) tant qu’un partage entre coachs n’est pas en place.</p>'+
+      (N||[]).map(function(x){ return '<div class="jn note">'+e(x.texte)+'<small>'+e(x.par)+' · '+e(x.quand)+'</small></div>'; }).join('')+
+      '<div class="jn-f"><textarea id="rl-note-t" placeholder="Ex. « vu avec Yoann : on garde le chocolat du soir »" aria-label="Nouvelle note interne"></textarea>'+
+      '<div class="rl-btns" style="margin-top:8px"><button type="button" class="mini ed-btn" data-act="note-aj">Ajouter la note</button></div></div>'+
+      '<div class="rl-sub">Relecture</div>'+(J||[]).map(function(x){ return '<div class="jn">'+e(x.texte)+'<small>'+e(x.quand)+'</small></div>'; }).join('')+
+      '<div class="jn">Déposée<small>'+e(R.depose)+'</small></div>';
+  }
+
+  /* 6d. BARRE D'OUTILS (collée en haut) : o = {i, edit, plein, suivante, lecture} */
+  function barreOutils(R,o){
+    var J=(R.menu||{}).jours||[], j=J[o.i]||{};
+    return '<button type="button" class="tb" data-act="file">← File</button><span class="sep"></span>'+
+      '<button type="button" class="tb ic" data-act="prec" aria-label="Jour précédent" title="Jour précédent (J ou ←)">‹</button><span class="tb jr" aria-live="polite">'+(j.off?'Jour OFF':'Jour '+(j.jour||''))+'</span><button type="button" class="tb ic" data-act="suiv" aria-label="Jour suivant" title="Jour suivant (K ou →)">›</button><span class="sep"></span>'+
+      '<button type="button" class="tb '+(o.edit?'on':'p')+'" data-act="edition"'+(o.lecture&&!o.edit?' disabled title="'+e(o.lecture)+'"':'')+'>'+(o.edit?'Terminer l’édition':'Modifier la diète')+' <kbd>E</kbd></button>'+
+      '<button type="button" class="tb" data-act="corriger">Renvoyer en correction <kbd>C</kbd></button>'+
+      '<button type="button" class="tb" data-act="notes">Notes <kbd>N</kbd></button>'+
+      '<button type="button" class="tb'+(o.plein?' on':'')+'" data-act="plein">Plein écran <kbd>F</kbd></button>'+
+      '<button type="button" class="tb ic" data-act="aide" aria-label="Raccourcis clavier" title="Raccourcis (?)">?</button>'+
+      (o.suivante?'<button type="button" class="tb fin" data-act="suivante" title="Diète suivante dans la file">Suivante : '+e(o.suivante)+' →</button>':'');
+  }
+
+  /* 6e. BARRE DE DÉCISION EN ÉDITION : o = {n, undo, redo, envoi} */
+  function barreEdition(o){
+    var d=o.envoi?' disabled':'';
+    return '<div class="rl-etat"><span><b>'+o.n+'</b> modification'+(o.n>1?'s':'')+' · tout se recalcule en direct</span><button type="button" class="tb" data-act="ed-quitter">Quitter l’édition</button></div>'+
+      '<div class="in"><button type="button" class="db ic" data-act="ed-undo"'+(o.undo?'':' disabled')+' aria-label="Annuler la dernière modification" title="Annuler (Ctrl+Z)">↶</button>'+
+      '<button type="button" class="db ic" data-act="ed-redo"'+(o.redo?'':' disabled')+' aria-label="Rétablir" title="Rétablir (Ctrl+Y)">↷</button>'+
+      '<button type="button" class="db" data-act="ed-enreg"'+d+'><span class="lg">Enregistrer sans valider</span><span class="sm">Enregistrer</span></button>'+
+      '<button type="button" class="db rec" data-act="ed-corr"'+d+'><span class="lg">Enregistrer et renvoyer en correction</span><span class="sm">Corriger</span></button>'+
+      '<button type="button" class="db ok" data-act="ed-valider"'+d+'><span class="lg">Enregistrer et valider</span><span class="sm">Valider</span></button></div>';
+  }
+
   /* 6c. BARRE DE DÉCISION (collée en bas de l'écran) */
   function decision(R,o){ o=o||{};
     var pr=String(R.nom).split(' ')[0], et='';
     if(R.etat==='valide') return '<div class="rl-etat"><b>Validée et envoyée à '+e(pr)+'</b> · lecture seule.</div><div class="in" style="grid-template-columns:1fr"><button type="button" class="db" data-act="file">← Retour à la file</button></div>';
     // refusée : on ne valide plus cette version (une nouvelle sera refaite), on peut encore préciser quoi changer
     if(R.etat==='refuse') return '<div class="rl-etat"><b>Refusée</b> : une nouvelle version sera entièrement refaite.</div><div class="in" style="grid-template-columns:1fr 1fr"><button type="button" class="db rec" data-act="corriger">Ajouter des remarques</button><button type="button" class="db" data-act="file">← Retour à la file</button></div>';
-    if(R.etat==='rectification') et='<div class="rl-etat"><b>Correction demandée</b>'+(o.envoyes?' · '+o.envoyes+' point'+(o.envoyes>1?'s':'')+' envoyé'+(o.envoyes>1?'s':''):'')+'. Tu peux encore valider.</div>';
-    return et+'<div class="in"><button type="button" class="db ok" data-act="valider">Valider et envoyer</button><button type="button" class="db rec" data-act="corriger">Demander une correction</button>'+
+    if(R.etat==='rectification') et='<div class="rl-etat"><b>Renvoyée en correction</b>'+(o.envoyes?' · '+o.envoyes+' action'+(o.envoyes>1?'s':'')+' envoyée'+(o.envoyes>1?'s':''):'')+'. Tu peux encore valider.</div>';
+    return et+'<div class="in"><button type="button" class="db ok" data-act="valider">Valider et envoyer</button><button type="button" class="db rec" data-act="corriger">Renvoyer en correction</button>'+
       '<button type="button" class="db no'+(o.arme?' arme':'')+'" data-act="refuser">'+(o.arme?'Confirmer le refus':'Refuser')+'</button></div>'+
-      (o.arme?'<div class="rl-etat" style="margin:8px auto 0">La diète sera entièrement refaite. Ajoute au moins une remarque pour qu’on sache quoi changer.</div>':'');
+      (o.arme?'<div class="rl-etat" style="margin:8px auto 0">La diète sera entièrement refaite. Ajoute au moins une action pour qu’on sache quoi changer.</div>':'');
   }
 
-  return {MEALS:MEALS,ETAT:ETAT,titre:titre,actifs:actifs,totJour:totJour,somme:somme,ecart:ecart,joursOk:joursOk,
-    entete:entete,semaine:semaine,graphe:graphe,jour:jour,comparer:comparer,controle:controle,apercu:apercu,decision:decision,ml:ml};
+  return {MEALS:MEALS,ETAT:ETAT,ML:ML,titre:titre,actifs:actifs,totJour:totJour,somme:somme,ecart:ecart,joursOk:joursOk,repasDe:repasDe,sig:sig,sigJ:sigJ,
+    interdits:interdits,refuse:refuse,entete:entete,semaine:semaine,graphe:graphe,jour:jour,jourEdit:jourEdit,equilibreur:equilibreur,controlesDirect:controlesDirect,modifs:modifs,
+    listeAliments:listeAliments,listePlats:listePlats,choixJours:choixJours,actionsRapides:actionsRapides,aide:aide,
+    comparer:comparer,controle:controle,apercu:apercu,correction:correction,actionObjet:actionObjet,notes:notes,barreOutils:barreOutils,barreEdition:barreEdition,decision:decision,ml:ml};
 })();
+
+/* ======================================================================
+   ÉDITION D'UNE DIÈTE : l'ÉTAT, sans aucun accès à la page (repris de coach-maquette.html,
+   branché sur le format réel validé le 28/09). S = ED.session(menu, cible, sexe) ; chaque
+   modification passe par ED.faire(S, type, args) (historique annuler / rétablir, phrase du journal).
+   ED.resultat(S) = {menu, changements} = ce qu'envoie rpc('editer_programme') :
+   - menu : champs non touchés conservés (_bornes, _fige, _impose…), ligne touchée -> _fige,
+     macros de ligne / repas / jour + écart recalculés, jour.ok = null sur les jours édités,
+     menu.courses supprimé, plat changé -> recette = clé catalogue, sans recette_base ni swap ;
+   - changements : [{op:'grammes'|'remplacer_aliment'|'ajouter_aliment'|'retirer_aliment'|'changer_plat'|'deplacer_repas'|'renommer', …}],
+     calculés en COMPARANT au menu déposé (un aller-retour annulé ne laisse aucune trace).
+   Macros : ligne existante = son propre ratio (macro / grammes), la base (assets/aliments_site.json)
+   ne sert qu'aux lignes nouvelles ou à 0 g. Formule du moteur : round(p100 × g / 100, 1).
+   ====================================================================== */
+var ED=(function(){
+  "use strict";
+  var MAC=['kcal','proteines','glucides','lipides'], MOTS={2:'Deux',3:'Trois',4:'Quatre',5:'Cinq',6:'Six',7:'Sept',8:'Huit',9:'Neuf',10:'Dix'};
+  var FEM=/^(banane|pomme|poire|orange|peche|nectarine|clementine|datte|echalote|tomate|courgette|carotte|galette|tranche|part|portion|boule|poignee|cuillere|gousse|rondelle|barquette|brique|boite|tasse|pincee|dose|toastinette|tortilla)/;
+  var CONDIMENT=/^(huile|sauce|sirop|miel|sel|epice|vinaigre)/;
+  var BASE={aliments:[],plats:[]}, IDX={};
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function cle(s){ return String(s==null?'':s).toLowerCase().replace(/œ/g,'oe').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim(); }
+  function r1(v){ return Math.round(v*10)/10; }
+  function cap(s){ s=String(s||''); return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  function charger(b){ BASE={aliments:(b&&b.aliments)||[],plats:(b&&b.plats)||[]}; IDX={};
+    BASE.aliments.forEach(function(a){ var k=cle(a.id); if(!IDX[k]) IDX[k]=a; }); }
+  function aliment(id){ return IDX[cle(id)]||null; }
+  function grille(al){ return al&&al.grille&&al.grille.length?al.grille.slice().sort(function(a,b){ return a-b; }):null; }
+  // pas des boutons −/+ : grille (conditionnements fixes) > pièce > pas_g > 5 g
+  function pasG(id){ var al=aliment(id); if(!al) return 5; if(al.piece) return al.piece.g*(al.piece.pas||1); return al.pas_g||5; }
+  function libPas(id){ var G=grille(aliment(id)); return G?'conditionnement suivant':pasG(id)+' g'; }
+  function voisin(id,g,sens){ var G=grille(aliment(id)), k;
+    if(G){ if(sens>0){ for(k=0;k<G.length;k++) if(G[k]>g) return G[k]; return G[G.length-1]; } for(k=G.length-1;k>=0;k--) if(G[k]<g) return G[k]; return 0; }
+    var st=pasG(id); return Math.max(0,Math.round((sens>0?Math.floor(g/st+1e-9)*st+st:Math.ceil(g/st-1e-9)*st-st)*100)/100); }
+  function arrondi(id,g){ var G=grille(aliment(id)); if(g<=0) return 0;
+    if(G) return G.reduce(function(b,x){ return Math.abs(x-g)<Math.abs(b-g)?x:b; },G[0]);
+    var st=pasG(id); return Math.max(st,Math.round(Math.round(g/st)*st*100)/100); }
+
+  // « 3 œufs », « Un demi-concombre », « Un poivron et demi », « Un quart de concombre » (units.format_units) ;
+  // null quand la quantité ne se nomme pas : la ligne s'affiche alors en grammes, jamais un nom approximatif
+  function affichage(id,g){ var al=aliment(id), p=al&&al.piece; if(!p||!g) return null;
+    var u=g/p.g, ur=Math.round(u), f=FEM.test(cle(p.un))||FEM.test(cle(id)), un=f?'Une':'Un', demi=f?'demie':'demi';
+    if(Math.abs(u-ur)<0.02) return ur>=1?ur+' '+(ur>1?p.plur:p.un):null;
+    var w=Math.floor(u), fr=u-w;
+    if(Math.abs(fr-.5)<=.02) return w===0?un+' demi-'+p.un:w===1?un+' '+p.un+' et '+demi:(MOTS[w]||w)+' '+p.plur+' et '+demi;
+    if(w) return null;
+    var AU=[[.25,'un quart'],[1/3,'un tiers'],[2/3,'deux tiers'],[.75,'trois quarts']];
+    for(var k=0;k<AU.length;k++) if(Math.abs(fr-AU[k][0])<=.02) return cap(AU[k][1])+' '+(/^[aeiouyâéèêîôh]/i.test(p.un)?'d’':'de ')+p.un;
+    return null; }
+  // repères d'une ligne (avertissent, ne bloquent jamais) : _bornes de la ligne, sinon bornes standard du sexe
+  function bornes(x,sexe){ if(Array.isArray(x._bornes)) return x._bornes; var al=aliment(x.ingredient), b=al&&al.bornes&&al.bornes[sexe==='H'?'H':'F']; return b||null; }
+  function alertes(x,sexe){ var L=[], g=+x.grammes||0, b=bornes(x,sexe), al=aliment(x.ingredient), G=grille(al);
+    if(b&&g){ if(b[0]!=null&&g<b[0]) L.push('sous le repère ('+b[0]+' g minimum)'); if(b[1]!=null&&g>b[1]) L.push('au-dessus du repère ('+b[1]+' g maximum)'); }
+    if(G&&g&&G.indexOf(g)<0) L.push('hors conditionnement ('+(G.length>4?G[0]+' à '+G[G.length-1]+' g, par '+(G[1]-G[0])+' g':G.join(' ou ')+' g')+')');
+    if(al&&al.piece&&g){ var q=g/al.piece.g/(al.piece.pas||1); if(Math.abs(q-Math.round(q))>.02) L.push('pas un nombre de pièces rond ('+al.piece.g+' g la pièce)'); }
+    return L; }
+  function defaut(al,sexe){ var G=grille(al), b=al.bornes&&al.bornes[sexe==='H'?'H':'F'];
+    if(G) return G[0]; if(CONDIMENT.test(cle(al.id))) return 10;
+    if(b&&b[0]) return arrondi(al.id,b[0]); if(al.piece) return al.piece.g*(al.piece.pas||1); return 50; }
+
+  // valeurs pour 100 g : ratio de la ligne de référence (même aliment, > 0 g), sinon la base
+  function p100(ref,id){
+    if(ref&&cle(ref.ingredient)===cle(id)&&+ref.grammes>0) return MAC.map(function(m){ return (+ref[m]||0)/ref.grammes*100; });
+    var al=aliment(id); if(!al||!al.p100) return null; return [al.p100.kcal,al.p100.p,al.p100.g,al.p100.l].map(function(v){ return +v||0; }); }
+  function regrammer(x,ref,g){ var v=p100(ref,x.ingredient), al=aliment(x.ingredient), p=al&&al.piece; x.grammes=g;
+    if(v) MAC.forEach(function(m,k){ x[m]=r1(v[k]*g/100); });
+    if(p){ x.unites=Math.round(g/p.g*100)/100; x.affichage=affichage(x.ingredient,g); } else if(x.affichage!=null) x.affichage=null; }
+  function nouvelleLigne(al,g){ var x={ingredient:al.id,aliment:al.nom,grammes:g,unites:null,affichage:null,kcal:0,proteines:0,glucides:0,lipides:0}; regrammer(x,null,g); return x; }
+
+  // repères d'origine : chaque repas garde « d'où il vient » (__o), chaque ligne son rang d'origine (__l) ; retirés à l'enregistrement
+  function session(menu,cible,sexe){
+    var m=clone(menu);
+    (m.jours||[]).forEach(function(j,i){ (j.repas||[]).forEach(function(r){ r.__o=i+'|'+r.type; (r.ingredients||[]).forEach(function(x,k){ x.__l=k; }); }); });
+    return {orig:clone(m),menu:m,cible:cible||m.cible||{},sexe:sexe,passe:[],futur:[]}; }
+  function refRepas(S,r){ if(!r||!r.__o) return null; var p=r.__o.split('|'), j=S.orig.jours[+p[0]]; return j?REL.repasDe(j,p[1]):null; }
+  function refLigne(S,r,x){ var o=refRepas(S,r); return o&&x&&x.__l!=null?(o.ingredients||[])[x.__l]||null:null; }
+  function cleMoteur(r){ return r?(r.recette_base||r.recette||null):null; }
+
+  // totaux d'un jour : repas au 1/10, jour à l'unité, écart en % (même présentation que le moteur) ; un jour revenu à l'identique reprend ses valeurs déposées
+  function totaux(j,c){ (j.repas||[]).forEach(function(r){ var s=REL.somme(r.ingredients||[]); r.macros={}; MAC.forEach(function(m){ r.macros[m]=r1(s[m]); }); });
+    var t=REL.somme((j.repas||[]).map(function(r){ return r.macros; })); j.macros={}; j.ecart={};
+    MAC.forEach(function(m){ j.macros[m]=Math.round(t[m]); if(c&&c[m]) j.ecart[m]=Math.round((t[m]-c[m])/c[m]*100); }); j.ok=null; }
+  function recalc(S){ (S.menu.jours||[]).forEach(function(j,i){ var o=S.orig.jours[i]; if(j.off) return;
+    if(o&&REL.sigJ(o)===REL.sigJ(j)){ ['macros','ecart','ok'].forEach(function(k){ if(k in o) j[k]=clone(o[k]); else delete j[k]; });
+      (j.repas||[]).forEach(function(r){ var or=REL.repasDe(o,r.type); if(or&&or.macros) r.macros=clone(or.macros); }); }
+    else totaux(j,S.cible); }); }
+
+  function R0(m,i,ty){ var j=m.jours[i]; return j&&REL.repasDe(j,ty); }
+  function nom(x){ return x.ingredient; }
+  // chaque opération modifie S.menu et renvoie le changement pour le journal (ou null si rien ne change)
+  var OPS={
+    grammes:function(S,a){ var r=R0(S.menu,a.i,a.ty), x=r&&r.ingredients[a.k]; if(!x) return null; var g=Math.max(0,Math.round(+a.g||0)), av=Math.round(+x.grammes||0);
+      if(g===av) return null; regrammer(x,refLigne(S,r,x),g);
+      return {cle:'g|'+a.i+'|'+a.ty+'|'+a.k,jour:S.menu.jours[a.i].jour,repas:a.ty,type:'grammes',aliment:nom(x),avant:av,apres:g,suffixe:a.pourquoi||''}; },
+    remplacer_aliment:function(S,a){ var r=R0(S.menu,a.i,a.ty), x=r&&r.ingredients[a.k], al=aliment(a.id); if(!x||!al||cle(x.ingredient)===cle(al.id)) return null; var av=nom(x);
+      x.ingredient=al.id; x.aliment=al.nom; var g=+x.grammes||0; if(al.piece||grille(al)) g=arrondi(al.id,g||defaut(al,S.sexe)); regrammer(x,refLigne(S,r,x),g);
+      return {jour:S.menu.jours[a.i].jour,repas:a.ty,type:'remplacer_aliment',avant:av,apres:al.id,grammes:g}; },
+    retirer_aliment:function(S,a){ var r=R0(S.menu,a.i,a.ty), x=r&&r.ingredients[a.k]; if(!x) return null; r.ingredients.splice(a.k,1);
+      return {jour:S.menu.jours[a.i].jour,repas:a.ty,type:'retirer_aliment',avant:{ingredient:nom(x),grammes:Math.round(+x.grammes||0)},apres:null}; },
+    ajouter_aliment:function(S,a){ var r=R0(S.menu,a.i,a.ty), al=aliment(a.id); if(!r||!al) return null; var g=a.g!=null?a.g:defaut(al,S.sexe);
+      (r.ingredients=r.ingredients||[]).push(nouvelleLigne(al,g));
+      return {jour:S.menu.jours[a.i].jour,repas:a.ty,type:'ajouter_aliment',avant:null,apres:{ingredient:al.id,grammes:g}}; },
+    renommer:function(S,a){ var r=R0(S.menu,a.i,a.ty), t=String(a.titre||'').trim(); if(!r||!t||t===REL.titre(r)) return null; var av=REL.titre(r);
+      r.titre=t; return {cle:'n|'+a.i+'|'+a.ty,jour:S.menu.jours[a.i].jour,repas:a.ty,type:'renommer',avant:av,apres:t}; },
+    // plat du catalogue : recette = sa clé, titre = son titre coach, sans recette_base ni swap ; grammes de départ repris du plat remplacé quand l'aliment y était
+    remplacer_plat:function(S,a){ var j=S.menu.jours[a.i], r=R0(S.menu,a.i,a.ty), p=a.plat; if(!r||!p) return null;
+      var n2=clone(r), G={}, inc=[]; (r.ingredients||[]).forEach(function(x){ G[cle(x.ingredient)]=+x.grammes||0; });
+      delete n2.__o; delete n2.recette_base; delete n2.swap; n2.recette=p.cle; n2.titre=p.titre; n2.type=a.ty;
+      n2.ingredients=(p.ingredients||[]).map(function(id){ var al=aliment(id); if(!al){ inc.push(id); return null; } return nouvelleLigne(al,G[cle(id)]||defaut(al,S.sexe)); }).filter(Boolean);
+      j.repas[j.repas.indexOf(r)]=n2; return {jour:j.jour,repas:a.ty,type:'remplacer_plat',avant:REL.titre(r),apres:p.titre,inconnus:inc}; },
+    dupliquer:function(S,a){ var src=R0(S.menu,a.i,a.ty), d=S.menu.jours[a.vers], old=d&&REL.repasDe(d,a.ty); if(!src||!d||d.off) return null; var p=clone(src);
+      if(old) d.repas[d.repas.indexOf(old)]=p; else d.repas.push(p);
+      return {jour:d.jour,repas:a.ty,type:'dupliquer',avant:old?REL.titre(old):null,apres:REL.titre(p),depuis:S.menu.jours[a.i].jour,deplace:1}; },
+    echanger:function(S,a){ var j1=S.menu.jours[a.i], j2=S.menu.jours[a.i2], r1_=R0(S.menu,a.i,a.ty), r2=R0(S.menu,a.i2,a.ty2); if(!r1_||!r2||r1_===r2) return null;
+      var k1=j1.repas.indexOf(r1_), k2=j2.repas.indexOf(r2); j1.repas[k1]=r2; j2.repas[k2]=r1_; r2.type=a.ty; r1_.type=a.ty2;
+      return {jour:j1.jour,repas:a.ty,type:'echanger',avant:REL.titre(r1_),apres:REL.titre(r2),avec:{jour:j2.jour,repas:a.ty2},deplace:1}; },
+    vider:function(S,a){ var r=R0(S.menu,a.i,a.ty); if(!r||!(r.ingredients||[]).length) return null; var av=r.ingredients.length; r.ingredients=[];
+      return {jour:S.menu.jours[a.i].jour,repas:a.ty,type:'vider',avant:REL.titre(r)+' ('+av+' aliments)',apres:null}; },
+    restaurer_repas:function(S,a){ var j=S.menu.jours[a.i], r=R0(S.menu,a.i,a.ty), o=R0(S.orig,a.i,a.ty); if(!r||!o) return null;
+      j.repas[j.repas.indexOf(r)]=clone(o); return {jour:j.jour,repas:a.ty,type:'restaurer_repas',avant:REL.titre(r),apres:REL.titre(o)}; },
+    copier_jour:function(S,a){ var s=S.menu.jours[a.i], d=S.menu.jours[a.vers]; if(!s||!d||d.off||a.i===a.vers) return null; d.repas=clone(s.repas);
+      return {jour:d.jour,repas:null,type:'copier_jour',avant:null,apres:'copie du jour '+s.jour,depuis:s.jour,deplace:1}; },
+    restaurer_jour:function(S,a){ var d=S.menu.jours[a.i], o=S.orig.jours[a.i]; if(!d||!o) return null; d.repas=clone(o.repas);
+      return {jour:d.jour,repas:null,type:'restaurer_jour',avant:null,apres:'jour déposé'}; }
+  };
+  // la phrase du journal : « J3 dîner : riz 80 → 95 g »
+  function texte(c){ var L='J'+c.jour+(c.repas?' '+REL.ml(c.repas).toLowerCase():'')+' : ';
+    switch(c.type){
+      case 'grammes': return L+c.aliment+' '+c.avant+' → '+c.apres+' g'+(c.suffixe?' ('+c.suffixe+')':'');
+      case 'remplacer_aliment': return L+c.avant+' remplacé par '+c.apres+' ('+c.grammes+' g)';
+      case 'retirer_aliment': return L+c.avant.ingredient+' retiré ('+c.avant.grammes+' g)';
+      case 'ajouter_aliment': return L+c.apres.ingredient+' ajouté ('+c.apres.grammes+' g)';
+      case 'renommer': return L+'« '+c.avant+' » renommé « '+c.apres+' »';
+      case 'remplacer_plat': return L+'« '+c.avant+' » remplacé par « '+c.apres+' »';
+      case 'dupliquer': return L+'« '+c.apres+' » copié depuis le J'+c.depuis+(c.avant?' (à la place de « '+c.avant+' »)':'');
+      case 'echanger': return L+'« '+c.avant+' » échangé avec J'+c.avec.jour+' '+REL.ml(c.avec.repas).toLowerCase()+' (« '+c.apres+' »)';
+      case 'vider': return L+'repas vidé';
+      case 'restaurer_repas': return L+'repas déposé remis (« '+c.apres+' »)';
+      case 'copier_jour': return L+'jour remplacé par une copie du J'+c.depuis;
+      case 'restaurer_jour': return L+'jour déposé remis';
+    }
+    return L+c.type;
+  }
+  function faire(S,type,a){
+    var snap=clone(S.menu), c=OPS[type]&&OPS[type](S,a); if(!c) return null;
+    recalc(S); c.texte=texte(c);
+    var der=S.passe[S.passe.length-1];
+    if(c.cle&&der&&der.c.cle===c.cle){            // −/+ répétés sur le même aliment : UNE ligne « 80 → 95 g »
+      c.avant=der.c.avant; c.texte=texte(c); der.c=c;
+      if(c.avant===c.apres) S.passe.pop();
+    } else S.passe.push({snap:snap,c:c});
+    S.futur=[]; return c;
+  }
+  function annuler(S){ var p=S.passe.pop(); if(!p) return null; S.futur.push({snap:clone(S.menu),c:p.c}); S.menu=p.snap; return p.c; }
+  function retablir(S){ var f=S.futur.pop(); if(!f) return null; S.passe.push({snap:clone(S.menu),c:f.c}); S.menu=f.snap; return f.c; }
+  function journal(S){ return S.passe.map(function(p){ return p.c; }); }
+  function deplaces(S){ var n=0; (S.menu.jours||[]).forEach(function(j,i){ (j.repas||[]).forEach(function(r){ if(r.__o&&r.__o!==i+'|'+r.type) n++; }); }); return n; }
+  function modifie(S){ return JSON.stringify(S.menu)!==JSON.stringify(S.orig); }
+
+  function nettoyer(o){ if(Array.isArray(o)) o.forEach(nettoyer); else if(o&&typeof o==='object'){ delete o.__o; delete o.__l; for(var k in o) nettoyer(o[k]); } return o; }
+  // ce qui part en base : menu + changements, calculés en comparant au menu déposé
+  function resultat(S){
+    var m=clone(S.menu), O=S.orig, ch=[], touche={};
+    delete m.courses;
+    function pos(s){ var p=String(s).split('|'); return {i:+p[0],ty:p[1]}; }
+    (m.jours||[]).forEach(function(j,i){ if(j.off) return;
+      (j.repas||[]).forEach(function(r){ var ty=r.type, N=j.jour, orPos=R0(O,i,ty);
+        function op(o){ ch.push(o); touche[i]=1; }
+        if(!r.__o){                               // plat pris dans le catalogue
+          op({op:'changer_plat',jour:N,repas:ty,avant:cleMoteur(orPos),apres:r.recette});
+          (r.ingredients||[]).forEach(function(x){ x._fige=+x.grammes||0; }); return; }
+        var s=pos(r.__o), src=R0(O,s.i,s.ty);
+        if(s.i!==i||s.ty!==ty){
+          var ici=REL.repasDe(m.jours[s.i]||{},s.ty);        // l'original est encore à sa place : c'est une copie, pas un déplacement
+          if(ici&&ici!==r&&ici.__o===r.__o) op({op:'changer_plat',jour:N,repas:ty,avant:cleMoteur(orPos),apres:cleMoteur(src),depuis:{jour:O.jours[s.i].jour,repas:s.ty}});
+          else op({op:'deplacer_repas',de:{jour:O.jours[s.i].jour,repas:s.ty},vers:{jour:N,repas:ty}}); }
+        if((r.titre||null)!==(src.titre||null)) op({op:'renommer',jour:N,repas:ty,avant:REL.titre(src),apres:REL.titre(r)});
+        var vus={};
+        r.ingredients=(r.ingredients||[]).map(function(x){ var ref=x.__l!=null?(src.ingredients||[])[x.__l]:null;
+          if(!ref){ op({op:'ajouter_aliment',jour:N,repas:ty,aliment:x.ingredient,grammes:+x.grammes||0}); x._fige=+x.grammes||0; return x; }
+          vus[x.__l]=1;
+          if(cle(ref.ingredient)!==cle(x.ingredient)){ op({op:'remplacer_aliment',jour:N,repas:ty,avant:ref.ingredient,apres:x.ingredient,grammes:+x.grammes||0}); x._fige=+x.grammes||0; return x; }
+          if(Math.round(+ref.grammes||0)!==Math.round(+x.grammes||0)){ op({op:'grammes',jour:N,repas:ty,aliment:x.ingredient,avant:+ref.grammes||0,apres:+x.grammes||0}); x._fige=+x.grammes||0; return x; }
+          return clone(ref); });              // ligne intacte : exactement celle déposée
+        (src.ingredients||[]).forEach(function(x,k){ if(!vus[k]) op({op:'retirer_aliment',jour:N,repas:ty,aliment:x.ingredient}); });
+      });
+    });
+    // jour touché : totaux recalculés, ok = null ; jour intact : exactement celui déposé
+    (m.jours||[]).forEach(function(j,i){ if(j.off) return;
+      if(touche[i]) totaux(j,S.cible); else m.jours[i]=clone(O.jours[i]); });
+    return {menu:nettoyer(m),changements:ch};
+  }
+
+  // ÉQUILIBREUR : grammes de l'aliment (cle = « type|rang ») pour que le total du jour atteigne la cible de la macro
+  function proposer(S,i,mac,k0){
+    var j=S.menu.jours[i], p=String(k0||'').split('|'), r=j&&REL.repasDe(j,p[0]), x=r&&r.ingredients[+p[1]]; if(!x) return null;
+    var mi=MAC.indexOf(mac), v=p100(refLigne(S,r,x),x.ingredient), d=v?v[mi]/100:0, tot=REL.totJour(j), c=(S.cible||{})[mac]||0;
+    if(d<.005) return {impossible:true,aliment:x.ingredient};
+    var besoin=c-(tot[mac]-(+x[mac]||0)), g=besoin>0?arrondi(x.ingredient,besoin/d):0, nt={};
+    MAC.forEach(function(m,k){ nt[m]=tot[m]-(+x[m]||0)+v[k]*g/100; });
+    return {aliment:x.ingredient,i:i,ty:p[0],k:+p[1],avant:Math.round(+x.grammes||0),apres:g,tot:nt,borne:besoin<0};
+  }
+  // aliments du jour, le plus « porteur » de la macro en premier (riz pour les glucides, poulet pour les protéines…)
+  function candidats(S,i,mac){
+    var j=S.menu.jours[i], L=[], mi=MAC.indexOf(mac), F={kcal:1,proteines:4,glucides:4,lipides:9};
+    ((j&&j.repas)||[]).forEach(function(r){ (r.ingredients||[]).forEach(function(x,k){ var v=p100(refLigne(S,r,x),x.ingredient); if(!v) return;
+      var part=mac==='kcal'?1:(v[mi]*F[mac])/(v[0]||1), sc=CONDIMENT.test(cle(x.ingredient))?-1:part*(+x[mac]||0);
+      L.push({cle:r.type+'|'+k,lib:x.ingredient+' ('+REL.ml(r.type).toLowerCase()+', '+Math.round(+x.grammes||0)+' g)',sc:sc}); }); });
+    return L.sort(function(a,b){ return b.sc-a.sc; });
+  }
+
+  return {charger:charger,base:function(){ return BASE; },aliment:aliment,cle:cle,pasG:pasG,libPas:libPas,voisin:voisin,affichage:affichage,alertes:alertes,
+    session:session,refRepas:refRepas,refLigne:refLigne,cleMoteur:cleMoteur,faire:faire,annuler:annuler,retablir:retablir,journal:journal,deplaces:deplaces,modifie:modifie,
+    resultat:resultat,proposer:proposer,candidats:candidats,clone:clone};
+})();
+
 
 (function(){
   "use strict";
@@ -1519,7 +2178,7 @@ var REL=(function(){
            '<div class="rn">'+esc(r.titre||r.recette)+'</div><div class="ri">'+ing+'</div>'+
            '<div class="rm">'+Math.round(ma.kcal||0)+' kcal · P'+Math.round(ma.proteines||0)+
            ' G'+Math.round(ma.glucides||0)+' L'+Math.round(ma.lipides||0)+'</div>'+
-           '<button class="flagbtn" data-plat="J'+j.jour+' '+(MEALS[r.type]||r.type)+' — '+esc(r.titre||r.recette)+'" data-jour="'+j.jour+'" data-repas="'+r.type+'">Signaler ce plat</button>'+
+           '<button class="flagbtn" data-plat="J'+j.jour+' '+(MEALS[r.type]||r.type)+' — '+esc(r.titre||r.recette)+'" data-cle="'+esc(r.recette_base||r.recette||'')+'" data-jour="'+j.jour+'" data-repas="'+r.type+'">Signaler ce plat</button>'+
            '</div>';
       });
       h+='</div>';
@@ -1529,6 +2188,7 @@ var REL=(function(){
       b.addEventListener('click',function(){
         $('retour').classList.add('on');
         $('r-plat').value=b.dataset.plat; $('r-jour').value=b.dataset.jour;
+        signale={libelle:b.dataset.plat,cle:b.dataset.cle||null,repas:b.dataset.repas||null};
         $('r-motif').focus(); $('retour').scrollIntoView({behavior:'smooth',block:'center'});
       });
     });
@@ -1538,11 +2198,10 @@ var REL=(function(){
   /* ---------- décisions ---------- */
   function setStatut(st,msg){
     var c=cur; if(!c||!c.programme_id) return;
-    sb.from('programmes').update({statut:st,traite_par:moi.id,traite_at:new Date().toISOString()})
-      .eq('id',c.programme_id).then(function(r){
-        if(r.error){ toast("Impossible d'enregistrer — réessaie."); return; }
+    majStatut(c.programme_id,st).then(function(err){
+        if(err){ toast("Impossible d'enregistrer — réessaie."); return; }
         c.statut=st; c.etape=st; renderFile(); renderProg(); recount(); toast(msg); chargerTout();
-        if(RL.R&&RL.R.pid===c.programme_id){ RL.R.etat=st; RL.arme=false; rlTete(); rlDec(); }
+        if(RL.R&&RL.R.pid===c.programme_id){ RL.R.etat=st; RL.arme=false; tout(); rlNotes(); }
       });
   }
   $('b-ok').addEventListener('click',function(){ setStatut('valide','Programme validé ✓'); });
@@ -1553,17 +2212,20 @@ var REL=(function(){
   $('b-rec').addEventListener('click',function(){ $('retour').classList.add('on'); $('retour').scrollIntoView({behavior:'smooth',block:'center'}); });
 
   /* ---------- retours structurés ---------- */
+  // la colonne « plat » reçoit la CLÉ moteur du repas signalé ; le libellé lisible (« J3 Déjeuner — titre ») part dans « attendu »
+  var signale=null;
   $('r-add').addEventListener('click',function(){
-    var r={motif:$('r-motif').value,gravite:$('r-grav').value,plat:$('r-plat').value||null,
+    var lib=$('r-plat').value.trim(), s=signale&&signale.libelle===lib?signale:null;
+    var r={motif:$('r-motif').value,gravite:$('r-grav').value,libelle:lib||null,plat:s?s.cle:null,repas:s?s.repas:null,
            jour:$('r-jour').value?+$('r-jour').value:null,attendu:$('r-attendu').value||null};
-    if(!r.attendu && !r.plat){ toast('Précise au moins le plat ou ce que tu aurais fait.'); return; }
-    retours.push(r); $('r-plat').value=''; $('r-jour').value=''; $('r-attendu').value='';
+    if(!r.attendu && !r.libelle){ toast('Précise au moins le plat ou ce que tu aurais fait.'); return; }
+    retours.push(r); $('r-plat').value=''; $('r-jour').value=''; $('r-attendu').value=''; signale=null;
     renderRetours();
   });
   function renderRetours(){
     $('rlist').innerHTML=retours.map(function(r,i){
       return '<div class="rrow"><div class="rx">'+esc(MOTIF[r.motif]||r.motif)+
-        (r.plat?' — '+esc(r.plat):'')+'<small>'+esc(r.attendu||'')+'</small></div>'+
+        (r.libelle?' — '+esc(r.libelle):'')+'<small>'+esc(r.attendu||'')+'</small></div>'+
         '<button class="del" data-i="'+i+'" title="Retirer">✕</button></div>';
     }).join('');
     $('rlist').querySelectorAll('.del').forEach(function(b){
@@ -1575,24 +2237,27 @@ var REL=(function(){
     if(!retours.length){ toast('Ajoute au moins un point avant d\'envoyer.'); return; }
     if(!c||!c.programme_id){ toast('Aucun programme sélectionné.'); return; }
     var nb=retours.length, pr=retours[0];
-    sb.from('retours_coach').insert(retours.map(function(r){
-      return {programme_id:c.programme_id,coach_id:moi.id,jour:r.jour,repas:null,plat:r.plat,
-              motif:r.motif,attendu:r.attendu,gravite:r.gravite};
+    insererRetours(retours.map(function(r){
+      return {programme_id:c.programme_id,coach_id:moi.id,jour:r.jour,repas:r.repas,plat:r.plat,
+              motif:r.motif,attendu:[r.libelle,r.attendu].filter(Boolean).join(' · ')||null,gravite:r.gravite};
     })).then(function(res){
-      if(res.error){ toast('Envoi impossible — réessaie.'); return; }
+      if(!res.ok){ toast('Envoi impossible — réessaie.'); return; }
       retours=[]; renderRetours(); $('retour').classList.remove('on');
-      if(RL.R&&RL.R.pid===c.programme_id){ RL.envoyes=nb; RL.R.note={par:'toi',texte:pr.attendu||pr.plat||''}; rlTete(); rlDec(); }
+      if(RL.R&&RL.R.pid===c.programme_id){ RL.envoyes=nb; RL.R.note={par:'toi',texte:pr.attendu||pr.libelle||''}; rlTete(); rlDec(); }
       if(c.etape!=='refuse') setStatut('rectification','Remarques envoyées ✓');
       else toast('Remarques envoyées ✓');
     });
   });
 
 
-  /* ================= RELECTURE D'UNE DIÈTE (rendu : REL, plus haut) =================
-     Ouverte depuis la file (bouton « Relire ») ou la fiche (« Relire la diète »).
-     Les décisions passent par le MÊME circuit que la fiche : setStatut() et le formulaire
-     #retour, DÉPLACÉ ici tant que la relecture est ouverte (une seule copie de ses id). */
-  var RL={R:null,i:0,mode:'coach',hl:null,arme:false,envoyes:0};
+  /* ================= RELECTURE D'UNE DIÈTE : le CONTRÔLEUR =================
+     Ouverte depuis la file (« Relire ») ou la fiche (« Relire la diète »). Rendu : REL (fonctions
+     pures) ; état d'édition : ED ; ici l'état de l'écran (RL) et les événements.
+     Écritures : rpc('editer_programme') pour une retouche (NOUVELLE version, l'ancienne passe à
+     « remplace ») ; retours_coach (+ colonne action) pour une correction ; programmes.statut pour
+     une décision. Tant que supabase/edition_programmes.sql n'est pas lancé : message clair pour
+     l'édition, et les corrections partent comme des remarques écrites (sans la colonne action). */
+  var RL={R:null,co:{}}, FE={cb:null,filtre:null,retour:null,t:0}, ALIM=null;
   function depuis(t){ if(!t) return '—'; var h=(Date.now()-new Date(t).getTime())/3600000;
     return h<1?'il y a moins d’une heure':h<24?'il y a '+Math.floor(h)+' h':h<48?'hier':'le '+dateFr(t); }
   function avecCible(menu,cible){ return (!menu||menu.cible||!cible)?menu:Object.assign({},menu,{cible:cible}); }
@@ -1600,69 +2265,386 @@ var REL=(function(){
     var d=c.diagnostic||{}, g=d.suivi&&d.suivi.geste, rep=c.reponses||{}, k=D&&D.par[c.user_id], fm=k&&((k.a&&k.a.formule)||k.p.formule);
     return {uid:c.user_id, pid:c.programme_id, nom:((c.prenom||'')+' '+(c.nom||'')).trim()||'Client', formule:FORM[fm]||'Sans formule',
       type:g==='reajuster'?'Réajustement':g?'Nouveau menu':'1re diète', version:c.version||1, depose:depuis(c.programme_at||c.created_at),
-      etat:c.etape, menu:avecCible(c.menu,c.cible)||{}, diagnostic:d, precedent:null, precedentVersion:null, note:null,
+      etat:c.etape, menu:avecCible(c.menu,c.cible)||{}, brut:c.menu, sexe:c.sexe==='HOMME'?'H':'F', diagnostic:d, precedent:null, precedentVersion:null, note:null,
       reponses:{objectif:rep1(rep,'Quel est ton objectif principal'), refuses:rep1(rep,'Des aliments que tu refuses'), allergies:rep1(rep,'Allergies'),
         regime:rep1(rep,'As-tu un régime particulier'), conserver:rep1(rep,'Y a-t-il des aliments que tu souhaites absolument conserver')}};
   }
-  function formulaireVers(ou){ var f=$('retour'); if(f.parentNode!==ou){ f.classList.remove('on'); ou.appendChild(f); } }
-  function relire(c){
+  function prenom(){ return String(RL.R.nom).split(' ')[0]; }
+  function quand(d){ return (d||new Date()).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+  function trace(t){ RL.journal.unshift({quand:quand(),texte:t}); }
+  function coVide(){ return {ouvert:false,act:null,grav:'a_revoir',portee:null,motif:null,ctx:{},liste:[],envoi:false}; }
+  // liste des aliments et des plats du catalogue (fichier tenu par l'équipe qui prépare les diètes)
+  function base(){ if(!ALIM) ALIM=fetch('assets/aliments_site.json?v=2026-09-28').then(function(r){ if(!r.ok) throw new Error('aliments '+r.status); return r.json(); })
+      .then(function(b){ ED.charger(b); return b; }).catch(function(err){ ALIM=null; throw err; });
+    return ALIM; }
+  // la diète telle qu'on l'affiche : en édition, le menu de la session
+  function vue(){ if(!RL.S) return RL.R; var v={}, k; for(k in RL.R) v[k]=RL.R[k]; v.menu=avecCible(RL.S.menu,RL.R.menu.cible); return v; }
+  function lecture(){ var e=RL.R.etat; return e==='valide'?'Diète déjà validée et envoyée : lecture seule.':e==='refuse'?'Diète refusée : elle sera entièrement refaite.':e==='remplace'?'Une version plus récente existe.':null; }
+  function suivante(){ var k=file.indexOf(cur); for(var d=1;d<=file.length;d++){ var x=file[(k+d+file.length)%file.length]; if(x&&x!==cur&&x.etape==='a_relire'&&x.menu&&x.programme_id) return x; } return null; }
+  function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px'); }
+  addEventListener('resize',hauteur);
+  addEventListener('beforeunload',function(e){ if(RL.S&&ED.modifie(RL.S)){ e.preventDefault(); e.returnValue=''; } });
+
+  function relire(c,force){
     if(!c||!c.menu||!c.programme_id){ toast('Pas encore de diète à relire pour ce client.'); return; }
-    var i=file.indexOf(c); cur=c; sel=i>=0?i:null;                 // setStatut et « Envoyer mes remarques » visent cette diète
-    if(!RL.R||RL.R.pid!==c.programme_id){ retours=[]; renderRetours(); }
-    var R=versR(c); RL={R:R,i:0,mode:'coach',hl:null,arme:false,envoyes:0};
-    formulaireVers($('decide'));                                      // on le sort avant de vider la page
-    $('p-relire').innerHTML='<div id="rl-tete"></div><div class="rl-cols"><div class="rl-main"><div class="carte" id="rl-sem"></div><div class="carte" id="rl-jour"></div></div>'+
-      '<aside class="rl-side"><div class="carte" id="rl-ctrl"></div><div class="carte" id="rl-comp" hidden></div>'+
-      '<div class="carte" id="rl-form"><h4>Demander une correction <button type="button" class="mini" data-act="fermer">Fermer</button></h4></div></aside></div>'+
+    if(!force&&RL.S&&RL.R&&RL.R.pid===c.programme_id){ voir('relire'); hauteur(); return; }      // retour sur la diète en cours d'édition
+    if(!force&&RL.S&&ED.modifie(RL.S)){ sortir(function(){ relire(c,true); }); return; }        // jamais de modification perdue sans le demander
+    var i=file.indexOf(c); cur=c; sel=i>=0?i:null;                 // setStatut vise cette diète
+    var R=versR(c);
+    RL={R:R,i:0,mode:'coach',hl:null,S:null,swap:null,eq:{mac:'glucides',cle:null},co:coVide(),envoyes:0,arme:false,envoi:false,
+      plein:document.body.classList.contains('rl-plein'),journal:[],consignes:[],consignesAbsentes:false};
+    document.body.classList.remove('rl-edit');
+    var ed=(c.diagnostic||{}).edition;
+    if(ed) RL.journal.push({quand:ed.le?quand(new Date(ed.le)):'',texte:'Modifiée à la main depuis la v'+ed.depuis_version+' ('+(ed.changements||[]).length+' changement'+((ed.changements||[]).length>1?'s':'')+')'});
+    $('p-relire').innerHTML='<div class="rl-barre" id="rl-barre"></div><div id="rl-tete"></div><div class="rl-cols"><div class="rl-main"><div class="carte" id="rl-sem"></div><div class="carte" id="rl-jour"></div></div>'+
+      '<aside class="rl-side"><div class="carte" id="rl-co" hidden></div><div class="carte" id="rl-live" hidden></div><div class="carte" id="rl-modifs" hidden></div><div class="carte" id="rl-ctrl"></div><div class="carte" id="rl-comp" hidden></div><div class="carte" id="rl-notes"></div></aside></div>'+
       '<div class="rl-dec" id="rl-dec"></div>';
-    formulaireVers($('rl-form'));
-    $('rl-ctrl').innerHTML=REL.controle(R);
-    rlTete(); rlSem(); rlJour(); rlDec(); renderFile(); voir('relire');
-    // en différé, sans bloquer l'écran : la version d'avant (comparaison) et la dernière demande de correction
+    tout(); rlNotes(); renderFile(); voir('relire'); hauteur();
+    // en différé, sans bloquer l'écran : la version d'avant (comparaison), la dernière demande de correction, les consignes durables
     if((+c.version||1)>1) sb.from('programmes').select('id,version,menu,cible,diagnostic').eq('user_id',c.user_id).lt('version',c.version)
       .order('version',{ascending:false}).limit(1).then(function(r){
         var p=((r&&r.data)||[])[0]; if(RL.R!==R||!p||!p.menu) return;
-        R.precedent=avecCible(p.menu,p.cible); R.precedentVersion=p.version;
-        $('rl-comp').innerHTML=REL.comparer(R); $('rl-comp').hidden=false; rlJour(); }).catch(function(){});
+        R.precedent=avecCible(p.menu,p.cible); R.precedentVersion=p.version; rlSide(); rlJour(); }).catch(function(){});
     if(c.etape==='rectification') sb.from('retours_coach').select('coach_id,plat,attendu,created_at').eq('programme_id',c.programme_id)
       .order('created_at',{ascending:false}).limit(1).then(function(r){
         var x=((r&&r.data)||[])[0]; if(RL.R!==R||!x||R.note) return;
         R.note={par:x.coach_id===moi.id?'toi':'un coach',texte:x.attendu||x.plat||''}; rlTete(); }).catch(function(){});
+    chargerConsignes(c.user_id);
+    base().catch(function(){});
   }
-  function rlTete(){ $('rl-tete').innerHTML=REL.entete(RL.R); }
-  function rlSem(){ $('rl-sem').innerHTML=REL.semaine(RL.R,{surligne:RL.hl,jour:RL.i}); G.mount('rl-graph',function(w){ return REL.graphe(RL.R,w); }); }
-  function rlJour(){ $('rl-jour').innerHTML=REL.jour(RL.R,RL.i,RL.mode);
+  // consignes durables (portée « client ») posées sur toutes les diètes du client, pour pouvoir les lever
+  function chargerConsignes(uid){ var R=RL.R;
+    sb.from('programmes').select('id').eq('user_id',uid).then(function(r){ var ids=((r&&r.data)||[]).map(function(x){ return x.id; }); if(!ids.length) return;
+      return sb.from('retours_coach').select('id,action,attendu,created_at').in('programme_id',ids).then(function(q){ if(RL.R!==R) return;
+        if(q.error){ RL.consignesAbsentes=true; return; }
+        var L=q.data||[], leves={}; L.forEach(function(x){ if(x.action&&x.action.type==='lever') leves[x.action.ref]=1; });
+        RL.consignes=L.filter(function(x){ return x.action&&x.action.portee==='client'&&x.action.type!=='lever'&&!leves[x.id]; })
+          .map(function(x){ return {id:x.id,texte:String(x.attendu||x.action.type).slice(0,90)}; });
+        if(RL.co.ouvert) rlCo(); }); }).catch(function(){});
+  }
+  function tout(){ if(RL.co.ouvert) lireCo(); rlBarre(); rlTete(); rlSem(); rlJour(); rlSide(); rlDec(); rlCo(); }
+  function majEd(){ rlBarre(); rlTete(); rlSem(); rlJour(); rlSide(); rlDec(); }
+  function rlBarre(){ var s=suivante(); $('rl-barre').innerHTML=REL.barreOutils(RL.R,{i:RL.i,edit:!!RL.S,plein:RL.plein,lecture:lecture(),suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
+  function rlTete(){ $('rl-tete').innerHTML=REL.entete(vue())+(RL.S?'<div class="ed-bandeau"><b>Mode édition</b> · grammes (−/+ ou saisie), aliment (clic sur son nom), plat, jour : tout se recalcule en direct. Rien ne part avant « Enregistrer ».'+
+      '<small>À savoir : une retouche d’ingrédient faite ici peut être perdue au prochain réajustement, sauf si elle est aussi envoyée comme consigne durable (« Renvoyer en correction », portée « durablement, pour ce client »).</small></div>':''); }
+  function rlSem(){ $('rl-sem').innerHTML=REL.semaine(vue(),{surligne:RL.hl,jour:RL.i,edit:!!RL.S,orig:RL.S?RL.S.orig:null,swap:RL.swap});
+    G.mount('rl-graph',function(w){ return REL.graphe(vue(),w); }); }
+  function eqHtml(){ var S=RL.S, j=S.menu.jours[RL.i]; if(!j||j.off) return '';
+    var C=ED.candidats(S,RL.i,RL.eq.mac); if(!C.length) return '';
+    if(!C.some(function(c){ return c.cle===RL.eq.cle; })) RL.eq.cle=C[0].cle;
+    return REL.equilibreur(vue(),{mac:RL.eq.mac,cle:RL.eq.cle,choix:C.map(function(c){ return [c.cle,c.lib]; }),prop:ED.proposer(S,RL.i,RL.eq.mac,RL.eq.cle)}); }
+  function rlJour(){ var R=RL.R, h;
+    if(RL.S&&RL.mode==='coach') h=REL.jourEdit(vue(),RL.i,{orig:RL.S.orig,refRepas:function(r){ return ED.refRepas(RL.S,r); },refLigne:function(r,x){ return ED.refLigne(RL.S,r,x); },
+      pas:function(x){ return ED.libPas(x.ingredient); },alertes:function(x){ return ED.alertes(x,R.sexe); },swap:RL.swap,eq:eqHtml()});
+    else if(RL.S&&RL.mode==='orig'){ var o={}, k; for(k in R) o[k]=R[k]; o.menu=avecCible(RL.S.orig,R.menu.cible); h=REL.jour(o,RL.i,'orig',{edit:true}); }
+    else h=REL.jour(vue(),RL.i,RL.mode,{edit:!!RL.S});
+    garde(function(){ $('rl-jour').innerHTML=h; });
     $('rl-sem').querySelectorAll('thead button').forEach(function(b){ b.classList.toggle('on',+b.dataset.i===RL.i); }); }
-  function rlDec(){ $('rl-dec').innerHTML=REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes}); }
-  function allerJour(i,ty){ var n=(RL.R.menu.jours||[]).length; if(!n) return; RL.i=(i+n)%n; rlJour();
+  // re-rendu sans perdre le champ (ou le bouton −/+) sous le doigt
+  function garde(fn){ var a=document.activeElement, box=$('rl-jour'), key=null;
+    if(a&&a!==document.body&&box.contains(a)){ var art=a.closest('[data-ty]'), row=a.closest('[data-k]');
+      key=(art?'[data-ty="'+art.dataset.ty+'"] ':'')+(row?'[data-k="'+row.dataset.k+'"] ':'')+(a.dataset.ed?'[data-ed="'+a.dataset.ed+'"]':a.dataset.act?'[data-act="'+a.dataset.act+'"]':''); }
+    fn();
+    var el=key&&key.trim()&&box.querySelector(key.trim()); if(el) el.focus({preventScroll:true}); }
+  // lignes modifiées hors repères (bornes, conditionnement, pièces) : avertissent, ne bloquent jamais
+  function horsReperes(){ var S=RL.S, L=[];
+    (S.menu.jours||[]).forEach(function(j){ if(j.off) return; (j.repas||[]).forEach(function(r){ (r.ingredients||[]).forEach(function(x){ var rl=ED.refLigne(S,r,x);
+      if(rl&&rl.ingredient===x.ingredient&&Math.round(+rl.grammes||0)===Math.round(+x.grammes||0)) return;
+      var t=ED.alertes(x,RL.R.sexe); if(t.length) L.push({lieu:'J'+j.jour+' '+REL.ml(r.type).toLowerCase(),aliment:x.ingredient+' '+Math.round(+x.grammes||0)+' g',textes:t}); }); }); });
+    return L; }
+  function rlSide(){ var V=vue(), ed=!!RL.S;
+    $('rl-live').hidden=!ed; $('rl-modifs').hidden=!ed;
+    if(ed){ $('rl-live').innerHTML=REL.controlesDirect(V,horsReperes(),ED.deplaces(RL.S)); $('rl-modifs').innerHTML=REL.modifs(ED.journal(RL.S),{undo:RL.S.passe.length,redo:RL.S.futur.length}); }
+    $('rl-ctrl').innerHTML=REL.controle(V);
+    if(RL.R.precedent){ $('rl-comp').innerHTML=REL.comparer(V); $('rl-comp').hidden=false; } }
+  function cleNotes(){ return 'ely_notes_'+RL.R.uid; }
+  function lireNotes(){ try{ return JSON.parse(localStorage.getItem(cleNotes())||'[]')||[]; }catch(e){ return []; } }
+  function rlNotes(){ $('rl-notes').innerHTML=REL.notes(RL.R,lireNotes(),RL.journal); }
+  function rlDec(){ var d=$('rl-dec'); d.className='rl-dec'+(RL.S?' ed-dec':'');
+    d.innerHTML=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes}); }
+  function allerJour(i,ty){ var n=(RL.R.menu.jours||[]).length; if(!n) return; RL.i=(i+n)%n; RL.eq.cle=null; rlJour(); rlBarre();
     var t=ty&&$('rl-m-'+ty); if(t){ t.scrollIntoView({behavior:'smooth',block:'start'}); t.classList.add('flash'); setTimeout(function(){ t.classList.remove('flash'); },1400); } }
-  function formulaireOuvert(plat,jour){ var f=$('retour'); f.classList.add('on');
-    if(plat!=null){ $('r-plat').value=plat; $('r-jour').value=jour; }
-    f.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(function(){ $('r-motif').focus({preventScroll:true}); },350); }
+
+  /* ---- feuille d'actions (bas d'écran sur téléphone, fenêtre au centre sur ordinateur) ---- */
+  function feuille(titre,html,cb,filtre){
+    var sh=$('sh');
+    if(!sh){ document.body.insertAdjacentHTML('beforeend','<div class="sh-bg" id="sh-bg"></div><div class="sh" id="sh" role="dialog" aria-modal="true" aria-labelledby="sh-t"><header><h3 id="sh-t"></h3><button type="button" class="tb ic" data-sh-x aria-label="Fermer">×</button></header><div class="sb" id="sh-b"></div></div>');
+      sh=$('sh');
+      $('sh-bg').addEventListener('click',function(){ if(Date.now()-FE.t>600) fermerFeuille(); });
+      sh.addEventListener('click',function(e){ if(e.target.closest('[data-sh-x]')){ fermerFeuille(); return; }
+        var b=e.target.closest('[data-sh]'); if(!b) return; var cb=FE.cb; fermerFeuille(); if(cb) cb(b.dataset.sh,b); });
+      sh.addEventListener('input',function(e){ if(e.target.id==='sh-q'&&FE.filtre) $('sh-l').innerHTML=FE.filtre(e.target.value); });
+      sh.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.id==='sh-q'){ var b=$('sh-l').querySelector('[data-sh]'); if(b){ e.preventDefault(); b.click(); } } });
+    }
+    FE.cb=cb; FE.filtre=filtre||null; FE.t=Date.now(); if(!sh.classList.contains('on')) FE.retour=document.activeElement;
+    $('sh-t').textContent=titre;
+    $('sh-b').innerHTML=filtre?'<input type="search" class="sh-q" id="sh-q" placeholder="Chercher…" autocomplete="off" aria-label="Chercher"><div class="al-l" id="sh-l">'+filtre('')+'</div>':html;
+    $('sh-b').scrollTop=0; sh.classList.add('on'); $('sh-bg').classList.add('on');
+    setTimeout(function(){ var t=$('sh-q')||sh.querySelector('.sb button,.sb textarea')||sh.querySelector('[data-sh-x]'); if(t) t.focus({preventScroll:true}); },80);
+  }
+  function feuilleOuverte(){ var sh=$('sh'); return !!(sh&&sh.classList.contains('on')); }
+  function fermerFeuille(){ if(!feuilleOuverte()) return; $('sh').classList.remove('on'); $('sh-bg').classList.remove('on'); FE.cb=null;
+    var r=FE.retour; if(r&&r.focus&&document.body.contains(r)) r.focus({preventScroll:true}); }
+
+  /* ---- édition ---- */
+  function ctxDe(b){ var art=b.closest('[data-ty]'), row=b.closest('[data-k]'); return {i:art?+art.dataset.i:RL.i,ty:art?art.dataset.ty:null,k:row?+row.dataset.k:null}; }
+  function repasDe(x){ var j=vue().menu.jours[x.i]; return j&&REL.repasDe(j,x.ty); }
+  function ingDe(x){ var r=repasDe(x); return r&&(r.ingredients||[])[x.k]; }
+  function faire(type,a,dire){ var c=ED.faire(RL.S,type,a); if(!c) return null; majEd();
+    if(c.inconnus&&c.inconnus.length) toast('Absents de la liste des aliments, non ajoutés : '+c.inconnus.join(', ')+'.');
+    else if(c.deplace) toast(c.texte+'. Batch cooking : le dîner d’un jour sert souvent de déjeuner le lendemain.');
+    else if(dire) toast(c.texte);
+    return c; }
+  function alerteRefus(id){ var rf=REL.refuse(id,REL.interdits(RL.R)); if(rf) toast('Attention : '+id+' est refusé par '+prenom()+' (« '+rf+' »).'); }
+  function choisirAliment(titre,cb){ feuille(titre,null,cb,function(q){ return REL.listeAliments(ED.base().aliments,q,RL.R); }); }
+  function remplacerAliment(x){ var ing=ingDe(x); if(!ing) return;
+    choisirAliment('Remplacer '+ing.ingredient+' par…',function(id){ if(faire('remplacer_aliment',{i:x.i,ty:x.ty,k:x.k,id:id})) alerteRefus(id); }); }
+  function edition(on){
+    if(!on){ sortir(null); return; }
+    if(RL.S) return; var R=RL.R, lec=lecture();
+    if(lec){ toast(lec); return; }
+    base().then(function(){ if(RL.R!==R||RL.S) return;
+      RL.S=ED.session(R.brut,R.menu.cible,R.sexe); RL.mode='coach'; RL.swap=null; RL.eq.cle=null;
+      document.body.classList.add('rl-edit'); tout(); toast('Mode édition : tout se recalcule en direct.');
+    },function(){ toast('Liste des aliments indisponible : recharge la page pour modifier la diète.'); });
+  }
+  function finEdition(then){ RL.S=null; RL.swap=null; RL.mode='coach'; document.body.classList.remove('rl-edit'); if(then) then(); else tout(); }
+  // quitter l'édition (ou l'écran) : jamais de modification perdue sans le demander
+  function sortir(then){
+    if(!RL.S){ if(then) then(); return; }
+    if(!ED.modifie(RL.S)){ finEdition(then); return; }
+    feuille('Quitter l’édition ?','<p class="leg" style="margin:0 0 8px">Des modifications ne sont pas encore enregistrées.</p>'+
+      '<button type="button" class="al" data-sh="enreg"><span>Enregistrer sans valider</span><span></span><small>nouvelle version de la diète, à relire avant l’envoi</small></button>'+
+      '<button type="button" class="al" data-sh="jeter"><span>Abandonner ces modifications</span><span></span><small>la diète reste telle qu’elle a été déposée</small></button>'+
+      '<button type="button" class="al" data-sh="rester"><span>Continuer à modifier</span><span></span></button>',
+      function(v){ if(v==='enreg') enregistrer('brouillon'); else if(v==='jeter'){ finEdition(then); toast('Modifications abandonnées.'); } });
+  }
+  // messages d'échec de l'enregistrement (jamais de nouvelle tentative automatique)
+  function erreurEdition(err){ var m=String((err&&(err.message||err.details||err.hint))||err||''), c=err&&err.code;
+    if(c==='PGRST202'||c==='42883'||/could not find the function|function .*editer_programme.* does not exist/i.test(m)) return 'Fonction d’édition pas encore activée : préviens Dimitri. Tes modifications restent à l’écran.';
+    if(/failed to fetch|networkerror|load failed/i.test(m)) return 'Connexion perdue : rien n’est enregistré. Réessaie quand le réseau revient.';
+    return 'Quelqu’un a modifié cette diète : recharge la page. Tes modifications restent à l’écran d’ici là.'; }
+  // mode : 'valider' (part au client) | 'brouillon' (nouvelle version à relire) | 'correction' (puis actions + statut « rectification » sur la NOUVELLE version)
+  function enregistrer(mode,liste){
+    var R=RL.R, S=RL.S; if(!S||RL.envoi) return;
+    var res=ED.resultat(S), nb=res.changements.length, uid=R.uid;
+    if(!nb){ toast('Aucune modification à enregistrer.'); return; }
+    RL.envoi=true; RL.co.envoi=true; rlDec(); rlCo();
+    function echec(err){ if(RL.R!==R) return; RL.envoi=false; RL.co.envoi=false; if(window.console) console.warn(err); toast(erreurEdition(err)); rlDec(); rlCo(); }
+    sb.rpc('editer_programme',{p_depuis:R.pid,p_menu:res.menu,p_changements:res.changements,p_valider:mode==='valider'}).then(function(r){
+      if(r.error){ echec(r.error); return; }
+      var nid=r.data; RL.S=null; RL.envoi=false; document.body.classList.remove('rl-edit');
+      if(mode!=='correction'){ toast(mode==='valider'?'Diète modifiée enregistrée et envoyée à '+prenom()+'.':'Modifications enregistrées : nouvelle version à relire.'); rafraichir(uid); return; }
+      insererRetours(lignesRetours(nid,liste)).then(function(x){
+        if(!x.ok){ if(window.console) console.warn(x.error); toast('Diète enregistrée, mais les actions ne sont pas parties : elles sont restées dans la liste, renvoie-les.'); rafraichir(uid,liste); return; }
+        majStatut(nid,'rectification').then(function(e){
+          toast(e?'Diète enregistrée et actions envoyées, mais le statut n’a pas changé : clique « Renvoyer en correction » puis envoie une note.'
+            :'Diète modifiée enregistrée et renvoyée en correction'+(x.sansAction?' (actions parties comme remarques écrites : préviens Dimitri)':'')+'.');
+          rafraichir(uid); }); });
+    },echec);
+  }
+  // recharge la file et rouvre la diète du client (sa dernière version)
+  function chargerFile(){ return sb.from('v_file_coach').select('*').then(function(r){ if(!r.error){ file=r.data||[]; renderFile(); recount(); } }); }
+  function rafraichir(uid,coListe){ return chargerFile().then(function(){ var c=file.filter(function(x){ return x.user_id===uid; })[0]; chargerTout();
+    if(c){ relire(c,true); if(coListe&&coListe.length){ RL.co.liste=coListe; ouvrirCo(); } } else voir('dietes'); }); }
+  function annuler(){ var c=RL.S&&ED.annuler(RL.S); if(c){ majEd(); toast('Annulé : '+c.texte); } }
+  function retablir(){ var c=RL.S&&ED.retablir(RL.S); if(c){ majEd(); toast('Rétabli : '+c.texte); } }
+
+  /* ---- renvoi en correction : retours_coach, une ligne par action ---- */
+  function majStatut(pid,st){ return sb.from('programmes').update({statut:st,traite_par:moi.id,traite_at:new Date().toISOString()}).eq('id',pid)
+    .then(function(r){ return r.error||null; },function(e){ return e||true; }); }
+  function colonneAbsente(err){ var m=String((err&&(err.message||err.details))||''); return !!err&&(err.code==='PGRST204'||err.code==='42703'||(/column/i.test(m)&&/action/i.test(m))); }
+  // plat = CLÉ moteur (recette_base sinon recette) ; le libellé lisible et la phrase vont dans « attendu »
+  function lignesRetours(pid,liste){ return liste.map(function(a){ return {programme_id:pid,coach_id:moi.id,jour:a.jour,repas:a.repas,plat:a.plat,motif:a.motif,gravite:a.gravite,
+    attendu:[a.lieu,a.action?a.texte:'',a.note].filter(Boolean).join(' · ')||null,action:a.action}; }); }
+  // repli tant que la colonne « action » n'existe pas : mêmes lignes, sans elle (la phrase reste dans « attendu »)
+  function insererRetours(rows){
+    return sb.from('retours_coach').insert(rows).then(function(r){
+      if(!r.error) return {ok:true};
+      if(!colonneAbsente(r.error)||!rows.some(function(x){ return 'action' in x; })) return {ok:false,error:r.error};
+      return sb.from('retours_coach').insert(rows.map(function(x){ var y={}, k; for(k in x) if(k!=='action') y[k]=x[k]; return y; }))
+        .then(function(r2){ return r2.error?{ok:false,error:r2.error}:{ok:true,sansAction:true}; });
+    },function(e){ return {ok:false,error:e}; }); }
+  function coX(){ var V=vue(), J=REL.actifs(V.menu), B=ED.base(), vu={}, AL=[], PL=[], ty={}, MI={}, cs=RL.consignes||[];
+    (B.aliments||[]).forEach(function(a){ if(!vu[a.id]){ vu[a.id]=1; AL.push([a.id,a.nom]); } });
+    J.forEach(function(j){ (j.repas||[]).forEach(function(r){ ty[r.type]=1; (r.ingredients||[]).forEach(function(x){ MI[ED.cle(x.ingredient)]=x.ingredient; if(!vu[x.ingredient]){ vu[x.ingredient]=1; AL.push([x.ingredient,x.aliment||'']); } }); }); });
+    (B.plats||[]).forEach(function(p){ PL.push([p.cle,p.titre]); });
+    function jr(n){ return J.filter(function(x){ return x.jour===n; })[0]; }
+    return {jours:J.map(function(j){ return j.jour; }), types:['petit_dejeuner','collation','dejeuner','collation_2','diner'].filter(function(t){ return ty[t]; }),
+      typesJour:function(n){ var j=jr(n); return j?(j.repas||[]).map(function(r){ return r.type; }):[]; },
+      plat:function(n,t){ var j=jr(n), r=j&&REL.repasDe(j,t); return r?{cle:ED.cleMoteur(r),titre:REL.titre(r)}:null; },
+      aliments:AL, plats:PL, cible:V.menu.cible, consignes:cs, consignesAbsentes:RL.consignesAbsentes,
+      consigne:function(id){ var c=cs.filter(function(x){ return x.id===id; })[0]; return c&&c.texte; },
+      aliment:function(v){ var k=ED.cle(v); if(!k) return null; var a=ED.aliment(k); return a?a.id:MI[k]||null; },
+      platCat:function(v){ var k=ED.cle(v); return (B.plats||[]).filter(function(p){ return ED.cle(p.cle)===k||ED.cle(p.titre)===k; }).map(function(p){ return {cle:p.cle,titre:p.titre}; })[0]||null; }};
+  }
+  function rlCo(){ var f=$('rl-co'); if(!f) return; f.hidden=!RL.co.ouvert; if(!RL.co.ouvert) return;
+    RL.co.avecEdition=RL.S&&ED.modifie(RL.S)?Math.max(1,ED.journal(RL.S).length):0;
+    f.innerHTML=REL.correction(RL.co,coX()); }
+  function lireCo(){ var f=$('rl-co'); if(!f) return; Array.prototype.forEach.call(f.querySelectorAll('input[id^="co-"],select[id^="co-"],textarea[id^="co-"]'),function(el){
+    if(el.id==='co-motif') RL.co.motif=el.value; else RL.co.ctx[el.id.slice(3)]=el.value.trim(); }); }
+  function ouvrirCo(pre){
+    if(RL.co.ouvert) lireCo();
+    if(pre){ if(pre.ctx) RL.co.ctx=pre.ctx; RL.co.act=pre.act||RL.co.act; RL.co.portee=pre.portee||null; RL.co.motif=null; }
+    RL.co.ouvert=true; rlCo();
+    base().then(function(){ if(RL.co.ouvert) rlCo(); },function(){});           // listes d'aliments et de plats dès qu'elles arrivent
+    var f=$('rl-co'); f.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(function(){ var L=f.querySelectorAll('.co-box input,.co-box select'), t=null; for(var k=0;k<L.length&&!t;k++) if(!L[k].value) t=L[k];
+      t=t||L[0]||f.querySelector('.rl-chip'); if(t) t.focus({preventScroll:true}); },380);
+  }
+  function signaler(x){ var j=vue().menu.jours[x.i], r=j&&REL.repasDe(j,x.ty); if(!r){ ouvrirCo(); return; }
+    ouvrirCo({ctx:{jour:String(j.jour),repas:x.ty}}); }
+  function envoyerCo(){ lireCo(); var L=RL.co.liste, R=RL.R; if(!L.length){ toast('Ajoute au moins une action à la liste.'); return; }
+    if(RL.S&&ED.modifie(RL.S)){ enregistrer('correction',L.slice()); return; }       // en édition : d'abord la nouvelle version, puis les actions sur elle
+    RL.co.envoi=true; rlCo();
+    insererRetours(lignesRetours(R.pid,L)).then(function(x){ if(RL.R!==R) return; RL.co.envoi=false;
+      if(!x.ok){ if(window.console) console.warn(x.error); toast('Envoi impossible : réessaie.'); rlCo(); return; }
+      var nb=L.length, txt=nb+' action'+(nb>1?'s':'')+' envoyée'+(nb>1?'s':'')+(x.sansAction?' comme remarques écrites (base pas encore à jour : préviens Dimitri)':'');
+      RL.envoyes=nb; R.note={par:'toi',texte:L[0].texte+(nb>1?' (+ '+(nb-1)+')':'')}; RL.co=coVide(); trace('Renvoyée en correction : '+nb+' action'+(nb>1?'s':''));
+      if(R.etat!=='refuse') setStatut('rectification',txt); else { toast(txt); tout(); rlNotes(); }
+    });
+  }
+  // appui long / clic droit sur un aliment : actions rapides
+  function rapides(row){ if(feuilleOuverte()||(RL.mode!=='coach')) return; var x=ctxDe(row), j=vue().menu.jours[x.i], r=j&&REL.repasDe(j,x.ty), ing=r&&(r.ingredients||[])[x.k]; if(!ing) return;
+    var ctx={jour:String(j.jour),repas:x.ty,aliment:ing.ingredient};
+    feuille('Actions rapides',REL.actionsRapides(ing.ingredient,!!RL.S),function(v){
+      if(v==='ed-remplacer') remplacerAliment(x);
+      else if(v==='ed-suppr') faire('retirer_aliment',x,true);
+      else if(v==='q-remplacer') ouvrirCo({act:'remplacer_aliment',portee:'repas',ctx:ctx});
+      else if(v==='q-exclure') ouvrirCo({act:'exclure_aliment',ctx:ctx});
+      else if(v==='q-minmax') ouvrirCo({act:'bornes_aliment',ctx:{aliment:ing.ingredient}});
+      else if(v==='signaler') signaler(x); }); }
+  function notesFocus(){ $('rl-notes').scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(function(){ var t=$('rl-note-t'); if(t) t.focus({preventScroll:true}); },320); }
+  function plein(){ RL.plein=!document.body.classList.contains('rl-plein'); document.body.classList.toggle('rl-plein',RL.plein);
+    try{ if(RL.plein&&document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function(){}); else if(!RL.plein&&document.fullscreenElement) document.exitFullscreen(); }catch(err){}
+    hauteur(); rlBarre(); }
+  function sortiePlein(){ document.body.classList.remove('rl-plein'); RL.plein=false; try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(err){} hauteur(); }
+  document.addEventListener('fullscreenchange',function(){ if(!document.fullscreenElement&&document.body.classList.contains('rl-plein')){ document.body.classList.remove('rl-plein'); RL.plein=false; hauteur(); if($('rl-barre')&&RL.R) rlBarre(); } });
+  function valider(){ if(RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification') return; trace('Validée et envoyée'); setStatut('valide','Diète validée et envoyée à '+prenom()+'.'); }
+
+  /* ---- clics ---- */
   $('p-relire').addEventListener('click',function(e){
-    var b=e.target.closest('[data-act]'); if(!b||!RL.R) return; var a=b.dataset.act, R=RL.R;
-    if(a==='file') voir('dietes');
-    else if(a==='jour'){ RL.i=+b.dataset.i; rlJour(); }
-    else if(a==='repas'){ RL.mode='coach'; allerJour(+b.dataset.i,b.dataset.ty); }
-    else if(a==='mode'){ RL.mode=b.dataset.m; rlJour(); }
-    else if(a==='surligne'){ RL.hl=RL.hl===b.dataset.ing?null:b.dataset.ing; rlSem(); }
-    else if(a==='signaler'){ var j=R.menu.jours[+b.dataset.i], r=(j.repas||[]).filter(function(x){ return x.type===b.dataset.ty; })[0]; if(!r) return;
-      formulaireOuvert('J'+j.jour+' '+REL.ml(r.type).toLowerCase()+' — '+REL.titre(r),j.jour); }
-    else if(a==='fermer') $('retour').classList.remove('on');
-    else if(a==='valider') setStatut('valide','Diète validée et envoyée à '+R.nom.split(' ')[0]);
-    else if(a==='corriger') formulaireOuvert();
-    else if(a==='refuser'){ clearTimeout(RL.t);
-      if(!RL.arme){ RL.arme=true; rlDec(); RL.t=setTimeout(function(){ if(RL.arme){ RL.arme=false; rlDec(); } },6000); return; }
-      RL.arme=false; rlDec(); setStatut('refuse','Diète refusée : ajoute tes remarques'); formulaireOuvert(); }
+    if(RL.lp){ RL.lp=false; e.preventDefault(); return; }                       // un appui long vient d'ouvrir les actions rapides
+    var b=e.target.closest('[data-act]'); if(!b||b.disabled||!RL.R) return; var a=b.dataset.act, x=ctxDe(b), ing, r;
+    switch(a){
+      case 'file': sortir(function(){ sortiePlein(); voir('dietes'); }); break;
+      case 'suivante': var s=suivante(); if(s) relire(s); break;
+      case 'jour': allerJour(+b.dataset.i); break;
+      case 'prec': allerJour(RL.i-1); break;
+      case 'suiv': allerJour(RL.i+1); break;
+      case 'repas':
+        if(RL.swap){ var sw=RL.swap; RL.swap=null; if((sw.i===x.i&&sw.ty===x.ty)||!faire('echanger',{i:sw.i,ty:sw.ty,i2:x.i,ty2:x.ty})) majEd(); break; }
+        RL.mode='coach'; allerJour(x.i,x.ty); break;
+      case 'mode': RL.mode=b.dataset.m; rlJour(); break;
+      case 'surligne': RL.hl=RL.hl===b.dataset.ing?null:b.dataset.ing; rlSem(); break;
+      case 'signaler': signaler(x); break;
+      case 'edition': edition(!RL.S); break;
+      case 'corriger': ouvrirCo(); break;
+      case 'notes': notesFocus(); break;
+      case 'plein': plein(); break;
+      case 'aide': feuille('Raccourcis et gestes',REL.aide(),null); break;
+      case 'note-aj': var t=$('rl-note-t').value.trim(); if(!t){ toast('Écris ta note d’abord.'); break; }
+        var N=lireNotes(); N.push({par:$('coachname').textContent||'Coach',quand:quand(),texte:t});
+        try{ localStorage.setItem(cleNotes(),JSON.stringify(N)); toast('Note ajoutée, sur cet appareil.'); }catch(err){ toast('Impossible de garder la note sur cet appareil (navigation privée ?).'); }
+        rlNotes(); break;
+      // renvoi en correction
+      case 'co-act': lireCo(); RL.co.act=b.dataset.a; RL.co.portee=null; RL.co.motif=null; rlCo(); var f1=$('rl-co').querySelector('.co-box input,.co-box select'); if(f1) f1.focus({preventScroll:true}); break;
+      case 'co-portee': lireCo(); RL.co.portee=b.dataset.v; rlCo(); break;
+      case 'co-grav': lireCo(); RL.co.grav=b.dataset.v; rlCo(); break;
+      case 'co-multi': lireCo(); var mu=RL.co.ctx.multi=(RL.co.ctx.multi||[]).slice(), p=mu.indexOf(b.dataset.v); if(p>=0) mu.splice(p,1); else mu.push(b.dataset.v); rlCo(); break;
+      case 'co-ajouter': lireCo(); var o=REL.actionObjet(RL.co,coX()); if(o.erreur){ toast(o.erreur); break; }
+        RL.co.liste.push(o.obj); RL.co.ctx={jour:RL.co.ctx.jour,repas:RL.co.ctx.repas}; RL.co.act=null; RL.co.portee=null; RL.co.motif=null; RL.co.grav='a_revoir'; rlCo(); toast('Ajouté : '+o.obj.texte); break;
+      case 'co-retirer': lireCo(); RL.co.liste.splice(+b.dataset.k,1); rlCo(); break;
+      case 'co-envoyer': envoyerCo(); break;
+      case 'co-fermer': lireCo(); RL.co.ouvert=false; rlCo(); break;
+      // décision
+      case 'valider': valider(); break;
+      case 'refuser': clearTimeout(RL.t);
+        if(!RL.arme){ RL.arme=true; rlDec(); RL.t=setTimeout(function(){ if(RL.arme){ RL.arme=false; rlDec(); } },6000); break; }
+        RL.arme=false; trace('Refusée'); setStatut('refuse','Diète refusée : ajoute tes actions pour qu’on sache quoi changer.'); ouvrirCo(); break;
+      // édition
+      case 'ed-moins': case 'ed-plus': ing=ingDe(x); if(!ing) break;
+        faire('grammes',{i:x.i,ty:x.ty,k:x.k,g:ED.voisin(ing.ingredient,Math.round(+ing.grammes||0),a==='ed-plus'?1:-1)}); break;
+      case 'ed-remplacer': remplacerAliment(x); break;
+      case 'ed-suppr': faire('retirer_aliment',x); break;
+      case 'ed-ajouter': r=repasDe(x); choisirAliment('Ajouter à « '+REL.titre(r)+' »',function(id){ if(!faire('ajouter_aliment',{i:x.i,ty:x.ty,id:id})) return; alerteRefus(id);
+          var rows=$('rl-m-'+x.ty).querySelectorAll('[data-k] input'); if(rows.length) rows[rows.length-1].focus(); }); break;
+      case 'ed-plat': r=repasDe(x); var PL=ED.base().plats;
+        feuille('Remplacer « '+REL.titre(r)+' » par…',null,function(v){ var p=PL[+v]; if(!p) return; faire('remplacer_plat',{i:x.i,ty:x.ty,plat:p},true);
+          var rf=(p.ingredients||[]).filter(function(id){ return REL.refuse(id,REL.interdits(RL.R)); }); if(rf.length) toast('Attention : '+rf.join(', ')+' refusé par '+prenom()+'.'); },
+          function(q){ return REL.listePlats(PL,q,x.ty,RL.R); }); break;
+      case 'ed-dupl': r=repasDe(x); feuille('Dupliquer « '+REL.titre(r)+' » vers…',REL.choixJours(vue(),x.i,x.ty),function(v){ faire('dupliquer',{i:x.i,ty:x.ty,vers:+v}); }); break;
+      case 'ed-swap': RL.swap=RL.swap&&RL.swap.i===x.i&&RL.swap.ty===x.ty?null:{i:x.i,ty:x.ty}; majEd();
+        if(RL.swap){ $('rl-sem').scrollIntoView({behavior:'smooth',block:'start'}); toast('Touche maintenant, dans la grille, le repas à échanger.'); } break;
+      case 'ed-swap-stop': RL.swap=null; majEd(); break;
+      case 'ed-vider': faire('vider',x,true); break;
+      case 'ed-restrepas': faire('restaurer_repas',x,true); break;
+      case 'ed-copierjour': feuille('Copier le jour '+vue().menu.jours[RL.i].jour+' vers…',REL.choixJours(vue(),RL.i,null),function(v){ faire('copier_jour',{i:RL.i,vers:+v}); }); break;
+      case 'ed-restjour': faire('restaurer_jour',{i:RL.i},true); break;
+      case 'ed-eq': var pp=ED.proposer(RL.S,RL.i,RL.eq.mac,RL.eq.cle); if(pp&&!pp.impossible) faire('grammes',{i:pp.i,ty:pp.ty,k:pp.k,g:pp.apres,pourquoi:'équilibreur, cible de '+REL.ML[RL.eq.mac]},true); break;
+      case 'ed-undo': annuler(); break;
+      case 'ed-redo': retablir(); break;
+      case 'ed-tout': var nb=RL.S.passe.length;
+        feuille('Tout annuler ?','<p class="leg" style="margin:0 0 8px">Les '+nb+' modifications seront annulées. « Rétablir » pourra encore les ramener une à une.</p>'+
+          '<div class="rl-btns"><button type="button" class="db no" data-sh="oui">Tout annuler</button><button type="button" class="db" data-sh="non">Garder</button></div>',
+          function(v){ if(v==='oui'){ while(ED.annuler(RL.S)){} majEd(); toast('Toutes les modifications sont annulées.'); } }); break;
+      case 'ed-quitter': sortir(null); break;
+      case 'ed-enreg': enregistrer('brouillon'); break;
+      case 'ed-corr': if(!ED.modifie(RL.S)){ toast('Aucune modification à enregistrer : les actions partiront sur la diète affichée.'); } ouvrirCo(); break;
+      case 'ed-valider': enregistrer('valider'); break;
+    }
   });
-  // clavier : flèches = jour précédent / suivant (hors champs de saisie)
+  // saisies : grammes, nom du plat, équilibreur (validées à « Entrée » ou en quittant le champ), champs du panneau de correction
+  $('p-relire').addEventListener('change',function(e){ var t=e.target, ed=t.dataset&&t.dataset.ed;
+    if(t.id==='co-jour'||t.id==='co-repas'){ lireCo(); rlCo(); return; }
+    if(!ed||!RL.S) return; var x=ctxDe(t);
+    if(ed==='g'){ if(t.value===''||isNaN(+t.value)){ rlJour(); return; } if(!faire('grammes',{i:x.i,ty:x.ty,k:x.k,g:+t.value})) rlJour(); }
+    else if(ed==='titre'){ if(!faire('renommer',{i:x.i,ty:x.ty,titre:t.value})) t.value=REL.titre(repasDe(x)); }
+    else if(ed==='eq-mac'){ RL.eq.mac=t.value; RL.eq.cle=null; rlJour(); }
+    else if(ed==='eq-ing'){ RL.eq.cle=t.value; rlJour(); } });
+  $('p-relire').addEventListener('keydown',function(e){ var t=e.target; if(!t.dataset||!/^(g|titre)$/.test(t.dataset.ed||'')) return;
+    if(e.key==='Enter'){ e.preventDefault(); t.dispatchEvent(new Event('change',{bubbles:true})); }
+    else if(e.key==='Escape'){ var x=ctxDe(t); t.value=t.dataset.ed==='g'?Math.round(+ingDe(x).grammes||0):REL.titre(repasDe(x)); t.blur(); } });
+  // glisser-déposer dans la grille de la semaine : échanger deux repas
+  $('p-relire').addEventListener('dragstart',function(e){ var c=e.target.closest&&e.target.closest('.rl-cel[draggable]'); if(!c||!RL.S) return;
+    e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',c.dataset.i+'|'+c.dataset.ty); RL.drag={i:+c.dataset.i,ty:c.dataset.ty}; c.classList.add('src'); });
+  $('p-relire').addEventListener('dragover',function(e){ var c=e.target.closest&&e.target.closest('.rl-cel'); if(!c||!RL.drag) return; e.preventDefault(); e.dataTransfer.dropEffect='move';
+    if(!c.classList.contains('drop')){ Array.prototype.forEach.call($('rl-sem').querySelectorAll('.drop'),function(d){ d.classList.remove('drop'); }); c.classList.add('drop'); } });
+  $('p-relire').addEventListener('dragleave',function(e){ var c=e.target.closest&&e.target.closest('.rl-cel'); if(c&&!c.contains(e.relatedTarget)) c.classList.remove('drop'); });
+  $('p-relire').addEventListener('drop',function(e){ var c=e.target.closest&&e.target.closest('.rl-cel'), d=RL.drag; if(!d) return; e.preventDefault(); RL.drag=null;
+    if(c&&!(d.i===+c.dataset.i&&d.ty===c.dataset.ty)&&faire('echanger',{i:d.i,ty:d.ty,i2:+c.dataset.i,ty2:c.dataset.ty})) return; rlSem(); });
+  $('p-relire').addEventListener('dragend',function(){ if(RL.drag){ RL.drag=null; rlSem(); } });
+  // appui long (tactile) et clic droit sur un aliment
+  var lp=null, lp0=null;
+  $('p-relire').addEventListener('pointerdown',function(e){ if(e.pointerType==='mouse') return; var row=e.target.closest('#rl-jour [data-k]'); if(!row||e.target.closest('input,.st,.ed-x')) return;
+    lp0=[e.clientX,e.clientY]; clearTimeout(lp); lp=setTimeout(function(){ lp=null; RL.lp=true; setTimeout(function(){ RL.lp=false; },800); if(navigator.vibrate) navigator.vibrate(8); rapides(row); },550); });
+  $('p-relire').addEventListener('pointermove',function(e){ if(lp&&lp0&&Math.abs(e.clientX-lp0[0])+Math.abs(e.clientY-lp0[1])>10){ clearTimeout(lp); lp=null; } });
+  ['pointerup','pointercancel'].forEach(function(ev){ $('p-relire').addEventListener(ev,function(){ clearTimeout(lp); lp=null; }); });
+  $('p-relire').addEventListener('contextmenu',function(e){ var row=e.target.closest('#rl-jour [data-k]'); if(!row||e.target.closest('input')) return; e.preventDefault(); rapides(row); });
+  // clavier
   document.addEventListener('keydown',function(e){
-    if(voir.p!=='relire'||!RL.R||(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')||/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)||e.altKey||e.ctrlKey||e.metaKey) return;
-    e.preventDefault(); allerJour(RL.i+(e.key==='ArrowRight'?1:-1));
-    var t=$('rl-jour').querySelector('[aria-selected="true"]'); if(t&&$('rl-jour').contains(document.activeElement)) t.focus(); });
-  // tactile : glisser à gauche / à droite sur le jour
+    if(voir.p!=='relire'||!RL.R) return;
+    if(feuilleOuverte()){ if(e.key==='Escape'){ e.preventDefault(); fermerFeuille(); } return; }
+    var tg=e.target, k=e.key, mod=e.ctrlKey||e.metaKey, saisie=/^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName)||tg.isContentEditable, grammes=tg.dataset&&tg.dataset.ed==='g';
+    if(mod&&!e.altKey&&RL.S&&(!saisie||grammes)&&/^[zy]$/i.test(k)){ e.preventDefault(); if(/z/i.test(k)&&!e.shiftKey) annuler(); else retablir(); return; }
+    if(saisie){ if(k==='Escape') tg.blur(); return; }
+    if(mod||e.altKey) return;
+    var K=k.length===1?k.toLowerCase():k;
+    if(K==='Escape'){ if(RL.swap){ RL.swap=null; majEd(); } else if(RL.co.ouvert){ lireCo(); RL.co.ouvert=false; rlCo(); } return; }
+    if(K==='ArrowLeft'||K==='j'||K==='ArrowRight'||K==='k'){ e.preventDefault(); allerJour(RL.i+(K==='ArrowRight'||K==='k'?1:-1));
+      var tb=$('rl-jour').querySelector('[aria-selected="true"]'); if(tb&&$('rl-jour').contains(document.activeElement)) tb.focus(); return; }
+    if(K==='e') edition(!RL.S);
+    else if(K==='c') ouvrirCo();
+    else if(K==='n'){ e.preventDefault(); notesFocus(); }
+    else if(K==='f') plein();
+    else if(k==='?') feuille('Raccourcis et gestes',REL.aide(),null);
+    else if(K==='v'){ if(!RL.S&&RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification') return;
+      if(RL.vArme){ RL.vArme=false; if(RL.S) enregistrer('valider'); else valider(); }
+      else { RL.vArme=true; toast(RL.S?'Appuie encore sur V pour enregistrer et valider.':'Appuie encore sur V pour valider et envoyer.'); setTimeout(function(){ RL.vArme=false; },2500); } }
+  });
+  // tactile : glisser à gauche / à droite sur le jour (hors champs et boutons −/+)
   var tx=null, ty0=null;
-  $('p-relire').addEventListener('touchstart',function(e){ if(!e.target.closest('#rl-jour')||e.target.closest('.rl-jtabs')){ tx=null; return; } tx=e.touches[0].clientX; ty0=e.touches[0].clientY; },{passive:true});
+  $('p-relire').addEventListener('touchstart',function(e){ if(!e.target.closest('#rl-jour')||e.target.closest('.rl-jtabs,input,.st,select')){ tx=null; return; } tx=e.touches[0].clientX; ty0=e.touches[0].clientY; },{passive:true});
   $('p-relire').addEventListener('touchend',function(e){ if(tx==null) return; var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty0; tx=null;
     if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy)) allerJour(RL.i+(dx<0?1:-1)); },{passive:true});
 
@@ -1912,7 +2894,7 @@ var REL=(function(){
 
   /* ---------- FICHE : depuis la file, la liste, un nom, la recherche ---------- */
   function ouvrir(id){
-    function montrer(){ formulaireVers($('decide')); renderFile(); renderTete(); renderClient(); renderProg(); voir('fiche'); }
+    function montrer(){ renderFile(); renderTete(); renderClient(); renderProg(); voir('fiche'); }
     var i=file.findIndex(function(x){ return x.user_id===id; });
     if(i>=0){ sel=i; cur=file[i]; montrer(); return; }        // dans la file : même fiche, décisions comprises
     var c=D&&D.par[id]; if(!c) return;

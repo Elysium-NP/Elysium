@@ -287,10 +287,109 @@
   .dash-hd .coachlink{text-decoration:none;color:var(--blue);border-color:rgba(46,155,255,.45)}
   .dash-hd .coachlink:hover{background:rgba(46,155,255,.1);color:var(--ice)}
   .dash-hd .coachlink[hidden]{display:none}
+
+  /* ===== B · TITRES D'ENCADRÉS (Damien 28/09 « plus travaillé, plus premium ») =====
+     Georgia (charte), une pastille au pastel de l'encadré, un filet fin souligné de bleu Elysium,
+     l'étiquette de droite en pilule pastel. Une couleur par encadré (--tp fond, --tc bordure). */
+  .card .ch{position:relative;padding-bottom:13px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+  .card .ch::after{content:"";position:absolute;left:0;bottom:-1px;width:46px;height:2px;border-radius:2px;background:var(--brand)}
+  .card .ch h3{display:flex;align-items:center;gap:12px;min-width:0}
+  .card .ch h3::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:var(--tc,var(--b-bleu));box-shadow:0 0 0 4px var(--tp,var(--p-bleu))}
+  .card .ch .tag{flex:none;background:var(--tp,var(--p-bleu));border-color:var(--tc,var(--b-bleu));color:var(--ice);font-weight:600;letter-spacing:.12em}
+  #c-courbe,#c-msg,#progcard{--tp:var(--p-bleu);--tc:var(--b-bleu)}
+  #c-mens{--tp:var(--p-vert);--tc:var(--b-vert)}
+  #c-photos,#c-abo{--tp:var(--p-violet);--tc:var(--b-violet)}
+  #c-avis,#c-profil,#democard{--tp:var(--p-jaune);--tc:var(--b-jaune)}
+  /* titres des encadrés du programme (conseils, mode de vie, suivi, courses) : Georgia aussi */
+  .cat h4,.acard h4{font:400 16.5px/1.3 var(--titre);letter-spacing:0}
+  .cat h4 .n{font-family:var(--texte)}
+
+  /* ===== A · NAVIGATION DU PROGRAMME (Damien 28/09) =====
+     « Mon menu » = les 7 jours ; en dessous, bien visibles : Conseils · Liste de courses · (Recettes) · Imprimer. */
+  .menu-hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;margin-top:24px}
+  .menu-hd h2{font-size:clamp(22px,2.4vw,27px)!important}
+  .menu-hd small{font:13px/1.4 var(--texte);color:var(--steel)}
+  .menu-hd + .tabs{padding-top:10px}
+  .rythme{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .rythme span{display:inline-flex;align-items:center;gap:7px;font:13px/1.35 var(--texte);color:var(--gris);border:1px solid var(--line);border-radius:12px;padding:6px 12px;background:var(--void2)}
+  .rythme span b{color:var(--ice);font-weight:600}
+  .rythme span.off{color:var(--steel);border-style:dashed;background:none}
+  .rythme svg,.acc .lk svg{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .acces{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:16px}
+  .acc{display:flex;align-items:center;gap:12px;text-align:left;min-width:0;padding:13px 14px;border-radius:14px;cursor:pointer;
+    background:var(--pc);border:1px solid var(--bc);color:var(--ice);font:inherit;transition:transform .2s,box-shadow .2s}
+  .acc:hover{transform:translateY(-2px);box-shadow:0 10px 22px -16px rgba(60,45,20,.55)}
+  .acc.on{box-shadow:inset 0 0 0 2px var(--blue)}
+  .acc .ic{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--void2);border:1px solid var(--bc)}
+  .acc .ic svg{width:19px;height:19px;fill:none;stroke:var(--ice);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .acc .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .acc .tx b{font:400 17px/1.2 var(--titre);color:var(--ice)}
+  .acc .tx small{font:12.5px/1.35 var(--texte);color:var(--gris)}
+  .acc.a-cons{--pc:var(--p-vert);--bc:var(--b-vert)} .acc.a-cour{--pc:var(--p-jaune);--bc:var(--b-jaune)}
+  .acc.a-rec{--pc:var(--p-violet);--bc:var(--b-violet)} .acc.a-print{--pc:var(--p-bleu);--bc:var(--b-bleu)}
+  /* ce que la formule n'inclut pas : discret, jamais une erreur */
+  .acc.lock{background:none;border-style:dashed;border-color:var(--line)}
+  .acc.lock .ic{border-color:var(--line)} .acc.lock .ic svg{stroke:var(--steel)}
+  .acc.lock .tx b{color:var(--gris)}
+  .acc .lk{display:inline-flex;align-items:center;gap:5px;color:var(--steel)}
+  .verrou{border:1px dashed var(--line);border-radius:14px;padding:26px 20px;text-align:center;max-width:560px;margin:0 auto}
+  .verrou h4{font:400 21px/1.25 var(--titre);color:var(--ice);margin:0 0 8px}
+  .verrou p{font:15.5px/1.6 var(--texte);color:var(--gris);margin:0}
+  .verrou .dispo{display:inline-block;margin-top:14px;font:600 13px/1.3 var(--texte);color:var(--blue);background:var(--p-bleu);border-radius:12px;padding:7px 14px}
+  .verrou .dispo a{color:inherit}
+  @media(max-width:520px){.acces{grid-template-columns:1fr 1fr;gap:8px}.acc{flex-direction:column;align-items:flex-start;gap:8px;padding:12px}.acc .tx b{font-size:16px}}
+  /* recettes des coachs (Formule Elysium) */
+  .recettes{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  @media(max-width:360px){.recettes{grid-template-columns:1fr}}
+  .rct{border:1px solid var(--b-violet);border-radius:14px;overflow:hidden;background:var(--void2)}
+  .rct summary{list-style:none;cursor:pointer;padding:12px 16px;background:var(--p-violet);display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .rct summary::-webkit-details-marker{display:none}
+  .rct summary b{font:400 17px/1.3 var(--titre);color:var(--ice);flex:1;min-width:0}
+  .rct summary i{font:600 12px/1.3 var(--texte);font-style:normal;color:var(--gris)}
+  .rct summary::after{content:"";flex:none;width:8px;height:8px;border-right:1.5px solid var(--gris);border-bottom:1.5px solid var(--gris);transform:rotate(45deg);margin:0 3px 4px 0;transition:transform .2s}
+  .rct[open] summary::after{transform:rotate(-135deg);margin:4px 3px 0 0}
+  @media(max-width:520px){.rct summary{flex-wrap:wrap;gap:4px 10px}.rct summary i{order:3;flex-basis:100%}}
+  .rct ol{margin:12px 16px 0 34px;padding:0;font:15px/1.55 var(--texte);color:var(--gris)}
+  .rct ol li{margin-bottom:6px}
+  .rct .astuce{margin:8px 16px 14px;font:14px/1.5 var(--texte);color:var(--steel)}
+  .rct[open] summary{border-bottom:1px solid var(--b-violet)}
+  .rct:not(:has(.astuce)) ol{margin-bottom:14px}
+
+  /* ===== C · ALERTES DE LA MESSAGERIE : un encart plutôt qu'un lien gris ===== */
+  .notif{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:14px 0 4px;padding:13px 15px;border-radius:14px;
+    background:var(--p-bleu);border:1px solid var(--b-bleu)}
+  .notif-ic{flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--brand)}
+  .notif-ic svg{width:20px;height:20px;fill:none;stroke:#111;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .notif-tx{flex:1 1 200px;display:flex;flex-direction:column;gap:3px;min-width:0}
+  .notif-tx b{font:400 17px/1.3 var(--titre);color:var(--ice)}
+  .notif-tx small{font:13px/1.45 var(--texte);color:var(--gris)}
+  .notif-btn{flex:none;font:600 14px/1 var(--texte);color:#111;background:var(--brand);border:0;border-radius:999px;padding:12px 18px;cursor:pointer;transition:background .2s,box-shadow .2s}
+  .notif-btn:hover{background:#5ab1ff;box-shadow:0 10px 22px -14px rgba(20,102,184,.7)}
+  @media(max-width:520px){.notif-btn{width:100%}}
+
+  /* ===== D · point « questionnaire » de la courbe ===== */
+  .cpq{fill:var(--b-violet);stroke:var(--void);stroke-width:1.5}
+  .cleg{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px;font:12.5px/1.3 var(--texte);color:var(--steel)}
+  .cleg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px;background:var(--blue)}
+  .cleg i.q{background:var(--b-violet)}
+
+  /* ===== E · mode démonstration ===== */
+  .demo-top{margin:0 0 18px;padding:10px 14px;border-radius:12px;background:var(--p-jaune);border:1px solid var(--b-jaune);font:14px/1.5 var(--texte);color:var(--ice)}
+  .demo-top a{color:var(--blue);font-weight:600;margin-left:4px}
+  .demo-top a[aria-current]{color:var(--ice);text-decoration:none}
+  #msg-form button:disabled,#abo-portail:disabled{opacity:.45;cursor:not-allowed}
+  /* bulles : la classe .b de site.css (texte bleu) les colorait par erreur */
+  .fil-msg .b{color:var(--ice)}
 </style>
+<script>/* DÉMONSTRATION DES FORMULES (Damien 28/09) : espace.html?demo=f1|f2|f3, sans connexion.
+   Client fictif, données d'exemple. On retire la bibliothèque Supabase avant ely-auth.js : son client
+   vaut alors null, donc AUCUN appel réseau (ni lecture ni écriture) et le compte éventuellement
+   connecté n'est pas touché. */
+var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;</script>
 <script src="assets/vendor/supabase.min.js"></script>
+<script>if(ELY_DEMO) window.supabase=null;</script>
 <script src="assets/ely-auth.js?v=stripe1"></script>
-<script>ElyAuth.requireAuth('connexion.html');</script>
+<script>if(!ELY_DEMO) ElyAuth.requireAuth('connexion.html');</script>
 </head>
 <body>
 
@@ -307,6 +406,7 @@
 </header>
 
 <main class="dash">
+  <div class="demo-top" id="demo-top" hidden></div>
   <div class="dash-hd">
     <h1>Bonjour, <span id="prenom">toi</span>.</h1>
   </div>
@@ -330,7 +430,7 @@
 
     <!-- COURBE DE POIDS -->
     <div class="card wide rv" id="c-courbe">
-      <div class="ch"><h3>Ma courbe</h3><span class="tag">Télémétrie</span></div>
+      <div class="ch"><h3>Ma courbe</h3><span class="tag">Poids</span></div>
       <div class="chart" id="chart"></div>
       <div class="wrow">
         <input type="date" id="wdate" class="dpick" aria-label="Date de la pesée">
@@ -381,10 +481,15 @@
     <div class="card wide rv" id="c-msg" hidden>
       <div class="ch"><h3>Mes messages</h3><span class="tag" id="msg-tag">Coachs</span></div>
       <p>Une question sur ton programme ? Écris à Damien &amp; Yoann, ils te répondent ici.</p>
+      <!-- alertes navigateur : visible seulement tant que la permission n'a pas été demandée -->
+      <div class="notif" id="notif-box" hidden>
+        <span class="notif-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.6 2H4.4z"/><path d="M10 20.5a2.1 2.1 0 0 0 4 0"/></svg></span>
+        <span class="notif-tx"><b>Reçois une alerte dès qu’un coach te répond</b><small>Une alerte sur cet appareil, rien d’autre. Tu peux la couper à tout moment.</small></span>
+        <button type="button" id="notif-on" class="notif-btn">Activer les notifications</button>
+      </div>
       <div class="fil-msg" id="fil-msg"></div>
       <form id="msg-form"><textarea id="msg-txt" placeholder="Ton message…" required maxlength="4000"></textarea><button type="submit">Envoyer</button></form>
       <p id="msg-err" class="foot-note" aria-live="polite"></p>
-      <button type="button" id="notif-on" class="ghostb" hidden style="margin-top:6px">Être alerté quand un coach me répond</button>
     </div>
 
     <!-- MON ABONNEMENT (Stripe) : formule, prix, échéance ; changer / résilier via le portail Stripe -->
@@ -392,11 +497,11 @@
       <div class="ch"><h3>Mon abonnement</h3><span class="tag" id="abo-tag">Actif</span></div>
       <div id="abo-corps"></div>
       <div class="dashcta"><button type="button" class="btn" id="abo-portail">Changer de formule ou résilier</button></div>
-      <p class="foot-note">Paiement, factures et carte bancaire sont gérés par Stripe, en toute sécurité.</p>
+      <p class="foot-note" id="abo-note">Paiement, factures et carte bancaire sont gérés par Stripe, en toute sécurité.</p>
     </div>
 
     <!-- PROFIL -->
-    <div class="card rv">
+    <div class="card rv" id="c-profil">
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
       <p>Prénom : <b id="pprenom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
       <p style="margin-top:8px">Nom : <b id="pnom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
@@ -484,7 +589,17 @@ var PROG = {
   modevie:["🚶 10 000 pas par jour minimum","😴 8 h de sommeil","💧 ~2,2 L d'eau / jour (1 L / 25 kg de poids de forme)","🍱 Astuce batch-cooking : cuisiner ses protéines & féculents à l'avance fait gagner du temps dans la semaine","🍽️ Resto / déplacement : protéine maigre + légumes, modère sauces & féculents"]
 };
 (function(){
-  var u=ElyAuth.user(); if(!u) return;
+  // DÉMO (?demo=f1|f2|f3) : client fictif, rien n'est lu ni écrit en base (voir le <head>)
+  var DEMO=window.ELY_DEMO||null, JOUR_MS=86400000;
+  var PRIX_CENTS={f1:1990,f2:2590,f3:2990};
+  var u=DEMO ? {id:'demo',prenom:'Sophie',nom:'Martin',sexe:'Femme',naissance:'1991-03-14',age:35,taille:165,email:'sophie.martin@example.com',
+      created:Date.now()-92*JOUR_MS,paid:true,formule:DEMO,
+      abonnement:{formule:DEMO,statut:'active',montant_cents:PRIX_CENTS[DEMO],periode_fin:new Date(Date.now()+19*JOUR_MS).toISOString(),stripe_subscription_id:'demo'}}
+    : ElyAuth.user();
+  if(!u) return;
+  function moi(){ return DEMO ? u : (ElyAuth.user()||{}); }
+  // en démo, toute action qui écrirait quelque chose s'arrête ici, avec un petit mot
+  function enDemo(el){ if(!DEMO) return false; if(el) el.textContent='Désactivé en démonstration : rien n’est enregistré.'; return true; }
   // Questionnaire INTERNE (Supabase) — on s'est séparé de Google Forms : les réponses
   // alimentent directement la base, donc le moteur et le futur espace coachs.
   var FORM_URL='questionnaire.html';
@@ -494,7 +609,7 @@ var PROG = {
   // client verrait celles d'un autre — ce sont des données de santé.
   // (Le stockage définitif est Supabase : les tables `poids` et `mensurations` existent
   //  déjà avec leurs protections d'accès. Ce suffixe est le correctif immédiat.)
-  var UID = '_' + String((ElyAuth.user()||{}).id || 'anon').slice(0, 8);
+  var UID = '_' + String(moi().id || 'anon').slice(0, 8);
   var WK='ely_weights'+UID, GK='ely_goal'+UID;
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
@@ -521,7 +636,23 @@ var PROG = {
   // PESÉES : enregistrées dans Supabase (table `poids`, une par jour, protégée par le RLS) pour que
   // les coachs les voient — c'est la pesée qui fait évoluer la diète. W = copie en mémoire.
   var W=[], sb=ElyAuth.client;
-  function weights(){ return W; }
+  // POIDS DU QUESTIONNAIRE = POINT DE DÉPART DE LA COURBE (Damien 28/09) : questionnaire -> point 1,
+  // première pesée -> point 2… Pas de doublon si une pesée existe déjà le même jour.
+  var Q0=null;
+  function weights(){
+    if(!Q0 || W.some(function(x){ return isoJour(x.t)===isoJour(Q0.t); })) return W;
+    return [Q0].concat(W);
+  }
+  function departQuestionnaire(q){
+    if(!q||q.statut!=='valide') return null;
+    var v=parseFloat(String((q.reponses||{})['Poids (en kg)']==null?'':q.reponses['Poids (en kg)']).replace(',','.')), d=q.valide_at||q.created_at;
+    if(!(v>=30&&v<=250)||!d) return null;
+    return {v:Math.round(v*10)/10, t:new Date(isoJour(new Date(d).getTime())+'T12:00:00').getTime(), q:true};
+  }
+  function chargerDepart(){
+    return sb.from('questionnaires').select('statut,reponses,valide_at,created_at').eq('user_id',u.id).eq('type','nutrition').maybeSingle()
+      .then(function(r){ Q0=departQuestionnaire(r&&r.data); }).catch(function(){});
+  }
   function isoJour(t){ var d=new Date(t),m=d.getMonth()+1,j=d.getDate(); return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(j<10?'0':'')+j; }
   function chargerPoids(verser){
     return sb.from('poids').select('date,kg').eq('user_id',u.id).order('date').then(function(r){
@@ -542,8 +673,9 @@ var PROG = {
     }).catch(function(){ msgPoids('Impossible de charger tes pesées pour le moment. Recharge la page.'); });
   }
   function msgPoids(t){ var el=document.getElementById('wmsg'); if(el) el.textContent=t||''; }
-  function goal(){ var g=localStorage.getItem(GK); return g?parseFloat(g):null; }
-  function saveGoal(v){ localStorage.setItem(GK,String(v)); }
+  var goalDemo=null;   // démo : objectif gardé en mémoire seulement
+  function goal(){ if(DEMO) return goalDemo; var g=localStorage.getItem(GK); return g?parseFloat(g):null; }
+  function saveGoal(v){ if(DEMO){ goalDemo=v; return; } localStorage.setItem(GK,String(v)); }
 
   // ---- tuiles stats + anneau ----
   function ringSVG(pct){
@@ -557,6 +689,7 @@ var PROG = {
   function renderStats(){
     var w=weights().slice().sort(function(a,b){return a.t-b.t;}), g=goal(), el=document.getElementById('stats');
     if(!w.length){ el.innerHTML='<div class="stat" style="grid-column:1/-1"><div class="sl">Tableau de bord</div><div class="sv" style="font-size:16px;margin-top:12px">Enregistre ta première pesée pour lancer ton suivi.</div></div>'; return; }
+    var pes=w.filter(function(x){ return !x.q; });   // vraies pesées (sans le point du questionnaire)
     var cur=w[w.length-1].v, start=w[0].v, delta=cur-start;
     var pct=(g!=null && start!==g)?(start-cur)/(start-g)*100:0;
     var ds=(delta>0?'+':'')+delta.toFixed(1);
@@ -568,10 +701,12 @@ var PROG = {
     if(recent.length>=2){ var dt=(recent[recent.length-1].t-recent[0].t)/(7*jour);
       if(dt>=5/7){ var pente=(recent[recent.length-1].v-recent[0].v)/dt;
         rythme=(pente>0?'+':'')+pente.toFixed(1).replace('.',',')+' kg / semaine sur 4 semaines'; } }
-    var depuis=Math.floor((Date.now()-w[w.length-1].t)/jour);
+    var depuis=pes.length?Math.floor((Date.now()-pes[pes.length-1].t)/jour):null;
     var quand = depuis<=0 ? "aujourd'hui" : depuis===1 ? 'hier' : 'il y a '+depuis+' jours';
-    el.innerHTML=(depuis>=7 ? '<div class="pesee-rappel"><span>Ta dernière pesée date de '+depuis+' jours. Pèse-toi : c’est elle qui permet à tes coachs d’ajuster ta diète.</span><button type="button" class="goto" data-goto="c-courbe">Noter mon poids</button></div>' : '')+
-      tile('Poids actuel',cur.toFixed(1),'kg','','Pesée '+quand)+tile('Départ',start.toFixed(1),'kg','',new Date(w[0].t).toLocaleDateString('fr-FR'))+
+    var rappel = !pes.length ? 'Enregistre ta première pesée : ta courbe démarre aussitôt, avec ton poids du questionnaire comme point de départ.'
+      : depuis>=7 ? 'Ta dernière pesée date de '+depuis+' jours. Pèse-toi : c’est elle qui permet à tes coachs d’ajuster ta diète.' : '';
+    el.innerHTML=(rappel ? '<div class="pesee-rappel"><span>'+rappel+'</span><button type="button" class="goto" data-goto="c-courbe">Noter mon poids</button></div>' : '')+
+      tile('Poids actuel',cur.toFixed(1),'kg','',w[w.length-1].q?'Questionnaire':'Pesée '+quand)+tile('Départ',start.toFixed(1),'kg','',new Date(w[0].t).toLocaleDateString('fr-FR')+(w[0].q?' · questionnaire':''))+
       tile('Évolution',ds,'kg','accent',rythme)+ringTile;
     var sg=document.getElementById('setgoal2'); if(sg) sg.addEventListener('click',askGoal);
   }
@@ -580,7 +715,7 @@ var PROG = {
   function renderChart(){
     var host=document.getElementById('chart');
     var w=weights().slice().sort(function(a,b){return a.t-b.t;}), g=goal();
-    if(w.length<2){ host.className='chart'; host.innerHTML='<div class="chart-empty">'+(w.length?'Une deuxième pesée et ta courbe démarre.':'Ta courbe apparaîtra ici, dès ta première pesée.')+'</div>'; return; }
+    if(w.length<2){ host.className='chart'; host.innerHTML='<div class="chart-empty">'+(!w.length?'Ta courbe apparaîtra ici, dès ta première pesée.':w[0].q?'Ton poids du questionnaire ('+w[0].v.toFixed(1).replace('.',',')+' kg) est le point de départ : ta courbe démarre dès ta première pesée.':'Une deuxième pesée et ta courbe démarre.')+'</div>'; return; }
     var W=640,H=230, pl=10,pr=46,pt=16,pb=24, iw=W-pl-pr, ih=H-pt-pb;
     var vals=w.map(function(d){return d.v;}), lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
     if(g!=null){ lo=Math.min(lo,g); hi=Math.max(hi,g); }
@@ -595,12 +730,15 @@ var PROG = {
     if(g!=null){ var gyy=Y(g); goalEl='<line class="cgoal" x1="'+pl+'" y1="'+gyy.toFixed(1)+'" x2="'+(W-pr)+'" y2="'+gyy.toFixed(1)+'"/><text class="cgoalt" x="'+pl+'" y="'+(gyy-6).toFixed(1)+'">Objectif '+g+' kg</text>'; }
     var dLine=w.map(function(d,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(d.v).toFixed(1);}).join(' ');
     var dArea='M'+X(0).toFixed(1)+' '+(pt+ih)+' '+w.map(function(d,i){return 'L'+X(i).toFixed(1)+' '+Y(d.v).toFixed(1);}).join(' ')+' L'+X(w.length-1).toFixed(1)+' '+(pt+ih)+' Z';
-    var pts=w.map(function(d,i){ var last=i===w.length-1; return '<circle class="cp'+(last?' cplast':'')+'" cx="'+X(i).toFixed(1)+'" cy="'+Y(d.v).toFixed(1)+'" r="'+(last?4.5:3)+'"/>'; }).join('');
+    var pts=w.map(function(d,i){ var last=i===w.length-1;
+      if(d.q) return '<circle class="cpq" cx="'+X(i).toFixed(1)+'" cy="'+Y(d.v).toFixed(1)+'" r="4.5"><title>Questionnaire : '+d.v.toFixed(1).replace('.',',')+' kg</title></circle>';
+      return '<circle class="cp'+(last?' cplast':'')+'" cx="'+X(i).toFixed(1)+'" cy="'+Y(d.v).toFixed(1)+'" r="'+(last?4.5:3)+'"/>'; }).join('');
     var dates='';
     [0,w.length-1].forEach(function(i){ var x=X(i), dt=new Date(w[i].t); dates+='<text class="cdate" x="'+Math.max(14,Math.min(W-pr-4,x)).toFixed(1)+'" y="'+(H-6)+'">'+dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})+'</text>'; });
     host.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Courbe de poids">'+
       '<defs><linearGradient id="carea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E9BFF" stop-opacity=".26"/><stop offset="1" stop-color="#2E9BFF" stop-opacity="0"/></linearGradient></defs>'+
-      grid+goalEl+'<path class="carea" d="'+dArea+'"/><path class="cline" d="'+dLine+'"/>'+pts+dates+'</svg>';
+      grid+goalEl+'<path class="carea" d="'+dArea+'"/><path class="cline" d="'+dLine+'"/>'+pts+dates+'</svg>'+
+      (w[0].q?'<div class="cleg"><span><i class="q"></i>Questionnaire (départ)</span><span><i></i>Pesées</span></div>':'');
     var line=host.querySelector('.cline');
     if(line && !reduce){ var len=line.getTotalLength(); host.style.setProperty('--len',len);
       host.classList.remove('draw'); void host.offsetWidth; host.classList.add('draw'); }
@@ -614,21 +752,52 @@ var PROG = {
   function seedDemo(){
     var day=86400000, base=Date.now(), seq=[84.2,83.6,83.9,82.7,82.1,81.6,81.9,80.7,80.1,79.5,79.7,78.6,78.1];
     W=seq.map(function(v,i){ return {v:v,t:base-(seq.length-1-i)*7*day}; });   // affichage seul, rien n'est enregistré
+    if(DEMO) Q0={v:85.1,t:base-seq.length*7*day,q:true};                          // démo : poids déclaré au questionnaire
     if(goal()==null) saveGoal(75);
     refresh();
   }
 
   // ---- programme intégré : construit le visuel V2 dans #progview (une seule fois) ----
+  // ---- DÉMO : ce qui distingue les formules (textes de la page Formules / recap.html) ----
+  // Recettes : celles des coachs (../out/recettes_etapes.json), pour les plats du programme d'exemple.
+  var RECETTES_DEMO={
+    'Tartines poulet & Saint-Môret':[5,2,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais griller les tranches de pain complet.','Dépose le Saint-Môret puis le blanc de poulet par-dessus.','Poivre, ciboulette, et c\'est prêt.']],
+    'Bœuf, pâtes & poivron':[10,12,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire les pâtes dans une grande casserole d\'eau bouillante (temps du paquet), égoutte.','Fais dorer la viande hachée dans une poêle au spray antiadhésif, en l\'émiettant.','Pendant ce temps, coupe le poivron en lanières et fais-le revenir 6 à 8 min à la poêle.','Dresse le tout dans l\'assiette, avec ail, cumin, origan à ton goût, et sers chaud.']],
+    'Axoa de bœuf & semoule':[10,25,['Pèse tous les aliments crus, aux quantités de ta fiche.','Émince l\'oignon et coupe le poivron en petits dés.','Fais-les revenir 5 min dans une sauteuse au spray antiadhésif.','Ajoute la viande hachée et fais-la dorer en l\'émiettant, avec le piment d\'Espelette ou les herbes du pays basque.','Ajoute un fond d\'eau, couvre et laisse mijoter 15 min à feu doux.','Verse la semoule dans un bol avec la même quantité d\'eau bouillante, couvre 5 min puis égraine.','Sers l\'axoa bien chaud sur la semoule.'],'L\'axoa, c\'est un plat basque qui aime mijoter : il est encore meilleur réchauffé.'],
+    'Thon, pâtes & concombre':[10,12,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire les pâtes dans une grande casserole d\'eau bouillante (temps du paquet), égoutte.','Égoutte le thon et émiette-le.','Coupe le concombre en dés.','Arrose d\'huile d\'olive, crue, au moment de servir.','Dresse le tout dans l\'assiette, avec citron, ail, persil, poivre à ton goût, et sers.']],
+    'Poisson blanc, patate douce & haricots verts':[10,25,['Pèse tous les aliments crus, aux quantités de ta fiche.','Préchauffe le four à 200 °C.','Coupe la patate douce en cubes et fais-la rôtir 25 min au four à 200 °C (ou 15 min à l\'eau bouillante).','Fais cuire le poisson blanc 12 à 15 min au four à 200 °C avec un filet de citron (ou 3 à 4 min par face à la poêle au spray antiadhésif).','Pendant ce temps, fais cuire les haricots verts 8 à 10 min à l\'eau bouillante ou à la vapeur.','Arrose d\'huile d\'olive, crue, au moment de servir.','Dresse le tout dans l\'assiette, avec citron, persil, ail, thym à ton goût, et sers chaud.']],
+    'Pâtes au poulet':[10,20,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire les pâtes (temps du paquet), égoutte.','Coupe le poulet en dés et fais-le dorer 6 à 8 min dans une sauteuse au spray antiadhésif avec l\'ail.','Verse la pulpe de tomate, l\'origan et le basilic, et laisse mijoter 8 min.','Mélange les pâtes à la sauce et parsème de parmesan.']],
+    'Steak, riz & poivron':[10,15,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire le riz dans une grande casserole d\'eau bouillante (temps du paquet), égoutte.','Saisis le steak 2 à 3 min par face dans une poêle très chaude au spray antiadhésif (plus ou moins selon la cuisson que tu aimes), puis laisse-le reposer 2 min.','Pendant ce temps, coupe le poivron en lanières et fais-le revenir 6 à 8 min à la poêle.','Dresse le tout dans l\'assiette, avec ail, herbes de Provence, citron, poivre à ton goût, et sers chaud.']],
+    'Poulet, semoule & ratatouille':[10,12,['Pèse tous les aliments crus, aux quantités de ta fiche.','Verse la semoule dans un bol avec la même quantité d\'eau bouillante, couvre 5 min, puis égraine à la fourchette.','Coupe le poulet en dés ou en lanières et fais-le dorer 6 à 8 min dans une poêle au spray antiadhésif.','Pendant ce temps, fais réchauffer la ratatouille dans une casserole.','Dresse le tout dans l\'assiette, avec paprika, ail, herbes de Provence, poivre à ton goût, et sers chaud.']]
+  };
+  function recettesDuMenu(){   // les recettes des plats servis, dans l'ordre du menu, sans doublon
+    var R={}; if(DEMO!=='f3') return R;
+    PROG.jours.forEach(function(j){ j.repas.forEach(function(r){ if(RECETTES_DEMO[r.rec]) R[r.rec]=RECETTES_DEMO[r.rec]; }); });
+    return R;
+  }
+  // rythme de la formule, avec ce qu'elle n'a pas en discret (démo seulement)
+  function rythmeHTML(){
+    if(!DEMO) return '';
+    var LK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+    // libellés validés par Damien (28/09), mot pour mot
+    var L={f1:[['<b>Un menu unique</b>'],['<b>Quantités réajustées</b> chaque mois'],['Un nouveau menu chaque mois : disponible avec la Formule Olympe',1],['Quantités réajustées chaque semaine : disponible avec la Formule Elysium',1]],
+           f2:[['<b>Un nouveau menu</b> chaque mois'],['<b>Quantités réajustées</b> à chaque nouveau menu'],['Quantités réajustées chaque semaine : disponible avec la Formule Elysium',1]],
+           f3:[['<b>Un nouveau menu</b> chaque mois'],['<b>Quantités réajustées</b> chaque semaine']]}[DEMO];
+    return '<div class="rythme">'+L.map(function(x){ return '<span'+(x[1]?' class="off">'+LK:'>')+x[0]+'</span>'; }).join('')+'</div>';
+  }
+
   var progBuilt=false;
   function buildProgView(){
     if(progBuilt) return; progBuilt=true;
-    var uu=ElyAuth.user()||{}; if(uu.prenom){ PROG.nom=[uu.prenom,(uu.nom||'').trim()]; }
+    var uu=moi(); if(uu.prenom){ PROG.nom=[uu.prenom,(uu.nom||'').trim()]; }
     var host=document.getElementById('progview');
     host.innerHTML=
       '<div class="phd"><div class="who"><div class="kick">Programme nutritionnel</div>'+
         '<h1 id="p-nom"></h1><div class="obj" id="p-obj"></div></div>'+
         '<div class="macros"><div class="donut" id="p-donut"></div><div class="mlist" id="p-mlist"></div></div></div>'+
-      '<div class="tabs" id="tabs"></div><div id="panels"></div>'+
+      '<div class="menu-hd"><h2>Mon menu</h2><small>6 jours + 1 jour off</small></div>'+rythmeHTML()+
+      '<div class="tabs" id="tabs" aria-label="Jours du menu"></div>'+
+      '<div class="acces" id="acces"></div><div id="panels"></div>'+
       '<div class="partner-strip"><span class="pk">Partenaire nutrition</span><img class="pn-logo" src="assets/prozis_logo.jpg" alt="Prozis" width="120" height="34"><span class="promo">Code <b>ELYSIUM</b> : bénéficie d\'une réduction de 10 % + des cadeaux sur tout le site</span></div>'+
       '<div class="pfoot">Programme personnel et nominatif. Toute reproduction ou diffusion est interdite.</div>';
 
@@ -669,31 +838,58 @@ var PROG = {
       }
     })();
 
-    // -- onglets : jours + off + courses + conseils --
-    var tabs=document.getElementById('tabs'), panels=document.getElementById('panels'), items=[];
+    // -- NAVIGATION (Damien 28/09) : « Mon menu » = les 7 jours en onglets ; juste dessous, bien visibles,
+    //    Conseils · Liste de courses · (Recettes des coachs) · Imprimer, en encadrés à part.
+    //    En démo, ce que la formule n'inclut pas reste visible mais verrouillé (« Disponible avec… »).
+    var tabs=document.getElementById('tabs'), acces=document.getElementById('acces'), panels=document.getElementById('panels'), items=[];
     PROG.jours.forEach(function(d){ items.push({id:'j'+d.j,label:'Jour '+d.j,html:dayHTML(d)}); });
-    items.push({id:'off',label:'Jour off',html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
-    if(Object.keys(PROG.courses||{}).length) items.push({id:'courses',label:'Liste de courses',html:coursesHTML()});
-    items.push({id:'conseils',label:'Conseils',html:adviceHTML()});
+    items.push({id:'off',label:'Jour OFF',html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
+    var nCourses=0; Object.keys(PROG.courses||{}).forEach(function(k){ nCourses+=(PROG.courses[k]||[]).length; });
+    var nRec=Object.keys(recettesDuMenu()).length;
+    var extras=[{id:'conseils',cls:'a-cons',label:'Conseils',sous:'Les règles, le mode de vie, le suivi',html:adviceHTML(),ic:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>'}];
+    var IC_COURSES='<path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/>',
+        IC_RECETTES='<path d="M4 5a2 2 0 0 1 2-2h5v17H6a2 2 0 0 0-2 2zM20 5a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 1 2 2z"/>';
+    if(DEMO==='f1') extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',lock:'Formule Olympe',ic:IC_COURSES,
+      html:verrouHTML('Liste de courses','','la Formule Olympe et la Formule Elysium')});
+    else if(nCourses) extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',sous:nCourses+' articles à cocher',ic:IC_COURSES,html:coursesHTML()});
+    if(DEMO) extras.push(DEMO==='f3'
+      ? {id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()}
+      : {id:'recettes',cls:'a-rec',label:'Recettes des coachs',lock:'Formule Elysium',ic:IC_RECETTES,
+        html:verrouHTML('Recettes des coachs','Les recettes des coachs pour chaque repas.','la Formule Elysium')});
     var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6
     var todayId=dow===0?'off':'j'+dow;
     if(!items.some(function(it){return it.id===todayId;})) todayId=items[0].id;
+    function panneau(it,on){ var wrap=document.createElement('div'); wrap.innerHTML=it.html; var pan=wrap.firstElementChild; pan.id='pan-'+it.id; if(on) pan.classList.add('on'); panels.appendChild(pan); }
+    var LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     items.forEach(function(it){
       var on=it.id===todayId;
-      var b=document.createElement('button'); b.className='tab'+(on?' on':'')+(it.id===todayId?' today':''); b.textContent=it.label; b.dataset.t=it.id;
-      if(it.id===todayId) b.title='Aujourd\'hui';
+      var b=document.createElement('button'); b.type='button'; b.className='tab'+(on?' on today':''); b.textContent=it.label; b.dataset.t=it.id;
+      if(on) b.title='Aujourd\'hui';
       b.addEventListener('click',function(){ select(it.id); }); tabs.appendChild(b);
-      var wrap=document.createElement('div'); wrap.innerHTML=it.html; var pan=wrap.firstElementChild; pan.id='pan-'+it.id; if(on) pan.classList.add('on');
-      panels.appendChild(pan);
+      panneau(it,on);
     });
-    // bouton Imprimer : au bout de la ligne d'onglets, poussé à droite (pas un onglet)
-    var pbtn=document.createElement('button'); pbtn.type='button'; pbtn.className='printbtn'; pbtn.title='Imprimer mon programme';
-    pbtn.innerHTML='<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>Imprimer';
-    tabs.appendChild(pbtn);
+    function tuile(x){
+      var b=document.createElement('button'); b.type='button'; b.className='acc '+x.cls+(x.lock?' lock':''); if(x.id) b.dataset.t=x.id;
+      b.innerHTML='<span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">'+x.ic+'</svg></span><span class="tx"><b>'+x.label+'</b><small>'+
+        (x.lock?'<span class="lk">'+LOCK+x.lock+'</span>':x.sous)+'</small></span>';
+      acces.appendChild(b); return b;
+    }
+    extras.forEach(function(x){ tuile(x).addEventListener('click',function(){ select(x.id); }); panneau(x,false); });
+    // Imprimer : une action, pas un onglet (le PDF est déjà prêt, voir plus bas)
+    tuile({cls:'a-print acc-print',label:'Imprimer ma programmation',sous:'Ton programme en PDF',ic:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/>'});
     function select(id){
-      [].forEach.call(tabs.children,function(b){ b.classList.toggle('on',b.dataset.t===id); });
+      [].forEach.call(host.querySelectorAll('.tab[data-t],.acc[data-t]'),function(b){ b.classList.toggle('on',b.dataset.t===id); });
       [].forEach.call(panels.children,function(p){ p.classList.toggle('on',p.id==='pan-'+id); });
       var pan=document.getElementById('pan-'+id); if(pan) [].forEach.call(pan.querySelectorAll('.rv'),function(e){e.classList.add('in');});
+    }
+    function verrouHTML(titre,texte,formules){
+      return '<div class="panel"><div class="verrou"><h4>'+titre+'</h4>'+(texte?'<p>'+texte+'</p>':'')+'<span class="dispo">Disponible avec '+formules+'</span></div></div>';
+    }
+    function recettesHTML(){
+      var R=recettesDuMenu();
+      return '<div class="panel"><div class="recettes">'+Object.keys(R).map(function(n){ var r=R[n];
+        return '<details class="rct rv"><summary><b>'+n+'</b><i>Préparation '+r[0]+' min · cuisson '+r[1]+' min</i></summary><ol>'+
+          r[2].map(function(e){ return '<li>'+e+'</li>'; }).join('')+'</ol>'+(r[3]?'<p class="astuce">'+r[3]+'</p>':'')+'</details>'; }).join('')+'</div></div>';
     }
     /* REPAS au style de l'exemple de l'accueil (Damien & Yoann 28/09) : en-tête à la couleur du repas,
        coins arrondis, ingrédients en une phrase, macros en pastilles. Pas d'abréviation (« tr. »). */
@@ -749,7 +945,7 @@ var PROG = {
     }
     // liste de courses : cases mémorisées + progression + « tout décocher »
     (function(){
-      var panel=document.getElementById('pan-courses'); if(!panel) return;
+      var panel=document.getElementById('pan-courses'); if(!panel||!panel.querySelector('.courses')) return;   // absente ou verrouillée (démo Odyssée)
       var CK='ely_courses'+UID;     // cloisonné par compte (cf. plus haut)
       var boxes=[].slice.call(panel.querySelectorAll('.ci input'));
       var saved; try{ saved=JSON.parse(localStorage.getItem(CK)||'[]'); }catch(e){ saved=[]; }
@@ -773,7 +969,7 @@ var PROG = {
 
     // Impression : AUCUNE génération ici. En prod, le PDF (versions claire ET sombre) est créé à
     // l'inscription, en même temps que la version en ligne ; ce bouton va juste chercher le fichier prêt.
-    var pb=host.querySelector('.printbtn'); if(pb) pb.addEventListener('click',function(){
+    var pb=host.querySelector('.acc-print'); if(pb) pb.addEventListener('click',function(){
       alert("Impression\n\nTon programme est déjà en PDF (version claire ET sombre), généré à ton inscription en même temps que ta version en ligne. Ici on récupère juste le fichier prêt, sans rien recalculer.\n\n(Maquette : le PDF n'est pas encore branché au back-end.)");
     });
 
@@ -861,7 +1057,7 @@ var PROG = {
   function cleFormule(v){ v=String(v||''); if(/^f[123]$/.test(v)) return v; var m=v.match(/Formule\s*0?([123])/i); if(m) return 'f'+m[1]; return /odyss/i.test(v)?'f1':/olympe/i.test(v)?'f2':/lysium/i.test(v)?'f3':null; }
   var STATUT={active:'Actif',trialing:'Actif',past_due:'Paiement en retard',unpaid:'Impayé',canceled:'Résilié',incomplete:'Paiement en attente',incomplete_expired:'Paiement expiré',paused:'En pause'};
   function renderAbo(){
-    var a=(ElyAuth.user()||{}).abonnement, card=document.getElementById('c-abo');
+    var a=moi().abonnement, card=document.getElementById('c-abo');
     if(!a||!a.stripe_subscription_id){ card.hidden=true; return; }
     card.hidden=false;
     var fin=a.periode_fin?new Date(a.periode_fin).toLocaleDateString('fr-FR'):'—';
@@ -873,12 +1069,13 @@ var PROG = {
       '<p style="margin-top:6px">'+(a.statut==='canceled'?'Abonnement terminé.':a.resiliation_prevue?'Se termine le <b style="color:var(--ice)">'+fin+'</b>, sans nouveau prélèvement.':'Prochain prélèvement le <b style="color:var(--ice)">'+fin+'</b>.')+'</p>';
   }
   document.getElementById('abo-portail').addEventListener('click',function(){
+    if(enDemo(document.getElementById('abo-note'))) return;
     var b=this; b.disabled=true; b.textContent='Ouverture…';
     ElyAuth.portail().catch(function(e){ b.disabled=false; b.textContent='Changer de formule ou résilier'; alert(e.message); });
   });
 
   function renderProgram(){
-    var uu=ElyAuth.user()||{}, paid=!!uu.paid;
+    var uu=moi(), paid=!!uu.paid;
     var quest = ADMIN ? !!uu.quest : REEL.quest;
     var pill=document.getElementById('statuspill'), c=document.getElementById('progcard'), pv=document.getElementById('progview');
     if(paid && (ADMIN ? quest : REEL.prog)){
@@ -931,6 +1128,7 @@ var PROG = {
   document.getElementById('wadd').addEventListener('click',function(){
     var i=document.getElementById('wval'), v=parseFloat(String(i.value).replace(',','.'));
     if(!v||v<30||v>250){ i.focus(); return; }
+    if(enDemo(document.getElementById('wmsg'))) return;
     var kg=Math.round(v*10)/10, jour=isoJour(_pickT('wdate')), b=this; b.disabled=true;
     sb.from('poids').upsert({user_id:u.id,date:jour,kg:kg},{onConflict:'user_id,date'}).then(function(r){
       b.disabled=false;
@@ -968,6 +1166,7 @@ var PROG = {
   document.getElementById('avis-liste').addEventListener('click',function(e){
     var b=e.target.closest('button[data-a]'); if(!b) return;
     var k=b.getAttribute('data-k'), a=b.getAttribute('data-a'), msg=document.getElementById('avis-msg');
+    if(enDemo(msg)) return;
     var req = AVIS[k]===a
       ? sb.from('retours').delete().eq('user_id',u.id).eq('programme_id',REEL.pid).eq('plat',k)          // re-clic = neutre
       : sb.from('retours').upsert({user_id:u.id,programme_id:REEL.pid,plat:k,avis:a},{onConflict:'user_id,programme_id,plat'});
@@ -1002,6 +1201,7 @@ var PROG = {
     }).catch(function(){});
   }
   photo.addEventListener('change',function(){
+    if(enDemo(pmsg)){ photo.value=''; return; }
     var f=photo.files&&photo.files[0]; if(!f) return;
     if(!/^image\//.test(f.type)){ pmsg.textContent='Choisis une image (JPEG, PNG…).'; return; }
     pmsg.textContent='Envoi de ta photo…';
@@ -1015,7 +1215,7 @@ var PROG = {
     }).catch(function(){ photo.value=''; pmsg.textContent='Cette image n’a pas pu être lue. Essaie une autre photo.'; });
   });
   document.getElementById('galerie').addEventListener('click',function(e){
-    var b=e.target.closest('.ph-suppr'); if(!b) return;
+    var b=e.target.closest('.ph-suppr'); if(!b||enDemo(pmsg)) return;
     if(!confirm('Supprimer cette photo ? Elle sera effacée définitivement.')) return;
     sb.storage.from(BUCKET).remove([b.getAttribute('data-p')]).then(function(r){ pmsg.textContent=r.error?'Suppression impossible pour le moment.':'Photo supprimée.'; chargerPhotos(); });
   });
@@ -1034,6 +1234,7 @@ var PROG = {
     var obj={t:_pickT('mdate')}, n=0;
     mfields.forEach(function(f){ var el=document.getElementById('m-'+f), v=parseFloat(String(el.value).replace(',','.')); if(v>0){ obj[f]=Math.round(v*2)/2; n++; } });
     var msg=document.getElementById('mens-msg');
+    if(enDemo(msg)) return;
     if(!n){ msg.textContent='Renseigne au moins une mesure.'; return; }
     var ligne={user_id:u.id,date:isoJour(obj.t)}; mfields.forEach(function(f){ if(obj[f]!=null) ligne[f]=obj[f]; });
     var b=this; b.disabled=true;
@@ -1058,17 +1259,17 @@ var PROG = {
   document.addEventListener('keydown',function(e){ if(e.key!=='Enter'&&e.key!==' ') return; var g=e.target.closest&&e.target.closest('.goto'); if(g){ e.preventDefault(); gotoCard(g.getAttribute('data-goto')); } });
 
   // ---- déconnexion + démo paiement ----
-  document.getElementById('logout').addEventListener('click',function(){ ElyAuth.logout(); location.href='index.html'; });
+  document.getElementById('logout').addEventListener('click',function(){ if(DEMO){ location.href='formules.html'; return; } ElyAuth.logout(); location.href='index.html'; });
 
   // ---- aiguillage selon le TYPE DE COMPTE (voir ElyAuth.acces) ----
   //  · "coach" (Damien, Yoann) : cette page ne les concerne pas — on les renvoie
   //    sur leur dashboard, même s'ils arrivent ici en tapant l'adresse.
   //  · "mixte" (Dimitri) : espace client + raccourci vers /coach.
   //  · "client" : rien de spécial.
-  ElyAuth.acces().then(function(a){
+  if(!DEMO) ElyAuth.acces().then(function(a){
     if(a==='coach'){ location.replace('coach.html'); return; }
     ADMIN = a==='mixte';
-    chargerPoids(!ADMIN).then(refresh);
+    Promise.all([chargerPoids(!ADMIN), chargerDepart()]).then(refresh);
     if(ADMIN){
       document.getElementById('coachlink').hidden=false;
       document.getElementById('democard').style.display='';
@@ -1088,7 +1289,7 @@ var PROG = {
       var card=document.getElementById('c-msg'); card.hidden=false;
       // CGV v3 art. 7.3 : paiement échoué -> plus de nouvel échange tant que la période n'est pas réglée (l'historique reste lisible)
       // même règle que supabase/messagerie_impayes.sql (past_due, unpaid, canceled)
-      var ab=(ElyAuth.user()||{}).abonnement, st=ab&&ab.statut, bloque=!ADMIN&&['past_due','unpaid','canceled'].indexOf(st)>-1;
+      var ab=moi().abonnement, st=ab&&ab.statut, bloque=!ADMIN&&['past_due','unpaid','canceled'].indexOf(st)>-1;
       document.getElementById('msg-form').hidden=bloque;
       if(bloque) document.getElementById('msg-err').textContent= st==='canceled'
         ? 'Ton abonnement est terminé : tu peux relire vos échanges ; pour écrire à tes coachs, reprends une formule.'
@@ -1114,12 +1315,60 @@ var PROG = {
     }).catch(function(){});
   }
   document.getElementById('msg-form').addEventListener('submit',function(e){ e.preventDefault();
-    var t=document.getElementById('msg-txt'), txt=t.value.trim(), err=document.getElementById('msg-err'); if(!txt) return;
+    var t=document.getElementById('msg-txt'), txt=t.value.trim(), err=document.getElementById('msg-err'); if(enDemo(err)||!txt) return;
     var bt=this.querySelector('button'); bt.disabled=true;
     sb.from('messages').insert({client_id:u.id,auteur_id:u.id,texte:txt}).then(function(r){ bt.disabled=false;
       if(r.error){ err.textContent='Message non envoyé, réessaie dans un instant.'; return; }
       err.textContent=''; t.value=''; chargerMsgs(); });
   });
+
+  // notifications : l'encart ne s'affiche que tant que la permission n'a pas été demandée
+  var notifBox=document.getElementById('notif-box'), notifBtn=document.getElementById('notif-on');
+  function etatNotif(){ notifBox.hidden=!(window.Notification && Notification.permission==='default'); }
+
+  // ---- DÉMONSTRATION : un client fictif abonné à la formule demandée, rien n'est enregistré ----
+  function demarrerDemo(){
+    var F={f1:['Formule Odyssée','19,90','Essentielle · un menu unique qui évolue'],f2:['Formule Olympe','25,90','Confort · un nouveau menu chaque mois'],
+           f3:['Formule Elysium','29,90','Premium · réajusté chaque semaine + recettes des coachs']};
+    var top=document.getElementById('demo-top'); top.hidden=false;
+    top.innerHTML='Démonstration : ce que voit un client <b>'+F[DEMO][0]+'</b> ('+F[DEMO][2]+', '+F[DEMO][1]+' € toutes les 4 semaines). Données d’exemple. '+
+      '<span style="white-space:nowrap">Voir aussi :</span>'+['f1','f2','f3'].map(function(k){
+        return '<a href="?demo='+k+'"'+(k===DEMO?' aria-current="page"':'')+'>'+F[k][0].replace('Formule ','')+'</a>'; }).join(' ·');
+    document.title='ELYSIUM · Démonstration '+F[DEMO][0];
+    document.getElementById('logout').textContent='Quitter la démo';
+    REEL.prog=true; REEL.quest=true;
+    seedDemo();   // pesées d'exemple + poids du questionnaire + objectif 75 kg, en mémoire seulement
+    renderProgram(); renderAbo();
+    // mensurations d'exemple
+    var M={epaules:104,poitrine:92,taille:74,hanches:98,cuisse:56,bras:28};
+    mfields.forEach(function(f){ document.getElementById('m-'+f).value=M[f]; });
+    document.getElementById('mens-msg').textContent='Dernière saisie le '+new Date(Date.now()-9*JOUR_MS).toLocaleDateString('fr-FR')+'.';
+    // photos : pas d'envoi
+    document.getElementById('photo').disabled=true;
+    pmsg.textContent='Envoi de photos désactivé en démonstration.';
+    // avis sur les plats : les plats du programme d'exemple
+    var vus={}, L=[];
+    PROG.jours.forEach(function(j){ j.repas.forEach(function(r){ if(!vus[r.rec]){ vus[r.rec]=1; L.push(r); } }); });
+    document.getElementById('avis-liste').innerHTML=L.map(function(r){
+      return '<div class="avis-l"><span class="avis-t"><small>'+esc(r.type)+'</small>'+esc(r.rec)+'</span><div class="avis-b">'+
+        '<button type="button" data-a="revoir" data-k="'+esc(r.rec)+'">À revoir</button><button type="button" data-a="plus_jamais" data-k="'+esc(r.rec)+'">Plus jamais</button></div></div>'; }).join('');
+    document.getElementById('c-avis').hidden=false;
+    // messagerie : un échange d'exemple, envoi désactivé
+    var il=function(j,h){ var d=new Date(Date.now()-j*JOUR_MS); d.setHours(h,12,0,0); return d.toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); };
+    document.getElementById('fil-msg').innerHTML=
+      '<div class="b coach">Bonjour Sophie, ton programme est en ligne. Pense à ta pesée du lundi matin, à jeun : c’est elle qui nous sert à ajuster tes quantités.<time>Coach · '+il(6,9)+'</time></div>'+
+      '<div class="b moi">Merci ! Je commence dès lundi.<time>'+il(6,12)+'</time></div>';
+    document.getElementById('msg-txt').disabled=true;
+    document.getElementById('msg-txt').placeholder='Désactivé en démonstration';
+    document.querySelector('#msg-form button').disabled=true;
+    document.getElementById('c-msg').hidden=false;
+    notifBox.hidden=false;
+    notifBtn.addEventListener('click',function(){ enDemo(document.getElementById('msg-err')); });
+    // abonnement : portail Stripe désactivé
+    document.getElementById('abo-portail').disabled=true;
+    document.getElementById('abo-note').textContent='Changer de formule ou résilier : désactivé en démonstration.';
+  }
+  if(DEMO){ demarrerDemo(); reveal(document); return; }
 
   if(/[?&]paiement=ok/.test(location.search)){
     history.replaceState(null,'',location.pathname);
@@ -1140,9 +1389,7 @@ var PROG = {
     setInterval(chargerMsgs,30000);                               // relève toutes les 30 s
     // TEMPS RÉEL : la réponse d'un coach apparaît tout de suite (RLS : uniquement le fil de ce client)
     sb.channel('messages-'+u.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'client_id=eq.'+u.id},function(){ chargerMsgs(); }).subscribe();
-    var b=document.getElementById('notif-on');
-    function btn(){ b.hidden=!(window.Notification && Notification.permission==='default'); }
-    b.addEventListener('click',function(){ Notification.requestPermission().then(btn); }); btn();
+    notifBtn.addEventListener('click',function(){ Notification.requestPermission().then(etatNotif); }); etatNotif();
   });
   document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') chargerMsgs(); });
   reveal(document);

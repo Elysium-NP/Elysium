@@ -842,21 +842,28 @@ var G=(function(){
   function renderSuivi(uid){
     Promise.all([
       sb.from('poids').select('date,kg').eq('user_id',uid).order('date'),
-      sb.from('mensurations').select('*').eq('user_id',uid).order('date',{ascending:false}).limit(1)
+      sb.from('mensurations').select('*').eq('user_id',uid).order('date',{ascending:false}).limit(1),
+      sb.from('questionnaires').select('statut,reponses,valide_at,created_at').eq('user_id',uid).eq('type','nutrition').maybeSingle()
     ]).then(function(r){
       var el=$('suivi'); if(!el||!cur||cur.user_id!==uid) return;   // on a changé de client entre-temps
-      var w=(r[0].data||[]).map(function(x){ return {v:+x.kg,t:new Date(x.date+'T12:00:00').getTime()}; });
+      var pes=(r[0].data||[]).map(function(x){ return {v:+x.kg,t:new Date(x.date+'T12:00:00').getTime()}; });
+      // POIDS DU QUESTIONNAIRE = POINT DE DÉPART DE LA COURBE (Damien 28/09), sauf pesée le même jour
+      var q=r[2]&&r[2].data, qv=q&&q.statut==='valide'?parseFloat(String((q.reponses||{})['Poids (en kg)']==null?'':q.reponses['Poids (en kg)']).replace(',','.')):NaN,
+          qd=q&&(q.valide_at||q.created_at), q0=null, jr=function(t){ return new Date(t).toDateString(); };
+      if(qv>=30&&qv<=250&&qd){ var qt=new Date(qd); qt.setHours(12,0,0,0); q0={v:Math.round(qv*10)/10,t:qt.getTime(),q:true}; }
+      var w=(q0&&!pes.some(function(x){ return jr(x.t)===jr(q0.t); })) ? [q0].concat(pes).sort(function(a,b){ return a.t-b.t; }) : pes;
       var m=(r[1].data||[])[0], h='<h4>Suivi</h4>';
-      if(!w.length){ h+='<div class="chiffres"><span class="retard">Aucune pesée enregistrée</span></div>'; }
+      if(!pes.length){ h+='<div class="chiffres"><span class="retard">Aucune pesée enregistrée</span>'+
+        (q0?'<span>Questionnaire : <b>'+fr(q0.v)+' kg</b> ('+new Date(q0.t).toLocaleDateString('fr-FR')+')</span>':'')+'</div>'; }
       else {
-        var der=w[w.length-1], dep=w[0], jours=Math.floor((Date.now()-der.t)/JOUR), ev=der.v-dep.v;
-        var recent=w.filter(function(x){ return x.t>=der.t-28*JOUR; }), rythme='';
+        var der=pes[pes.length-1], dep=w[0], jours=Math.floor((Date.now()-der.t)/JOUR), ev=der.v-dep.v;
+        var recent=pes.filter(function(x){ return x.t>=der.t-28*JOUR; }), rythme='';
         if(recent.length>=2){ var sem=(der.t-recent[0].t)/(7*JOUR); if(sem>=5/7) rythme=((der.v-recent[0].v)/sem>0?'+':'')+fr((der.v-recent[0].v)/sem)+' kg / sem.'; }
         h+='<div class="chiffres"><span>Dernière pesée : <b>'+fr(der.v)+' kg</b> le '+new Date(der.t).toLocaleDateString('fr-FR')+
           (jours>=7?' · <span class="retard">il y a '+jours+' jours</span>':'')+'</span>'+
-          '<span>Départ : <b>'+fr(dep.v)+' kg</b> ('+new Date(dep.t).toLocaleDateString('fr-FR')+')</span>'+
+          '<span>Départ : <b>'+fr(dep.v)+' kg</b> ('+new Date(dep.t).toLocaleDateString('fr-FR')+(dep.q?' · questionnaire':'')+')</span>'+
           '<span>Évolution : <b>'+(ev>0?'+':'')+fr(ev)+' kg</b></span>'+(rythme?'<span>Rythme sur 4 semaines : <b>'+rythme+'</b></span>':'')+
-          '<span>'+w.length+' pesée'+(w.length>1?'s':'')+'</span></div>';
+          '<span>'+pes.length+' pesée'+(pes.length>1?'s':'')+'</span></div>';
         if(w.length>=2) h+='<div id="suivi-courbe"></div>';
       }
       h+='<div id="suivi-frise"></div>';
@@ -896,14 +903,16 @@ var G=(function(){
     var c=D&&D.par[uid], nom=c?c.nom:'ce client', dep=w.length?w[0].v:null, pal=c?palier(c.rep):null, cible=null;
     if(dep!=null&&pal&&c.obj==='Perte') cible=dep-pal; else if(dep!=null&&pal&&c.obj==='Prise') cible=dep+pal;
     var jl=function(t){ return new Date(t).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); };
+    var qd=w.length&&w[0].q;   // 1er point = poids du questionnaire (départ), marqué à part
     if(w.length>=2) G.mount('suivi-courbe',function(lg){ return G.ligne(lg,{h:220,x:w.map(function(p){ return new Date(p.t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }),
-      tx:function(i){ return 'Pesée du '+jl(w[i].t); },points:true,series:[{nom:'',v:w.map(function(p){ return p.v; }),c:'var(--blue)',aire:true}],
+      tx:function(i){ return (w[i].q?'Questionnaire du ':'Pesée du ')+jl(w[i].t); },points:true,
+      series:[{nom:'',v:w.map(function(p){ return p.v; }),c:'var(--blue)',aire:true}].concat(qd?[{nom:'départ',v:w.map(function(p,i){ return i?null:p.v; }),c:'var(--b-violet)'}]:[]),
       cible:cible,cibleT:cible==null?'':'objectif '+fr(cible)+' kg',zone:cible==null?null:[cible-1,cible+1],f:function(v){ return G.n(v,1)+' kg'; },
-      label:'Poids de '+nom+' : '+fr(dep)+' kg à la première pesée, '+fr(w[w.length-1].v)+' kg à la dernière'+(cible==null?'':', objectif '+fr(cible)+' kg')})+
-      G.leg([['pesée','var(--blue)']].concat(cible==null?[]:[['objectif du questionnaire','',1],['zone cible (± 1 kg)','color-mix(in srgb,var(--b-vert) 45%,transparent)']])); });
+      label:'Poids de '+nom+' : '+fr(dep)+' kg '+(qd?'au questionnaire':'à la première pesée')+', '+fr(w[w.length-1].v)+' kg à la dernière pesée'+(cible==null?'':', objectif '+fr(cible)+' kg')})+
+      G.leg([['pesée','var(--blue)']].concat(qd?[['questionnaire (départ)','var(--b-violet)']]:[],cible==null?[]:[['objectif du questionnaire','',1],['zone cible (± 1 kg)','color-mix(in srgb,var(--b-vert) 45%,transparent)']])); });
     var V=((c&&c.prog)||[]).filter(function(x){ return x.traite_at||x.created_at; }).map(function(x,i){ var g=geste(x), ty=g==='reajuster'?'Réajustement':g?'Nouveau menu':'1re diète';
       return {t:new Date(x.traite_at||x.created_at).getTime(),lab:'v'+(x.version||i+1),c:TYPE_C[ty],tip:'v'+(x.version||i+1)+' · '+ty+'\n'+(ETAT[x.statut]||(x.statut==='en_attente'?'À relire':x.statut||''))+' · '+jl(x.traite_at||x.created_at)}; });
-    var P=w.map(function(p){ return {t:p.t,tip:'Pesée du '+jl(p.t)+'\n'+G.n(p.v,1)+' kg'}; }), T=V.map(function(v){ return v.t; }).concat(P.map(function(p){ return p.t; }));
+    var P=w.filter(function(p){ return !p.q; }).map(function(p){ return {t:p.t,tip:'Pesée du '+jl(p.t)+'\n'+G.n(p.v,1)+' kg'}; }), T=V.map(function(v){ return v.t; }).concat(P.map(function(p){ return p.t; }));
     G.mount('suivi-frise',function(lg){ if(!T.length) return '';
       var deb=Math.min.apply(null,T.concat(c&&c.p.created_at?[new Date(c.p.created_at).getTime()]:[])), fin=Math.max(Date.now(),Math.max.apply(null,T));
       return '<div class="mens" style="margin-bottom:4px">Parcours : diètes et pesées</div>'+G.frise(lg,{debut:deb,fin:fin,dietes:V,pesees:P,

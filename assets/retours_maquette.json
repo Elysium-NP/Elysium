@@ -1,0 +1,39 @@
+[
+ {
+  "id": 501,
+  "programme_id": 9061,
+  "motif": "aliment_deteste",
+  "attendu": "N'aime pas, à retirer",
+  "action": {
+   "type": "exclure_aliment",
+   "aliment": "ble",
+   "portee": "client"
+  },
+  "applique_version": 2,
+  "applique_note": null,
+  "created_at": "2026-09-27T11:40:00+00:00"
+ },
+ {
+  "id": 502,
+  "programme_id": 9061,
+  "motif": "autre",
+  "attendu": "Plus de légumes verts le soir",
+  "action": null,
+  "applique_version": null,
+  "applique_note": null,
+  "created_at": "2026-09-27T11:41:00+00:00"
+ },
+ {
+  "id": 503,
+  "programme_id": 9061,
+  "motif": "autre",
+  "attendu": "Monter à 1700 kcal",
+  "action": {
+   "type": "changer_cible",
+   "kcal": 1700
+  },
+  "applique_version": null,
+  "applique_note": "non appliquée : action « changer_cible » pas encore branchée au moteur, à faire à la main",
+  "created_at": "2026-09-27T11:41:30+00:00"
+ }
+]

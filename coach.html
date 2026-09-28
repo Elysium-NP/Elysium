@@ -147,6 +147,10 @@
   .qa dd{margin:4px 0 0;font-size:15px;line-height:1.5;color:var(--ice)}
   .qa.alerte dd{color:#b45309;font-weight:600}
   html[data-theme="obscur"] .qa.alerte dd{color:#f0b35a}
+  /* questionnaire complet repliable (relecture d'un client du Google Form) */
+  .q-rep{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  .q-rep summary{cursor:pointer;font:600 13.5px/1.3 var(--texte);color:var(--blue);min-height:32px;display:flex;align-items:center}
+  .q-rep .qa dd{font-size:14px;overflow-wrap:anywhere}
 
   /* abonnements (Damien 27/09) : formules, montant, résiliations — Stripe pour l'argent */
   .kpis.abo{grid-template-columns:repeat(5,1fr)}
@@ -636,6 +640,9 @@
   <!-- ═════════════ RELECTURE D'UNE DIÈTE (ouverte depuis la file ou la fiche, hors onglets) ═════════════ -->
   <section class="page" id="p-relire" hidden></section>
 
+  <!-- ═════════════ FICHE RÉDUITE d'un client du Google Form (sans compte) : identité, questionnaire, versions ═════════════ -->
+  <section class="page" id="p-ext" hidden></section>
+
   <!-- ═════════════ MESSAGES ═════════════ -->
   <section class="page" id="p-msgs" hidden>
   <h2 class="t">Messages <span id="msg-nl" style="font:600 15px var(--texte);color:var(--blue)"></span></h2>
@@ -1037,7 +1044,7 @@ var REL=(function(){
     var nai=(ai.refuses||[]).length+(ai.allergies||[]).length+(ai.conserver||[]).length, SI=servisInterdits(R), ok=joursOk(R), nb=actifs(R.menu).length;
     var h='<div class="rl-top"><button type="button" class="retour-btn" data-act="file">← Retour à la file</button>'+
       '<span class="tag '+({a_relire:'b',rectification:'r',valide:'v',refuse:'r',remplace:''}[R.etat]||'')+'">'+e(ETAT[R.etat]||R.etat)+'</span></div>'+
-      '<h2 class="t">Relecture · <span class="nom" tabindex="0" role="button"'+(R.uid?' data-u="'+e(R.uid)+'"':'')+' title="Ouvrir la fiche">'+e(R.nom)+'</span></h2>'+
+      '<h2 class="t">Relecture · <span class="nom" tabindex="0" role="button"'+(R.uid?' data-u="'+e(R.uid)+'"':R.xid?' data-x="'+e(R.xid)+'"':'')+' title="Ouvrir la fiche">'+e(R.nom)+'</span></h2>'+
       '<div class="fmeta"><span class="tag b">'+e(R.formule)+'</span><span class="tag '+(TT[R.type]||'')+'">'+e(R.type)+'</span><span class="tag">v'+e(R.version)+'</span>'+
       ((R.reponses||{}).objectif?'<span class="tag">'+e(R.reponses.objectif)+'</span>':'')+'<span class="tag">déposée '+e(R.depose)+'</span></div>';
     if(sv&&sv.geste){ var nr=Array.isArray(sv.retours)?sv.retours.length:(+sv.retours||0);
@@ -1762,7 +1769,7 @@ var ED=(function(){
   function dansFiltre(c,f){ return f==='tout'||(f==='brouillon'?brouillon(c):f==='corriger'?(c.etape==='rectification'||c.etape==='refuse'):c.etape===f); }
   function depot(c){ return c.programme_at||c.questionnaire_valide_at||''; }
   function relisable(c){ return !!(c.menu&&c.programme_id&&['a_relire','rectification','valide','refuse'].indexOf(c.etape)>=0); }
-  function valideLe(c){ var k=D&&D.par[c.user_id], x=k&&k.prog.filter(function(p){ return p.id===c.programme_id; })[0]; return x&&x.traite_at?new Date(x.traite_at).getTime():0; }
+  function valideLe(c){ if(c.externe) return c.traite_at?new Date(c.traite_at).getTime():0; var k=D&&D.par[c.user_id], x=k&&k.prog.filter(function(p){ return p.id===c.programme_id; })[0]; return x&&x.traite_at?new Date(x.traite_at).getTime():0; }
   // ce qui demande un œil particulier, lu dans le diagnostic de la diète
   function particularites(c){ var d=c.diagnostic||{}, ai=d.a_interpreter||{}, L=[];
     if((ai.refuses||[]).length+(ai.allergies||[]).length+(ai.conserver||[]).length) L.push('mots à interpréter');
@@ -1777,8 +1784,9 @@ var ED=(function(){
           :c.etape==='refuse'?'refusée, à refaire'
           :c.etape==='valide'?'validée'+(vl?' '+depuis(vl):'')
           :br?'modifiée à la main par '+nomCoach(ed.par)+', rien n’est envoyé':'déposée '+depuis(c.programme_at);
-    return '<div class="ligne file-l" tabindex="0" role="button" '+(rl?'data-rel="'+i+'" aria-label="Relire la diète de '+esc(nm)+'"':'data-u="'+esc(c.user_id)+'" aria-label="Ouvrir la fiche de '+esc(nm)+'"')+'>'+
-      '<b class="nom" role="button" tabindex="0" data-u="'+esc(c.user_id)+'" title="Ouvrir la fiche">'+esc(nm)+'</b><span>'+
+    var qui=c.externe?'data-x="'+esc(c.ext_id)+'"':'data-u="'+esc(c.user_id)+'"';   // client du Google Form : pas de compte, fiche réduite
+    return '<div class="ligne file-l" tabindex="0" role="button" '+(rl?'data-rel="'+i+'" aria-label="Relire la diète de '+esc(nm)+'"':qui+' aria-label="Ouvrir la fiche de '+esc(nm)+'"')+'>'+
+      '<b class="nom" role="button" tabindex="0" '+qui+' title="Ouvrir la fiche">'+esc(nm)+'</b><span>'+(c.externe?BADGE_GF+' · ':'')+
       (c.programme_id?typeDiete(c)+' · v'+esc(c.version||1)+' · ':'')+(br?'<span class="tag j">Brouillon</span> · ':'')+esc(info)+
       (P.length?'<br><small class="file-p">'+P.map(esc).join(' · ')+'</small>':'')+
       (rl?'<button type="button" class="mini" tabindex="-1">'+(c.etape==='valide'||c.etape==='refuse'?'Voir':'Relire')+'</button>':'')+'</span></div>';
@@ -1806,7 +1814,7 @@ var ED=(function(){
   // clic sur une ligne = relecture ; le nom (data-u) est laissé au gestionnaire global qui ouvre la fiche
   $('file').addEventListener('click',function(e){ if(e.target.closest('.nom')) return; var l=e.target.closest('[data-rel]'); if(l) relire(file[+l.dataset.rel]); });
   $('file').addEventListener('keydown',function(e){ var l=e.target; if((e.key!=='Enter'&&e.key!==' ')||!l.classList||!l.classList.contains('file-l')) return;
-    e.preventDefault(); if(l.dataset.rel!=null) relire(file[+l.dataset.rel]); else ouvrir(l.dataset.u); });
+    e.preventDefault(); if(l.dataset.rel!=null) relire(file[+l.dataset.rel]); else if(l.dataset.x!=null) ouvrirExt(l.dataset.x); else ouvrir(l.dataset.u); });
 
   /* ---------- FICHE CLIENT (présentation de coach-maquette.html) ----------
      En-tête, 4 chiffres clés, courbe de poids, parcours, puis les sous-onglets.
@@ -2118,6 +2126,7 @@ var ED=(function(){
         '<span><button type="button" class="mini" data-voir="'+esc(x.id)+'">'+(rel?'Relire':'Voir')+'</button></span></div>'; }).join('')+
       '<p class="leg">Une version validée, remplacée ou ancienne s’ouvre en lecture seule.</p>'; }
   function voirVersion(pid){
+    if(cur&&cur.externe){ voirVersionExt(cur.ext_id,pid); return; }
     var uid=cur&&cur.user_id, k=D&&D.par[uid]; if(!k) return;
     var der=k.prog[k.prog.length-1], f=der&&der.id===pid&&file.filter(function(x){ return x.user_id===uid&&x.programme_id===pid; })[0];
     if(f){ relire(Object.assign({},f,{retour:uid})); return; }
@@ -2135,16 +2144,82 @@ var ED=(function(){
         if(err){ toast("Impossible d'enregistrer — réessaie."); return; }
         c.statut=st; c.etape=st; toast(msg);
         if(RL.R&&RL.R.pid===c.programme_id){ RL.R.etat=st; RL.arme=false; tout(); }
-        recharger(c.user_id);
+        recharger(cleC(c));
       });
   }
-  // après une décision : la file (v_file_coach), les compteurs et le tableau de bord sont RELUS en base
-  function recharger(uid){
+  // après une décision : la file (v_file_coach + diètes du Google Form), les compteurs et le tableau de bord sont RELUS en base
+  // k = cleC(ligne) : l'id du compte, ou « x: » + l'id du client Google Form (jamais user_id nul, qui les confondrait tous)
+  function recharger(k){
     return Promise.all([chargerFile(),chargerTout()]).then(function(){
-      var n=file.filter(function(x){ return x.user_id===uid; })[0];
-      if(n&&cur&&cur.user_id===uid&&n.programme_id===cur.programme_id){ cur=n; sel=file.indexOf(n); renderFile(); }
-      if(RL.R&&RL.R.uid===uid&&$('rl-barre')){ rlBarre(); rlNotes(); }
+      var n=file.filter(function(x){ return cleC(x)===k; })[0];
+      if(n&&cur&&cleC(cur)===k&&n.programme_id===cur.programme_id){ cur=n; sel=file.indexOf(n); renderFile(); }
+      if(RL.R&&RL.R.cle===k&&$('rl-barre')){ rlBarre(); rlNotes(); }
     });
+  }
+
+  /* ================= CLIENTS DU GOOGLE FORM (pont temporaire, sans compte sur le site) =================
+     programmes.user_id nul + programmes.client_externe = {id:"gf:<slug>", source, prenom, nom, sexe, age, questionnaire:{libellé: réponse}, horodateur_form}.
+     Même file, même relecture, mêmes décisions ; PAS de fiche compte (abonnement, pesées, messages, photos, notes).
+     Tant que la colonne n'existe pas (ou toute autre erreur) : liste vide, la page reste exactement comme avant.
+     Statistiques / économie / échéancier : ignorés (ils ne lisent que D.clients). */
+  var EXT={par:{}};                              // par[id client externe] = ses versions, de la plus ancienne à la plus récente
+  var BADGE_GF='<span class="tag b">Questionnaire Google Form</span>';
+  function cleC(c){ return c&&c.externe?'x:'+c.ext_id:c&&c.user_id; }
+  function slugExt(s){ return sansAccent(s).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+  function sexeExt(s){ s=sansAccent(s||'').trim(); return /^(h|m)/.test(s)?'HOMME':/^f/.test(s)?'FEMME':null; }
+  function ligneExt(p,archive){ var ce=p.client_externe||{};
+    return {externe:true, ext_id:p._cle, user_id:null, prenom:ce.prenom||'', nom:ce.nom||'', sexe:sexeExt(ce.sexe), age:ce.age, horodateur:ce.horodateur_form||'',
+      reponses:(ce.questionnaire&&typeof ce.questionnaire==='object')?ce.questionnaire:{}, client_externe:ce,
+      programme_id:p.id, version:p.version, menu:p.menu, cible:p.cible, diagnostic:p.diagnostic, statut:p.statut, programme_at:p.created_at, created_at:p.created_at,
+      traite_at:p.traite_at, traite_par:p.traite_par, etape:p.statut==='en_attente'?'a_relire':p.statut, archive:!!archive}; }
+  // ponytail: toutes les versions et leurs menus d'un coup ; filtrer (dernières versions seulement) si le pont dure et grossit
+  function lireExternes(){
+    return sb.from('programmes').select('id,version,statut,menu,cible,diagnostic,created_at,traite_at,traite_par,client_externe').is('user_id',null).order('version')
+      .then(function(r){ if(r.error||!Array.isArray(r.data)) return []; var P={};
+        r.data.forEach(function(p){ var ce=p&&p.client_externe; if(!ce||typeof ce!=='object') return;
+          p._cle=String(ce.id||'')||('gf:'+(slugExt((ce.prenom||'')+' '+(ce.nom||''))||'sans-nom-'+p.id)); (P[p._cle]=P[p._cle]||[]).push(p); });
+        Object.keys(P).forEach(function(k){ P[k].sort(function(a,b){ return (a.version-b.version)||(a.created_at>b.created_at?1:-1); }); });
+        EXT.par=P;
+        return Object.keys(P).map(function(k){ return ligneExt(P[k][P[k].length-1]); });
+      },function(){ return []; }).then(null,function(){ return []; }); }
+  function nomExt(c){ return '<b class="nom" role="button" tabindex="0" data-x="'+esc(c.ext_id)+'" title="Ouvrir la fiche">'+esc(((c.prenom||'')+' '+(c.nom||'')).trim()||'Client')+'</b> '+BADGE_GF; }
+  // réponse du questionnaire : début de libellé (comme pour le site), puis, pour le Google Form seulement, mots-clés
+  var MOTS_GF={'Quel est ton objectif principal':/objectif/,'Des aliments que tu refuses':/refus|aimes? pas|deteste/,'Allergies':/allergi|intoleran/,
+    'As-tu un régime particulier':/regime/,'Y a-t-il des aliments que tu souhaites absolument conserver':/conserver|\bgarder/};
+  function repC(c,deb){ var rep=c.reponses||{}, v=rep1(rep,deb); if(v||!c.externe) return v;
+    var re=MOTS_GF[deb], k=re&&Object.keys(rep).filter(function(x){ return rep[x]&&re.test(sansAccent(x)); })[0]; return k?String(rep[k]):''; }
+  // le questionnaire complet, dans un bloc repliable (relecture)
+  function questionnaireReplie(c){ var rep=c.reponses||{}, K=Object.keys(rep).filter(function(k){ return rep[k]!==''&&rep[k]!=null; });
+    return K.length?'<details class="q-rep"><summary>Questionnaire complet · '+K.length+' réponse'+(K.length>1?'s':'')+'</summary><dl style="margin:6px 0 0">'+K.map(function(k){ return qa(k,rep[k]); }).join('')+'</dl></details>'
+      :'<p class="leg" style="margin-left:0">Questionnaire du formulaire vide.</p>'; }
+  // fiche réduite : identité + questionnaire + versions de la diète
+  function ouvrirExt(k){
+    var L=EXT.par[k]; if(!L||!L.length) return;
+    var f=file.filter(function(x){ return x.externe&&x.ext_id===k; })[0]||ligneExt(L[L.length-1]);
+    cur=f; sel=file.indexOf(f); if(sel<0) sel=null; renderFile(); renderExt(); voir('ext');
+  }
+  function renderExt(){ var c=cur; if(!c||!c.externe) return; var L=(EXT.par[c.ext_id]||[]).slice().reverse(), h='';
+    h+='<button type="button" class="retour-btn" data-ext="retour">← Retour</button><h2 class="t">'+esc(((c.prenom||'')+' '+(c.nom||'')).trim()||'Client')+'</h2>'+
+      '<div class="fmeta">'+BADGE_GF+(c.sexe||c.age?'<span class="tag">'+[c.sexe==='HOMME'?'Homme':c.sexe?'Femme':'',+c.age>0&&+c.age<120?+c.age+' ans':''].filter(Boolean).join(' · ')+'</span>':'')+
+      (c.horodateur?'<span class="tag">formulaire du '+esc(isNaN(new Date(c.horodateur))?String(c.horodateur).split(' ')[0]:dateFr(c.horodateur))+'</span>':'')+'</div>'+
+      '<p class="sous">Client passé par le Google Form, sans compte sur le site : pas d’abonnement, de pesées, de messagerie ni de photos.</p>';
+    h+='<div class="carte"><h4>Versions de sa diète <span class="n">'+L.length+'</span></h4>'+L.map(function(x,i){ var ed=(x.diagnostic||{}).edition, st=VST[x.statut]||[x.statut,''],
+        lib=x.statut==='en_attente'&&ed?'Brouillon':st[0], qui=x.traite_par?nomCoach(x.traite_par):'', rel=!i&&(x.statut==='en_attente'||x.statut==='rectification');
+      return '<div class="ligne"><span><b>v'+esc(x.version)+'</b> · '+typeDiete(x)+' · <span class="tag '+st[1]+'">'+lib+'</span>'+
+        '<br><small>déposée le '+dateFr(x.created_at)+(ed?' (retouche de '+esc(nomCoach(ed.par))+')':'')+
+        (x.traite_at&&VVB[x.statut]?' · '+VVB[x.statut]+' le '+dateFr(x.traite_at)+(qui?' par '+esc(qui):''):'')+'</small></span>'+
+        '<span><button type="button" class="mini" data-voir="'+esc(x.id)+'">'+(rel?'Relire':'Voir')+'</button></span></div>'; }).join('')+
+      (L[0]&&L[0].statut==='valide'?boutonPdf():'')+'<p class="leg">Une version validée, remplacée ou ancienne s’ouvre en lecture seule.</p></div>';
+    h+='<div class="carte" style="margin-top:12px">'+questionnaire(c)+'</div>';
+    $('p-ext').innerHTML=h;
+  }
+  function boutonPdf(){ return '<div class="rl-btns"><button type="button" class="db" disabled title="Bientôt disponible">Télécharger la fiche PDF</button><span class="leg" style="align-self:center;margin:0">bientôt</span></div>'; }
+  $('p-ext').addEventListener('click',function(e){ if(e.target.closest('[data-ext="retour"]')) voir(voir.retour); });
+  function voirVersionExt(k,pid){
+    var L=EXT.par[k]||[], der=L[L.length-1], p=L.filter(function(x){ return x.id===pid; })[0];
+    if(!p||!p.menu){ toast('Version introuvable.'); return; }
+    var f=der&&der.id===pid&&file.filter(function(x){ return x.externe&&x.ext_id===k&&x.programme_id===pid; })[0];
+    relire(Object.assign({},f||ligneExt(p,!der||der.id!==pid),{retour:k}));
   }
 
   /* ================= RELECTURE D'UNE DIÈTE : le CONTRÔLEUR =================
@@ -2160,11 +2235,11 @@ var ED=(function(){
   function avecCible(menu,cible){ return (!menu||menu.cible||!cible)?menu:Object.assign({},menu,{cible:cible}); }
   function versR(c){
     var d=c.diagnostic||{}, g=d.suivi&&d.suivi.geste, rep=c.reponses||{}, k=D&&D.par[c.user_id], fm=k&&((k.a&&k.a.formule)||k.p.formule);
-    return {uid:c.user_id, pid:c.programme_id, nom:((c.prenom||'')+' '+(c.nom||'')).trim()||'Client', formule:FORM[fm]||'Sans formule',
+    return {uid:c.user_id, cle:cleC(c), xid:c.externe?c.ext_id:null, pid:c.programme_id, nom:((c.prenom||'')+' '+(c.nom||'')).trim()||'Client', formule:c.externe?'Questionnaire Google Form':FORM[fm]||'Sans formule',
       type:g==='reajuster'?'Réajustement':g?'Nouveau menu':'1re diète', version:c.version||1, depose:depuis(c.programme_at||c.created_at),
       etat:c.etape, archive:!!c.archive, menu:avecCible(c.menu,c.cible)||{}, brut:c.menu, sexe:c.sexe==='HOMME'?'H':'F', diagnostic:d, precedent:null, precedentVersion:null, note:null,
-      reponses:{objectif:rep1(rep,'Quel est ton objectif principal'), refuses:rep1(rep,'Des aliments que tu refuses'), allergies:rep1(rep,'Allergies'),
-        regime:rep1(rep,'As-tu un régime particulier'), conserver:rep1(rep,'Y a-t-il des aliments que tu souhaites absolument conserver')}};
+      reponses:{objectif:repC(c,'Quel est ton objectif principal'), refuses:repC(c,'Des aliments que tu refuses'), allergies:repC(c,'Allergies'),
+        regime:repC(c,'As-tu un régime particulier'), conserver:repC(c,'Y a-t-il des aliments que tu souhaites absolument conserver')}};
   }
   function prenom(){ return String(RL.R.nom).split(' ')[0]; }
   function quand(d){ return (d||new Date()).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
@@ -2194,9 +2269,11 @@ var ED=(function(){
       '<aside class="rl-side"><div class="carte" id="rl-co" hidden></div><div class="carte" id="rl-live" hidden></div><div class="carte" id="rl-modifs" hidden></div><div class="carte" id="rl-ctrl"></div><div class="carte" id="rl-comp" hidden></div><div class="carte" id="rl-notes"></div></aside></div>'+
       '<div class="rl-dec" id="rl-dec"></div>';
     tout(); rlNotes(); renderFile(); voir('relire'); hauteur();
-    chargerNotes(c.user_id).then(function(){ afficherNotes(c.user_id); });
+    if(!c.externe) chargerNotes(c.user_id).then(function(){ afficherNotes(c.user_id); });   // notes liées au compte : pas pour le Google Form
     // en différé, sans bloquer l'écran : la version d'avant (comparaison), la dernière demande de correction, les consignes durables
-    if((+c.version||1)>1) sb.from('programmes').select('id,version,menu,cible,diagnostic').eq('user_id',c.user_id).lt('version',c.version)
+    if(c.externe){ var PX=(EXT.par[c.ext_id]||[]).filter(function(x){ return x.version<c.version&&x.menu; }).pop();   // déjà en mémoire
+      if(PX){ R.precedent=avecCible(PX.menu,PX.cible); R.precedentVersion=PX.version; rlSide(); rlJour(); } }
+    else if((+c.version||1)>1) sb.from('programmes').select('id,version,menu,cible,diagnostic').eq('user_id',c.user_id).lt('version',c.version)
       .order('version',{ascending:false}).limit(1).then(function(r){
         var p=((r&&r.data)||[])[0]; if(RL.R!==R||!p||!p.menu) return;
         R.precedent=avecCible(p.menu,p.cible); R.precedentVersion=p.version; rlSide(); rlJour(); }).catch(function(){});
@@ -2204,12 +2281,12 @@ var ED=(function(){
       .order('created_at',{ascending:false}).limit(1).then(function(r){
         var x=((r&&r.data)||[])[0]; if(RL.R!==R||!x||R.note) return;
         R.note={par:x.coach_id===moi.id?'toi':'un coach',texte:x.attendu||x.plat||''}; rlTete(); }).catch(function(){});
-    chargerConsignes(c.user_id);
+    chargerConsignes(c);
     base().catch(function(){});
   }
   // consignes durables (portée « client ») posées sur toutes les diètes du client, pour pouvoir les lever
-  function chargerConsignes(uid){ var R=RL.R;
-    sb.from('programmes').select('id').eq('user_id',uid).then(function(r){ var ids=((r&&r.data)||[]).map(function(x){ return x.id; }); if(!ids.length) return;
+  function chargerConsignes(c){ var R=RL.R;
+    (c.externe?Promise.resolve({data:EXT.par[c.ext_id]||[]}):sb.from('programmes').select('id').eq('user_id',c.user_id)).then(function(r){ var ids=((r&&r.data)||[]).map(function(x){ return x.id; }); if(!ids.length) return;
       return sb.from('retours_coach').select('id,action,attendu,created_at').in('programme_id',ids).then(function(q){ if(RL.R!==R) return;
         if(q.error){ RL.consignesAbsentes=true; return; }
         var L=q.data||[], leves={}; L.forEach(function(x){ if(x.action&&x.action.type==='lever') leves[x.action.ref]=1; });
@@ -2255,7 +2332,7 @@ var ED=(function(){
   function rlSide(){ var V=vue(), ed=!!RL.S;
     $('rl-live').hidden=!ed; $('rl-modifs').hidden=!ed;
     if(ed){ $('rl-live').innerHTML=REL.controlesDirect(V,horsReperes(),ED.deplaces(RL.S)); $('rl-modifs').innerHTML=REL.modifs(ED.journal(RL.S),{undo:RL.S.passe.length,redo:RL.S.futur.length}); }
-    $('rl-ctrl').innerHTML=REL.controle(V);
+    $('rl-ctrl').innerHTML=REL.controle(V)+(RL.R.xid&&cur&&cur.externe?questionnaireReplie(cur):'');
     if(RL.R.precedent){ $('rl-comp').innerHTML=REL.comparer(V); $('rl-comp').hidden=false; } }
   /* ---- NOTES INTERNES PARTAGÉES (table notes_coachs, supabase/notes_coachs.sql) ----
      Tant que la table n'existe pas : l'ancien fonctionnement (localStorage ely_notes_<uid>, sur cet appareil), dit à l'écran.
@@ -2303,9 +2380,9 @@ var ED=(function(){
   }
   /* JOURNAL DE RELECTURE tiré de la base (et plus de l'appareil) : versions déposées, retouches à la main
      (diagnostic.edition), décisions (programmes.traite_par / traite_at), corrections envoyées (retours_coach). */
-  function journal(uid){
-    var c=D&&D.par[uid]; if(!c||!c.prog.length) return null;
-    var L=[], V={}, P=c.prog, DEC={valide:'validée et envoyée',refuse:'refusée',rectification:'renvoyée en correction'};
+  function journal(P,ext){      // P = versions du client (D.par[uid].prog, ou EXT.par[id] pour le Google Form : rien n'est « envoyé »)
+    if(!P||!P.length) return null;
+    var L=[], V={}, DEC={valide:ext?'validée':'validée et envoyée',refuse:'refusée',rectification:'renvoyée en correction'};
     P.forEach(function(x){ V[x.id]=x.version; });
     P.forEach(function(x,k){ var d=x.diagnostic||{}, ed=d.edition, rc=d.rectification, nx=P[k+1], nch=ed&&(ed.changements||[]).length;
       if(ed) L.push({t:ed.le||x.created_at,texte:'v'+x.version+' : modifiée à la main par '+nomCoach(ed.par)+' depuis la v'+ed.depuis_version+(nch?' ('+nch+' changement'+(nch>1?'s':'')+')':'')});
@@ -2318,9 +2395,16 @@ var ED=(function(){
     Object.keys(G2).forEach(function(k){ var g=G2[k]; L.push({t:g.t,texte:g.n+' action'+(g.n>1?'s':'')+' de correction sur la v'+V[g.pid]+' par '+nomCoach(g.coach)}); });
     return L.sort(function(a,b){ return new Date(b.t)-new Date(a.t); }).map(function(x){ return {quand:quand(new Date(x.t)),texte:x.texte}; });
   }
-  function rlNotes(){ var u=RL.R.uid; $('rl-notes').innerHTML=REL.notes(RL.R,NOTES.brut[u]?notesDe(u):[],journal(u),{partage:NOTES.brut[u]?NOTES.partage:null}); }
+  function rlNotes(){ var u=RL.R.uid;
+    if(RL.R.xid){ var J=journal(EXT.par[RL.R.xid],1);          // Google Form : pas de notes liées au compte, le journal seul
+      $('rl-notes').innerHTML='<h4>Journal de relecture</h4>'+(J&&J.length?J.map(function(x){ return '<div class="jn">'+esc(x.texte)+'<small>'+esc(x.quand)+'</small></div>'; }).join(''):'<div class="jn">Déposée<small>'+esc(RL.R.depose)+'</small></div>'); return; }
+    $('rl-notes').innerHTML=REL.notes(RL.R,NOTES.brut[u]?notesDe(u):[],journal(((D&&D.par[u])||{}).prog),{partage:NOTES.brut[u]?NOTES.partage:null}); }
   function rlDec(){ var d=$('rl-dec'); d.className='rl-dec'+(RL.S?' ed-dec':'');
-    var s=suivante(); d.innerHTML=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
+    var s=suivante();
+    if(!RL.S&&RL.R.xid&&RL.R.etat==='valide'&&!RL.R.archive){          // Google Form : rien n'est « envoyé » (pas de compte) ; la fiche PDF viendra ici
+      d.innerHTML='<div class="rl-etat"><b>Validée</b> · lecture seule. Client sans compte : la fiche PDF se téléchargera ici (bientôt).</div><div class="in"><button type="button" class="db" data-act="file">← Retour à la file</button>'+
+        '<button type="button" class="db" disabled title="Bientôt disponible">Télécharger la fiche PDF · bientôt</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(((s.prenom||'')+' '+(s.nom||'')).trim())+' →</button>':'<span></span>')+'</div>'; return; }
+    d.innerHTML=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
   function allerJour(i,ty){ var n=(RL.R.menu.jours||[]).length; if(!n) return; RL.i=(i+n)%n; RL.eq.cle=null; rlJour(); rlBarre();
     var t=ty&&$('rl-m-'+ty); if(t){ t.scrollIntoView({behavior:'smooth',block:'start'}); t.classList.add('flash'); setTimeout(function(){ t.classList.remove('flash'); },1400); } }
 
@@ -2386,14 +2470,14 @@ var ED=(function(){
   // mode : 'valider' (part au client) | 'brouillon' (nouvelle version à relire) | 'correction' (puis actions + statut « rectification » sur la NOUVELLE version)
   function enregistrer(mode,liste){
     var R=RL.R, S=RL.S; if(!S||RL.envoi) return;
-    var res=ED.resultat(S), nb=res.changements.length, uid=R.uid;
+    var res=ED.resultat(S), nb=res.changements.length, uid=R.cle;
     if(!nb){ toast('Aucune modification à enregistrer.'); return; }
     RL.envoi=true; RL.co.envoi=true; rlDec(); rlCo();
     function echec(err){ if(RL.R!==R) return; RL.envoi=false; RL.co.envoi=false; if(window.console) console.warn(err); toast(erreurEdition(err)); rlDec(); rlCo(); }
     sb.rpc('editer_programme',{p_depuis:R.pid,p_menu:res.menu,p_changements:res.changements,p_valider:mode==='valider'}).then(function(r){
       if(r.error){ echec(r.error); return; }
       var nid=r.data; RL.S=null; RL.envoi=false; document.body.classList.remove('rl-edit');
-      if(mode!=='correction'){ toast(mode==='valider'?'Diète modifiée enregistrée et envoyée à '+prenom()+'.':'Modifications enregistrées : nouvelle version à relire.'); rafraichir(uid); return; }
+      if(mode!=='correction'){ toast(mode==='valider'?'Diète modifiée enregistrée et '+(R.xid?'validée':'envoyée à '+prenom())+'.':'Modifications enregistrées : nouvelle version à relire.'); rafraichir(uid); return; }
       insererRetours(lignesRetours(nid,liste)).then(function(x){
         if(!x.ok){ if(window.console) console.warn(x.error); toast('Diète enregistrée, mais les actions ne sont pas parties : elles sont restées dans la liste, renvoie-les.'); rafraichir(uid,liste); return; }
         majStatut(nid,'rectification').then(function(e){
@@ -2403,8 +2487,10 @@ var ED=(function(){
     },echec);
   }
   // recharge la file et rouvre la diète du client (sa dernière version)
-  function chargerFile(){ return sb.from('v_file_coach').select('*').then(function(r){ if(!r.error){ file=r.data||[]; renderFile(); recount(); } }); }
-  function rafraichir(uid,coListe){ return chargerFile().then(function(){ var c=file.filter(function(x){ return x.user_id===uid; })[0]; chargerTout();
+  // la file = v_file_coach (comptes du site) + dernières versions des clients du Google Form ; null si la vue est illisible
+  function lireFile(){ return Promise.all([sb.from('v_file_coach').select('*'),lireExternes()]).then(function(r){ return r[0].error?null:(r[0].data||[]).concat(r[1]); }); }
+  function chargerFile(){ return lireFile().then(function(f){ if(f){ file=f; renderFile(); recount(); } }); }
+  function rafraichir(k,coListe){ return chargerFile().then(function(){ var c=file.filter(function(x){ return cleC(x)===k; })[0]; chargerTout();
     if(c){ relire(c,true); if(coListe&&coListe.length){ RL.co.liste=coListe; ouvrirCo(); } } else voir('dietes'); }); }
   function annuler(){ var c=RL.S&&ED.annuler(RL.S); if(c){ majEd(); toast('Annulé : '+c.texte); } }
   function retablir(){ var c=RL.S&&ED.retablir(RL.S); if(c){ majEd(); toast('Rétabli : '+c.texte); } }
@@ -2461,7 +2547,7 @@ var ED=(function(){
       if(!x.ok){ if(window.console) console.warn(x.error); toast('Envoi impossible : réessaie.'); rlCo(); return; }
       var nb=L.length, txt=nb+' action'+(nb>1?'s':'')+' envoyée'+(nb>1?'s':'')+(x.sansAction?' comme remarques écrites (base pas encore à jour : préviens Dimitri)':'');
       RL.envoyes=nb; R.note={par:'toi',texte:L[0].texte+(nb>1?' (+ '+(nb-1)+')':'')}; RL.co=coVide();
-      if(R.etat!=='refuse') setStatut('rectification',txt); else { toast(txt); tout(); recharger(R.uid); }
+      if(R.etat!=='refuse') setStatut('rectification',txt); else { toast(txt); tout(); recharger(R.cle); }
     });
   }
   // appui long / clic droit sur un aliment : actions rapides
@@ -2480,14 +2566,14 @@ var ED=(function(){
     hauteur(); rlBarre(); }
   function sortiePlein(){ document.body.classList.remove('rl-plein'); RL.plein=false; try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(err){} hauteur(); }
   document.addEventListener('fullscreenchange',function(){ if(!document.fullscreenElement&&document.body.classList.contains('rl-plein')){ document.body.classList.remove('rl-plein'); RL.plein=false; hauteur(); if($('rl-barre')&&RL.R) rlBarre(); } });
-  function valider(){ if(RL.R.archive||(RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification')) return; setStatut('valide','Diète validée et envoyée à '+prenom()+'.'); }
+  function valider(){ if(RL.R.archive||(RL.R.etat!=='a_relire'&&RL.R.etat!=='rectification')) return; setStatut('valide',RL.R.xid?'Diète validée.':'Diète validée et envoyée à '+prenom()+'.'); }
 
   /* ---- clics ---- */
   $('p-relire').addEventListener('click',function(e){
     if(RL.lp){ RL.lp=false; e.preventDefault(); return; }                       // un appui long vient d'ouvrir les actions rapides
     var b=e.target.closest('[data-act]'); if(!b||b.disabled||!RL.R) return; var a=b.dataset.act, x=ctxDe(b), ing, r;
     switch(a){
-      case 'file': var rt=RL.retour; sortir(function(){ sortiePlein(); if(rt) ouvrir(rt); else voir('dietes'); }); break;
+      case 'file': var rt=RL.retour, rx=!!RL.R.xid; sortir(function(){ sortiePlein(); if(rt){ if(rx) ouvrirExt(rt); else ouvrir(rt); } else voir('dietes'); }); break;
       case 'suivante': var s=suivante(); if(s) relire(s); break;
       case 'jour': allerJour(+b.dataset.i); break;
       case 'prec': allerJour(RL.i-1); break;
@@ -2612,7 +2698,7 @@ var ED=(function(){
     if(aff==='mfa'&&p!=='mfa') MFA.cible=p;
     document.querySelectorAll('.onglets button').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.p===p); });
     document.querySelectorAll('.page').forEach(function(x){ x.hidden=x.id!=='p-'+aff; });
-    if(p!=='fiche'&&p!=='mfa') voir.retour=p;
+    if(p!=='fiche'&&p!=='mfa'&&p!=='ext') voir.retour=p;
     voir.p=aff; scrollTo(0,0);
     if(aff==='mfa') mfaEcran();
     var on=document.querySelector('.onglets [aria-selected="true"]');     // onglet actif visible sur téléphone
@@ -2620,7 +2706,7 @@ var ED=(function(){
     if(p==='msgs'&&sb) renderMessages();
     G.refresh();   // les graphiques d'une page cachée se dessinent quand elle s'affiche
     document.body.classList.toggle('rl-on',p==='relire');     // le message éphémère passe au-dessus de la barre de décision
-    try{ history.replaceState(null,'',p==='fiche'||p==='relire'?location.pathname:'#'+(p==='mfa'?MFA.cible:p)); }catch(e){}
+    try{ history.replaceState(null,'',p==='fiche'||p==='relire'||p==='ext'?location.pathname:'#'+(p==='mfa'?MFA.cible:p)); }catch(e){}
   }
   voir.p='jour'; voir.retour='jour';
   document.querySelector('.onglets').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) voir(b.dataset.p); });
@@ -2779,7 +2865,7 @@ var ED=(function(){
       D.clients.forEach(function(c){ D.par[c.id]=c; });
       $('g-noms').innerHTML=D.clients.map(function(c){ return '<option value="'+esc(c.nom)+'">'; }).join('');
       renderFile(); renderJour(); renderTable(); renderResultats(); renderEcheancier(); renderGraphes(); renderEco(); renderStats();
-      if(cur) ficheNotes(cur.user_id); if(RL.R&&$('rl-notes')) rlNotes();
+      if(cur&&!cur.externe) ficheNotes(cur.user_id); if(RL.R&&$('rl-notes')) rlNotes();
       if(voir.p==='fiche'&&cur){ renderTete(); fKpis(); if(FS.s===0) sousFiche(); }    // noms des coachs et journal à jour
     }).catch(function(e){ console.error(e); toast('Tableau de bord indisponible, recharge la page.'); });
   }
@@ -2798,7 +2884,7 @@ var ED=(function(){
     $('j-pesees').innerHTML=pes+'<small> / '+base.length+'</small>';
     $('j-pesees-s').textContent=base.length?Math.round(pes/base.length*100)+' % des clients suivis':'aucun client suivi pour l’instant';
     var relire=file.filter(function(c){ return c.etape==='a_relire'||c.etape==='rectification'; }).map(function(c){
-      return ligne(nomLien(cl(c.user_id)), c.etape==='rectification'?'<span class="tag r">À corriger</span>':typeDiete(c)); });
+      return ligne(c.externe?nomExt(c):nomLien(cl(c.user_id)), c.etape==='rectification'?'<span class="tag r">À corriger</span>':typeDiete(c)); });
     var nouveaux=file.filter(function(c){ return c.etape==='a_generer'; }).map(function(c){ return ligne(nomLien(cl(c.user_id)), c.questionnaire_valide_at?heure(c.questionnaire_valide_at):''); });
     var retard=C.filter(function(c){ return c.prog.some(function(x){ return x.statut==='valide'; }); })
       .map(function(c){ return {c:c, j:c.der?jours(c.der.date):null}; }).filter(function(x){ return x.j==null||x.j>=7; })
@@ -2812,10 +2898,12 @@ var ED=(function(){
     // corrections en cours : renvoyée en correction (nouvelle version attendue), ou version corrigée déposée et pas encore relue
     var nbA={}; D.rc.forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
     var pa=function(n,s){ return n+' '+s+(n>1?'s':''); };
-    var corr=C.map(function(c){ var x=c.prog[c.prog.length-1], rc=x&&(x.diagnostic||{}).rectification; if(!x) return null;
-      if(x.statut==='rectification') return ligne(nomLien(c),'v'+x.version+' · '+pa(nbA[x.id]||0,'action')+' posée'+((nbA[x.id]||0)>1?'s':'')+' · nouvelle version attendue');
+    // (clients du Google Form compris : même calcul sur leurs versions)
+    var corr=C.map(function(c){ return [nomLien(c),c.prog]; }).concat(Object.keys(EXT.par).map(function(k){ var P=EXT.par[k]; return [nomExt(ligneExt(P[P.length-1])),P]; })).map(function(z){
+      var x=z[1][z[1].length-1], rc=x&&(x.diagnostic||{}).rectification; if(!x) return null;
+      if(x.statut==='rectification') return ligne(z[0],'v'+x.version+' · '+pa(nbA[x.id]||0,'action')+' posée'+((nbA[x.id]||0)>1?'s':'')+' · nouvelle version attendue');
       if(x.statut==='en_attente'&&rc){ var ap=(rc.actions||[]).length, na=(rc.non_appliquees||[]).length, nl=(rc.notes_libres||[]).length;
-        return ligne(nomLien(c),'v'+x.version+' à relire · '+pa(nbA[rc.depuis_programme]||ap+na+nl,'action')+' · '+ap+' appliquée'+(ap>1?'s':'')+
+        return ligne(z[0],'v'+x.version+' à relire · '+pa(nbA[rc.depuis_programme]||ap+na+nl,'action')+' · '+ap+' appliquée'+(ap>1?'s':'')+
           (na?' · <span class="retard">'+na+' non appliquée'+(na>1?'s':'')+'</span>':'')+(nl?' · '+pa(nl,'note')+' à lire':'')); }
       return null; }).filter(Boolean);
     $('jour-cartes').innerHTML=carte('Diètes à relire',relire.length,relire,'Rien à relire.')+carte('Corrections en cours',corr.length,corr,'Aucune correction en cours.')+carte('Nouveaux questionnaires',nouveaux.length,nouveaux,'Aucun nouveau questionnaire.')+
@@ -2824,7 +2912,8 @@ var ED=(function(){
 
     // santé du jour : trois anneaux sur les 7 derniers jours (« — » tant qu'il n'y a rien à mesurer)
     var s7=Date.now()-7*JOUR, dec=0;
-    C.forEach(function(c){ c.prog.forEach(function(x){ if(x.traite_at&&x.statut!=='en_attente'&&new Date(x.traite_at).getTime()>=s7) dec++; }); });
+    C.map(function(c){ return c.prog; }).concat(Object.keys(EXT.par).map(function(k){ return EXT.par[k]; }))       // Google Form compris (ils sont dans « à relire »)
+      .forEach(function(P){ P.forEach(function(x){ if(x.traite_at&&x.statut!=='en_attente'&&new Date(x.traite_at).getTime()>=s7) dec++; }); });
     var att=relire.length, mc=MSG.filter(function(m){ return m.auteur_id===m.client_id&&new Date(m.created_at).getTime()>=s7; }), ml=mc.filter(function(m){ return m.lu_at; }).length;
     $('j-anneaux').innerHTML=[
       [base.length?pes/base.length*100:null,'Pesées de la semaine',base.length?pes+' client'+(pes>1?'s':'')+' sur '+base.length:'aucun client suivi pour l’instant','var(--brand)'],
@@ -2896,6 +2985,7 @@ var ED=(function(){
     var v=e.target.closest('[data-mfa]'); if(v){ MFA.cible=v.getAttribute('data-mfa'); voir('mfa'); return; }
     var m=e.target.closest('[data-msg]'); if(m){ filOuvert=m.getAttribute('data-msg'); voir('msgs'); return; }
     var vv=e.target.closest('[data-voir]'); if(vv){ voirVersion(+vv.getAttribute('data-voir')); return; }
+    var xx=e.target.closest('[data-x]'); if(xx){ ouvrirExt(xx.getAttribute('data-x')); return; }   // client du Google Form : fiche réduite
     var u=e.target.closest('[data-u]'); if(u) ouvrir(u.getAttribute('data-u'));
   });
   document.addEventListener('keydown',function(e){ var n=e.target.closest&&e.target.closest('.nom[role="button"]'); if(n&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); n.click(); } });
@@ -3229,11 +3319,11 @@ var ED=(function(){
       $('coachname').textContent=r.data.nom||u.prenom||'Coach';
       $('app').hidden=false;
       return Promise.all([
-        sb.from('v_file_coach').select('*'),
+        lireFile(),
         lireNiveau()                                   // code déjà tapé dans cette session ?
       ]).then(function(res){
         majMfaEtat(); sonderNotes();
-        file=(res[0].data)||[]; renderFile(); recount(); chargerAbo(); chargerMessages();
+        file=res[0]||[]; renderFile(); recount(); chargerAbo(); chargerMessages();
         chargerTout();
         var h=location.hash.slice(1); voir(['jour','clients','dietes','msgs','suivi','stats','eco'].indexOf(h)>=0?h:'jour');
       });

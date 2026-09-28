@@ -872,7 +872,7 @@ var PROG = {
       html:verrouHTML('Liste de courses','','la Formule Olympe et la Formule Elysium')});
     else if(nCourses) extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',sous:nCourses+' articles à cocher',ic:IC_COURSES,html:coursesHTML()});
     // recettes : ouvertes en démo Elysium ; pour un vrai client Elysium, elles arriveront avec le catalogue (menu.recettes)
-    if((DEMO||VUE)==='f3') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()});
+    if((DEMO||VUE)==='f3'||(ADMIN&&!DEMO&&!VUE)) extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()});
     else if(FC==='f1'||FC==='f2') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',lock:'Formule Elysium',ic:IC_RECETTES,
         html:verrouHTML('Recettes des coachs','Les recettes des coachs pour chaque repas.','la Formule Elysium')});
     var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6

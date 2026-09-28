@@ -896,7 +896,7 @@
       var par=function(rows,multi){ var o={}; (rows||[]).forEach(function(x){ if(multi)(o[x.user_id]=o[x.user_id]||[]).push(x); else o[x.user_id]=x; }); return o; };
       var coach={}; (r[4].data||[]).forEach(function(a){ coach[a.user_id]=1; });
       var ab=par(r[1].data), pd=par(r[2].data,1), qs=par(r[3].data), pr=par(r[5].data,1);
-      D={retours:r[6].data||[], par:{}, clients:(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
+      D={retours:r[6].data||[], abos:r[1].data||[], par:{}, clients:(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
         var q=qs[p.id], rep=(q&&q.statut==='valide'&&q.reponses)||{}, w=pd[p.id]||[];
         return {id:p.id, p:p, nom:((p.prenom||'')+' '+(p.nom||'')).trim()||'Sans nom', a:ab[p.id]||null, w:w, der:w[w.length-1]||null,
           q:!!(q&&q.statut==='valide'), rep:rep, obj:objectif(rep), prog:pr[p.id]||[]}; })};
@@ -911,9 +911,10 @@
     if(!D) return;
     var C=D.clients, base=suivis(), d=new Date(), mois=new Date(d.getFullYear(),d.getMonth(),1).toISOString();
     var cl=function(id){ return D.par[id]||{id:id,nom:(NOMS[id]||'Client').trim()}; };
-    $('j-actifs').textContent=C.filter(actif).length;
+    // abonnements : même source que l'onglet Économie (tous les comptes, y compris le compte de test de Dimitri)
+    $('j-actifs').textContent=D.abos.filter(function(a){ return a.statut==='active'||a.statut==='trialing'; }).length;
     $('j-dietes').textContent=C.reduce(function(t,c){ return t+c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at&&x.traite_at>=mois; }).length; },0);
-    $('j-mrr').innerHTML=euros(C.reduce(function(t,c){ return t+(c.a&&['active','trialing','past_due'].indexOf(c.a.statut)>=0?(+c.a.montant_cents||0):0); },0))+' <small>€</small>';
+    $('j-mrr').innerHTML=euros(D.abos.reduce(function(t,a){ return t+(['active','trialing','past_due'].indexOf(a.statut)>=0?(+a.montant_cents||0):0); },0))+' <small>€</small>';
     var pes=base.filter(function(c){ return c.der&&jours(c.der.date)<7; }).length;
     $('j-pesees').innerHTML=pes+'<small> / '+base.length+'</small>';
     $('j-pesees-s').textContent=base.length?Math.round(pes/base.length*100)+' % des clients suivis':'aucun client suivi pour l’instant';

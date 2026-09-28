@@ -450,7 +450,7 @@
 (function(){
   function norm(t){ return String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/œ/g,'oe'); }
   function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-  fetch('assets/aliments_questionnaire.json').then(function(r){ return r.json(); }).then(function(T){
+  fetch('assets/aliments_questionnaire.json?v=arachide').then(function(r){ return r.json(); }).then(function(T){
     document.querySelectorAll('.picker').forEach(function(p){
       var table=T[p.getAttribute('data-liste')]||{}, libelles=Object.keys(table), choisis=[], rien=false, idx=-1;
       var ta=p.querySelector('textarea'), chips=p.querySelector('.pick-chips'), inp=p.querySelector('.pick-in'),

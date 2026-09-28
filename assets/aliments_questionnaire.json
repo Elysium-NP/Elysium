@@ -356,6 +356,9 @@
   "Noix de cajou": [
    "Noix de cajou"
   ],
+  "Arachide (cacahuètes, beurre de cacahuète…)": [
+   "Arachide"
+  ],
   "Cacahuètes": [
    "Cacahuete"
   ],
@@ -509,6 +512,9 @@
   "Yaourt": [
    "Yaourt"
   ],
+  "Petit suisse": [
+   "Petit suisse"
+  ],
   "Cottage cheese": [
    "Cottage cheese"
   ],
@@ -536,11 +542,17 @@
   "Camembert": [
    "Camembert 5%"
   ],
+  "Fromage de chèvre": [
+   "Fromage de chevre"
+  ],
   "Carré Frais": [
    "Carré Frais 0%"
   ],
   "Saint Môret": [
    "Saint-moret leger 8%"
+  ],
+  "Toastinette": [
+   "Toastinette"
   ],
   "Whey (protéine en poudre)": [
    "Whey isolat"
@@ -702,6 +714,9 @@
   "Pomme": [
    "Pomme"
   ],
+  "Orange": [
+   "Orange"
+  ],
   "Clémentine": [
    "Clementine"
   ],
@@ -765,6 +780,9 @@
   ],
   "Lait d'avoine": [
    "Lait d'avoine"
+  ],
+  "Lait de soja": [
+   "Lait de soja"
   ],
   "Yaourt de soja": [
    "Yaourt de soja"

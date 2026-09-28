@@ -1447,13 +1447,20 @@ var REL=(function(){
       '<p>Ces mots n’ont <b>pas</b> été retirés du menu. À toi de juger ce que ça implique (une famille entière ? une source à remplacer ?) et de le signaler si le menu doit changer.</p></div>'
       :'<p class="leg" style="margin-left:0">Rien à interpréter : tout ce que le client a écrit est connu.</p>';
     // plats imposés (suivi, coach, client) retirés car ils contenaient un aliment refusé : diagnostic.alertes_impose (28/09 soir)
-    var ali=(R.diagnostic||{}).alertes_impose;
-    if(ali&&(!Array.isArray(ali)||ali.length)) h+='<p class="rl-ko">Plat imposé écarté (aliment refusé) : '+[].concat(ali).map(function(a){
-      return e(typeof a==='string'?a:[a.jour?'J'+a.jour:'',a.repas,a.plat||a.titre,a.aliment?'('+a.aliment+')':'',a.raison].filter(Boolean).join(' '));
-    }).join(' · ')+'. La case a été remplie par un autre plat.</p>';
-    // corrections demandées que la préparation n'a pas pu appliquer : diagnostic.rectification.non_appliquees
-    var na=((R.diagnostic||{}).rectification||{}).non_appliquees;
-    if(Array.isArray(na)&&na.length) h+='<p class="rl-ko">Corrections non appliquées : '+na.map(function(x){ return e(typeof x==='string'?x:(x.raison||JSON.stringify(x))); }).join(' · ')+'. À reprendre à la main.</p>';
+    //   format : [{case: n° du jour, repas, plat: clé moteur, geste: retire|adapte, refuses: [...]}]
+    var ali=(R.diagnostic||{}).alertes_impose, jours=(R.menu||{}).jours||[];
+    function titreServi(n,ty,cle){ var j=jours.filter(function(x){ return x.jour===n; })[0], r=j&&(j.repas||[]).filter(function(x){ return x.type===ty&&((x.recette_base||x.recette)===cle); })[0]; return r?titre(r):cle; }
+    (Array.isArray(ali)?ali:[]).forEach(function(a){
+      var ref=e((a.refuses||[]).join(', ')), ou=e(titreServi(a.case,a.repas,a.plat))+', jour '+a.case+' '+ml(a.repas).toLowerCase();
+      h+= a.geste==='adapte'
+        ? '<p class="rl-ko">Plat imposé conservé mais adapté (aliment refusé retiré : '+ref+') : '+ou+'.</p>'
+        : '<p class="rl-ko">Plat imposé écarté (aliment refusé : '+ref+') : '+ou+'. La case a été remplie par un autre plat.</p>';
+    });
+    // corrections : diagnostic.rectification = {non_appliquees:[{id, raison}], jours_refaits: "tous"|[n…], …}
+    var rc=(R.diagnostic||{}).rectification||{}, lib=R.retoursLib||{};
+    if(rc.jours_refaits) h+='<p class="leg" style="margin-left:0">'+(rc.jours_refaits==='tous'?'Semaine entière refaite.':'Jours refaits : '+[].concat(rc.jours_refaits).join(', ')+'.')+'</p>';
+    if(Array.isArray(rc.non_appliquees)&&rc.non_appliquees.length) h+='<p class="rl-ko">Corrections non appliquées, à reprendre à la main :</p><ul class="rl-na">'+
+      rc.non_appliquees.map(function(x){ return '<li>'+e(lib[x.id]||('Correction n° '+x.id))+' : '+e(x.raison||'')+'</li>'; }).join('')+'</ul>';
     return h;
   }
 
@@ -2326,6 +2333,9 @@ var ED=(function(){
       return sb.from('retours_coach').select('id,action,attendu,created_at').in('programme_id',ids).then(function(q){ if(RL.R!==R) return;
         if(q.error){ RL.consignesAbsentes=true; return; }
         var L=q.data||[], leves={}; L.forEach(function(x){ if(x.action&&x.action.type==='lever') leves[x.action.ref]=1; });
+        // libellés par id : affichent les « corrections non appliquées » (diagnostic.rectification.non_appliquees)
+        if(R){ R.retoursLib={}; L.forEach(function(x){ R.retoursLib[x.id]=String(x.attendu||(x.action&&x.action.type)||'').slice(0,90); });
+          if(((R.diagnostic||{}).rectification||{}).non_appliquees) rlSide(); }
         RL.consignes=L.filter(function(x){ return x.action&&x.action.portee==='client'&&x.action.type!=='lever'&&!leves[x.id]; })
           .map(function(x){ return {id:x.id,texte:String(x.attendu||x.action.type).slice(0,90)}; });
         if(RL.co.ouvert) rlCo(); }); }).catch(function(){});

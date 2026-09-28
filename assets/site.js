@@ -1,7 +1,13 @@
 /* ELYSIUM — comportement partagé des pages contenu : curseur instrument + révélation au scroll.
    Zéro dépendance. Dégrade proprement (pas de JS = tout visible, curseur natif). */
+// PRIX DE L'E-BOOK « Bien manger, au gramme près » : UNE seule valeur pour tout le site
+// (valeur offerte avec la Formule Elysium + achat à l'unité). À changer ici, et dans supabase/boutique.sql
+// (produits.prix_cents) pour le montant réellement encaissé par Stripe.
+window.ELY_PRIX_EBOOK = '9,90 €';
 (function(){
   "use strict";
+  // valeur de l'e-book offert, partout où la page la demande (<span class="valeur-ebook">)
+  document.querySelectorAll('.valeur-ebook').forEach(function(e){ e.textContent='(valeur '+window.ELY_PRIX_EBOOK+')'; });
   // iOS n'applique :active au toucher que si la page écoute les touchers (cartes de formule)
   document.addEventListener('touchstart', function(){}, { passive:true });
   var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;

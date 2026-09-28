@@ -857,7 +857,8 @@ var PROG = {
   }
 
   var bonjour=document.querySelector('.dash-hd h1');
-  var NOM_FORMULE={f1:'Formule 01 · Menu unique',f2:'Formule 02 · Menu mensuel',f3:'Formule 03 · Menu mensuel & recettes'};
+  var NOM_FORMULE={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Élysium'};
+  function cleFormule(v){ v=String(v||''); if(/^f[123]$/.test(v)) return v; var m=v.match(/Formule\s*0?([123])/i); if(m) return 'f'+m[1]; return /odyss/i.test(v)?'f1':/olympe/i.test(v)?'f2':/lysium/i.test(v)?'f3':null; }
   var STATUT={active:'Actif',trialing:'Actif',past_due:'Paiement en retard',unpaid:'Impayé',canceled:'Résilié',incomplete:'Paiement en attente',incomplete_expired:'Paiement expiré',paused:'En pause'};
   function renderAbo(){
     var a=(ElyAuth.user()||{}).abonnement, card=document.getElementById('c-abo');
@@ -890,7 +891,7 @@ var PROG = {
     if(!paid){
       pill.textContent='Compte gratuit'; pill.className='pill free';
       c.className='card wide locked';
-      var f=uu.formule, fp=uu.formule_prix;
+      var f=uu.formule&&(NOM_FORMULE[cleFormule(uu.formule)]||esc(uu.formule)), fp=uu.formule_prix;
       var choiceLine = f
         // même taille que le texte de la carte (Yoann 27/09 : « écrit trop petit »)
         ? '<p style="margin:0 0 12px">Formule choisie&nbsp;: <b style="color:var(--ice)">'+f+'</b>'+(fp?' · '+fp:'')+' &nbsp;·&nbsp; <a href="choisir.html" style="color:var(--blue)">changer de formule</a></p>'

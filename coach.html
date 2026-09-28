@@ -320,7 +320,7 @@
     <p class="sous">Tous les clients. Filtrez, triez (clic sur un en-tête), puis cliquez sur une ligne pour ouvrir la fiche.</p>
     <div class="outils">
       <input type="search" id="c-q" placeholder="Rechercher un nom…" aria-label="Rechercher un client" autocomplete="off">
-      <select id="c-f" aria-label="Formule"><option value="">Toutes les formules</option><option value="f1">Formule 1</option><option value="f2">Formule 2</option><option value="f3">Formule 3</option></select>
+      <select id="c-f" aria-label="Formule"><option value="">Toutes les formules</option><option value="f1">Formule Odyssée</option><option value="f2">Formule Olympe</option><option value="f3">Formule Élysium</option></select>
       <select id="c-s" aria-label="Abonnement"><option value="">Tous les statuts</option><option>Abonné</option><option>Impayé</option><option>Résilié</option><option>Sans abonnement</option></select>
       <select id="c-o" aria-label="Objectif"><option value="">Tous les objectifs</option><option>Perte</option><option>Prise</option><option>Maintien</option></select>
     </div>
@@ -350,7 +350,7 @@
     </section>
     <h3 class="s">Échéancier des 4 prochaines semaines</h3>
     <div class="grille" id="echeancier"><div class="carte"><p class="rien">Chargement…</p></div></div>
-    <p class="sous" style="margin-top:12px">Rythme : Formule 1 = réajustement 4 semaines après la dernière diète · Formule 2 = nouveau menu toutes les 4 semaines · Formule 3 = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif. Les dates suivantes supposent que chaque diète est validée le jour prévu.</p>
+    <p class="sous" style="margin-top:12px">Rythme : Formule Odyssée = réajustement 4 semaines après la dernière diète · Formule Olympe = nouveau menu toutes les 4 semaines · Formule Élysium = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif. Les dates suivantes supposent que chaque diète est validée le jour prévu.</p>
   </section>
 
   <!-- ═════════════ FICHE CLIENT (ouverte depuis n'importe quel nom) ═════════════ -->
@@ -462,9 +462,9 @@
   <!-- ── abonnements (Damien 27/09) : l'argent viendra de Stripe, rien n'est inventé ── -->
   <h2 class="intitule" style="margin:4px 0 12px">Abonnements</h2>
   <div class="kpis abo">
-    <div class="kpi"><div class="k">Formule 1 · 19,90 €</div><div class="v" id="k-f1">—</div><div class="s">Menu unique</div></div>
-    <div class="kpi"><div class="k">Formule 2 · 25,90 €</div><div class="v" id="k-f2">—</div><div class="s">Menu mensuel</div></div>
-    <div class="kpi"><div class="k">Formule 3 · 29,90 €</div><div class="v" id="k-f3">—</div><div class="s">Menu mensuel &amp; recettes</div></div>
+    <div class="kpi"><div class="k">Odyssée · 19,90 €</div><div class="v" id="k-f1">—</div><div class="s">Essentielle</div></div>
+    <div class="kpi"><div class="k">Olympe · 25,90 €</div><div class="v" id="k-f2">—</div><div class="s">Confort</div></div>
+    <div class="kpi"><div class="k">Élysium · 29,90 €</div><div class="v" id="k-f3">—</div><div class="s">Premium</div></div>
     <div class="kpi"><div class="k">Clients depuis le début</div><div class="v" id="k-total">—</div><div class="s" id="k-total-s">comptes créés sur le site</div></div>
     <div class="kpi"><div class="k">Montant / 4 semaines</div><div class="v att" id="k-montant">—</div><div class="s" id="k-montant-s">en attente de Stripe</div></div>
     <div class="kpi"><div class="k">Résiliations</div><div class="v att" id="k-resil">—</div><div class="s" id="k-resil-s">en attente de Stripe</div></div>
@@ -642,7 +642,7 @@
       if(r.error){ // colonne pas encore créée : on le dit, on n'invente rien
         $('abo-note').textContent='Répartition par formule : à activer (script supabase/tableau_de_bord_coach.sql).';
         return; }
-      var n={f1:0,f2:0,f3:0}; (r.data||[]).forEach(function(p){ if(n[p.formule]!=null) n[p.formule]++; });
+      var n={f1:0,f2:0,f3:0}; (r.data||[]).forEach(function(p){ var k=cleFormule(p.formule); if(k) n[k]++; });
       $('k-f1').textContent=n.f1; $('k-f2').textContent=n.f2; $('k-f3').textContent=n.f3;
       $('abo-note').textContent='Comptes par formule choisie à l’inscription. Les clients réellement actifs viendront de Stripe.';
     });
@@ -866,8 +866,9 @@
   $('f-retour').addEventListener('click',function(){ voir(voir.retour); });
 
   /* ================= les données de toutes les pages ================= */
-  var D=null, FORM={f1:'Formule 1',f2:'Formule 2',f3:'Formule 3'},
+  var D=null, FORM={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Élysium'},
       ABO={active:'Abonné',trialing:'Abonné',past_due:'Impayé',canceled:'Résilié',aucun:'Sans abonnement'}, ABOTAG={active:'v',trialing:'v',past_due:'r'};
+  function cleFormule(v){ v=String(v||''); if(/^f[123]$/.test(v)) return v; var m=v.match(/Formule\s*0?([123])/i); if(m) return 'f'+m[1]; return /odyss/i.test(v)?'f1':/olympe/i.test(v)?'f2':/lysium/i.test(v)?'f3':null; }
   function sansAccent(x){ return String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
   function jours(d){ return Math.floor((Date.now()-new Date(String(d).length<=10?d+'T12:00:00':d).getTime())/JOUR); }
   function dateFr(d){ return d?new Date(String(d).length<=10?d+'T12:00:00':d).toLocaleDateString('fr-FR'):'—'; }
@@ -897,6 +898,7 @@
       var coach={}; (r[4].data||[]).forEach(function(a){ coach[a.user_id]=1; });
       var ab=par(r[1].data), pd=par(r[2].data,1), qs=par(r[3].data), pr=par(r[5].data,1);
       D={retours:r[6].data||[], abos:r[1].data||[], par:{}, clients:(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
+        p.formule=cleFormule(p.formule);
         var q=qs[p.id], rep=(q&&q.statut==='valide'&&q.reponses)||{}, w=pd[p.id]||[];
         return {id:p.id, p:p, nom:((p.prenom||'')+' '+(p.nom||'')).trim()||'Sans nom', a:ab[p.id]||null, w:w, der:w[w.length-1]||null,
           q:!!(q&&q.statut==='valide'), rep:rep, obj:objectif(rep), prog:pr[p.id]||[]}; })};

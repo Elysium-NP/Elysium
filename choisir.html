@@ -134,24 +134,24 @@
       <p class="optlede">Toutes construites à la main d'après ton questionnaire, au gramme près. Elles diffèrent par la fréquence des nouveaux menus, l'ajustement des quantités, la liste de courses et les recettes. <a href="formules.html" style="color:var(--blue)">Voir le détail</a>.</p>
       <div class="optgroup plans" role="radiogroup" aria-label="Formule">
         <label class="plan opt-card">
-          <input type="radio" name="formule" value="f1" data-nom="Menu unique" data-prix="19,90 €">
-          <span class="pn">Formule 01</span>
-          <h3>Menu unique</h3>
+          <input type="radio" name="formule" value="f1" data-nom="Formule Odyssée" data-prix="19,90 €">
+          <span class="pn">Essentielle</span>
+          <h3>Formule Odyssée</h3>
           <p class="desc">Un menu sur-mesure, qui suit ta progression.</p>
           <div class="price01"><div class="now"><span class="n1">19</span><span class="eur">€</span><span class="n2">90</span></div></div>
           <div class="pterm">Toutes les 4 semaines</div>
           <ul>
             <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
-            <li><b>Menu unique</b></li>
+            <li><b>Ton menu</b>, gardé d’un mois à l’autre</li>
             <li><b>Quantités réajustées chaque mois</b></li>
             <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
           </ul>
           <span class="opt-choix" aria-hidden="true"></span>
         </label>
         <label class="plan opt-card feat in">
-          <input type="radio" name="formule" value="f2" data-nom="Menu mensuel" data-prix="25,90 €" checked>
-          <span class="pn">Formule 02</span>
-          <h3>Menu mensuel</h3>
+          <input type="radio" name="formule" value="f2" data-nom="Formule Olympe" data-prix="25,90 €" checked>
+          <span class="pn">Confort</span>
+          <h3>Formule Olympe</h3>
           <p class="desc">Un nouveau menu chaque mois, et les courses déjà faites sur le papier.</p>
           <div class="price01"><div class="now"><span class="n1">25</span><span class="eur">€</span><span class="n2">90</span></div></div>
           <div class="pterm">Toutes les 4 semaines</div>
@@ -165,9 +165,9 @@
           <span class="opt-choix" aria-hidden="true"></span>
         </label>
         <label class="plan opt-card feat complet in">
-          <input type="radio" name="formule" value="f3" data-nom="Menu mensuel &amp; recettes" data-prix="29,90 €">
-          <span class="pn">Formule 03</span>
-          <h3>Menu mensuel &amp; recettes</h3>
+          <input type="radio" name="formule" value="f3" data-nom="Formule Élysium" data-prix="29,90 €">
+          <span class="pn">Premium</span>
+          <h3>Formule Élysium</h3>
           <p class="desc">Le suivi le plus serré, avec les recettes de chaque plat.</p>
           <div class="price01"><div class="now"><span class="n1">29</span><span class="eur">€</span><span class="n2">90</span></div></div>
           <div class="pterm">Toutes les 4 semaines</div>
@@ -254,7 +254,7 @@
     try {
       var uu = ElyAuth.user() || {};
       var f = sel();
-      uu.formule = 'Formule ' + f.value.slice(1) + ' · ' + f.getAttribute('data-nom').replace('&amp;','&');
+      uu.formule = f.value;   // la clé f1/f2/f3 ; le libellé se lit dans NOM_FORMULE (espace)
       uu.formule_prix = f.getAttribute('data-prix') + ' / 4 sem';
       localStorage.setItem('ely_user_demo', JSON.stringify(uu));
     } catch(e){}

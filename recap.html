@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("ely_theme")==="obscur")document.documentElement.setAttribute("data-theme","obscur")}catch(e){}</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/cormorant-garamond-500-normal-latin.woff2" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F3EE">
+<title>ELYSIUM · Ton récapitulatif</title>
+<meta name="description" content="Tout ce que comprend ta formule Elysium, avant de payer.">
+<meta name="robots" content="noindex">
+<script>document.documentElement.classList.add('js');try{sessionStorage.removeItem('ely_tr')}catch(e){}</script>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
+<link rel="stylesheet" href="assets/site.css?v=2809h">
+<style>
+  /* RÉCAPITULATIF AVANT PAIEMENT (Yoann 28/09 : « personne ne doit pouvoir dire : je ne savais pas »).
+     Contenu = page Formules (mot pour mot) + CGV v3 (art. 4, 7, 8, 10). Rien d'inventé. */
+  .rwrap{max-width:820px;margin:0 auto;padding:110px var(--edge) 80px}
+  .rwrap h1{font:400 clamp(30px,5vw,44px)/1.1 var(--titre);color:var(--ice);margin:0 0 10px}
+  .rwrap .lede{font-size:16px;line-height:1.6;color:var(--gris);margin:0 0 26px}
+  .rbloc{border:1px solid var(--line);background:var(--void2);border-radius:16px;padding:clamp(20px,3vw,30px);margin-bottom:16px}
+  .rbloc h2{font:400 24px/1.2 var(--titre);color:var(--ice);margin:0 0 14px}
+  .rbloc h3{font:600 12px/1 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:22px 0 10px}
+  .rbloc p,.rbloc li{font-size:15.5px;line-height:1.6;color:var(--gris)}
+  .rbloc b{color:var(--ice)}
+  .rbloc ul{margin:0;padding-left:20px}
+  .rbloc li{margin:4px 0}
+  .rtete{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:6px}
+  .rtete .sous{font:600 12px/1 var(--texte);letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+  .rtete h2{margin:6px 0 0}
+  .rprix{font:700 30px/1 var(--texte);color:var(--ice);white-space:nowrap}
+  .rprix small{font:600 14px var(--texte);color:var(--steel)}
+  .manque li{color:var(--steel)}
+  .manque li b{color:var(--gris)}
+  .manque .ou{font-size:13px;color:var(--blue);white-space:nowrap}
+  .monter{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--p-violet,#e7e1f3);border:1px solid var(--b-violet,#8e7cc3)}
+  .monter p{margin:0;color:#111}
+  .monter a{font:600 14px/1 var(--texte);color:#111;background:#fff;border:1px solid var(--b-violet,#8e7cc3);border-radius:999px;padding:10px 14px;text-decoration:none;white-space:nowrap}
+  html[data-theme="obscur"] .monter p,html[data-theme="obscur"] .monter a{color:var(--ice)}
+  html[data-theme="obscur"] .monter a{background:var(--void)}
+  .coches{display:flex;flex-direction:column;gap:12px;margin:6px 0 18px}
+  .coche{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5;color:var(--gris);cursor:pointer}
+  .coche input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:var(--blue);cursor:pointer}
+  .coche a{color:var(--blue)}
+  .rbtns{display:flex;flex-wrap:wrap;gap:10px}
+  .rbtns .btn{flex:1 1 260px;justify-content:center;cursor:pointer}
+  .rbtns .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .rbtns .autre{flex:1 1 260px;display:flex;align-items:center;justify-content:center;font:600 15px/1.2 var(--texte);color:var(--ice);border:1px solid var(--line);border-radius:999px;padding:14px 18px;text-decoration:none;text-align:center}
+  .rbtns .autre:hover{border-color:var(--blue);color:var(--blue)}
+  .rmsg{font-size:14px;color:#b45309;margin:12px 0 0;min-height:1em}
+  .av{background:#fff3c4;color:#6b4a00;font:700 11px/1 var(--texte);border-radius:4px;padding:2px 5px;vertical-align:1px}
+  .demo{background:var(--p-jaune);border:1px solid var(--b-jaune);color:#111;border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:18px}
+</style>
+</head>
+<body>
+
+<header class="qtop" style="position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;justify-content:space-between;padding:16px var(--edge);background:linear-gradient(var(--fond),transparent)">
+  <a class="logo" href="index.html" aria-label="Elysium"><span class="elg"><span class="elg-name">Elysium</span></span></a>
+  <a class="back" href="espace.html" style="font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none">Mon espace ›</a>
+</header>
+
+<main id="main" class="rwrap">
+  <div class="demo" id="demo" hidden>Page de démonstration : elle s’affichera entre le choix de la formule et le paiement. Les marques <span class="av">À VALIDER</span> sont des points à confirmer par Damien &amp; Yoann.</div>
+  <h1>Ton récapitulatif</h1>
+  <p class="lede">Avant de payer, prends deux minutes pour relire ce que tu choisis. Tout est écrit ici&nbsp;: ce que comprend ta formule, ce qu’elle ne comprend pas, et comment se passent les paiements et la résiliation.</p>
+
+  <!-- 1. LA FORMULE CHOISIE -->
+  <section class="rbloc">
+    <div class="rtete">
+      <div><span class="sous" id="f-sous"></span><h2 id="f-nom"></h2></div>
+      <div class="rprix" id="f-prix"></div>
+    </div>
+    <h3>Ce que tu reçois</h3>
+    <ul id="f-inclus"></ul>
+    <h3>Ce qui se passe au fil des semaines</h3>
+    <p id="f-rythme"></p>
+    <p><b>Sans pesée, pas de réajustement.</b> Si tu ne notes pas ton poids à temps, ta programmation reste celle de la période précédente&nbsp;; cela ne donne lieu à aucun remboursement ni à aucune prolongation.</p>
+    <p>Ta première programmation est mise à disposition dans ton espace <span id="f-delai">dans les 24&nbsp;heures qui suivent la validation de ton questionnaire <span class="av">À VALIDER</span></span>. Chaque programmation est relue et validée par Damien &amp; Yoann.</p>
+  </section>
+
+  <!-- 2. CE QUE LA FORMULE NE COMPREND PAS -->
+  <section class="rbloc" id="b-manque">
+    <h2>Ce que ta formule ne comprend pas</h2>
+    <ul class="manque" id="f-manque"></ul>
+    <div class="monter" id="f-monter"></div>
+  </section>
+
+  <!-- 3. PAIEMENT, CHANGEMENT, RÉSILIATION (CGV v3, art. 7 et 10) -->
+  <section class="rbloc">
+    <h2>Paiement et résiliation</h2>
+    <h3>Le paiement</h3>
+    <ul>
+      <li><b id="p-montant"></b> aujourd’hui, par carte bancaire (paiement sécurisé par Stripe&nbsp;: Elysium ne voit jamais ta carte).</li>
+      <li>Ensuite, <b>prélèvement automatique tous les 28 jours</b>, à la date anniversaire de ta souscription. Une période dure 4 semaines&nbsp;: ce n’est pas un mois civil, il y a donc <b>13 prélèvements par an</b>.</li>
+      <li>Un reçu t’est envoyé par e-mail à chaque prélèvement.</li>
+      <li><b>Sans engagement</b>&nbsp;: aucune durée minimale.</li>
+    </ul>
+    <h3>Changer de formule</h3>
+    <ul><li>À tout moment, depuis ton espace («&nbsp;Mon abonnement&nbsp;»). Le changement prend effet tout de suite&nbsp;; le prix est ajusté au prorata de la période en cours, sur le prochain prélèvement.</li></ul>
+    <h3>Résilier</h3>
+    <ul>
+      <li>À tout moment, <b>sans frais et sans justification</b>, en quelques clics depuis «&nbsp;Mon abonnement&nbsp;», ou par e-mail à elysium.np.pro@gmail.com.</li>
+      <li>La résiliation prend effet <b>à la fin de la période en cours</b>&nbsp;: plus aucun prélèvement ensuite, et tu gardes l’accès à ta programmation jusqu’à cette date.</li>
+      <li>Une période commencée est due et n’est pas remboursée (sauf rétractation, ci-dessous). Tu reçois une confirmation par e-mail.</li>
+    </ul>
+    <h3>Si un paiement échoue</h3>
+    <ul>
+      <li>Tu es prévenu par e-mail. Tu gardes l’accès à ce que tu as déjà payé, mais aucune nouvelle programmation, aucun réajustement ni nouvel échange par la messagerie tant que la période n’est pas réglée.</li>
+      <li>Pendant 7 jours, le paiement est retenté automatiquement. Sans paiement au bout de 7 jours, l’abonnement est résilié, et rien n’est dû pour la période impayée.</li>
+    </ul>
+    <h3>Ton droit de rétractation</h3>
+    <ul>
+      <li>Tu disposes de 14 jours pour te rétracter. Pour recevoir ta programmation sans attendre ces 14 jours, tu demandes qu’elle commence tout de suite&nbsp;: tu perds alors ce droit dès que ta programmation personnalisée est mise à ta disposition.</li>
+      <li>Si tu te rétractes avant, tu es remboursé intégralement.</li>
+    </ul>
+  </section>
+
+  <!-- 4 & 5. ACCEPTATION ET CHOIX -->
+  <section class="rbloc">
+    <h2>Je confirme</h2>
+    <div class="coches">
+      <label class="coche"><input type="checkbox" id="c-cgv"><span>J’ai lu et j’accepte les <a href="cgv.html" target="_blank" rel="noopener">conditions générales de vente</a>.</span></label>
+      <label class="coche"><input type="checkbox" id="c-retract"><span>Je demande que ma programmation commence tout de suite, et je reconnais perdre mon droit de rétractation dès qu’elle est mise à ma disposition. <span class="av">À VALIDER</span></span></label>
+    </div>
+    <div class="rbtns">
+      <button type="button" class="btn" id="confirmer" disabled>Je confirme cette formule</button>
+      <a class="autre" href="choisir.html">Je veux changer de formule / voir les autres formules</a>
+    </div>
+    <p class="rmsg" id="rmsg" aria-live="polite"></p>
+  </section>
+</main>
+
+<script src="assets/site.js?v=2809h"></script>
+<script src="assets/vendor/supabase.min.js"></script>
+<script src="assets/ely-auth.js?v=stripe1"></script>
+<script>
+(function(){
+  "use strict";
+  // Textes = page Formules (mot pour mot) ; rythmes = CGV v3 art. 4.2 à 4.4 et art. 8.
+  var F={
+    f1:{nom:'Formule Odyssée',sous:'Essentielle',prix:'19,90',
+      inclus:['<b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire','<b>Ton menu</b>, gardé d’un mois à l’autre',
+              '<b>Quantités réajustées chaque mois</b>','<b>Suivi du poids &amp; des mensurations</b> dans ton espace','<b>La messagerie</b> de ton espace, pour échanger avec tes coachs'],
+      rythme:'Ton menu reste le même d’une période de 4 semaines à l’autre. Tes quantités sont réajustées une fois par période, à partir de tes pesées&nbsp;: pèse-toi au moins une fois par période, avant la fin de celle-ci.'},
+    f2:{nom:'Formule Olympe',sous:'Confort',prix:'25,90',
+      inclus:['<b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire','<b>Nouveau menu chaque mois</b>','<b>Quantités réajustées</b> à chaque changement de menu',
+              '<b>Liste de courses</b> avec les quantités exactes, pour chaque semaine','<b>Suivi du poids &amp; des mensurations</b> dans ton espace','<b>La messagerie</b> de ton espace, pour échanger avec tes coachs'],
+      rythme:'Un nouveau menu à chaque période de 4 semaines. Tes quantités sont réajustées à chaque changement de menu, à partir de tes pesées&nbsp;: pèse-toi au moins une fois par période, avant la fin de celle-ci.'},
+    f3:{nom:'Formule Elysium',sous:'Premium',prix:'29,90',
+      inclus:['<b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire','<b>Nouveau menu chaque mois</b>','<b>Quantités réajustées chaque semaine</b>',
+              '<b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise','<b>Liste de courses</b> avec les quantités exactes, pour chaque semaine',
+              '<b>Suivi du poids &amp; des mensurations</b> dans ton espace','<b>La messagerie</b> de ton espace, pour échanger avec tes coachs'],
+      rythme:'Le suivi le plus rapproché&nbsp;: un nouveau menu à chaque période de 4 semaines, et tes quantités réajustées chaque semaine, à partir de ta pesée hebdomadaire. Pèse-toi chaque semaine, le même jour, le matin à jeun.'}
+  };
+  // ce que les formules du dessus ajoutent (mêmes mots que la page Formules)
+  var MANQUE={
+    f1:[['<b>Nouveau menu chaque mois</b>','Olympe, Elysium'],['<b>Liste de courses</b> avec les quantités exactes, pour chaque semaine','Olympe, Elysium'],
+        ['<b>Quantités réajustées chaque semaine</b>','Elysium'],['<b>Les recettes des coachs</b> pour chaque plat','Elysium']],
+    f2:[['<b>Quantités réajustées chaque semaine</b>','Elysium'],['<b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise','Elysium']],
+    f3:[]
+  };
+  var q=new URLSearchParams(location.search), k=q.get('formule');
+  if(!F[k]){ location.replace('choisir.html'); return; }
+  var f=F[k], $=function(id){ return document.getElementById(id); };
+  $('demo').hidden=q.get('demo')!=='1';
+  $('f-sous').textContent=f.sous; $('f-nom').textContent=f.nom;
+  $('f-prix').innerHTML=f.prix+' €<small> / 4 semaines</small>';
+  $('f-inclus').innerHTML=f.inclus.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  $('f-rythme').innerHTML=f.rythme;
+  $('p-montant').textContent=f.prix+' €';
+  if(MANQUE[k].length){
+    $('f-manque').innerHTML=MANQUE[k].map(function(m){ return '<li>'+m[0]+' <span class="ou">· avec '+(m[1].indexOf(',')>0?'les formules ':'la formule ')+m[1]+'</span></li>'; }).join('');
+    $('f-monter').innerHTML='<p><b>La Formule Elysium</b> comprend tout cela, pour 29,90&nbsp;€ toutes les 4 semaines.</p><a href="recap.html?formule=f3'+(q.get('demo')==='1'?'&demo=1':'')+'">Voir la Formule Elysium</a>';
+  } else {
+    $('f-manque').innerHTML='<li style="list-style:none;margin-left:-20px">Rien&nbsp;: tu as choisi la formule la plus complète.</li>'; $('f-monter').remove();
+  }
+
+  // le bouton ne s'active qu'une fois les deux cases cochées
+  var b=$('confirmer'), c1=$('c-cgv'), c2=$('c-retract');
+  function maj(){ b.disabled=!(c1.checked&&c2.checked); }
+  c1.addEventListener('change',maj); c2.addEventListener('change',maj);
+  b.addEventListener('click',function(){
+    if(b.disabled) return;
+    if(!ElyAuth.user()){ location.href='connexion.html'; return; }
+    b.disabled=true; b.textContent='Ouverture du paiement…'; $('rmsg').textContent='';
+    ElyAuth.payer(k).catch(function(e){ b.textContent='Je confirme cette formule'; maj(); $('rmsg').textContent=e.message; });
+  });
+})();
+</script>
+</body>
+</html>

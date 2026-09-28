@@ -903,10 +903,10 @@ var PROG = {
       var ub=document.getElementById('unlock');
       // PAIEMENT STRIPE : formule choisie -> page de paiement Stripe ; sans formule -> choix de la formule
       if(ub) ub.addEventListener('click',function(e){ e.preventDefault();
-        var code=(String(f||'').match(/([123])/)||[])[1];
+        var code=cleFormule(uu.formule);
         if(!code){ location.href='choisir.html'; return; }
         ub.textContent='Ouverture du paiement…'; ub.style.pointerEvents='none';
-        ElyAuth.payer('f'+code).catch(function(err){ ub.textContent='Réessayer le paiement'; ub.style.pointerEvents='';
+        ElyAuth.payer(code).catch(function(err){ ub.textContent='Réessayer le paiement'; ub.style.pointerEvents='';
           var m=document.createElement('p'); m.className='foot-note'; m.style.color='#b45309'; m.textContent=err.message; c.appendChild(m); }); });
     } else if(quest){
       pill.textContent='Programmation en cours'; pill.className='pill paid';
@@ -1086,6 +1086,10 @@ var PROG = {
     return sb.from('messages').select('id,auteur_id,texte,lu_at,created_at').eq('client_id',u.id).order('created_at').then(function(r){
       if(r.error) return;                                      // table pas encore créée : rien à montrer
       var card=document.getElementById('c-msg'); card.hidden=false;
+      // CGV v3 art. 7.3 : paiement échoué -> plus de nouvel échange tant que la période n'est pas réglée (l'historique reste lisible)
+      var ab=(ElyAuth.user()||{}).abonnement, bloque=!ADMIN&&!!ab&&ab.statut==='past_due';
+      document.getElementById('msg-form').hidden=bloque;
+      if(bloque) document.getElementById('msg-err').textContent='Ton dernier paiement a échoué : la messagerie reprend dès qu’il est réglé (« Mon abonnement » › mettre à jour ta carte).';
       var L=r.data||[], box=document.getElementById('fil-msg');
       box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id;
         return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':'Coach · ')+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')

@@ -34,7 +34,7 @@
   .rprix small{font:600 14px var(--texte);color:var(--steel)}
   .manque li{color:var(--steel)}
   .manque li b{color:var(--gris)}
-  .manque .ou{font-size:13px;color:var(--blue);white-space:nowrap}
+  .manque .ou{color:var(--steel)}
   .monter{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--p-violet,#e7e1f3);border:1px solid var(--b-violet,#8e7cc3)}
   .monter p{margin:0;color:#111}
   .monter a{font:600 14px/1 var(--texte);color:#111;background:#fff;border:1px solid var(--b-violet,#8e7cc3);border-radius:999px;padding:10px 14px;text-decoration:none;white-space:nowrap}
@@ -172,7 +172,7 @@
   $('f-rythme').innerHTML=f.rythme;
   $('p-montant').textContent=f.prix+' €';
   if(MANQUE[k].length){
-    $('f-manque').innerHTML=MANQUE[k].map(function(m){ return '<li>'+m[0]+' <span class="ou">· avec '+(m[1].indexOf(',')>0?'les formules ':'la formule ')+m[1].replace(', ',' et ')+'</span></li>'; }).join('');
+    $('f-manque').innerHTML=MANQUE[k].map(function(m){ return '<li>'+m[0]+'<span class="ou"> — inclus dans '+m[1].replace(', ',' et ')+'</span></li>'; }).join('');
     $('f-monter').innerHTML='<p><b>La Formule Elysium</b> comprend tout cela, pour 29,90&nbsp;€ toutes les 4 semaines.</p><a href="recap.html?formule=f3'+(q.get('demo')==='1'?'&demo=1':'')+'">Voir la Formule Elysium</a>';
   } else {
     $('f-manque').innerHTML='<li style="list-style:none;margin-left:-20px">Rien&nbsp;: tu as choisi la formule la plus complète.</li>'; $('f-monter').remove();

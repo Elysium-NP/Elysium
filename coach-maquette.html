@@ -299,6 +299,8 @@
     var cible=((p==='stats'||p==='eco')&&!ouvert)?'verrou':p;
     document.querySelectorAll('.page').forEach(function(s){ s.hidden=s.id!=='p-'+cible; });
     voir.p=p; scrollTo(0,0);
+    var on=document.querySelector('.onglets [aria-selected="true"]'), nav=on.parentNode;   // onglet actif visible sur téléphone
+    nav.scrollLeft=on.offsetLeft-(nav.clientWidth-on.offsetWidth)/2;
   }
   document.querySelector('.onglets').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) voir(b.dataset.p); });
   $('deverrouiller').addEventListener('click',function(){ ouvert=true; voir(voir.p); });

@@ -285,6 +285,18 @@
   .rl-ap{max-width:560px;margin:0 auto;border:1px solid var(--line);border-radius:16px;background:var(--void);padding:18px 16px}
   .rl-ap h5{font:400 24px/1.2 var(--titre);color:var(--ice);margin:0 0 4px;text-align:center}
   .rl-ap .s{text-align:center;font-size:12.5px;color:var(--steel);margin:0 0 14px}
+  .rl-ap .ap-m{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:12px;background:var(--void2);border-left-width:1px}
+  .rl-ap .ap-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;font:600 14px/1.2 var(--texte);color:var(--ice);background:var(--p-bleu)}
+  .rl-ap .m-jaune .ap-hd{background:var(--p-jaune)} .rl-ap .m-vert .ap-hd{background:var(--p-vert)} .rl-ap .m-violet .ap-hd{background:var(--p-violet)}
+  .rl-ap .ap-m.m-jaune,.rl-ap .ap-m.m-vert,.rl-ap .ap-m.m-violet,.rl-ap .ap-m.m-bleu{background:var(--void2)}
+  .rl-ap .ap-hd i{font-style:normal;font-weight:700;font-size:13px;white-space:nowrap}
+  .rl-ap .ap-in{padding:12px 14px 13px}
+  .rl-ap .ap-in strong{display:block;font:700 16px/1.3 var(--texte);color:var(--ice);margin-bottom:5px}
+  .rl-ap .ap-in p{font:15px/1.55 var(--texte);color:var(--gris);margin:0;overflow-wrap:anywhere}
+  .rl-ap .ap-mac{display:flex;gap:14px;padding-top:10px;font:600 13px/1 var(--texte);color:var(--ice)}
+  .rl-ap .ap-mac span{display:inline-flex;align-items:center;gap:6px}
+  .rl-ap .ap-mac span::before{content:"";width:9px;height:9px;border-radius:2px;background:#cc0000}
+  .rl-ap .ap-mac .g::before{background:#3d85c6} .rl-ap .ap-mac .l::before{background:#f1c232}
   .rl-ap .r{border-radius:12px;border-left-width:4px;border-left-style:solid;padding:10px 12px;margin-top:10px;color:#111}
   .rl-ap .r b{display:block;font:700 10.5px/1.2 var(--texte);letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
   .rl-ap .r strong{display:block;font:400 17px/1.3 var(--titre);margin-bottom:4px}
@@ -1532,9 +1544,13 @@ var REL=(function(){
   function apercu(R,i){
     var j=((R.menu||{}).jours||[])[i]; if(!j) return '';
     if(j.off) return '<div class="rl-ap"><h5>Jour OFF</h5><p class="s">Repas libres + 1 cheat meal possible<br>Profitez &amp; rechargez !</p></div>';
-    return '<div class="rl-ap"><h5>Jour '+j.jour+'</h5><p class="s">Ce que '+e(String(R.nom).split(' ')[0])+' verra dans son espace et sur sa fiche</p>'+
-      (j.repas||[]).map(function(r){ return '<div class="r m-'+(PASTEL[r.type]||'bleu')+'"><b>'+ml(r.type)+'</b><strong>'+e(titre(r))+'</strong><ul>'+
-        (r.ingredients||[]).map(function(x){ return '<li>'+e(ingLabel(x))+'</li>'; }).join('')+'</ul></div>'; }).join('')+'</div>';
+    /* même carte que l'espace client (espace.html dayHTML) : en-tête couleur du repas + kcal, plat, ingrédients en une phrase, P/G/L */
+    var EMO={petit_dejeuner:'☀️',dejeuner:'🍴',collation:'🍎',collation_2:'🍎',diner:'🌙'};
+    return '<div class="rl-ap"><h5>Jour '+j.jour+'</h5><p class="s">'+(R.xid?'Ce que '+e(String(R.nom).split(' ')[0])+' recevra sur sa fiche':'Ce que '+e(String(R.nom).split(' ')[0])+' verra dans son espace et sur sa fiche')+'</p>'+
+      (j.repas||[]).map(function(r){ var ma=r.macros||somme(r.ingredients||[]);
+        return '<div class="ap-m m-'+(PASTEL[r.type]||'bleu')+'"><div class="ap-hd"><span>'+(EMO[r.type]||'')+' '+ml(r.type)+'</span><i>'+g0(ma.kcal)+' kcal</i></div>'+
+          '<div class="ap-in"><strong>'+e(titre(r))+'</strong><p>'+(r.ingredients||[]).map(function(x){ return e(ingLabel(x)); }).join(' · ')+'</p>'+
+          '<div class="ap-mac"><span class="p">P '+g0(ma.proteines)+'</span><span class="g">G '+g0(ma.glucides)+'</span><span class="l">L '+g0(ma.lipides)+'</span></div></div></div>'; }).join('')+'</div>';
   }
 
   /* 6b. RENVOI EN CORRECTION : actions structurées, empilables (format validé le 28/09, colonne retours_coach.action).

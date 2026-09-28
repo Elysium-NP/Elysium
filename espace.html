@@ -192,6 +192,24 @@
   .tab.today.on::after{background:#fff}
   .meal{transition:border-color .3s,transform .3s,box-shadow .3s}
   .meal:hover{border-color:rgba(46,155,255,.32);transform:translateY(-2px);box-shadow:0 8px 24px rgba(60,45,20,.18)}
+  /* ===== REPAS AU STYLE DE L'EXEMPLE DE L'ACCUEIL (Damien & Yoann 28/09) =====
+     en-tête à la couleur du repas (celles de leurs fiches), coins arrondis, macros en pastilles. */
+  .meals .meal{padding:0;border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--fond) 20%,#fff)}
+  html[data-theme="obscur"] .meals .meal{background:var(--void2)}
+  .meal-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;font:600 14px/1.2 var(--texte);color:var(--ice);border-bottom:1px solid}
+  .meal-hd i{font-style:normal;font-weight:700;font-size:13px;white-space:nowrap}
+  .meal.pdj .meal-hd{background:var(--p-jaune);border-color:var(--b-jaune)}
+  .meal.dej .meal-hd{background:var(--p-vert);border-color:var(--b-vert)}
+  .meal.col .meal-hd{background:var(--p-violet);border-color:var(--b-violet)}
+  .meal.din .meal-hd{background:var(--p-bleu);border-color:var(--b-bleu)}
+  .meal-in{padding:12px 14px 13px;display:flex;flex-direction:column;flex:1}
+  .meal-in .dish{font:700 16px/1.3 var(--texte);color:var(--ice);margin:0 0 5px}
+  .meal-in .ings-l{font:15px/1.55 var(--texte);color:var(--gris);margin:0}
+  .meal-in .seas{margin-top:8px;font-style:normal}
+  .meal-in .mac{display:flex;gap:14px;margin-top:auto;padding-top:10px;border-top:0;font:600 13px/1 var(--texte);color:var(--ice);font-variant-numeric:tabular-nums;letter-spacing:0}
+  .meal-in .mac span{display:inline-flex;align-items:center;gap:6px}
+  .meal-in .mac span::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--c)}
+  .meal-in .mac .p{--c:#cc0000} .meal-in .mac .g{--c:#3d85c6} .meal-in .mac .l{--c:#f1c232}
   @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.2)}100%{transform:scale(1)}}
   .cat .ci .box.pop{animation:pop .28s ease}
   .rv{opacity:0;transform:translateY(12px)}
@@ -615,13 +633,24 @@ var PROG = {
       [].forEach.call(panels.children,function(p){ p.classList.toggle('on',p.id==='pan-'+id); });
       var pan=document.getElementById('pan-'+id); if(pan) [].forEach.call(pan.querySelectorAll('.rv'),function(e){e.classList.add('in');});
     }
+    /* REPAS au style de l'exemple de l'accueil (Damien & Yoann 28/09) : en-tête à la couleur du repas,
+       coins arrondis, ingrédients en une phrase, macros en pastilles. Pas d'abréviation (« tr. »). */
+    function deplier(q){ return String(q).replace(/(^|\s)(\d+(?:[.,]\d+)?)\s*tr\.?(?=\s|$)/g,function(_,a,n){ return a+n+(parseFloat(n.replace(',','.'))>1?' tranches':' tranche'); }); }
+    function coulRepas(t){ t=String(t).toLowerCase();
+      return /petit/.test(t)?'pdj':/d[ée]jeuner/.test(t)?'dej':/collation/.test(t)?'col':/d[îi]ner/.test(t)?'din':'dej'; }
+    function ingPhrase(x){
+      var q=deplier(String(x[0]||'').trim()), n=String(x[1]||'').trim();
+      if(!n) return q;
+      if(/^[\d.,\/½¼¾]+$/.test(q)) return q+' '+n;                           // « 1 œuf », « 4 galettes de riz »
+      return q+(/^[aeiouyhâéèêëîïôûœ]/i.test(n)?" d'":' de ')+n;              // « 20 g de fromage », « 5 g d'huile »
+    }
     function dayHTML(d){
       var m=d.repas.map(function(r){
-        var ings=r.ings.map(function(x){return '<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>';}).join('');
-        return '<div class="meal rv"><div class="mh"><span class="mt">'+r.emo+' '+r.type+'</span><span class="mk">'+r.kcal+' kcal</span></div>'+
-          '<div class="rec">'+r.rec+'</div><ul class="ings">'+ings+'</ul>'+
-          '<div class="seas">'+r.seas+'</div>'+
-          '<div class="mac"><span>P <b>'+r.m[0]+'</b></span><span>G <b>'+r.m[1]+'</b></span><span>L <b>'+r.m[2]+'</b></span></div></div>';
+        var ings=r.ings.map(ingPhrase).join(' · ');
+        return '<article class="meal '+coulRepas(r.type)+' rv"><div class="meal-hd"><span>'+r.emo+' '+r.type+'</span><i>'+r.kcal+' kcal</i></div>'+
+          '<div class="meal-in"><p class="dish">'+r.rec+'</p><p class="ings-l">'+ings+'</p>'+
+          (r.seas?'<p class="seas">'+r.seas+'</p>':'')+
+          '<div class="mac"><span class="p">P '+r.m[0]+'</span><span class="g">G '+r.m[1]+'</span><span class="l">L '+r.m[2]+'</span></div></div></article>';
       }).join('');
       return '<div class="panel"><div class="meals">'+m+'</div></div>';
     }
@@ -636,7 +665,7 @@ var PROG = {
       var total=0;
       var cats=Object.keys(PROG.courses).map(function(cn){
         var arr=PROG.courses[cn]; total+=arr.length;
-        var li=arr.map(function(x){return '<label class="ci" data-k="'+encodeURIComponent(cn+'::'+x[0])+'"><input type="checkbox"><span class="box"></span><span class="nm">'+x[0]+'</span><b>'+x[1]+'</b></label>';}).join('');
+        var li=arr.map(function(x){return '<label class="ci" data-k="'+encodeURIComponent(cn+'::'+x[0])+'"><input type="checkbox"><span class="box"></span><span class="nm">'+x[0]+'</span><b>'+deplier(x[1])+'</b></label>';}).join('');
         return '<div class="cat rv"><h4><span class="cn">'+(/^[A-Za-zÀ-ÿ]/.test(cn)?catEmo(cn)+' ':'')+cn+'</span><span class="n"><b class="done">0</b> / '+arr.length+'</span></h4>'+li+'</div>';
       }).join('');
       return '<div class="panel">'+

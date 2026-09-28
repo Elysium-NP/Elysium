@@ -35,63 +35,51 @@
 
   .cwrap{padding:22px var(--edge) 60px;max-width:1680px;margin:0 auto}
 
-  /* ---- bandeau de chiffres ---- */
-  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
-  /* suivi du client (pesées + mensurations) dans sa fiche */
-  .suivi{border:1px solid var(--line);background:var(--void2);padding:14px 16px;margin:0 0 16px}
-  .suivi h4{font:600 11px/1 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin:0 0 10px}
-  .suivi .chiffres{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--gris)}
-  .suivi .chiffres b{color:var(--ice)}
-  .suivi .retard{color:#b45309;font-weight:600}
-  .suivi > svg{display:block;width:100%;height:90px;margin:10px 0 4px}
-  .suivi > svg path{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
-  .suivi > svg circle{fill:var(--blue)}
-  .suivi .gx{margin:10px 0 4px}
-  .suivi .mens{font-size:13px;color:var(--steel);margin-top:8px}
-  .ph-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:6px}
-  .ph-grille a{display:block;text-decoration:none;color:var(--steel);font-size:11px}
-  .ph-grille img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
-  @media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}}
-  .kpi{position:relative;border:1px solid var(--line);background:linear-gradient(180deg,rgba(46,155,255,.05),rgba(60,45,20,0));
-    padding:16px 18px;overflow:hidden}
-  .kpi::before{content:"";position:absolute;top:0;left:0;width:30px;height:1px;background:var(--blue)}
-  .kpi .k{font-family:var(--disp);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
-  .kpi .v{font-family:var(--disp);font-weight:700;font-size:38px;line-height:1;color:var(--ice);margin-top:8px;
-    font-variant-numeric:tabular-nums;text-shadow:0 0 22px rgba(46,155,255,.18)}
+  /* ---- chiffres clés (présentation de coach-maquette.html) ---- */
+  .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  @media(max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .kpi{border:1px solid var(--line);background:var(--void2);border-radius:14px;padding:14px 16px;min-width:0}
+  .kpi .k{font:600 10.5px/1.3 var(--texte);letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
+  .kpi .v{font:700 32px/1 var(--texte);color:var(--ice);margin-top:8px;font-variant-numeric:tabular-nums}
+  .kpi .v.txt{font-size:20px;line-height:1.3;overflow-wrap:anywhere}
   .kpi.hot .v{color:var(--blue)}
-  .kpi .s{font-family:var(--disp);font-size:11px;color:var(--steel);margin-top:6px}
-
-  /* ---- cockpit 3 colonnes ---- */
-  .cock{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start}
-  @media(max-width:1240px){.cock{grid-template-columns:1fr}}
-  .panel{border:1px solid var(--line);background:var(--void2);display:flex;flex-direction:column;max-height:calc(100vh - 230px)}
-  .panel > h2{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--blue);padding:15px 18px;border-bottom:1px solid var(--line);margin:0;flex:none;
-    display:flex;align-items:center;gap:10px}
-  .panel > h2 .n{margin-left:auto;font-size:11px;color:var(--steel);letter-spacing:.06em}
-  .panel .body{overflow-y:auto;padding:6px 0;flex:1}
-  .panel .body.pad{padding:18px}
-
-  /* ---- file d'attente ---- */
-  .fitem{display:block;width:100%;text-align:left;background:none;border:0;border-left:2px solid transparent;
-    padding:13px 18px;cursor:pointer;transition:background .2s,border-color .2s}
-  .fitem:hover{background:rgba(46,155,255,.06)}
-  .fitem.on{background:rgba(46,155,255,.1);border-left-color:var(--blue)}
-  .fitem .nm{font-family:var(--disp);font-weight:500;font-size:16px;color:var(--ice)}
-  .fitem .mt{font-family:var(--disp);font-size:11px;color:var(--steel);margin-top:4px;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
-  .etat{font-family:var(--disp);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border:1px solid}
-  .etat.a_generer{color:#8a5a00;border-color:rgba(232,176,75,.45)}
-  .etat.a_relire{color:var(--blue);border-color:rgba(46,155,255,.5)}
-  .etat.valide{color:#2f6b1a;border-color:rgba(110,231,168,.4)}
-  .etat.rectification{color:#8a5a00;border-color:rgba(232,176,75,.45)}
-  .etat.refuse{color:#9b1c1c;border-color:rgba(240,160,160,.4)}
-  .etat.sans_questionnaire{color:var(--steel);border-color:var(--line)}
-
-  .fitem .retard{color:#b45309}
+  .kpi .s{font-size:12px;color:var(--steel);margin-top:6px}
+  .ph-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
+  .ph-grille a{display:block;text-decoration:none;color:var(--steel);font-size:11px}
+  .ph-grille img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+  /* file de relecture : lignes cliquables (clic = relecture, clic sur le nom = fiche) */
+  .file-l{cursor:pointer;align-items:center;border-radius:8px}
+  .file-l:hover .nom{color:var(--blue)}
+  .file-l:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .file-l .mini{margin-left:6px}
+  .file-l .file-p{color:var(--steel);font-size:12px}
+  /* fiche client */
+  .progres{position:relative;height:12px;border-radius:99px;background:var(--line);margin:14px 0 6px}
+  .progres i{position:absolute;left:0;top:0;bottom:0;background:var(--brand);border-radius:99px}
+  .progres-l{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--steel)}
+  .sous-onglets{display:flex;gap:6px;overflow-x:auto;margin:22px 0 12px;scrollbar-width:none}
+  .sous-onglets::-webkit-scrollbar{display:none}
+  .sous-onglets button{flex:none;font:600 13px/1 var(--texte);border:1px solid var(--line);background:none;border-radius:999px;padding:9px 14px;color:var(--gris);cursor:pointer}
+  .sous-onglets button.on{background:var(--ice);color:var(--fond);border-color:var(--ice)}
+  /* messages (page Messages et fiche) */
+  .fils{display:grid;grid-template-columns:280px minmax(0,1fr);gap:12px;align-items:start}
+  @media(max-width:760px){.fils{grid-template-columns:1fr}}
+  .fil{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 2px;cursor:pointer;font:14px/1.3 var(--texte);color:var(--gris)}
+  .fil:first-of-type{border-top:0}
+  .fil b{color:var(--ice)}
+  .fil.on b{color:var(--blue)}
+  .fil > span:first-child{min-width:0;overflow-wrap:anywhere}
+  .bulles{max-height:440px;overflow-y:auto}
+  .bulle{max-width:80%;width:fit-content;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.45;margin:6px 0;color:var(--ice);background:var(--void);border:1px solid var(--line);white-space:pre-wrap;overflow-wrap:anywhere}
+  .bulle.co{margin-left:auto;background:var(--brand);border-color:var(--brand);color:#111}
+  .bulle small{display:block;font-size:11px;opacity:.65;margin-top:4px}
+  .repondre{display:flex;gap:8px;margin-top:12px;align-items:flex-end}
+  .repondre textarea{flex:1;min-width:0;min-height:44px;resize:vertical;font:16px/1.35 var(--texte);color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:18px;padding:10px 16px}
+  .btn-p{font:600 15px/1 var(--texte);background:var(--brand);color:#111;border:0;border-radius:999px;padding:13px 22px;cursor:pointer}
+  .btn-p:disabled{opacity:.5;cursor:wait}
+  .onglets button .cad{flex:none}
 
   /* ==== TABLEAU DE BORD EN ONGLETS (maquette validée par Dimitri le 28/09) ==== */
-  .kpi,.panel,.decide,.scard,.msgs,.suivi{border-radius:14px}
-  .panel,.msgs{overflow:hidden}
   .onglets{display:flex;gap:6px;overflow-x:auto;padding:0 0 4px;margin:0 0 18px;scrollbar-width:none}
   .onglets::-webkit-scrollbar{display:none}
   .onglets button{flex:none;font:600 14px/1 var(--texte);color:var(--gris);background:none;border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer;display:flex;align-items:center;gap:6px}
@@ -105,8 +93,6 @@
   h2.t{font:400 26px/1.2 var(--titre);color:var(--ice);margin:0 0 4px;text-transform:none;letter-spacing:0}
   p.sous{color:var(--steel);font-size:14px;margin:0 0 18px}
   h3.s{font:600 11px/1 var(--texte);letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin:26px 0 10px}
-  .kpis.q4{grid-template-columns:repeat(4,1fr)}
-  @media(max-width:900px){.kpis.q4{grid-template-columns:repeat(2,1fr)}}
   .kpi .v small{font-size:15px;font-weight:600;color:var(--steel)}
   .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
   @media(max-width:400px){.grille{grid-template-columns:1fr}}
@@ -116,6 +102,8 @@
   .ligne{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14px;color:var(--gris)}
   .carte h4 + .ligne{border-top:0}
   .ligne > span:last-child{text-align:right;color:var(--steel);font-size:13px}
+  .ligne b{color:var(--ice);font-weight:600}
+  .ligne small{color:var(--steel);font-size:12px}
   .rien,.leg{font-size:13px;color:var(--steel);margin:4px 0 0}
   .tag{display:inline-block;font:600 11px/1 var(--texte);border-radius:999px;padding:4px 8px;border:1px solid var(--line);color:var(--gris);white-space:nowrap}
   .tag.j{background:var(--p-jaune);border-color:var(--b-jaune);color:#111}
@@ -145,10 +133,6 @@
   .tab tbody tr{cursor:pointer}
   .tab tbody tr:hover td{background:rgba(46,155,255,.06)}
   .tab tr:last-child td{border-bottom:0}
-  /* la file, pleine largeur */
-  .panel.file{max-height:none}
-  #file{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-  #file .empty{grid-column:1/-1}
   /* progression vers le palier du questionnaire */
   .pbars{display:flex;flex-direction:column;gap:9px}
   .pbar{display:grid;grid-template-columns:minmax(0,120px) 1fr auto;align-items:center;gap:10px;font-size:13px}
@@ -156,102 +140,20 @@
   .pbar .bt i{display:block;height:100%;background:var(--brand);border-radius:99px}
   .pbar .bv{color:var(--ice);font-weight:600;white-space:nowrap}
 
-  /* ---- fiche client ---- */
-  .idcard{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-  .idcard h3{font-family:var(--disp);font-weight:600;font-size:30px;color:var(--ice);text-transform:uppercase;margin:0;line-height:1}
-  .idmeta{font-family:var(--disp);font-size:12.5px;color:var(--steel)}
-  .idmeta b{color:var(--blue);font-weight:500}
-  .qa{border-top:1px solid rgba(46,155,255,.12);padding:12px 0}
-  .qa dt{font-family:var(--disp);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel)}
-  .qa dd{font-family:var(--disp);font-size:15px;line-height:1.55;color:var(--ice);margin:5px 0 0}
-  .qa.flag dd{color:#6b4a00}
-  .qa.flag dt{color:#8a5a00}
-
-  /* ---- programme ---- */
-  .jour{border-bottom:1px solid rgba(46,155,255,.1);padding:12px 0}
-  .jour > .jh{font-family:var(--disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
-  .repas{margin-bottom:10px}
-  .repas .rt{font-family:var(--disp);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel)}
-  .repas .rn{font-family:var(--disp);font-weight:500;font-size:15.5px;color:var(--ice);margin:2px 0 3px}
-  .repas .ri{font-family:var(--disp);font-size:13px;line-height:1.6;color:var(--gris)}
-  .repas .rm{font-family:var(--mono);font-size:10.5px;color:var(--steel);margin-top:3px;letter-spacing:.02em}
-  .flagbtn{font-family:var(--disp);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);
-    background:none;border:1px solid var(--line);padding:3px 8px;cursor:pointer;margin-top:5px;transition:.2s}
-  .flagbtn:hover{color:#8a5a00;border-color:rgba(232,176,75,.5)}
-
-  /* ---- barre de décision ---- */
-  .decide{margin-top:16px;border:1px solid var(--line);background:var(--void2);padding:18px}
-  .decide h2{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin:0 0 14px}
-  .dbtns{display:flex;gap:12px;flex-wrap:wrap}
-  .dbtn{font-family:var(--disp);font-size:12.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
-    padding:14px 26px;border:1px solid;background:none;cursor:pointer;transition:.25s;display:flex;align-items:center;gap:9px}
-  .dbtn .ic{font-size:15px}
-  .dbtn.ok{color:#2f6b1a;border-color:rgba(110,231,168,.45)}
-  .dbtn.ok:hover{background:rgba(110,231,168,.1);box-shadow:0 0 22px -6px rgba(110,231,168,.5)}
-  .dbtn.rec{color:#8a5a00;border-color:rgba(232,176,75,.45)}
-  .dbtn.rec:hover{background:rgba(232,176,75,.1);box-shadow:0 0 22px -6px rgba(232,176,75,.5)}
-  .dbtn.no{color:#9b1c1c;border-color:rgba(240,160,160,.42)}
-  .dbtn.no:hover{background:rgba(240,160,160,.1);box-shadow:0 0 22px -6px rgba(240,160,160,.45)}
-  .dbtn:disabled{opacity:.35;cursor:not-allowed;box-shadow:none;background:none}
-
-  /* ---- formulaire de retour ---- */
-  .retour{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;display:none}
-  .retour.on{display:block;animation:fadein .35s ease}
-  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:820px){.rgrid{grid-template-columns:1fr}}
-  .rf{display:flex;flex-direction:column;gap:7px}
-  .rf.full{grid-column:1/-1}
-  .rf label{font-family:var(--disp);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--steel)}
-  .rf select,.rf input,.rf textarea{font-family:var(--disp);font-size:15px;color:var(--ice);background:var(--void);
-    border:1px solid var(--line);padding:11px 12px;width:100%;color-scheme:light}
-  .rf textarea{min-height:78px;resize:vertical;line-height:1.55}
-  .rf select:focus,.rf input:focus,.rf textarea:focus{outline:none;border-color:var(--blue)}
-  .rlist{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-  .rrow{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);padding:10px 12px;background:var(--void)}
-  .rrow .rx{font-family:var(--disp);font-size:13.5px;color:var(--ice);flex:1}
-  .rrow .rx small{display:block;color:var(--steel);font-size:11.5px;margin-top:3px}
-  .rrow .del{background:none;border:0;color:var(--steel);cursor:pointer;font-size:15px;line-height:1}
-  .rrow .del:hover{color:#9b1c1c}
-
-  /* ---- statistiques ---- */
-  .stats{margin-top:26px}
-  .stats h2{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin:0 0 14px}
-  .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-  .scard{border:1px solid var(--line);background:var(--void2);padding:16px 18px}
-  .scard .st{font-family:var(--disp);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
-  .bars{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-  .bar{display:flex;align-items:center;gap:10px}
-  .bar .bl{font-family:var(--disp);font-size:11.5px;color:var(--gris);min-width:66px}
-  .bar .bt{flex:1;height:7px;background:rgba(46,155,255,.1);position:relative;overflow:hidden}
-  .bar .bf{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--blue-d),var(--blue));
-    box-shadow:0 0 10px rgba(46,155,255,.5);width:0;transition:width 1s cubic-bezier(.2,.7,.2,1)}
-  .bar .bv{font-family:var(--disp);font-size:12px;color:var(--ice);min-width:30px;text-align:right;font-variant-numeric:tabular-nums}
+  /* réponses au questionnaire (fiche) */
+  .qa{padding:10px 0;border-top:1px solid var(--line)}
+  .qa:first-child{border-top:0}
+  .qa dt{font:600 11px/1.3 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
+  .qa dd{margin:4px 0 0;font-size:15px;line-height:1.5;color:var(--ice)}
+  .qa.alerte dd{color:#b45309;font-weight:600}
+  html[data-theme="obscur"] .qa.alerte dd{color:#f0b35a}
 
   /* abonnements (Damien 27/09) : formules, montant, résiliations — Stripe pour l'argent */
   .kpis.abo{grid-template-columns:repeat(5,1fr)}
   @media(max-width:1100px){.kpis.abo{grid-template-columns:repeat(3,1fr)}}
   @media(max-width:640px){.kpis.abo{grid-template-columns:repeat(2,1fr)}}   /* Damien 27/09 : illisible sur téléphone */
   .kpi .v.att{font-size:26px;color:var(--steel)}
-  /* messagerie clients <-> coachs */
-  .msgs{display:grid;grid-template-columns:280px 1fr;border:1px solid var(--line);background:var(--void2);margin-bottom:22px;min-height:340px}
-  @media(max-width:800px){.msgs{grid-template-columns:1fr}}
-  .msgs .fils{border-right:1px solid var(--line);overflow-y:auto;max-height:460px}
-  .msgs .fil{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 14px;cursor:pointer;font:14px/1.35 var(--texte);color:var(--ice)}
-  .msgs .fil.on{background:var(--p-bleu)}
-  .msgs .fil small{display:block;color:var(--steel);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
-  .msgs .nl{flex:none;align-self:center;min-width:22px;height:22px;border-radius:11px;background:var(--brand);color:#111;font:700 12px/22px var(--texte);text-align:center;padding:0 6px}
-  .msgs .conv{display:flex;flex-direction:column;min-width:0}
-  .msgs .bulles{flex:1;overflow-y:auto;max-height:380px;padding:16px;display:flex;flex-direction:column;gap:8px}
-  .msgs .b{max-width:78%;padding:9px 12px;border-radius:12px;font-size:14.5px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
-  .msgs .b.lui{align-self:flex-start;background:#fff;border:1px solid var(--line)}
-  .msgs .b.nous{align-self:flex-end;background:var(--p-bleu)}
-  .msgs .b time{display:block;font-size:11px;color:var(--steel);margin-top:4px}
-  .msgs form{display:flex;gap:8px;border-top:1px solid var(--line);padding:10px}
-  .msgs textarea{flex:1;min-height:44px;resize:vertical;font:16px/1.4 var(--texte);border:1px solid var(--line);padding:9px 11px;background:#fff;color:var(--ice)}
-  .msgs form button{font:600 14px/1 var(--texte);background:var(--brand);color:#111;border:0;border-radius:999px;padding:0 18px;cursor:pointer}
-  .empty{font-family:var(--disp);font-size:13.5px;line-height:1.65;color:var(--steel);text-align:center;padding:38px 20px}
-  .empty b{color:var(--ice);display:block;font-size:16px;margin-bottom:6px}
+  #abo-note{font-size:12.5px;color:var(--steel);margin:10px 0 22px}
   .soon{font-family:var(--disp);font-size:11px;letter-spacing:.1em;color:var(--steel);border:1px dashed var(--line);padding:9px 12px;margin-top:10px}
   .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:99;opacity:0;pointer-events:none;
     font-family:var(--disp);font-size:13.5px;color:var(--ice);background:rgba(251,248,242,.98);
@@ -261,17 +163,6 @@
   .gate.on{display:flex}
   .gate h2{font-family:var(--disp);font-weight:600;font-size:34px;color:var(--ice);text-transform:uppercase;margin:0 0 14px}
   .gate p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);max-width:44ch;margin:0 auto 26px}
-  /* « À interpréter » : mots écrits par le client, absents de la base. Doit se voir
-     sans crier — c'est une demande de jugement, pas une erreur. */
-  .ainterp{border:1px solid rgba(232,176,75,.4);background:rgba(232,176,75,.055);padding:14px 16px;margin-bottom:16px}
-  .ai-t{font-family:var(--disp);font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:#8a5a00;margin-bottom:11px}
-  .ai-l{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:8px}
-  .ai-k{font-family:var(--disp);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);min-width:112px}
-  .ai-w{font-family:var(--disp);font-size:14px;color:var(--ice);border:1px solid var(--line);padding:4px 10px}
-  .ai-l.fort .ai-w{color:#6b4a00;border-color:rgba(232,176,75,.45)}
-  .ai-n{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--gris);margin:11px 0 0}
-  .ai-n b{color:#6b4a00}
-  @media(max-width:600px){.ai-k{min-width:0;width:100%}}
   .large{grid-column:1/-1}
   /* ==== GRAPHIQUES : SVG faits main (même boîte à outils que coach.html) ==== */
   .gx{min-width:0}
@@ -466,11 +357,6 @@
   html[data-theme="obscur"] .rl-cel .rl-r,html[data-theme="obscur"] .moins,html[data-theme="obscur"] .rl-ko,html[data-theme="obscur"] .db.no{color:#f29b9b}
   html[data-theme="obscur"] .plus,html[data-theme="obscur"] .rl-ok{color:#8fd07a}
   html[data-theme="obscur"] .rl-fq{color:var(--ice)}
-  /* branchement dans la page réelle : bouton « Relire » de la file, formulaire de retours déplacé */
-  .fwrap{position:relative;min-width:0}
-  .fwrap .rl-go{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
-  .fwrap:has(.rl-go) .fitem{padding-right:92px}
-  .rl-lance{margin:0 0 14px}
   .rl-on .toast{bottom:120px;z-index:150}
 
   /* ==== POSTE DE TRAVAIL (repris de coach-maquette.html) : barre d'outils collante, édition, correction, feuille d'actions ==== */
@@ -671,15 +557,15 @@
     <button role="tab" data-p="dietes">Diètes</button>
     <button role="tab" data-p="msgs">Messages <span class="pastille-n" id="nav-nl" hidden></span></button>
     <button role="tab" data-p="suivi">Suivi &amp; résultats</button>
-    <button role="tab" data-p="stats">Statistiques</button>
-    <button role="tab" data-p="eco">Économie</button>
+    <button role="tab" data-p="stats">Statistiques<svg class="cad" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-label="protégé"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+    <button role="tab" data-p="eco">Économie<svg class="cad" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-label="protégé"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
   </nav>
 
   <!-- ═════════════ AUJOURD'HUI : ce qui attend une action ═════════════ -->
   <section class="page" id="p-jour">
     <h2 class="t">À faire aujourd’hui</h2>
     <p class="sous">Ce qui attend une action de votre part. Un clic sur un nom ouvre sa fiche.</p>
-    <div class="kpis q4">
+    <div class="kpis">
       <div class="kpi"><div class="k">Clients actifs</div><div class="v" id="j-actifs">—</div><div class="s">abonnement en cours</div></div>
       <div class="kpi"><div class="k">Diètes du mois</div><div class="v" id="j-dietes">—</div><div class="s">validées depuis le 1er</div></div>
       <div class="kpi hot"><div class="k">Revenu récurrent</div><div class="v" id="j-mrr">—</div><div class="s">par période de 4 semaines</div></div>
@@ -710,102 +596,41 @@
   <section class="page" id="p-dietes" hidden>
     <h2 class="t">Diètes</h2>
     <p class="sous">La file de relecture, et qui recevra quoi dans les 4 prochaines semaines.</p>
-  <!-- ── chiffres clés ─────────────────────────────────────────────────── -->
   <div class="kpis">
     <div class="kpi hot"><div class="k">À relire</div><div class="v" id="k-relire">0</div><div class="s" id="k-relire-s">diètes prêtes</div></div>
     <div class="kpi"><div class="k">À corriger</div><div class="v" id="k-corr">0</div><div class="s">renvoyées ou refusées</div></div>
     <div class="kpi"><div class="k">Validées ce mois</div><div class="v" id="k-val">—</div><div class="s" id="k-val-s">envoyées aux clients</div></div>
-    <div class="kpi"><div class="k">Délai moyen de relecture</div><div class="v" id="k-delai">—</div><div class="s">du dépôt à la validation, 30 jours</div></div>
-    <div class="kpi"><div class="k">Pesées en retard</div><div class="v" id="k-pesee">—</div><div class="s">clients sans pesée depuis 7 jours</div></div>
+    <div class="kpi"><div class="k">Délai moyen de validation</div><div class="v" id="k-delai">—</div><div class="s">entre le dépôt et votre validation, 30 jours</div></div>
   </div>
-
-    <section class="panel file">
-      <h2 class="intitule">La file <span class="n" id="filen"></span></h2>
-      <div class="outils" style="padding:12px 14px 0;margin:0">
-        <input type="search" id="f-q" placeholder="Rechercher un nom…" aria-label="Rechercher dans la file" autocomplete="off">
-        <select id="f-tri" aria-label="Trier la file"><option value="ancien">Attend depuis le plus longtemps</option><option value="recent">Plus récentes d’abord</option><option value="nom">Par nom</option></select>
-      </div>
-      <div class="rl-chips" id="f-filtres" role="group" aria-label="Filtrer la file" style="padding:0 14px 8px"></div>
-      <div class="body" id="file"></div>
-    </section>
-    <h3 class="s">Rythme de relecture</h3>
-    <div class="grille">
+    <div class="grille" style="margin-top:16px">
       <div class="carte"><h4>Délai de relecture <span class="n" id="g-delai-n"></span></h4><div id="g-delai"></div>
         <p class="leg">Temps entre le dépôt d’une diète et la décision d’un coach, sur 30 jours. Au-delà de 24 h, la barre passe en jaune.</p></div>
-      <div class="carte"><h4>Validées par type <span class="n" id="g-types-n"></span></h4><div id="g-types"></div></div>
+      <div class="carte"><h4>Ce mois-ci, par type <span class="n" id="g-types-n"></span></h4><div id="g-types"></div></div>
     </div>
+    <h3 class="s">File de relecture <span id="filen" style="color:var(--steel)"></span></h3>
+    <p class="sous" style="margin-top:-4px">Clique sur une ligne (ou « Relire ») pour ouvrir la diète et la relire à la loupe ; clique sur le nom pour ouvrir la fiche du client.</p>
+    <div class="outils">
+      <input type="search" id="f-q" placeholder="Rechercher un nom…" aria-label="Rechercher dans la file" autocomplete="off">
+      <select id="f-tri" aria-label="Trier la file"><option value="ancien">Attend depuis le plus longtemps</option><option value="recent">Plus récentes d’abord</option><option value="nom">Par nom</option></select>
+    </div>
+    <div class="rl-chips" id="f-filtres" role="group" aria-label="Filtrer la file" style="margin:0 0 12px"></div>
+    <div class="grille" id="file"><div class="carte"><p class="rien">Chargement…</p></div></div>
     <h3 class="s">Échéancier des 4 prochaines semaines</h3>
     <div class="carte" style="margin-bottom:12px"><h4>Charge à venir <span class="n" id="g-charge-n"></span></h4><div id="g-charge"></div></div>
     <div class="grille" id="echeancier"><div class="carte"><p class="rien">Chargement…</p></div></div>
     <p class="sous" style="margin-top:12px">Rythme : Formule Odyssée = réajustement 4 semaines après la dernière diète · Formule Olympe = nouveau menu toutes les 4 semaines · Formule Elysium = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif. Les dates suivantes supposent que chaque diète est validée le jour prévu.</p>
   </section>
 
-  <!-- ═════════════ FICHE CLIENT (ouverte depuis n'importe quel nom) ═════════════ -->
+  <!-- ═════════════ FICHE CLIENT (ouverte depuis n'importe quel nom) : présentation de coach-maquette.html ═════════════ -->
   <section class="page" id="p-fiche" hidden>
     <button type="button" class="retour-btn" id="f-retour">← Retour</button>
+    <h2 class="t" id="f-nom"></h2>
     <div class="fmeta" id="fiche-tete"></div>
-    <div class="cock" id="cock">
-      <section class="panel">
-        <h2 class="intitule">Le client</h2>
-        <div class="body pad" id="client">
-          <div class="empty"><b>Personne de sélectionné</b>Choisis un client dans la liste ou dans la file.</div>
-        </div>
-      </section>
-      <section class="panel">
-        <h2 class="intitule">Son programme <span class="n" id="progn"></span></h2>
-        <div class="body pad" id="prog">
-          <div class="empty"><b>Aucun programme affiché</b>Il apparaîtra ici, à côté des réponses.</div>
-        </div>
-      </section>
-    </div>
-  <!-- ── décision ──────────────────────────────────────────────────────── -->
-  <section class="decide" id="decide" hidden>
-    <h2 class="intitule">Ta décision</h2>
-    <div class="dbtns">
-      <button class="dbtn ok"  id="b-ok"  type="button"><span class="ic">✓</span>Valider et envoyer</button>
-      <button class="dbtn rec" id="b-rec" type="button"><span class="ic">↻</span>Demander une correction</button>
-      <button class="dbtn no"  id="b-no"  type="button"><span class="ic">✕</span>Refuser</button>
-    </div>
-
-    <div class="retour" id="retour">
-      <div class="rgrid">
-        <div class="rf"><label>Qu'est-ce qui cloche ?</label>
-          <select id="r-motif">
-            <option value="quantite_trop_faible">Quantité trop faible</option>
-            <option value="quantite_trop_elevee">Quantité trop élevée</option>
-            <option value="aliment_deteste">Un aliment détesté a été servi</option>
-            <option value="association_incoherente">Association incohérente</option>
-            <option value="plat_hors_habitudes">Plat qui ne nous ressemble pas</option>
-            <option value="repetition">Répétition / manque de variété</option>
-            <option value="portion_irrealiste">Portion irréaliste à l'achat</option>
-            <option value="erreur_affichage">Erreur d'affichage (nom, unité…)</option>
-            <option value="autre">Autre</option>
-          </select>
-        </div>
-        <div class="rf"><label>Gravité</label>
-          <select id="r-grav">
-            <option value="detail">Détail</option>
-            <option value="a_revoir" selected>À revoir</option>
-            <option value="bloquant">Bloquant</option>
-          </select>
-        </div>
-        <div class="rf"><label>Repas concerné (optionnel)</label>
-          <input type="text" id="r-plat" placeholder="Ex. J3 déjeuner — Wrap tex-mex"></div>
-        <div class="rf"><label>Jour (optionnel)</label>
-          <input type="number" id="r-jour" min="1" max="7" placeholder="1 à 6"></div>
-        <div class="rf full"><label>Ce que tu aurais fait</label>
-          <textarea id="r-attendu" placeholder="Ex. « 25 g de riz minimum par wrap » — écris comme tu le dirais à un stagiaire."></textarea></div>
-      </div>
-      <div class="dbtns" style="margin-top:14px">
-        <button class="dbtn rec" id="r-add" type="button"><span class="ic">+</span>Ajouter ce point</button>
-      </div>
-      <div class="rlist" id="rlist"></div>
-      <div class="dbtns" style="margin-top:16px">
-        <button class="dbtn ok" id="r-send" type="button"><span class="ic">→</span>Envoyer mes remarques</button>
-      </div>
-    </div>
-  </section>
-
+    <div class="kpis" id="f-kpis"></div>
+    <div class="carte" style="margin-top:12px"><h4>Poids <span class="n" id="f-poids-n"></span></h4><div id="suivi-courbe"></div><div id="f-progres"></div></div>
+    <div class="carte" style="margin-top:12px"><h4>Parcours <span class="n">diètes et pesées</span></h4><div id="suivi-frise"></div></div>
+    <div class="sous-onglets" role="tablist" aria-label="Sa fiche" id="f-onglets"></div>
+    <div class="carte" id="f-sous"></div>
   </section>
 
   <!-- ═════════════ RELECTURE D'UNE DIÈTE (ouverte depuis la file ou la fiche, hors onglets) ═════════════ -->
@@ -813,27 +638,24 @@
 
   <!-- ═════════════ MESSAGES ═════════════ -->
   <section class="page" id="p-msgs" hidden>
-  <!-- ── messagerie : les coachs répondent à la main ── -->
-  <h2 class="intitule" style="margin:4px 0 12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">Messages <span id="msg-nl" style="color:var(--blue)"></span>
-    <button type="button" id="notif-on" hidden style="margin-left:auto;font:600 12px/1 var(--texte);letter-spacing:0;text-transform:none;background:var(--brand);color:#111;border:0;border-radius:999px;padding:9px 14px;cursor:pointer">Activer les alertes de messages</button></h2>
-  <div class="msgs" id="msgs"><div class="empty" style="grid-column:1/-1">Chargement…</div></div>
-
+  <h2 class="t">Messages <span id="msg-nl" style="font:600 15px var(--texte);color:var(--blue)"></span></h2>
+  <p class="sous" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px">Un fil par client. Les non lus remontent en haut.
+    <button type="button" id="notif-on" class="mini" hidden>Activer les alertes de messages</button></p>
+  <div class="fils" id="msgs">
+    <div class="carte" id="m-fils"><p class="rien">Chargement…</p></div>
+    <div class="carte" id="m-conv" hidden></div>
+  </div>
   </section>
 
   <!-- ═════════════ SUIVI & RÉSULTATS ═════════════ -->
   <section class="page" id="p-suivi" hidden>
     <h2 class="t">Suivi &amp; résultats</h2>
     <p class="sous">Est-ce que les clients se pèsent, et est-ce que ça avance.</p>
-    <div class="kpis q4">
+    <div class="kpis">
       <div class="kpi"><div class="k">Taux de pesée</div><div class="v" id="r-taux">—</div><div class="s" id="r-taux-s">&nbsp;</div></div>
       <div class="kpi"><div class="k">Perte de poids</div><div class="v" id="r-Perte">—</div><div class="s" id="r-Perte-s">&nbsp;</div></div>
       <div class="kpi"><div class="k">Prise de masse</div><div class="v" id="r-Prise">—</div><div class="s" id="r-Prise-s">&nbsp;</div></div>
       <div class="kpi"><div class="k">Maintien</div><div class="v" id="r-Maintien">—</div><div class="s" id="r-Maintien-s">&nbsp;</div></div>
-    </div>
-    <div class="grille" style="margin-top:16px">
-      <div class="carte"><h4>Vers l’objectif du questionnaire</h4><div id="r-prog"></div>
-        <p class="leg">Kilos perdus (ou pris) depuis la première pesée, sur l’objectif annoncé au questionnaire (« 1 à 4 kilos » → 4 kg).</p></div>
-      <div class="carte" id="r-stag"></div>
     </div>
     <h3 class="s">Évolution moyenne depuis la première pesée · 12 semaines</h3>
     <div class="grille">
@@ -845,6 +667,13 @@
     <h3 class="s">Régularité des pesées</h3>
     <div class="carte"><h4>Une case = une semaine <span class="n">12 dernières semaines</span></h4><div id="g-regu"></div>
       <div class="g-leg"><span><i style="background:var(--steel);opacity:.25"></i>aucune pesée</span><span><i style="background:var(--brand);opacity:.6"></i>1 pesée</span><span><i style="background:var(--brand)"></i>2 pesées ou plus</span><span>case absente : pas encore inscrit</span></div></div>
+    <div class="grille" style="margin-top:12px">
+      <div class="carte"><h4>Où en sont les clients <span class="n" id="g-histo-n">chemin parcouru</span></h4><div id="g-histo"></div>
+        <p class="leg">Part du chemin déjà faite entre le poids de départ et l’objectif annoncé au questionnaire.</p></div>
+      <div class="carte"><h4>Meilleures progressions <span class="n">vers l’objectif du questionnaire</span></h4><div id="r-prog"></div>
+        <p class="leg">Kilos perdus (ou pris) depuis la première pesée, sur l’objectif annoncé au questionnaire (« 1 à 4 kilos » → 4 kg).</p></div>
+      <div class="carte" id="r-stag"></div>
+    </div>
   </section>
 
   <!-- ═════════════ STATISTIQUES ═════════════ -->
@@ -852,7 +681,7 @@
   <!-- ── statistiques : diètes du site + historique d'avant le site (stats_historique) ── -->
   <h2 class="t">Statistiques</h2>
   <p class="sous" id="s-sous">Programmes alimentaires uniquement (l’entraînement n’est pas compté).</p>
-  <div class="kpis q4">
+  <div class="kpis">
     <div class="kpi"><div class="k" id="s-an-k">Diètes cette année</div><div class="v" id="s-an">—</div><div class="s" id="s-an-s">&nbsp;</div></div>
     <div class="kpi"><div class="k">Depuis le début</div><div class="v" id="s-tot">—</div><div class="s" id="s-tot-s">&nbsp;</div></div>
     <div class="kpi"><div class="k">Hommes / Femmes</div><div class="v" id="s-hf">—</div><div class="s" id="s-hf-s">&nbsp;</div></div>
@@ -874,7 +703,7 @@
   <!-- ── économie : historique des paiements Stripe (table paiements) + abonnements actifs ; rien n'est inventé ── -->
   <h2 class="t">Économie</h2>
   <p class="sous" id="e-sous">Chiffres lus dans l’historique des paiements Stripe. Aucune donnée de carte.</p>
-  <div class="kpis q4">
+  <div class="kpis">
     <div class="kpi hot"><div class="k">Encaissé ce mois</div><div class="v" id="e-mois">—</div><div class="s" id="e-mois-s">&nbsp;</div></div>
     <div class="kpi"><div class="k" id="e-an-k">Encaissé cette année</div><div class="v" id="e-an">—</div><div class="s" id="e-an-s">&nbsp;</div></div>
     <div class="kpi"><div class="k">Revenu récurrent</div><div class="v" id="e-mrr">—</div><div class="s" id="e-mrr-s">par période de 4 semaines</div></div>
@@ -897,7 +726,7 @@
     <div class="kpi"><div class="k">Clients depuis le début</div><div class="v" id="k-total">—</div><div class="s" id="k-total-s">comptes créés sur le site</div></div>
     <div class="kpi"><div class="k">Résiliations</div><div class="v att" id="k-resil">—</div><div class="s" id="k-resil-s">en attente de Stripe</div></div>
   </div>
-  <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
+  <p id="abo-note"></p>
   <div class="grille" style="margin-bottom:18px">
     <div class="carte large"><h4>Du compte créé à l’abonné fidèle</h4><div id="g-funnel"></div>
       <p class="leg">Chaque barre = combien de personnes passent l’étape ; le pourcentage compare à l’étape d’avant. « Encore là » = abonnement actif 1 mois (2e mois) ou 2 mois (3e mois) après la création du compte.</p></div>
@@ -1483,7 +1312,7 @@ var REL=(function(){
     var rc=(R.diagnostic||{}).rectification||{}, lib=R.retoursLib||{};
     if(rc.jours_refaits) h+='<p class="leg" style="margin-left:0">'+(rc.jours_refaits==='tous'?'Semaine entière refaite.':'Jours refaits : '+[].concat(rc.jours_refaits).join(', ')+'.')+'</p>';
     if(Array.isArray(rc.non_appliquees)&&rc.non_appliquees.length) h+='<p class="rl-ko">Corrections non appliquées, à reprendre à la main :</p><ul class="rl-na">'+
-      rc.non_appliquees.map(function(x){ return '<li>'+e(lib[x.id]||('Correction n° '+x.id))+' : '+e(x.raison||'')+'</li>'; }).join('')+'</ul>';
+      rc.non_appliquees.map(function(x){ return '<li>'+e(propre(lib[x.id]||('Correction n° '+x.id)))+' : '+e(propre(x.raison||''))+'</li>'; }).join('')+'</ul>';
     return h;
   }
 
@@ -1520,6 +1349,13 @@ var REL=(function(){
     {id:'lever',g:'Consignes durables',lib:'Lever une consigne durable',motif:'autre',f:['ref'],po:null},
     {id:'note',g:'Autre',lib:'Note libre',motif:'autre',f:['lieu_opt'],po:null}];
   var ACT={}; ACTIONS.forEach(function(a){ ACT[a.id]=a; });
+  // textes venus de la base (non_appliquees[].raison, applique_note, libellés de retours_coach) : jamais « moteur »
+  // ni un identifiant d'action à l'écran. « lever » / « reequilibrer » seulement quand c'est tout le texte (mots courants).
+  function propre(s){ if(s==null) return s;
+    var t=String(s).replace(/branch[ée]+e?s?\s+au\s+moteur/gi,'prise en charge automatiquement').replace(/pris(?:e|es)?\s+en\s+charge\s+par\s+le\s+moteur/gi,'prise en charge automatiquement')
+      .replace(/\b(?:le|du|au)\s+moteur\b/gi,function(m){ var a=m.slice(0,2).toLowerCase(); return a==='le'?'la préparation':a==='du'?'de la préparation':'à la préparation'; }).replace(/\bmoteur\b/gi,'préparation')
+      .replace(/\b(remplacer_aliment|exclure_aliment|bornes_aliment|remplacer_plat|verrouiller_plat|refaire_jour|changer_cible|plus_de_variete|plus_simple|budget_serre)\b/g,function(m){ return ACT[m].lib; });
+    return /^\s*(lever|reequilibrer)\s*$/.test(t)?ACT[t.trim()].lib:t; }
   var VARIETE=['petit_dejeuner','collation','dejeuner','diner'];
 
   // champs lus dans le panneau -> {obj} ou {erreur}. X = aides de lecture (voir correction)
@@ -1684,7 +1520,7 @@ var REL=(function(){
   return {MEALS:MEALS,ETAT:ETAT,ML:ML,titre:titre,actifs:actifs,totJour:totJour,somme:somme,ecart:ecart,joursOk:joursOk,repasDe:repasDe,sig:sig,sigJ:sigJ,
     interdits:interdits,refuse:refuse,entete:entete,semaine:semaine,graphe:graphe,jour:jour,jourEdit:jourEdit,equilibreur:equilibreur,controlesDirect:controlesDirect,modifs:modifs,
     listeAliments:listeAliments,listePlats:listePlats,choixJours:choixJours,actionsRapides:actionsRapides,aide:aide,
-    comparer:comparer,controle:controle,apercu:apercu,correction:correction,actionObjet:actionObjet,notes:notes,blocNotes:blocNotes,barreOutils:barreOutils,barreEdition:barreEdition,decision:decision,ml:ml};
+    comparer:comparer,controle:controle,propre:propre,apercu:apercu,correction:correction,actionObjet:actionObjet,notes:notes,blocNotes:blocNotes,barreOutils:barreOutils,barreEdition:barreEdition,decision:decision,ml:ml};
 })();
 
 /* ======================================================================
@@ -1917,166 +1753,238 @@ var ED=(function(){
     plat_hors_habitudes:'Plat hors habitudes',repetition:'Répétition',portion_irrealiste:'Portion irréaliste',
     erreur_affichage:'Erreur d\'affichage',autre:'Autre'};
 
-  /* ---------- la file ---------- */
-  // filtres de la file : « À corriger » = renvoyées en correction ou refusées ; « Brouillons » = retouche à la main enregistrée sans valider (diagnostic.edition)
+  /* ---------- la file de relecture (onglet Diètes), présentation de coach-maquette.html ----------
+     Cartes « À relire », « À corriger », « Validées cette semaine » (+ « À produire » quand il y en a,
+     « Brouillons » par le filtre). Clic sur une ligne = relecture directe ; clic sur le nom = fiche.
+     « À corriger » = renvoyées en correction ou refusées ; « Brouillons » = retouche à la main enregistrée sans valider (diagnostic.edition) */
   var FF={f:'tout'}, FILTRES=[['tout','Toutes'],['a_relire','À relire'],['corriger','À corriger'],['brouillon','Brouillons'],['valide','Validées'],['a_generer','À produire']];
   function brouillon(c){ return c.etape==='a_relire'&&!!(c.diagnostic||{}).edition; }
   function dansFiltre(c,f){ return f==='tout'||(f==='brouillon'?brouillon(c):f==='corriger'?(c.etape==='rectification'||c.etape==='refuse'):c.etape===f); }
   function depot(c){ return c.programme_at||c.questionnaire_valide_at||''; }
-  function renderFile(){
-    var box=$('file'), q=sansAccent(($('f-q').value||'').trim()), tri=$('f-tri').value, pl=function(n,s){ return n+' '+s+(n>1?'s':''); };
-    $('filen').textContent=file.length||'';
-    $('f-filtres').innerHTML=FILTRES.map(function(x){ var n=file.filter(function(c){ return dansFiltre(c,x[0]); }).length;
-      return '<button type="button" class="rl-chip'+(FF.f===x[0]?' on':'')+'" data-ff="'+x[0]+'" aria-pressed="'+(FF.f===x[0])+'">'+x[1]+' · '+n+'</button>'; }).join('');
-    var L=file.map(function(c,i){ return {c:c,i:i}; }).filter(function(x){ return dansFiltre(x.c,FF.f)&&(!q||sansAccent((x.c.prenom||'')+' '+(x.c.nom||'')).indexOf(q)>=0); })
-      .sort(function(a,b){ if(tri==='nom') return sansAccent((a.c.prenom||'')+' '+(a.c.nom||'')).localeCompare(sansAccent((b.c.prenom||'')+' '+(b.c.nom||'')),'fr');
-        var x=depot(a.c), y=depot(b.c); return (x>y?1:x<y?-1:0)*(tri==='recent'?-1:1); });
-    if(!L.length){ box.innerHTML='<div class="empty"><b>'+(file.length?'Rien dans ce filtre':'Rien en attente')+'</b>'+(file.length?'Change de filtre ou de recherche.':'Aucun questionnaire validé pour le moment.')+'</div>'; return; }
-    var nbA={}; ((D&&D.rc)||[]).forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
-    box.innerHTML=L.map(function(x){ var c=x.c, idx=x.i, ed=(c.diagnostic||{}).edition, br=brouillon(c),
-        rl=c.menu&&c.programme_id&&['a_relire','rectification','valide','refuse'].indexOf(c.etape)>=0,
+  function relisable(c){ return !!(c.menu&&c.programme_id&&['a_relire','rectification','valide','refuse'].indexOf(c.etape)>=0); }
+  function valideLe(c){ var k=D&&D.par[c.user_id], x=k&&k.prog.filter(function(p){ return p.id===c.programme_id; })[0]; return x&&x.traite_at?new Date(x.traite_at).getTime():0; }
+  // ce qui demande un œil particulier, lu dans le diagnostic de la diète
+  function particularites(c){ var d=c.diagnostic||{}, ai=d.a_interpreter||{}, L=[];
+    if((ai.refuses||[]).length+(ai.allergies||[]).length+(ai.conserver||[]).length) L.push('mots à interpréter');
+    if((d.alertes_impose||[]).length) L.push('plat imposé écarté');
+    if(d.rectification){ var na=(d.rectification.non_appliquees||[]).length; L.push('corrections revenues'+(na?', '+na+' non appliquée'+(na>1?'s':''):'')); }
+    if((c.menu||{}).recettes) L.push('avec recettes');
+    return L; }
+  function ligneFile(c,nbA){
+    var i=file.indexOf(c), nm=((c.prenom||'')+' '+(c.nom||'')).trim()||'Client', ed=(c.diagnostic||{}).edition, br=brouillon(c), rl=relisable(c), P=particularites(c), n=nbA[c.programme_id]||0, vl=valideLe(c),
         info=c.etape==='a_generer'?'questionnaire validé le '+dateFr(c.questionnaire_valide_at)
-          :c.etape==='rectification'?pl(nbA[c.programme_id]||0,'action')+' de correction envoyée'+((nbA[c.programme_id]||0)>1?'s':'')
+          :c.etape==='rectification'?n+' action'+(n>1?'s':'')+' de correction envoyée'+(n>1?'s':'')+' · nouvelle version attendue'
+          :c.etape==='refuse'?'refusée, à refaire'
+          :c.etape==='valide'?'validée'+(vl?' '+depuis(vl):'')
           :br?'modifiée à la main par '+nomCoach(ed.par)+', rien n’est envoyé':'déposée '+depuis(c.programme_at);
-      return '<div class="fwrap"><button class="fitem'+(sel===idx?' on':'')+'" data-i="'+idx+'">'+
-        '<div class="nm">'+esc(c.prenom)+' '+esc(c.nom)+'</div>'+
-        '<div class="mt"><span class="etat '+c.etape+'">'+(br?'Brouillon':ETAT[c.etape]||c.etape)+'</span>'+(c.programme_id?typeDiete(c)+'<span>v'+esc(c.version||1)+'</span>':'')+'</div>'+
-        '<div class="mt">'+esc(info)+'</div></button>'+
-        (rl?'<button type="button" class="mini rl-go" data-rel="'+idx+'" aria-label="Relire la diète de '+esc(c.prenom)+'">Relire</button>':'')+'</div>';
-    }).join('');
-    box.querySelectorAll('.fitem').forEach(function(b){
-      b.addEventListener('click',function(){ ouvrir(file[+b.dataset.i].user_id); });
-    });
-    box.querySelectorAll('[data-rel]').forEach(function(b){
-      b.addEventListener('click',function(){ relire(file[+b.dataset.rel]); });
-    });
+    return '<div class="ligne file-l" tabindex="0" role="button" '+(rl?'data-rel="'+i+'" aria-label="Relire la diète de '+esc(nm)+'"':'data-u="'+esc(c.user_id)+'" aria-label="Ouvrir la fiche de '+esc(nm)+'"')+'>'+
+      '<b class="nom" role="button" tabindex="0" data-u="'+esc(c.user_id)+'" title="Ouvrir la fiche">'+esc(nm)+'</b><span>'+
+      (c.programme_id?typeDiete(c)+' · v'+esc(c.version||1)+' · ':'')+(br?'<span class="tag j">Brouillon</span> · ':'')+esc(info)+
+      (P.length?'<br><small class="file-p">'+P.map(esc).join(' · ')+'</small>':'')+
+      (rl?'<button type="button" class="mini" tabindex="-1">'+(c.etape==='valide'||c.etape==='refuse'?'Voir':'Relire')+'</button>':'')+'</span></div>';
+  }
+  function renderFile(){
+    var box=$('file'); if(!box) return;
+    var q=sansAccent(($('f-q').value||'').trim()), tri=$('f-tri').value, f=FF.f, sem=Date.now()-7*JOUR;
+    $('filen').textContent=file.length?'· '+file.length:'';
+    $('f-filtres').innerHTML=FILTRES.map(function(x){ var n=file.filter(function(c){ return dansFiltre(c,x[0]); }).length;
+      return '<button type="button" class="rl-chip'+(f===x[0]?' on':'')+'" data-ff="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+' · '+n+'</button>'; }).join('');
+    var L=file.filter(function(c){ return !q||sansAccent((c.prenom||'')+' '+(c.nom||'')).indexOf(q)>=0; })
+      .sort(function(a,b){ if(tri==='nom') return sansAccent((a.prenom||'')+' '+(a.nom||'')).localeCompare(sansAccent((b.prenom||'')+' '+(b.nom||'')),'fr');
+        var x=depot(a), y=depot(b); return (x>y?1:x<y?-1:0)*(tri==='recent'?-1:1); });
+    var nbA={}; ((D&&D.rc)||[]).forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
+    var GR=[['a_relire','À relire',function(c){ return c.etape==='a_relire'; },'Tout est relu.'],
+      ['corriger','À corriger',function(c){ return c.etape==='rectification'||c.etape==='refuse'; },'Rien en correction.'],
+      ['valide',f==='valide'?'Validées':'Validées cette semaine',function(c){ return c.etape==='valide'&&(f==='valide'||valideLe(c)>=sem); },f==='valide'?'Aucune diète validée.':'Aucune diète validée ces 7 derniers jours.'],
+      ['brouillon','Brouillons',brouillon,'Aucun brouillon.'],
+      ['a_generer','À produire',function(c){ return c.etape==='a_generer'; },'Aucune diète à produire.']];
+    box.innerHTML=GR.filter(function(g){ return f==='tout'?(g[0]!=='brouillon'&&(g[0]!=='a_generer'||file.some(g[2]))):f===g[0]; }).map(function(g){ var M=L.filter(g[2]);
+      return '<div class="carte"><h4>'+g[1]+' <span class="n">'+M.length+'</span></h4>'+(M.map(function(c){ return ligneFile(c,nbA); }).join('')||'<p class="rien">'+(q?'Aucun nom ne correspond.':g[3])+'</p>')+'</div>'; }).join('');
   }
   $('f-filtres').addEventListener('click',function(e){ var b=e.target.closest('[data-ff]'); if(b){ FF.f=b.dataset.ff; renderFile(); } });
   $('f-q').addEventListener('input',renderFile); $('f-tri').addEventListener('change',renderFile);
+  // clic sur une ligne = relecture ; le nom (data-u) est laissé au gestionnaire global qui ouvre la fiche
+  $('file').addEventListener('click',function(e){ if(e.target.closest('.nom')) return; var l=e.target.closest('[data-rel]'); if(l) relire(file[+l.dataset.rel]); });
+  $('file').addEventListener('keydown',function(e){ var l=e.target; if((e.key!=='Enter'&&e.key!==' ')||!l.classList||!l.classList.contains('file-l')) return;
+    e.preventDefault(); if(l.dataset.rel!=null) relire(file[+l.dataset.rel]); else ouvrir(l.dataset.u); });
 
-  /* ---------- fiche client : les réponses, directement à l'écran ---------- */
-  // On met EN AVANT ce qui compte pour juger une diète, le reste suit.
-  // Repérées par DÉBUT de libellé : couvre l'ancien formulaire et celui refondu le 04/09
-  // (« … (choix multiple possible) », avertissements ajoutés en fin de question).
+  /* ---------- FICHE CLIENT (présentation de coach-maquette.html) ----------
+     En-tête, 4 chiffres clés, courbe de poids, parcours, puis les sous-onglets.
+     Sources : cur (ligne de la file ou dernière version), D.par[uid] (profil, abonnement, versions),
+     et ce que renderSuivi lit à l'ouverture (pesées, mensurations, questionnaire, retours, photos) dans FS. */
+  // réponses du questionnaire : ce qui compte pour juger une diète d'abord, repéré par DÉBUT de libellé
+  // (couvre l'ancien formulaire et celui refondu le 04/09)
   var PRIO=['Quel est ton objectif principal','Comment décrirais-tu ton appétit',
     'Des aliments que tu refuses','Allergies','As-tu un régime particulier',
     'Y a-t-il des aliments que tu souhaites absolument conserver','FACULTATIF - Pour aller plus loin'];
   var ALERTE=['Des aliments que tu refuses','Allergies'];
-
-  function renderClient(){
-    var c=cur, box=$('client');
-    if(!c){ return; }
-    var age=c.naissance?(new Date().getFullYear()-+c.naissance.slice(0,4)):'—';
-    var h='<div class="idcard"><h3>'+esc(c.prenom)+' '+esc(c.nom)+'</h3>'+
-      '<span class="idmeta">'+(c.sexe==='HOMME'?'Homme':c.sexe?'Femme':'—')+' · <b>'+age+' ans</b> · <b>'+
-      (c.dernier_poids||(c.reponses||{})['Poids (en kg)']||'?')+' kg</b> · '+(c.taille_cm||'?')+' cm</span></div>';
-    h+='<div class="suivi" id="suivi"><h4>Suivi</h4><div class="chiffres">Chargement des pesées…</div></div>';
-    h+='<div class="carte" id="f-notes" style="margin:0 0 16px"></div>';
-    var rep=c.reponses||{}, vus={};
-    if(!Object.keys(rep).length) h+='<div class="empty"><b>Questionnaire pas encore rempli</b>Les réponses apparaîtront ici dès qu’il sera validé.</div>';
-    PRIO.forEach(function(p){ Object.keys(rep).forEach(function(k){
-      if(!vus[k] && rep[k] && k.indexOf(p)===0){ vus[k]=1; h+=qa(k,rep[k]); } }); });
-    Object.keys(rep).forEach(function(k){ if(!vus[k] && rep[k]) h+=qa(k,rep[k]); });
-    box.innerHTML=h;
+  var SOUS=['Diètes','Messages','Questionnaire','Mensurations','Photos','Retours sur les plats','Notes internes'];
+  var FS={uid:null,s:0};
+  function prenomDe(c){ return String((c&&c.prenom)||'').trim()||'le client'; }
+  function renderFiche(){
+    var c=cur; if(!c) return;
+    if(FS.uid!==c.user_id) FS={uid:c.user_id,s:0,pes:null,w:null,q0:null,mens:null,ret:null,ph:null};
+    $('f-nom').textContent=((c.prenom||'')+' '+(c.nom||'')).trim()||'Client';
+    $('f-poids-n').textContent=''; $('f-progres').innerHTML='';
+    G.mount('suivi-courbe',function(){ return '<p class="rien">Chargement des pesées…</p>'; });
+    G.mount('suivi-frise',function(){ return ''; });
+    renderTete(); fKpis(); sousFiche();
     renderSuivi(c.user_id);
-    ficheNotes(c.user_id); chargerNotes(c.user_id).then(function(){ ficheNotes(c.user_id); });
+    chargerNotes(c.user_id).then(function(){ ficheNotes(c.user_id); });
   }
-  // notes internes de la fiche (même table que la relecture)
-  $('client').addEventListener('click',function(e){ var b=e.target.closest('[data-act]'); if(!b||!cur) return;
+  function sousFiche(){
+    var c=cur, z=$('f-sous'); if(!c||!z) return; var uid=c.user_id, h='';
+    $('f-onglets').innerHTML=SOUS.map(function(t,i){ return '<button type="button" role="tab" data-s="'+i+'" aria-selected="'+(i===FS.s)+'"'+(i===FS.s?' class="on"':'')+'>'+t+'</button>'; }).join('');
+    var ta=$('f-msg-txt'), brou=ta&&ta.value, foc=ta&&document.activeElement===ta;          // le brouillon survit à un nouveau message reçu
+    if(FS.s===0) h=versions(uid);
+    else if(FS.s===1) h='<h4>Messages <span class="n">fil de '+esc(prenomDe(c))+'</span></h4><div class="bulles" id="f-bulles">'+bulles(uid)+'</div>'+formMsg(uid,'f-msg-txt',prenomDe(c));
+    else if(FS.s===2) h=questionnaire(c);
+    else if(FS.s===3) h=mensurations();
+    else if(FS.s===4) h=photos();
+    else if(FS.s===5) h=retoursPlats(c);
+    else h='<div id="f-notes"></div>';
+    z.innerHTML=h;
+    if(FS.s===1){ var b=$('f-bulles'); b.scrollTop=b.scrollHeight; if(brou) $('f-msg-txt').value=brou; if(foc) $('f-msg-txt').focus({preventScroll:true}); lireFil(uid); }
+    if(FS.s===6) ficheNotes(uid);
+  }
+  $('p-fiche').addEventListener('click',function(e){ var b=e.target.closest('[data-s],[data-fs],[data-act]'); if(!b||!cur) return;
+    if(b.dataset.s!=null){ FS.s=+b.dataset.s; sousFiche(); return; }
+    if(b.dataset.fs!=null){ FS.s=+b.dataset.fs; sousFiche(); $('f-onglets').scrollIntoView({behavior:'smooth',block:'start'});
+      setTimeout(function(){ var t=$('f-msg-txt'); if(t) t.focus({preventScroll:true}); },350); return; }
     if(b.dataset.act==='note-aj') ajouterNote(cur.user_id,cur.programme_id,$('f-note-t'));
     else if(b.dataset.act==='note-sup') supprimerNote(cur.user_id,b.dataset.id); });
-  /* ---------- suivi : pesées (table poids) + dernières mensurations ----------
-     C'est la pesée qui fait évoluer la diète : le coach la voit ici, à côté du questionnaire. */
+  function qa(k,v){
+    var flag=ALERTE.some(function(a){return k.indexOf(a)===0;});
+    return '<div class="qa'+(flag?' alerte':'')+'"><dt>'+esc(k.split('⚠')[0].split('\n(')[0].replace(/\s+/g,' ').replace(/\s*\(.*?\)\s*$/,'').slice(0,90))+'</dt><dd>'+esc(v)+'</dd></div>';
+  }
+  // CE QUE LE CLIENT A ÉCRIT ET QUI N'EST PAS DANS LA BASE : pas exclu du menu, demande une lecture humaine
+  function aInterp(d){ var ai=(d||{}).a_interpreter||{}, bl=[['Refusé',ai.refuses,1],['Allergie / santé',ai.allergies,1],['À conserver',ai.conserver,0]].filter(function(b){ return b[1]&&b[1].length; });
+    if(!bl.length) return '';
+    return '<div class="rl-ai'+(bl.some(function(b){ return b[2]; })?' fort':'')+'" style="margin:0 0 10px"><b>À interpréter</b> · mots écrits par le client, absents de notre liste d’aliments'+
+      bl.map(function(b){ return '<span class="k">'+b[0]+'</span>'+b[1].map(function(w){ return '<span class="w">'+esc(w)+'</span>'; }).join(''); }).join('')+
+      '<p>Ces mots n’ont <b>pas</b> été retirés du menu. À toi de juger ce que ça implique (une famille entière ? une source à remplacer ?) et de le signaler si le menu doit changer.</p></div>'; }
+  function questionnaire(c){
+    var rep=c.reponses||((D&&D.par[c.user_id])||{}).rep||{}, vus={}, L=[], n=Object.keys(rep).filter(function(k){ return rep[k]; }).length;
+    if(!n) return '<h4>Ses réponses au questionnaire</h4><p class="rien">Questionnaire pas encore rempli : les réponses apparaîtront ici dès qu’il sera validé.</p>';
+    PRIO.forEach(function(p){ Object.keys(rep).forEach(function(k){ if(!vus[k]&&rep[k]&&k.indexOf(p)===0){ vus[k]=1; L.push(qa(k,rep[k])); } }); });
+    Object.keys(rep).forEach(function(k){ if(!vus[k]&&rep[k]) L.push(qa(k,rep[k])); });
+    return '<h4>Ses réponses au questionnaire <span class="n">'+n+' réponse'+(n>1?'s':'')+'</span></h4>'+aInterp(c.diagnostic)+'<dl style="margin:0">'+L.join('')+'</dl>';
+  }
+  var MENS=[['taille','Tour de taille'],['hanches','Tour de hanches'],['poitrine','Tour de poitrine'],['epaules','Épaules'],['cuisse','Tour de cuisse'],['bras','Tour de bras']];
+  function mensurations(){ var M=FS.mens, dj=function(m){ return new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR'); };
+    if(M==null) return '<h4>Mensurations</h4><p class="rien">Chargement…</p>';
+    if(!M.length) return '<h4>Mensurations</h4><p class="rien">Aucune mensuration enregistrée pour l’instant.</p>';
+    var L=MENS.map(function(k){ var v=M.filter(function(m){ return m[k[0]]!=null; }); if(!v.length) return '';
+      var a=v[0], b=v[v.length-1]; return '<div class="ligne"><span>'+k[1]+'</span><b>'+(v.length>1?fr(a[k[0]])+' → '+fr(b[k[0]]):fr(b[k[0]]))+' cm</b></div>'; }).join('');
+    return '<h4>Mensurations <span class="n">'+(M.length>1?'du '+dj(M[0])+' au '+dj(M[M.length-1]):'le '+dj(M[0]))+'</span></h4>'+(L||'<p class="rien">Aucune mesure renseignée.</p>'); }
+  function photos(){ var P=FS.ph;
+    return '<h4>Photos <span class="n">privées, visibles des coachs seulement</span></h4>'+(P==null?'<p class="rien">Chargement…</p>':!P.length?'<p class="rien">Aucune photo pour l’instant.</p>':
+      '<div class="ph-grille">'+P.map(function(x){ return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener"><img src="'+esc(x.url)+'" alt="Photo du '+esc(x.d)+'" loading="lazy"><span>'+esc(x.d)+'</span></a>'; }).join('')+'</div>'); }
+  // retours du client sur ses plats (table retours), diète la plus récente
+  function retoursPlats(c){ var R=FS.ret, pid=c.programme_id, h='<h4>Retours sur les plats <span class="n">'+(c.version?'diète v'+esc(c.version):'')+'</span></h4>';
+    if(R==null) return h+'<p class="rien">Chargement…</p>';
+    var L=R.filter(function(x){ return !pid||x.programme_id===pid; });
+    if(!L.length) return h+'<p class="rien">Aucun retour du client sur cette diète pour l’instant.</p>';
+    var titres={}, AV={garder:['À garder','v'],revoir:['À revoir','j'],plus_jamais:['Plus jamais','r']};
+    ((c.menu||{}).jours||[]).forEach(function(j){ (j.repas||[]).forEach(function(rp){ var k=rp.recette_base||rp.recette; if(k&&!titres[k]) titres[k]=rp.titre||k; }); });
+    return h+['garder','revoir','plus_jamais'].map(function(a){ return L.filter(function(x){ return x.avis===a; }).map(function(x){
+      return '<div class="ligne"><span>'+esc(titres[x.plat]||String(x.plat||'').replace(/_/g,' '))+'</span><span class="tag '+AV[a][1]+'">'+AV[a][0]+'</span></div>'; }).join(''); }).join('')+
+      '<p class="leg">Donnés par le client dans son espace, sur sa diète actuelle.</p>'; }
+  // objectif de poids du questionnaire (palier « 5 à 8 kilos » -> 8), mesuré depuis le point de départ de la courbe
+  function objectifPoids(k,w){ var pal=k&&palier(k.rep); if(!pal||!w||w.length<2||(k.obj!=='Perte'&&k.obj!=='Prise')) return null;
+    var s=k.obj==='Prise'?1:-1, dep=w[0].v, der=w[w.length-1].v;
+    return {pal:pal,s:s,dep:dep,der:der,cible:dep+s*pal,pct:Math.max(0,Math.min(100,Math.round((der-dep)*s/pal*100)))}; }
+  // les 4 chiffres clés : poids, objectif, prochaine diète (échéancier), dernière pesée
+  function fKpis(){
+    var c=cur, box=$('f-kpis'); if(!c||!box) return;
+    var k=D&&D.par[c.user_id], pes=FS.pes, w=FS.w, der=pes&&pes.length?pes[pes.length-1]:null, ob=objectifPoids(k,w), pal=k&&palier(k.rep), K=[];
+    if(!pes) K.push(['Poids actuel','…','&nbsp;']);
+    else if(!der) K.push(['Poids actuel','—',FS.q0?'questionnaire : '+fr(FS.q0.v)+' kg':'aucune pesée']);
+    else { var dep=w[0], ev=der.v-dep.v; K.push(['Poids actuel',fr(der.v)+' <small>kg</small>',w.length>1?(ev>0?'+':ev<0?'−':'')+fr(Math.abs(ev))+' kg depuis '+(dep.q?'le questionnaire':'la 1re pesée'):'première pesée']); }
+    K.push(ob?['Vers l’objectif',ob.pct+' <small>%</small>','objectif '+fr(ob.cible)+' kg ('+(ob.s>0?'+':'−')+ob.pal+' kg)',1]
+      :['Vers l’objectif','—',!pes?'&nbsp;':pal&&(k.obj==='Perte'||k.obj==='Prise')?'il faut au moins une pesée':k&&k.obj==='Maintien'?'objectif : maintien':'pas d’objectif chiffré au questionnaire',1]);
+    var pr=prochaine(k); K.push(['Prochaine diète',pr[0],pr[1],0,1]);
+    if(!pes) K.push(['Dernière pesée','…','&nbsp;',0,1]);
+    else if(!der) K.push(['Dernière pesée','aucune','<span class="retard">relance conseillée</span>',0,1]);
+    else { var j=Math.floor((Date.now()-der.t)/JOUR); K.push(['Dernière pesée',j>0?'il y a '+j+' j':'aujourd’hui',j>=7?'<span class="retard">relance conseillée</span>':'le '+new Date(der.t).toLocaleDateString('fr-FR'),0,1]); }
+    box.innerHTML=K.map(function(x){ return '<div class="kpi'+(x[3]?' hot':'')+'"><div class="k">'+x[0]+'</div><div class="v'+(x[4]?' txt':'')+'">'+x[1]+'</div><div class="s">'+x[2]+'</div></div>'; }).join('');
+  }
+  // prochaine diète : même calcul que l'échéancier (planClient), sans limite de 4 semaines
+  function prochaine(k){
+    if(!k) return ['—','&nbsp;'];
+    var der=k.prog[k.prog.length-1], fm=k.a&&k.a.formule, jr=function(d){ return d.toLocaleDateString('fr-FR'); };
+    if(der&&(der.statut==='en_attente'||der.statut==='rectification')) return ['v'+esc(der.version)+' '+(der.statut==='en_attente'?'à relire':'à corriger'),'déjà chez les coachs'];
+    if(der&&der.statut==='refuse') return ['v'+esc(der.version)+' refusée','nouvelle version à refaire'];
+    if(!der) return k.q?['1re diète','questionnaire validé, à produire']:['—','questionnaire à remplir'];
+    if(!k.a||!RYTHME[fm]) return ['—','sans abonnement actif'];
+    if(!actif(k)&&k.a.statut!=='past_due') return ['<span class="retard">bloquée</span>','abonnement '+String(ABO[k.a.statut]||k.a.statut).toLowerCase()];
+    var p=planClient(k,Date.now()+400*JOUR), e0=p&&p.ev[0], auj=new Date(); auj.setHours(0,0,0,0);
+    if(!e0) return ['—','rien de prévu'];
+    var ty=e0.g==='menu'?'nouveau menu':'réajustement';
+    if(p.imp) return ['<span class="retard">bloquée : impayé</span>',ty];
+    if(!p.pese) return ['<span class="retard">en attente d’une pesée</span>',ty+' prévu le '+jr(e0.d)];
+    return e0.d<auj?['<span class="retard">en retard</span>',ty+' prévu le '+jr(e0.d)]:[jr(e0.d),ty];
+  }
+
+  /* ---------- suivi : pesées (table poids), mensurations, questionnaire, retours, photos ----------
+     C'est la pesée qui fait évoluer la diète : le coach la voit en tête de la fiche. */
   var JOUR=86400000;
   function fr(n,d){ return (+n).toFixed(d==null?1:d).replace('.',','); }
   function renderSuivi(uid){
+    var ici=function(){ return cur&&cur.user_id===uid&&FS.uid===uid; };        // on a pu changer de client entre-temps
     Promise.all([
       sb.from('poids').select('date,kg').eq('user_id',uid).order('date'),
-      sb.from('mensurations').select('*').eq('user_id',uid).order('date',{ascending:false}).limit(1),
+      sb.from('mensurations').select('*').eq('user_id',uid).order('date'),
       sb.from('questionnaires').select('statut,reponses,valide_at,created_at').eq('user_id',uid).eq('type','nutrition').maybeSingle()
     ]).then(function(r){
-      var el=$('suivi'); if(!el||!cur||cur.user_id!==uid) return;   // on a changé de client entre-temps
+      if(!ici()) return;
       var pes=(r[0].data||[]).map(function(x){ return {v:+x.kg,t:new Date(x.date+'T12:00:00').getTime()}; });
       // POIDS DU QUESTIONNAIRE = POINT DE DÉPART DE LA COURBE (Damien 28/09), sauf pesée le même jour
       var q=r[2]&&r[2].data, qv=q&&q.statut==='valide'?parseFloat(String((q.reponses||{})['Poids (en kg)']==null?'':q.reponses['Poids (en kg)']).replace(',','.')):NaN,
           qd=q&&(q.valide_at||q.created_at), q0=null, jr=function(t){ return new Date(t).toDateString(); };
       if(qv>=30&&qv<=250&&qd){ var qt=new Date(qd); qt.setHours(12,0,0,0); q0={v:Math.round(qv*10)/10,t:qt.getTime(),q:true}; }
-      var w=(q0&&!pes.some(function(x){ return jr(x.t)===jr(q0.t); })) ? [q0].concat(pes).sort(function(a,b){ return a.t-b.t; }) : pes;
-      var m=(r[1].data||[])[0], h='<h4>Suivi</h4>';
-      if(!pes.length){ h+='<div class="chiffres"><span class="retard">Aucune pesée enregistrée</span>'+
-        (q0?'<span>Questionnaire : <b>'+fr(q0.v)+' kg</b> ('+new Date(q0.t).toLocaleDateString('fr-FR')+')</span>':'')+'</div>'; }
-      else {
-        var der=pes[pes.length-1], dep=w[0], jours=Math.floor((Date.now()-der.t)/JOUR), ev=der.v-dep.v;
-        var recent=pes.filter(function(x){ return x.t>=der.t-28*JOUR; }), rythme='';
-        if(recent.length>=2){ var sem=(der.t-recent[0].t)/(7*JOUR); if(sem>=5/7) rythme=((der.v-recent[0].v)/sem>0?'+':'')+fr((der.v-recent[0].v)/sem)+' kg / sem.'; }
-        h+='<div class="chiffres"><span>Dernière pesée : <b>'+fr(der.v)+' kg</b> le '+new Date(der.t).toLocaleDateString('fr-FR')+
-          (jours>=7?' · <span class="retard">il y a '+jours+' jours</span>':'')+'</span>'+
-          '<span>Départ : <b>'+fr(dep.v)+' kg</b> ('+new Date(dep.t).toLocaleDateString('fr-FR')+(dep.q?' · questionnaire':'')+')</span>'+
-          '<span>Évolution : <b>'+(ev>0?'+':'')+fr(ev)+' kg</b></span>'+(rythme?'<span>Rythme sur 4 semaines : <b>'+rythme+'</b></span>':'')+
-          '<span>'+pes.length+' pesée'+(pes.length>1?'s':'')+'</span></div>';
-        if(w.length>=2) h+='<div id="suivi-courbe"></div>';
-      }
-      h+='<div id="suivi-frise"></div>';
-      if(m){ var L={epaules:'Épaules',poitrine:'Poitrine',taille:'Taille',hanches:'Hanches',cuisse:'Cuisse',bras:'Bras'};
-        var t=Object.keys(L).filter(function(k){ return m[k]!=null; }).map(function(k){ return L[k]+' '+fr(m[k])+' cm'; });
-        if(t.length) h+='<div class="mens">Mensurations du '+new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR')+' : '+t.join(' · ')+'</div>'; }
-      el.innerHTML=h+'<div class="mens" id="retours-plats"></div><div class="ph-coach" id="ph-coach"></div>';
-      grapheFiche(uid,w);
-      // retours du client sur ses plats (table retours), diète la plus récente
-      var pid=cur&&cur.programme_id;
-      sb.from('retours').select('plat,avis,programme_id').eq('user_id',uid).then(function(rr){
-        var z=$('retours-plats'); if(!z||rr.error||!cur||cur.user_id!==uid) return;
-        var L=(rr.data||[]).filter(function(x){ return !pid||x.programme_id===pid; });
-        if(!L.length){ z.textContent='Retours sur la diète : aucun pour l’instant.'; return; }
-        var menu=(cur&&cur.menu)||{}, titres={};
-        (menu.jours||[]).forEach(function(j){ (j.repas||[]).forEach(function(rp){ var k=rp.recette_base||rp.recette; if(k&&!titres[k]) titres[k]=rp.titre||k; }); });
-        var nom=function(k){ return esc(titres[k]||k); };
-        var av=function(a){ return L.filter(function(x){ return x.avis===a; }).map(function(x){ return nom(x.plat); }); }, gd=av('garder'), rv=av('revoir'), pj=av('plus_jamais');
-        z.innerHTML='<b style="color:var(--ice)">Retours sur la diète</b>'+(gd.length?'<br><span class="plus">À garder</span> : '+gd.join(' · '):'')+(rv.length?'<br>À revoir : '+rv.join(' · '):'')+(pj.length?'<br>Plus jamais : '+pj.join(' · '):'');
-      }).catch(function(){});
-      // photos de suivi du client (stockage privé, liens signés d'une heure)
-      sb.storage.from('photos-suivi').list(uid,{limit:50,sortBy:{column:'name',order:'desc'}}).then(function(p){
-        var L=((p&&p.data)||[]).filter(function(f){ return /\.(jpe?g|png|webp)$/i.test(f.name); }); if(!L.length) return;
-        return sb.storage.from('photos-suivi').createSignedUrls(L.map(function(f){ return uid+'/'+f.name; }),3600).then(function(s){
-          var c=$('ph-coach'); if(!c||!cur||cur.user_id!==uid) return;
-          c.innerHTML='<div class="mens">Photos ('+L.length+')</div><div class="ph-grille">'+(s.data||[]).map(function(x,i){
-            return '<a href="'+esc(x.signedUrl)+'" target="_blank" rel="noopener"><img src="'+esc(x.signedUrl)+'" alt="Photo du '+L[i].name.slice(0,10)+'" loading="lazy"><span>'+L[i].name.slice(0,10).split('-').reverse().join('/')+'</span></a>'; }).join('')+'</div>';
-        });
-      }).catch(function(){});
-    }).catch(function(){ var el=$('suivi'); if(el) el.innerHTML='<h4>Suivi</h4><div class="chiffres">Pesées indisponibles pour le moment.</div>'; });
+      FS.pes=pes; FS.q0=q0; FS.mens=r[1].error?[]:(r[1].data||[]);
+      FS.w=(q0&&!pes.some(function(x){ return jr(x.t)===jr(q0.t); })) ? [q0].concat(pes).sort(function(a,b){ return a.t-b.t; }) : pes;
+      fKpis(); grapheFiche(uid,FS.w); if(FS.s===3) sousFiche();
+    }).catch(function(){ if(!ici()) return; FS.pes=FS.pes||[]; FS.w=FS.w||[]; FS.mens=FS.mens||[]; fKpis(); if(FS.s===3) sousFiche();
+      G.mount('suivi-courbe',function(){ return G.vide('Pesées indisponibles pour le moment.'); }); });
+    // retours du client sur ses plats (table retours)
+    sb.from('retours').select('plat,avis,programme_id').eq('user_id',uid).then(function(rr){ if(!ici()) return; FS.ret=rr.error?[]:(rr.data||[]); if(FS.s===5) sousFiche(); },
+      function(){ if(ici()){ FS.ret=[]; if(FS.s===5) sousFiche(); } });
+    // photos de suivi (stockage privé, liens signés d'une heure)
+    function sansPhoto(){ if(ici()){ FS.ph=[]; if(FS.s===4) sousFiche(); } }
+    sb.storage.from('photos-suivi').list(uid,{limit:50,sortBy:{column:'name',order:'desc'}}).then(function(p){
+      var L=((p&&p.data)||[]).filter(function(f){ return /\.(jpe?g|png|webp)$/i.test(f.name); }); if(!L.length){ sansPhoto(); return; }
+      return sb.storage.from('photos-suivi').createSignedUrls(L.map(function(f){ return uid+'/'+f.name; }),3600).then(function(s){ if(!ici()) return;
+        FS.ph=(s.data||[]).filter(function(x){ return x&&x.signedUrl; }).map(function(x,i){ return {url:x.signedUrl,d:L[i].name.slice(0,10).split('-').reverse().join('/')}; });
+        if(FS.s===4) sousFiche(); });
+    }).catch(sansPhoto);
   }
-  /* courbe de poids riche (points, objectif du questionnaire en pointillés, zone cible ±1 kg)
-     + frise des versions de diète et des pesées. Rien d'inventé : sans objectif chiffré, pas de ligne. */
+  /* courbe de poids riche (points, objectif du questionnaire en pointillés, zone cible ±1 kg) + barre de progression,
+     puis frise des versions de diète et des pesées. Rien d'inventé : sans objectif chiffré, pas de ligne. */
   var TYPE_C={'1re diète':'var(--b-bleu)','Réajustement':'var(--b-vert)','Nouveau menu':'var(--b-jaune)'};
   function grapheFiche(uid,w){
-    var c=D&&D.par[uid], nom=c?c.nom:'ce client', dep=w.length?w[0].v:null, pal=c?palier(c.rep):null, cible=null;
-    if(dep!=null&&pal&&c.obj==='Perte') cible=dep-pal; else if(dep!=null&&pal&&c.obj==='Prise') cible=dep+pal;
+    var c=D&&D.par[uid], nom=c?c.nom:'ce client', dep=w.length?w[0].v:null, ob=objectifPoids(c,w), cible=ob?ob.cible:null;
     var jl=function(t){ return new Date(t).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); };
     var qd=w.length&&w[0].q;   // 1er point = poids du questionnaire (départ), marqué à part
-    if(w.length>=2) G.mount('suivi-courbe',function(lg){ return G.ligne(lg,{h:220,x:w.map(function(p){ return new Date(p.t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }),
+    $('f-poids-n').textContent=w.length>1?fr(dep)+' → '+fr(w[w.length-1].v)+' kg':w.length?fr(dep)+' kg':'';
+    G.mount('suivi-courbe',function(lg){
+      if(w.length<2) return G.vide(w.length?'Une seule mesure pour l’instant ('+(qd?'poids du questionnaire':'première pesée')+') : la courbe démarre à la pesée suivante.':'Aucune pesée pour l’instant : la courbe démarre à la première.');
+      return G.ligne(lg,{h:230,x:w.map(function(p){ return new Date(p.t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }),
       tx:function(i){ return (w[i].q?'Questionnaire du ':'Pesée du ')+jl(w[i].t); },points:true,
       series:[{nom:'',v:w.map(function(p){ return p.v; }),c:'var(--blue)',aire:true}].concat(qd?[{nom:'départ',v:w.map(function(p,i){ return i?null:p.v; }),c:'var(--b-violet)'}]:[]),
       cible:cible,cibleT:cible==null?'':'objectif '+fr(cible)+' kg',zone:cible==null?null:[cible-1,cible+1],f:function(v){ return G.n(v,1)+' kg'; },
       label:'Poids de '+nom+' : '+fr(dep)+' kg '+(qd?'au questionnaire':'à la première pesée')+', '+fr(w[w.length-1].v)+' kg à la dernière pesée'+(cible==null?'':', objectif '+fr(cible)+' kg')})+
       G.leg([['pesée','var(--blue)']].concat(qd?[['questionnaire (départ)','var(--b-violet)']]:[],cible==null?[]:[['objectif du questionnaire','',1],['zone cible (± 1 kg)','color-mix(in srgb,var(--b-vert) 45%,transparent)']])); });
+    $('f-progres').innerHTML=ob?'<div class="progres"><i style="width:'+ob.pct+'%"></i></div><div class="progres-l"><span>Départ '+fr(ob.dep)+' kg</span><span>Objectif '+fr(ob.cible)+' kg</span></div>':'';
     var V=((c&&c.prog)||[]).filter(function(x){ return x.traite_at||x.created_at; }).map(function(x,i){ var g=geste(x), ty=g==='reajuster'?'Réajustement':g?'Nouveau menu':'1re diète';
       return {t:new Date(x.traite_at||x.created_at).getTime(),lab:'v'+(x.version||i+1),c:TYPE_C[ty],tip:'v'+(x.version||i+1)+' · '+ty+'\n'+(ETAT[x.statut]||(x.statut==='en_attente'?'À relire':x.statut||''))+' · '+jl(x.traite_at||x.created_at)}; });
     var P=w.filter(function(p){ return !p.q; }).map(function(p){ return {t:p.t,tip:'Pesée du '+jl(p.t)+'\n'+G.n(p.v,1)+' kg'}; }), T=V.map(function(v){ return v.t; }).concat(P.map(function(p){ return p.t; }));
-    G.mount('suivi-frise',function(lg){ if(!T.length) return '';
+    G.mount('suivi-frise',function(lg){ if(!T.length) return G.vide('Aucune diète ni pesée pour l’instant.');
       var deb=Math.min.apply(null,T.concat(c&&c.p.created_at?[new Date(c.p.created_at).getTime()]:[])), fin=Math.max(Date.now(),Math.max.apply(null,T));
-      return '<div class="mens" style="margin-bottom:4px">Parcours : diètes et pesées</div>'+G.frise(lg,{debut:deb,fin:fin,dietes:V,pesees:P,
+      return G.frise(lg,{debut:deb,fin:fin,dietes:V,pesees:P,
         label:'Parcours de '+nom+' : '+V.length+' diète'+(V.length>1?'s':'')+' et '+P.length+' pesée'+(P.length>1?'s':'')})+
         G.leg([['1re diète','var(--b-bleu)'],['réajustement','var(--b-vert)'],['nouveau menu','var(--b-jaune)'],['pesée','var(--steel)']]); });
-  }
-  // compteur : clients de la file dont la dernière pesée a 7 jours ou plus (ou aucune pesée)
-  function compterRetards(){
-    // ponytail: lit toutes les pesées ; passer par une vue « dernière pesée par client » au-delà de quelques milliers de lignes
-    sb.from('poids').select('user_id,date').then(function(r){
-      if(r.error) return;
-      var der={}; (r.data||[]).forEach(function(x){ if(!der[x.user_id]||x.date>der[x.user_id]) der[x.user_id]=x.date; });
-      var n=file.filter(function(c){ var d=der[c.user_id]; return !d || Date.now()-new Date(d+'T12:00:00').getTime()>=7*JOUR; }).length;
-      $('k-pesee').textContent=n;
-    });
   }
   /* ---------- abonnements ---------- */
   var abonnementsOk=false;
@@ -2111,7 +2019,7 @@ var ED=(function(){
     });
   }
 
-  /* ---------- messagerie : un fil par client (table messages) ---------- */
+  /* ---------- messagerie : un fil par client (table messages), présentation de coach-maquette.html ---------- */
   var MSG=[], NOMS={}, filOuvert=null;
   function heure(t){ return new Date(t).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
   function chargerMessages(){
@@ -2119,7 +2027,7 @@ var ED=(function(){
       sb.from('messages').select('id,client_id,auteur_id,texte,lu_at,created_at').order('created_at'),
       sb.from('profiles').select('id,prenom,nom')
     ]).then(function(r){
-      if(r[0].error){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Messagerie à activer</b>Il reste à lancer le script supabase/tableau_de_bord_coach.sql.</div>'; return; }
+      if(r[0].error){ $('m-fils').innerHTML='<p class="rien"><b>Messagerie à activer</b> : il reste à lancer le script supabase/tableau_de_bord_coach.sql.</p>'; $('m-conv').hidden=true; return; }
       MSG=r[0].data||[]; (r[1].data||[]).forEach(function(p){ NOMS[p.id]=(p.prenom||'')+' '+(p.nom||''); });
       if(!vus){ vus={}; MSG.forEach(function(m){ vus[m.id]=1; }); setInterval(releve,30000); boutonAlertes();
         // TEMPS RÉEL (Supabase Realtime, table messages publiée le 27/09) : un message écrit ou lu
@@ -2134,28 +2042,36 @@ var ED=(function(){
   function majNonLus(){ var n=MSG.filter(function(m){ return m.auteur_id===m.client_id&&!m.lu_at; }).length;
     $('msg-nl').textContent=n?'· '+n+' non lu'+(n>1?'s':''):''; document.title=(n?'('+n+') ':'')+TITRE;
     var p=$('nav-nl'); p.textContent=n; p.hidden=!n; renderJour(); }
+  function nomFil(id){ return String(NOMS[id]||'').trim()||'Client'; }
+  // bulles d'un fil + formulaire de réponse (page Messages ET sous-onglet de la fiche)
+  function bulles(cid){ return MSG.filter(function(m){ return m.client_id===cid; }).map(function(m){ var lui=m.auteur_id===m.client_id;
+      return '<div class="bulle'+(lui?'':' co')+'">'+esc(m.texte)+'<small>'+(lui?'':'Coach · ')+heure(m.created_at)+'</small></div>'; }).join('')
+    || '<p class="rien">Aucun message pour l’instant.</p>'; }
+  function formMsg(cid,id,pr){ return '<form class="repondre" data-c="'+esc(cid)+'"><textarea id="'+id+'" rows="1" placeholder="Répondre à '+esc(pr)+'…" aria-label="Ta réponse" required maxlength="4000"></textarea><button class="btn-p" type="submit">Envoyer</button></form>'; }
+  // ouvrir un fil = lire ses messages (seulement si l'écran est réellement sous les yeux)
+  function lireFil(cid){
+    var aLire=MSG.filter(function(m){ return m.client_id===cid && m.auteur_id===cid && !m.lu_at; }).map(function(m){ return m.id; });
+    if(!aLire.length||document.visibilityState!=='visible') return;
+    sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(r){
+      if(r.error) return;
+      MSG.forEach(function(m){ if(aLire.indexOf(m.id)>=0) m.lu_at=new Date().toISOString(); });
+      majNonLus(); document.querySelectorAll('.fil.on .pastille-n').forEach(function(x){ x.remove(); }); });
+  }
   function renderMessages(){
     var fils={}; MSG.forEach(function(m){ fils[m.client_id]=m; });   // dernier message de chaque fil
     var ids=Object.keys(fils).sort(function(a,b){ return (nonLus(b)-nonLus(a)) || (fils[b].created_at>fils[a].created_at?1:-1); });
     majNonLus();
-    if(!ids.length && !filOuvert){ $('msgs').innerHTML='<div class="empty" style="grid-column:1/-1"><b>Aucun message</b>Les messages des clients arriveront ici.</div>'; return; }
+    if(voir.p==='fiche'&&FS.s===1&&cur) sousFiche();              // le fil ouvert dans la fiche suit aussi
+    if(!ids.length && !filOuvert){ $('m-fils').innerHTML='<p class="rien"><b>Aucun message</b> : les messages des clients arriveront ici.</p>'; $('m-conv').hidden=true; return; }
     if(!filOuvert||(!fils[filOuvert]&&!NOMS[filOuvert])) filOuvert=ids[0];
     if(filOuvert&&!fils[filOuvert]) ids.unshift(filOuvert);     // fil encore vide : le coach écrit le premier
-    var h='<div class="fils">'+ids.map(function(id){ var n=nonLus(id);
-      return '<button type="button" class="fil'+(id===filOuvert?' on':'')+'" data-fil="'+id+'"><span>'+esc(NOMS[id]||'Client')+
-        '<small>'+esc(fils[id]?fils[id].texte:'Nouveau message')+'</small></span>'+(n?'<span class="nl">'+n+'</span>':'')+'</button>'; }).join('')+'</div>';
-    h+='<div class="conv"><div class="bulles" id="bulles">'+MSG.filter(function(m){ return m.client_id===filOuvert; }).map(function(m){
-      var lui=m.auteur_id===m.client_id;
-      return '<div class="b '+(lui?'lui':'nous')+'">'+esc(m.texte)+'<time>'+(lui?'':'Coach · ')+heure(m.created_at)+'</time></div>'; }).join('')+'</div>'+
-      '<form id="msg-form"><textarea id="msg-txt" placeholder="Ta réponse…" required maxlength="4000"></textarea><button type="submit">Envoyer</button></form></div>';
-    $('msgs').innerHTML=h;
+    $('m-fils').innerHTML=ids.map(function(id){ var n=nonLus(id), t=fils[id]?fils[id].texte:'Nouveau message';
+      return '<button type="button" class="fil'+(id===filOuvert?' on':'')+'" data-fil="'+esc(id)+'"><span><b>'+esc(nomFil(id))+'</b><br>'+esc(t.slice(0,38))+(t.length>38?'…':'')+'</span>'+(n?'<span class="pastille-n">'+n+'</span>':'')+'</button>'; }).join('');
+    var z=$('m-conv'); z.hidden=false;
+    z.innerHTML='<h4><span class="nom" tabindex="0" role="button" data-u="'+esc(filOuvert)+'">'+esc(nomFil(filOuvert))+'</span> <span class="n">voir sa fiche en cliquant sur son nom</span></h4>'+
+      '<div class="bulles" id="bulles">'+bulles(filOuvert)+'</div>'+formMsg(filOuvert,'msg-txt',nomFil(filOuvert).split(' ')[0]);
     var b=$('bulles'); b.scrollTop=b.scrollHeight;
-    // ouvrir un fil = lire ses messages
-    var aLire=MSG.filter(function(m){ return m.client_id===filOuvert && m.auteur_id===filOuvert && !m.lu_at; }).map(function(m){ return m.id; });
-    if(aLire.length && document.visibilityState==='visible' && voir.p==='msgs') sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(r){
-      if(r.error) return;
-      MSG.forEach(function(m){ if(aLire.indexOf(m.id)>=0) m.lu_at=new Date().toISOString(); });
-      majNonLus(); document.querySelectorAll('.fil.on .nl').forEach(function(x){ x.remove(); }); });
+    if(voir.p==='msgs') lireFil(filOuvert);
   }
   /* ALERTES (choix de Dimitri 27/09 : notification du navigateur) : relève toutes les 30 s, même
      onglet en arrière-plan ; chaque nouveau message d'un client -> alerte à l'écran + compteur dans
@@ -2182,92 +2098,25 @@ var ED=(function(){
     b.onclick=function(){ Notification.requestPermission().then(boutonAlertes); }; }
   document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible' && MSG.length) renderMessages(); });
   document.addEventListener('click',function(e){ var f=e.target.closest&&e.target.closest('.fil'); if(f){ filOuvert=f.getAttribute('data-fil'); renderMessages(); } });
-  document.addEventListener('submit',function(e){ if(e.target.id!=='msg-form') return; e.preventDefault();
-    var t=$('msg-txt'), txt=t.value.trim(); if(!txt) return; var bt=e.target.querySelector('button'); bt.disabled=true;
-    sb.from('messages').insert({client_id:filOuvert,auteur_id:moi.id,texte:txt}).then(function(r){ bt.disabled=false;
+  document.addEventListener('submit',function(e){ var f=e.target; if(!f.classList||!f.classList.contains('repondre')) return; e.preventDefault();
+    var t=f.querySelector('textarea'), txt=t.value.trim(), cid=f.getAttribute('data-c'); if(!txt||!cid) return; var bt=f.querySelector('button'); bt.disabled=true;
+    sb.from('messages').insert({client_id:cid,auteur_id:moi.id,texte:txt}).then(function(r){ bt.disabled=false;
       if(r.error){ toast('Message non envoyé, réessaie.'); return; } t.value=''; chargerMessages(); });
   });
-  function qa(k,v){
-    var flag=ALERTE.some(function(a){return k.indexOf(a)===0;});
-    return '<div class="qa'+(flag?' flag':'')+'"><dt>'+esc(k.split('⚠')[0].split('\n(')[0].replace(/\s+/g,' ').replace(/\s*\(.*?\)\s*$/,'').slice(0,90))+'</dt><dd>'+esc(v)+'</dd></div>';
-  }
 
-  /* ---------- le programme, à côté ---------- */
-  var MEALS={petit_dejeuner:'Petit-déjeuner',collation:'Collation',collation_2:'Collation',dejeuner:'Déjeuner',diner:'Dîner'};
-  function renderProg(){
-    var c=cur, box=$('prog'), dec=$('decide');
-    if(!c||!c.menu){
-      box.innerHTML=c&&c.etape==='sans_questionnaire'
-        ? '<div class="empty"><b>Pas encore de programme</b>Le client n’a pas validé son questionnaire.</div>'
-        : '<div class="empty"><b>Programme pas encore prêt</b>Le questionnaire est validé : la programmation sera produite puis affichée ici.</div>';
-      dec.hidden=true; $('progn').textContent=''; return;
-    }
-    var m=c.menu, d=c.diagnostic||{};
-    $('progn').textContent='v'+(c.version||1)+(d.jours_ok!=null?' · '+d.jours_ok+'/6 jours':'');
-    var h=(c.programme_id?'<div class="rl-lance"><button type="button" class="db ok" data-relire>Relire la diète</button></div>':'')+versions(c.user_id);
-    // diète déposée par le SUIVI (réajustement ou nouveau menu) : on le dit en tête
-    var sv=d.suivi;
-    if(sv&&sv.geste){
-      var nbr=Array.isArray(sv.retours)?sv.retours.length:(+sv.retours||0);
-      h+='<div class="suivi" style="margin-bottom:14px"><h4>Suivi</h4><div class="chiffres"><span><b>'+
-        (sv.geste==='reajuster'?'Réajustement des grammes':'Nouveau menu')+'</b>'+(sv.poids!=null?' à <b>'+esc(String(sv.poids).replace('.',','))+' kg</b>':'')+'</span>'+
-        '<span>'+nbr+' retour'+(nbr>1?'s':'')+' du client pris en compte</span></div></div>';
-    }
-
-    // ---- CE QUE LE CLIENT A ÉCRIT ET QUI N'EST PAS DANS LA BASE ----
-    // Ces mots n'ont PAS été exclus du menu : ils demandent une lecture humaine
-    // (« pamplemousse » -> peut-être aucun agrume ; « banane » -> une source à
-    // remplacer). Avant, ils disparaissaient sans que personne ne le sache.
-    var ai=d.a_interpreter||{};
-    var blocs=[['Refusé',ai.refuses,'grave'],['Allergie / santé',ai.allergies,'grave'],
-               ['À conserver',ai.conserver,'doux']];
-    var interp='';
-    blocs.forEach(function(b){
-      if(!b[1]||!b[1].length) return;
-      interp+='<div class="ai-l'+(b[2]==='grave'?' fort':'')+'"><span class="ai-k">'+b[0]+'</span>'+
-              b[1].map(function(x){ return '<span class="ai-w">'+esc(x)+'</span>'; }).join('')+'</div>';
-    });
-    if(interp){
-      h+='<div class="ainterp"><div class="ai-t">À interpréter — mots absents de la base</div>'+interp+
-         '<p class="ai-n">Ces mots n’ont <b>pas</b> été exclus du menu : ils ne figurent pas dans la base. '+
-         'À toi de juger ce que ça implique (une famille entière&nbsp;? une source à remplacer&nbsp;?) '+
-         'et de le signaler si le menu doit changer.</p></div>';
-    }
-    (m.jours||[]).forEach(function(j){
-      if(j.off) return;
-      h+='<div class="jour"><div class="jh">Jour '+j.jour+'</div>';
-      (j.repas||[]).forEach(function(r){
-        var ing=(r.ingredients||[]).map(function(i){ return esc(i.affichage||((i.grammes||'')+' g '+i.ingredient)); }).join(' · ');
-        var ma=r.macros||{};
-        h+='<div class="repas"><div class="rt">'+(MEALS[r.type]||r.type)+'</div>'+
-           '<div class="rn">'+esc(r.titre||r.recette)+'</div><div class="ri">'+ing+'</div>'+
-           '<div class="rm">'+Math.round(ma.kcal||0)+' kcal · P'+Math.round(ma.proteines||0)+
-           ' G'+Math.round(ma.glucides||0)+' L'+Math.round(ma.lipides||0)+'</div>'+
-           '<button class="flagbtn" data-plat="J'+j.jour+' '+(MEALS[r.type]||r.type)+' — '+esc(r.titre||r.recette)+'" data-cle="'+esc(r.recette_base||r.recette||'')+'" data-jour="'+j.jour+'" data-repas="'+r.type+'">Signaler ce plat</button>'+
-           '</div>';
-      });
-      h+='</div>';
-    });
-    box.innerHTML=h;
-    box.querySelectorAll('.flagbtn').forEach(function(b){
-      b.addEventListener('click',function(){
-        $('retour').classList.add('on');
-        $('r-plat').value=b.dataset.plat; $('r-jour').value=b.dataset.jour;
-        signale={libelle:b.dataset.plat,cle:b.dataset.cle||null,repas:b.dataset.repas||null};
-        $('r-motif').focus(); $('retour').scrollIntoView({behavior:'smooth',block:'center'});
-      });
-    });
-    dec.hidden = (c.etape!=='a_relire' && c.etape!=='rectification');
-  }
-
-  /* historique des versions v1…vN d'un client : statut (remplacée comprise), date, qui ; « Voir » ouvre la relecture (lecture seule si ancienne) */
+  /* historique des versions v1…vN d'un client (sous-onglet « Diètes » de la fiche) : statut (remplacée comprise), date, qui ;
+     « Relire » / « Voir » ouvre l'écran de relecture (lecture seule si ancienne, validée ou remplacée) */
   var VST={en_attente:['À relire','b'],valide:['Validée','v'],rectification:['À corriger','r'],refuse:['Refusée','r'],remplace:['Remplacée','']},
       VVB={valide:'validée',refuse:'refusée',rectification:'renvoyée en correction',remplace:'remplacée'};
-  function versions(uid){ var k=D&&D.par[uid], P=k?k.prog.slice().reverse():[]; if(!P.length) return '';
-    return '<div class="suivi" style="margin-bottom:14px"><h4>Versions de la diète</h4>'+P.map(function(x){ var ed=(x.diagnostic||{}).edition, st=VST[x.statut]||[x.statut,''],
-        lib=x.statut==='en_attente'&&ed?'Brouillon':st[0], qui=x.traite_par?nomCoach(x.traite_par):'';
-      return '<div class="ligne"><span><b>v'+esc(x.version)+'</b> <span class="tag '+st[1]+'">'+lib+'</span> déposée le '+dateFr(x.created_at)+(ed?' (retouche de '+esc(nomCoach(ed.par))+')':'')+
-        (x.traite_at&&VVB[x.statut]?' · '+VVB[x.statut]+' le '+dateFr(x.traite_at)+(qui?' par '+esc(qui):''):'')+'</span><span><button type="button" class="mini" data-voir="'+esc(x.id)+'">Voir</button></span></div>'; }).join('')+'</div>'; }
+  function versions(uid){ var k=D&&D.par[uid], P=k?k.prog.slice().reverse():[];
+    if(!P.length) return '<h4>Versions de sa diète</h4><p class="rien">'+((cur&&cur.etape==='a_generer')||(k&&k.q)?'Questionnaire validé : sa première diète est en préparation.':'Pas encore de diète : le client n’a pas validé son questionnaire.')+'</p>';
+    return '<h4>Versions de sa diète <span class="n">'+P.length+'</span></h4>'+P.map(function(x,i){ var ed=(x.diagnostic||{}).edition, st=VST[x.statut]||[x.statut,''],
+        lib=x.statut==='en_attente'&&ed?'Brouillon':st[0], qui=x.traite_par?nomCoach(x.traite_par):'', rel=!i&&(x.statut==='en_attente'||x.statut==='rectification');
+      return '<div class="ligne"><span><b>v'+esc(x.version)+'</b> · '+typeDiete(x)+' · <span class="tag '+st[1]+'">'+lib+'</span>'+
+        '<br><small>déposée le '+dateFr(x.created_at)+(ed?' (retouche de '+esc(nomCoach(ed.par))+')':'')+
+        (x.traite_at&&VVB[x.statut]?' · '+VVB[x.statut]+' le '+dateFr(x.traite_at)+(qui?' par '+esc(qui):''):'')+'</small></span>'+
+        '<span><button type="button" class="mini" data-voir="'+esc(x.id)+'">'+(rel?'Relire':'Voir')+'</button></span></div>'; }).join('')+
+      '<p class="leg">Une version validée, remplacée ou ancienne s’ouvre en lecture seule.</p>'; }
   function voirVersion(pid){
     var uid=cur&&cur.user_id, k=D&&D.par[uid]; if(!k) return;
     var der=k.prog[k.prog.length-1], f=der&&der.id===pid&&file.filter(function(x){ return x.user_id===uid&&x.programme_id===pid; })[0];
@@ -2279,12 +2128,12 @@ var ED=(function(){
         etape:p.statut==='en_attente'?'a_relire':p.statut,archive:!der||der.id!==p.id,retour:uid}); });
   }
 
-  /* ---------- décisions ---------- */
+  /* ---------- décisions (prises dans l'écran de relecture : barre de décision + renvoi en correction) ---------- */
   function setStatut(st,msg){
     var c=cur; if(!c||!c.programme_id) return;
     majStatut(c.programme_id,st).then(function(err){
         if(err){ toast("Impossible d'enregistrer — réessaie."); return; }
-        c.statut=st; c.etape=st; renderProg(); toast(msg);
+        c.statut=st; c.etape=st; toast(msg);
         if(RL.R&&RL.R.pid===c.programme_id){ RL.R.etat=st; RL.arme=false; tout(); }
         recharger(c.user_id);
       });
@@ -2294,55 +2143,9 @@ var ED=(function(){
     return Promise.all([chargerFile(),chargerTout()]).then(function(){
       var n=file.filter(function(x){ return x.user_id===uid; })[0];
       if(n&&cur&&cur.user_id===uid&&n.programme_id===cur.programme_id){ cur=n; sel=file.indexOf(n); renderFile(); }
-      if(voir.p==='fiche'&&cur&&cur.user_id===uid){ renderTete(); renderProg(); }
       if(RL.R&&RL.R.uid===uid&&$('rl-barre')){ rlBarre(); rlNotes(); }
     });
   }
-  $('b-ok').addEventListener('click',function(){ setStatut('valide','Programme validé ✓'); });
-  $('b-no').addEventListener('click',function(){
-    if(!confirm("Refuser ce programme ?\n\nIl sera entièrement refait. Pense à indiquer au moins une remarque pour qu'on sache quoi corriger.")) return;
-    $('retour').classList.add('on'); setStatut('refuse','Programme refusé — ajoute tes remarques');
-  });
-  $('b-rec').addEventListener('click',function(){ $('retour').classList.add('on'); $('retour').scrollIntoView({behavior:'smooth',block:'center'}); });
-
-  /* ---------- retours structurés ---------- */
-  // la colonne « plat » reçoit la CLÉ moteur du repas signalé ; le libellé lisible (« J3 Déjeuner — titre ») part dans « attendu »
-  var signale=null;
-  $('r-add').addEventListener('click',function(){
-    var lib=$('r-plat').value.trim(), s=signale&&signale.libelle===lib?signale:null;
-    var r={motif:$('r-motif').value,gravite:$('r-grav').value,libelle:lib||null,plat:s?s.cle:null,repas:s?s.repas:null,
-           jour:$('r-jour').value?+$('r-jour').value:null,attendu:$('r-attendu').value||null};
-    if(!r.attendu && !r.libelle){ toast('Précise au moins le plat ou ce que tu aurais fait.'); return; }
-    retours.push(r); $('r-plat').value=''; $('r-jour').value=''; $('r-attendu').value=''; signale=null;
-    renderRetours();
-  });
-  function renderRetours(){
-    $('rlist').innerHTML=retours.map(function(r,i){
-      return '<div class="rrow"><div class="rx">'+esc(MOTIF[r.motif]||r.motif)+
-        (r.libelle?' — '+esc(r.libelle):'')+'<small>'+esc(r.attendu||'')+'</small></div>'+
-        '<button class="del" data-i="'+i+'" title="Retirer">✕</button></div>';
-    }).join('');
-    $('rlist').querySelectorAll('.del').forEach(function(b){
-      b.addEventListener('click',function(){ retours.splice(+b.dataset.i,1); renderRetours(); });
-    });
-  }
-  $('r-send').addEventListener('click',function(){
-    var c=cur;
-    if(!retours.length){ toast('Ajoute au moins un point avant d\'envoyer.'); return; }
-    if(!c||!c.programme_id){ toast('Aucun programme sélectionné.'); return; }
-    var nb=retours.length, pr=retours[0];
-    insererRetours(retours.map(function(r){
-      return {programme_id:c.programme_id,coach_id:moi.id,jour:r.jour,repas:r.repas,plat:r.plat,
-              motif:r.motif,attendu:[r.libelle,r.attendu].filter(Boolean).join(' · ')||null,gravite:r.gravite};
-    })).then(function(res){
-      if(!res.ok){ toast('Envoi impossible — réessaie.'); return; }
-      retours=[]; renderRetours(); $('retour').classList.remove('on');
-      if(RL.R&&RL.R.pid===c.programme_id){ RL.envoyes=nb; RL.R.note={par:'toi',texte:pr.attendu||pr.libelle||''}; rlTete(); rlDec(); }
-      if(c.etape!=='refuse') setStatut('rectification','Remarques envoyées ✓');
-      else { toast('Remarques envoyées ✓'); recharger(c.user_id); }
-    });
-  });
-
 
   /* ================= RELECTURE D'UNE DIÈTE : le CONTRÔLEUR =================
      Ouverte depuis la file (« Relire ») ou la fiche (« Relire la diète »). Rendu : REL (fonctions
@@ -2411,10 +2214,10 @@ var ED=(function(){
         if(q.error){ RL.consignesAbsentes=true; return; }
         var L=q.data||[], leves={}; L.forEach(function(x){ if(x.action&&x.action.type==='lever') leves[x.action.ref]=1; });
         // libellés par id : affichent les « corrections non appliquées » (diagnostic.rectification.non_appliquees)
-        if(R){ R.retoursLib={}; L.forEach(function(x){ R.retoursLib[x.id]=String(x.attendu||(x.action&&x.action.type)||'').slice(0,90); });
+        if(R){ R.retoursLib={}; L.forEach(function(x){ R.retoursLib[x.id]=String(REL.propre(x.attendu||(x.action&&x.action.type)||'')).slice(0,90); });
           if(((R.diagnostic||{}).rectification||{}).non_appliquees) rlSide(); }
         RL.consignes=L.filter(function(x){ return x.action&&x.action.portee==='client'&&x.action.type!=='lever'&&!leves[x.id]; })
-          .map(function(x){ return {id:x.id,texte:String(x.attendu||x.action.type).slice(0,90)}; });
+          .map(function(x){ return {id:x.id,texte:String(REL.propre(x.attendu||x.action.type)).slice(0,90)}; });
         if(RL.co.ouvert) rlCo(); }); }).catch(function(){});
   }
   function tout(){ if(RL.co.ouvert) lireCo(); rlBarre(); rlTete(); rlSem(); rlJour(); rlSide(); rlDec(); rlCo(); }
@@ -2600,7 +2403,7 @@ var ED=(function(){
     },echec);
   }
   // recharge la file et rouvre la diète du client (sa dernière version)
-  function chargerFile(){ return sb.from('v_file_coach').select('*').then(function(r){ if(!r.error){ file=r.data||[]; renderFile(); recount(); compterRetards(); } }); }
+  function chargerFile(){ return sb.from('v_file_coach').select('*').then(function(r){ if(!r.error){ file=r.data||[]; renderFile(); recount(); } }); }
   function rafraichir(uid,coListe){ return chargerFile().then(function(){ var c=file.filter(function(x){ return x.user_id===uid; })[0]; chargerTout();
     if(c){ relire(c,true); if(coListe&&coListe.length){ RL.co.liste=coListe; ouvrirCo(); } } else voir('dietes'); }); }
   function annuler(){ var c=RL.S&&ED.annuler(RL.S); if(c){ majEd(); toast('Annulé : '+c.texte); } }
@@ -2976,7 +2779,8 @@ var ED=(function(){
       D.clients.forEach(function(c){ D.par[c.id]=c; });
       $('g-noms').innerHTML=D.clients.map(function(c){ return '<option value="'+esc(c.nom)+'">'; }).join('');
       renderFile(); renderJour(); renderTable(); renderResultats(); renderEcheancier(); renderGraphes(); renderEco(); renderStats();
-      if(cur) ficheNotes(cur.user_id); if(RL.R&&$('rl-notes')) rlNotes();    // noms des coachs et journal à jour
+      if(cur) ficheNotes(cur.user_id); if(RL.R&&$('rl-notes')) rlNotes();
+      if(voir.p==='fiche'&&cur){ renderTete(); fKpis(); if(FS.s===0) sousFiche(); }    // noms des coachs et journal à jour
     }).catch(function(e){ console.error(e); toast('Tableau de bord indisponible, recharge la page.'); });
   }
 
@@ -3065,7 +2869,7 @@ var ED=(function(){
 
   /* ---------- FICHE : depuis la file, la liste, un nom, la recherche ---------- */
   function ouvrir(id){
-    function montrer(){ renderFile(); renderTete(); renderClient(); renderProg(); voir('fiche'); }
+    function montrer(){ renderFile(); renderFiche(); voir('fiche'); }
     var i=file.findIndex(function(x){ return x.user_id===id; });
     if(i>=0){ sel=i; cur=file[i]; montrer(); return; }        // dans la file : même fiche, décisions comprises
     var c=D&&D.par[id]; if(!c) return;
@@ -3078,18 +2882,19 @@ var ED=(function(){
     });
   }
   function renderTete(){
-    var c=D&&D.par[cur.user_id], h='';
+    var c=D&&D.par[cur.user_id], h='', p=(c&&c.p)||cur, nais=p.naissance, sx=p.sexe;
     if(c){ var st=c.a?c.a.statut:'aucun', fm=(c.a&&c.a.formule)||c.p.formule;
-      h='<span class="tag b">'+(FORM[fm]||'Sans formule')+'</span><span class="tag '+(ABOTAG[st]||'')+'">'+(ABO[st]||st)+'</span>'+
-        (c.obj?'<span class="tag">'+c.obj+'</span>':'')+(c.a&&st!=='canceled'&&c.a.periode_fin?'<span class="tag">échéance '+dateFr(c.a.periode_fin)+'</span>':'')+
-        '<span class="tag">inscrit le '+dateFr(c.p.created_at)+'</span>'; }
-    $('fiche-tete').innerHTML=h+'<button type="button" class="mini" data-msg="'+esc(cur.user_id)+'">Écrire un message</button>';
+      h='<span class="tag b">'+(FORM[fm]||'Sans formule')+'</span><span class="tag '+(ABOTAG[st]||'')+'">'+(ABO[st]||st)+'</span>'+(c.obj?'<span class="tag">'+c.obj+'</span>':''); }
+    var age=null; if(nais){ var b=new Date(String(nais).slice(0,10)+'T12:00:00'), n=new Date(); age=n.getFullYear()-b.getFullYear()-((n.getMonth()<b.getMonth()||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate()))?1:0); }
+    if(sx||(age>0&&age<120)) h+='<span class="tag">'+[sx==='HOMME'?'Homme':sx?'Femme':'',age>0&&age<120?age+' ans':''].filter(Boolean).join(' · ')+'</span>';
+    if(p.taille_cm) h+='<span class="tag">'+esc(p.taille_cm)+' cm</span>';
+    if(c) h+='<span class="tag">inscrit le '+dateFr(c.p.created_at)+'</span>'+(c.a&&c.a.statut!=='canceled'&&c.a.periode_fin?'<span class="tag">échéance '+dateFr(c.a.periode_fin)+'</span>':'');
+    $('fiche-tete').innerHTML=h+'<button type="button" class="mini" data-fs="1">Écrire un message</button>';
   }
   document.addEventListener('click',function(e){
     if(!e.target.closest) return;
     var v=e.target.closest('[data-mfa]'); if(v){ MFA.cible=v.getAttribute('data-mfa'); voir('mfa'); return; }
     var m=e.target.closest('[data-msg]'); if(m){ filOuvert=m.getAttribute('data-msg'); voir('msgs'); return; }
-    if(e.target.closest('[data-relire]')){ relire(cur); return; }
     var vv=e.target.closest('[data-voir]'); if(vv){ voirVersion(+vv.getAttribute('data-voir')); return; }
     var u=e.target.closest('[data-u]'); if(u) ouvrir(u.getAttribute('data-u'));
   });
@@ -3103,23 +2908,28 @@ var ED=(function(){
   /* ---------- DIÈTES : échéancier des 4 prochaines semaines ----------
      ⚠️ MÊME RÈGLE que suivi.py côté moteur (RYTHME, STATUTS_ACTIFS) : toute modification doit toucher LES DEUX. */
   var RYTHME={f1:{reajuster:28,nouveau_menu:null},f2:{reajuster:null,nouveau_menu:28},f3:{reajuster:7,nouveau_menu:28}};
+  // diètes à venir d'un client jusqu'à « fin » (échéancier ET chiffre « Prochaine diète » de la fiche)
+  // null = pas concerné (sans abonnement actif, version déjà chez les coachs, aucune diète validée)
+  function planClient(c,fin){
+    var r=c.a&&RYTHME[c.a.formule], imp=!!(c.a&&c.a.statut==='past_due'); if(!r||(!actif(c)&&!imp)) return null;   // impayé : montré, mais bloqué
+    if(c.prog.some(function(x){ return x.statut==='en_attente'||x.statut==='rectification'; })) return null;   // une version attend déjà les coachs
+    var val=c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at; }).sort(function(a,b){ return a.traite_at>b.traite_at?1:-1; }); if(!val.length) return null;
+    var T=new Date(val[val.length-1].traite_at), menus=val.filter(function(x){ return geste(x)!=='reajuster'; }), N=new Date((menus.length?menus[menus.length-1]:val[0]).traite_at);
+    var pese=c.w.some(function(w){ return new Date(w.date+'T23:59:59')>=T; }), ev=[], d;
+    // ponytail: projection naïve, chaque diète supposée validée le jour prévu
+    if(r.nouveau_menu) for(d=new Date(N.getTime()+r.nouveau_menu*JOUR); d<fin; d=new Date(d.getTime()+r.nouveau_menu*JOUR)) ev.push({d:d,g:'menu'});
+    if(r.reajuster) for(d=new Date(T.getTime()+r.reajuster*JOUR); d<fin; d=new Date(d.getTime()+r.reajuster*JOUR)){ var dd=d;
+      if(!ev.some(function(e){ return Math.abs(e.d-dd)<7*JOUR; })) ev.push({d:dd,g:'reaj'}); }      // le nouveau menu recalcule aussi les grammes
+    return {ev:ev.sort(function(a,b){ return a.d-b.d; }),imp:imp,pese:pese};
+  }
   function renderEcheancier(){
     var auj=new Date(); auj.setHours(0,0,0,0);
     var lundi=new Date(auj); lundi.setDate(auj.getDate()-((auj.getDay()+6)%7));
     var sem=[0,1,2,3].map(function(i){ var d=new Date(lundi); d.setDate(lundi.getDate()+7*i); return {d:d,L:[]}; }), fin=new Date(lundi.getTime()+28*JOUR);
     var jm=function(d){ return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); };
-    D.clients.forEach(function(c){
-      var r=c.a&&RYTHME[c.a.formule], imp=!!(c.a&&c.a.statut==='past_due'); if(!r||(!actif(c)&&!imp)) return;   // impayé : montré, mais bloqué
-      if(c.prog.some(function(x){ return x.statut==='en_attente'||x.statut==='rectification'; })) return;   // une version attend déjà les coachs
-      var val=c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at; }).sort(function(a,b){ return a.traite_at>b.traite_at?1:-1; }); if(!val.length) return;
-      var T=new Date(val[val.length-1].traite_at), menus=val.filter(function(x){ return geste(x)!=='reajuster'; }), N=new Date((menus.length?menus[menus.length-1]:val[0]).traite_at);
-      var pese=c.w.some(function(w){ return new Date(w.date+'T23:59:59')>=T; }), ev=[], d;
-      // ponytail: projection naïve, chaque diète supposée validée le jour prévu
-      if(r.nouveau_menu) for(d=new Date(N.getTime()+r.nouveau_menu*JOUR); d<fin; d=new Date(d.getTime()+r.nouveau_menu*JOUR)) ev.push({d:d,g:'menu'});
-      if(r.reajuster) for(d=new Date(T.getTime()+r.reajuster*JOUR); d<fin; d=new Date(d.getTime()+r.reajuster*JOUR)){ var dd=d;
-        if(!ev.some(function(e){ return Math.abs(e.d-dd)<7*JOUR; })) ev.push({d:dd,g:'reaj'}); }      // le nouveau menu recalcule aussi les grammes
-      ev.sort(function(a,b){ return a.d-b.d; }).forEach(function(e,i){
-        var k=Math.max(0,Math.floor((e.d-lundi)/(7*JOUR))); if(k<=3) sem[k].L.push({c:c,g:e.g,d:e.d,bloque:imp?'bloqué : impayé':i===0&&!pese?'en attente d’une pesée':null}); });
+    D.clients.forEach(function(c){ var p=planClient(c,fin); if(!p) return;
+      p.ev.forEach(function(e,i){
+        var k=Math.max(0,Math.floor((e.d-lundi)/(7*JOUR))); if(k<=3) sem[k].L.push({c:c,g:e.g,d:e.d,bloque:p.imp?'bloqué : impayé':i===0&&!p.pese?'en attente d’une pesée':null}); });
     });
     // 1res diètes : questionnaires validés, diète encore à produire (cette semaine)
     file.filter(function(f){ return f.etape==='a_generer'; }).forEach(function(f){ var c=D.par[f.user_id]; if(c) sem[0].L.push({c:c,g:'premiere',d:auj}); });
@@ -3142,6 +2952,9 @@ var ED=(function(){
     var C=D.clients, base=suivis(), pes=base.filter(function(c){ return c.der&&jours(c.der.date)<7; }).length;
     $('r-taux').innerHTML=(base.length?Math.round(pes/base.length*100):0)+' <small>%</small>';
     $('r-taux-s').textContent=pes+' sur '+base.length+' pesé'+(pes>1?'s':'')+' depuis 7 jours';
+    var F12=[]; for(var q=11;q>=0;q--) F12.push(Date.now()-q*7*JOUR);
+    var tS=base.length?F12.map(function(f){ return Math.round(base.filter(function(c){ return c.w.some(function(w){ var u=new Date(w.date+'T12:00:00').getTime(); return u>f-7*JOUR&&u<=f; }); }).length/base.length*100); }):[];
+    G.kpi($('r-taux').parentNode,som(tS)?{v:tS,x:F12.map(function(t){ return new Date(t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }),tx:'Semaine au ',cur:tS[11],prev:tS[10]||null,vs:'vs la semaine d’avant',f:function(v){ return v+' % pesés'; },label:'Part des clients pesés par semaine sur 12 semaines'}:{});
     var grp={Perte:[],Prise:[],Maintien:[]};
     C.forEach(function(c){ if(c.w.length<2||!grp[c.obj]) return; var a=c.w[0], b=c.der, sem=(new Date(b.date)-new Date(a.date))/(7*JOUR); if(sem>=1) grp[c.obj].push((b.kg-a.kg)/sem); });
     Object.keys(grp).forEach(function(o){ var L=grp[o], m=L.length?L.reduce(function(t,x){ return t+x; },0)/L.length:null;
@@ -3149,6 +2962,11 @@ var ED=(function(){
       $('r-'+o+'-s').textContent=L.length?'moyenne sur '+L.length+' client'+(L.length>1?'s':''):'au moins une semaine de pesées nécessaire'; });
     var P=C.filter(function(c){ return c.w.length>=2&&palier(c.rep); }).map(function(c){ var ev=c.der.kg-c.w[0].kg, pal=palier(c.rep);
       return {c:c, ev:ev, pal:pal, pct:Math.max(0,Math.min(100,Math.round(ev*(c.obj==='Prise'?1:-1)/pal*100)))}; }).sort(function(a,b){ return b.pct-a.pct; });
+    var HI=['0-20 %','20-40 %','40-60 %','60-80 %','80-100 %'], hv=[0,0,0,0,0]; P.forEach(function(x){ hv[Math.min(4,Math.floor(x.pct/20))]++; });
+    $('g-histo-n').textContent=P.length?P.length+' client'+(P.length>1?'s':''):'chemin parcouru';
+    G.mount('g-histo',function(w){ return P.length?G.barres(w,{h:190,x:HI,valeurs:true,entier:true,series:[{v:hv,cs:['var(--b-bleu)','var(--b-bleu)','var(--brand)','var(--brand)','var(--b-vert)']}],
+      tx:function(i){ return 'Entre '+HI[i].replace('-',' et '); },f:function(v){ return v+' client'+(v>1?'s':''); },label:'Chemin parcouru vers l’objectif du questionnaire : '+hv.join(', ')+' clients par tranche de 20 %'})
+      :G.vide('Il faut au moins 2 pesées et un objectif de poids au questionnaire.'); });
     $('r-prog').innerHTML=P.length?'<div class="pbars">'+P.map(function(x){ return '<div class="pbar">'+nomLien(x.c)+'<span class="bt"><i style="width:'+x.pct+'%"></i></span><span class="bv">'+
       (x.ev>0?'+':'')+fr(x.ev)+' / '+x.pal+' kg</span></div>'; }).join('')+'</div>':'<p class="rien">Il faut au moins 2 pesées et un objectif de poids au questionnaire.</p>';
     var stag=C.filter(function(c){ if(c.w.length<3) return false; var t=c.w.slice(-3).map(function(x){ return +x.kg; }); return Math.max.apply(null,t)-Math.min.apply(null,t)<=0.3; })
@@ -3178,15 +2996,24 @@ var ED=(function(){
       tx:function(i){ return 'Décidées en '+DEL[i]; },f:function(v){ return pl(v,'diète'); },label:'Délai de relecture sur 30 jours : '+DEL.map(function(l,i){ return dv[i]+' en '+l; }).join(', ')}):G.vide('Aucune diète décidée ces 30 derniers jours.'); });
     var moy=function(L){ return L.length?L.reduce(function(t,x){ return t+x; },0)/L.length:null; }, dm=moy(hV);
     $('k-delai').innerHTML=dm==null?'—':G.n(dm,dm<10?1:0)+' <small>h</small>';
-    G.kpi($('k-delai').parentNode,dm!=null&&hV0.length?{cur:dm,prev:moy(hV0),inv:1,vs:'vs les 30 jours d’avant'}:{});
-    var V30=VAL.filter(function(x){ return ms(x.traite_at)>=j30; }), TY=[['1re diète',0,'var(--b-bleu)'],['Réajustement',0,'var(--b-vert)'],['Nouveau menu',0,'var(--b-jaune)']];
+    var d1=new Date(maintenant.getFullYear(),maintenant.getMonth(),1).getTime(), dp=new Date(maintenant.getFullYear(),maintenant.getMonth()-1,1).getTime();
+    var V30=VAL.filter(function(x){ return ms(x.traite_at)>=d1; }), TY=[['1re diète',0,'var(--b-bleu)'],['Réajustement',0,'var(--b-vert)'],['Nouveau menu',0,'var(--b-jaune)']];
     V30.forEach(function(x){ var g=geste(x); TY[g==='reajuster'?1:g?2:0][1]++; });
-    $('g-types-n').textContent=V30.length?pl(V30.length,'validée')+' · 30 jours':'';
+    $('g-types-n').textContent=V30.length?pl(V30.length,'validée'):'';
     G.mount('g-types',function(w){ return V30.length?G.donut(w,{parts:TY,sous:'validées',f:function(v){ return pl(v,'diète'); },
-      label:'Diètes validées sur 30 jours par type : '+TY.map(function(t){ return t[1]+' '+t[0]; }).join(', ')}):G.vide('Aucune diète validée ces 30 derniers jours.'); });
-    var d1=new Date(maintenant.getFullYear(),maintenant.getMonth(),1).getTime(), dp=new Date(maintenant.getFullYear(),maintenant.getMonth()-1,1).getTime(),
-        vM=VAL.filter(function(x){ return ms(x.traite_at)>=d1; }).length, vP=VAL.filter(function(x){ var t=ms(x.traite_at); return t>=dp&&t<d1; }).length;
-    $('k-val').textContent=vM; G.kpi($('k-val').parentNode,vP?{cur:vM,prev:vP,vs:'vs le mois dernier'}:{});
+      label:'Diètes validées ce mois-ci par type : '+TY.map(function(t){ return t[1]+' '+t[0]; }).join(', ')}):G.vide('Aucune diète validée depuis le 1er du mois.'); });
+    var vM=V30.length, vP=VAL.filter(function(x){ var t=ms(x.traite_at); return t>=dp&&t<d1; }).length;
+    // tendances 12 semaines (seulement quand il y a de quoi tracer) : validées par semaine, délai moyen par semaine
+    var F12=[]; for(var q=11;q>=0;q--) F12.push(Date.now()-q*7*JOUR);
+    var L12=F12.map(function(t){ return new Date(t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }), dans=function(t,f){ return t>f-7*JOUR&&t<=f; };
+    var vS=F12.map(function(f){ return VAL.filter(function(x){ return dans(ms(x.traite_at),f); }).length; });
+    var hS=F12.map(function(f){ var L=VAL.filter(function(x){ return x.created_at&&dans(ms(x.traite_at),f); }).map(function(x){ return (ms(x.traite_at)-ms(x.created_at))/3600000; }).filter(function(h){ return h>=0; });
+      return L.length?Math.round(L.reduce(function(t,h){ return t+h; },0)/L.length*10)/10:null; });
+    $('k-val').textContent=vM;
+    G.kpi($('k-val').parentNode,som(vS)?{v:vS,x:L12,tx:'Semaine au ',cur:vM,prev:vP||null,vs:'vs le mois dernier',f:function(v){ return pl(v,'diète')+' validée'+(v>1?'s':''); },label:'Diètes validées par semaine sur 12 semaines'}:(vP?{cur:vM,prev:vP,vs:'vs le mois dernier'}:{}));
+    var hPts=hS.filter(function(v){ return v!=null; }).length;
+    G.kpi($('k-delai').parentNode,dm==null?{}:{cur:dm,prev:hV0.length?moy(hV0):null,inv:1,vs:'vs les 30 jours d’avant',
+      v:hPts>1?hS.map(function(v,i){ return v!=null?v:(hS.slice(0,i).reverse().filter(function(x){ return x!=null; })[0]||0); }):null,x:L12,tx:'Semaine au ',f:function(v){ return G.n(v,1)+' h en moyenne'; },label:'Délai moyen de validation par semaine sur 12 semaines'});
 
     // ---- SUIVI : évolution moyenne par objectif (pesée la plus proche de chaque semaine, à ±3,5 jours)
     var S13=[]; for(var k=0;k<=12;k++) S13.push(k?'s'+k:'départ');
@@ -3406,7 +3233,7 @@ var ED=(function(){
         lireNiveau()                                   // code déjà tapé dans cette session ?
       ]).then(function(res){
         majMfaEtat(); sonderNotes();
-        file=(res[0].data)||[]; renderFile(); recount(); compterRetards(); chargerAbo(); chargerMessages();
+        file=(res[0].data)||[]; renderFile(); recount(); chargerAbo(); chargerMessages();
         chargerTout();
         var h=location.hash.slice(1); voir(['jour','clients','dietes','msgs','suivi','stats','eco'].indexOf(h)>=0?h:'jour');
       });

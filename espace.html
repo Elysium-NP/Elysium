@@ -1458,8 +1458,15 @@ var PROG = {
 
   // ---- messagerie : la carte n'apparaît que si la table existe (script tableau_de_bord_coach.sql) ----
   var vusMsg=null, TITRE=document.title;
+  // prénom du coach sous ses réponses (« Damien - Coach ») : fonction noms_coachs() de supabase/noms_coachs.sql ;
+  // tant qu'elle n'existe pas, on garde « Coach »
+  var NOMS_C={}, nomsCharges=null;
+  function chargerNomsCoachs(){
+    if(!nomsCharges) nomsCharges=sb.rpc('noms_coachs').then(function(r){ (r.data||[]).forEach(function(x){ NOMS_C[x.user_id]=x.prenom; }); }).catch(function(){});
+    return nomsCharges;
+  }
   function chargerMsgs(){
-    return sb.from('messages').select('id,auteur_id,texte,lu_at,created_at').eq('client_id',u.id).order('created_at').then(function(r){
+    return chargerNomsCoachs().then(function(){ return sb.from('messages').select('id,auteur_id,texte,lu_at,created_at').eq('client_id',u.id).order('created_at'); }).then(function(r){
       if(r.error) return;                                      // table pas encore créée : rien à montrer
       var card=document.getElementById('c-msg'); card.hidden=false;
       // CGV v3 art. 7.3 : paiement échoué -> plus de nouvel échange tant que la période n'est pas réglée (l'historique reste lisible)
@@ -1471,7 +1478,7 @@ var PROG = {
         : 'Ton dernier paiement a échoué : la messagerie reprend dès qu’il est réglé (« Mon abonnement » › mettre à jour ta carte).';
       var L=r.data||[], box=document.getElementById('fil-msg');
       box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id;
-        return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':'Coach · ')+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
+        return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':(NOMS_C[m.auteur_id]?esc(NOMS_C[m.auteur_id])+' - Coach · ':'Coach · '))+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')
         : '<p class="foot-note">Aucun message pour l’instant.</p>';
       box.scrollTop=box.scrollHeight;
       var aLire=L.filter(function(m){ return m.auteur_id!==u.id && !m.lu_at; });
@@ -1533,7 +1540,7 @@ var PROG = {
     // messagerie : un échange d'exemple, envoi désactivé
     var il=function(j,h){ var d=new Date(Date.now()-j*JOUR_MS); d.setHours(h,12,0,0); return d.toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); };
     document.getElementById('fil-msg').innerHTML=
-      '<div class="b coach">Bonjour Sophie, ton programme est en ligne. Pense à ta pesée du lundi matin, à jeun : c’est elle qui nous sert à ajuster tes quantités.<time>Coach · '+il(6,9)+'</time></div>'+
+      '<div class="b coach">Bonjour Sophie, ton programme est en ligne. Pense à ta pesée du lundi matin, à jeun : c’est elle qui nous sert à ajuster tes quantités.<time>Damien - Coach · '+il(6,9)+'</time></div>'+
       '<div class="b moi">Merci ! Je commence dès lundi.<time>'+il(6,12)+'</time></div>';
     document.getElementById('msg-txt').disabled=true;
     document.getElementById('msg-txt').placeholder='Désactivé en démonstration';

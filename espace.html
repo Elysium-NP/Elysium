@@ -305,7 +305,7 @@
   .cat h4 .n{font-family:var(--texte)}
 
   /* ===== A · NAVIGATION DU PROGRAMME (Damien 28/09) =====
-     « Mon menu » = les 7 jours ; en dessous, bien visibles : Conseils · Liste de courses · (Recettes) · Imprimer. */
+     « Mon menu » = les 7 jours ; en dessous, bien visibles : Conseils · Liste de courses · Imprimer (les recettes se déplient dans le menu). */
   .menu-hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;margin-top:24px}
   .menu-hd h2{font-size:clamp(22px,2.4vw,27px)!important}
   .menu-hd small{font:13px/1.4 var(--texte);color:var(--steel)}
@@ -326,7 +326,7 @@
   .acc .tx b{font:400 17px/1.2 var(--titre);color:var(--ice)}
   .acc .tx small{font:12.5px/1.35 var(--texte);color:var(--gris)}
   .acc.a-cons{--pc:var(--p-vert);--bc:var(--b-vert)} .acc.a-cour{--pc:var(--p-jaune);--bc:var(--b-jaune)}
-  .acc.a-rec{--pc:var(--p-violet);--bc:var(--b-violet)} .acc.a-print{--pc:var(--p-bleu);--bc:var(--b-bleu)}
+  .acc.a-print{--pc:var(--p-bleu);--bc:var(--b-bleu)}
   /* ce que la formule n'inclut pas : discret, jamais une erreur */
   .acc.lock{background:none;border-style:dashed;border-color:var(--line)}
   .acc.lock .ic{border-color:var(--line)} .acc.lock .ic svg{stroke:var(--steel)}
@@ -342,22 +342,46 @@
   .verrou .dispo{display:inline-block;margin-top:14px;font:600 13px/1.3 var(--texte);color:var(--blue);background:var(--p-bleu);border-radius:12px;padding:7px 14px}
   .verrou .dispo a{color:inherit}
   @media(max-width:520px){.acces{grid-template-columns:1fr 1fr;gap:8px}.acc{flex-direction:column;align-items:flex-start;gap:8px;padding:12px}.acc .tx b{font-size:16px}}
-  /* recettes des coachs (Formule Elysium) */
-  .recettes{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-  @media(max-width:360px){.recettes{grid-template-columns:1fr}}
-  .rct{border:1px solid var(--b-violet);border-radius:14px;overflow:hidden;background:var(--void2)}
-  .rct summary{list-style:none;cursor:pointer;padding:12px 16px;background:var(--p-violet);display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .rct summary::-webkit-details-marker{display:none}
-  .rct summary b{font:400 17px/1.3 var(--titre);color:var(--ice);flex:1;min-width:0}
-  .rct summary i{font:600 12px/1.3 var(--texte);font-style:normal;color:var(--gris)}
-  .rct summary::after{content:"";flex:none;width:8px;height:8px;border-right:1.5px solid var(--gris);border-bottom:1.5px solid var(--gris);transform:rotate(45deg);margin:0 3px 4px 0;transition:transform .2s}
-  .rct[open] summary::after{transform:rotate(-135deg);margin:4px 3px 0 0}
-  @media(max-width:520px){.rct summary{flex-wrap:wrap;gap:4px 10px}.rct summary i{order:3;flex-basis:100%}}
-  .rct ol{margin:12px 16px 0 34px;padding:0;font:15px/1.55 var(--texte);color:var(--gris)}
-  .rct ol li{margin-bottom:6px}
-  .rct .astuce{margin:8px 16px 14px;font:14px/1.5 var(--texte);color:var(--steel)}
-  .rct[open] summary{border-bottom:1px solid var(--b-violet)}
-  .rct:not(:has(.astuce)) ol{margin-bottom:14px}
+  /* ===== RECETTE AU CLIC SUR UN PLAT (Damien & Dimitri 28/09) =====
+     Plus d'encadré « Recettes » : on touche un plat du menu et sa recette se déroule dessous, aux
+     couleurs du repas. Formule Elysium : la recette ; sinon un encart « disponible avec… ». Plusieurs
+     recettes peuvent rester ouvertes (sur iPhone, refermer celle du dessus ferait sauter la page). */
+  .meal.pdj{--mp:var(--p-jaune);--mb:var(--b-jaune)} .meal.dej{--mp:var(--p-vert);--mb:var(--b-vert)}
+  .meal.col{--mp:var(--p-violet);--mb:var(--b-violet)} .meal.din{--mp:var(--p-bleu);--mb:var(--b-bleu)}
+  .meals:has(.meal.open){align-items:start}
+  .meal-in .plat{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;width:100%;min-height:44px;margin:-6px 0 2px;padding:6px 0;
+    background:none;border:0;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .plat .dn{flex:1 1 150px;min-width:0}
+  .plat .voir{flex:none;display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1 var(--texte);color:var(--blue)}
+  .plat .voir svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+  .plat[aria-expanded="true"] .voir svg{transform:rotate(180deg)}
+  .plat:hover .dn{text-decoration:underline;text-decoration-color:var(--mb);text-underline-offset:3px}
+  .plat:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+  .rc{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .35s ease,visibility 0s .35s}
+  .meal.open .rc{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .35s ease}
+  .rc-in{min-height:0;overflow:hidden}
+  .rc-box{margin:0 14px 14px;padding:14px 15px;border-radius:12px;background:color-mix(in srgb,var(--mp) 55%,var(--void2));border:1px solid color-mix(in srgb,var(--mb) 55%,transparent)}
+  .rc-hd{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--mb) 60%,transparent)}
+  .rc-hd b{font:400 18px/1.3 var(--titre);color:var(--ice)}
+  .rc-hd span{font:13px/1.4 var(--texte);color:var(--steel)}
+  .rc-box h5{font:600 11.5px/1.2 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin:0 0 8px}
+  .rc-ing{list-style:none;margin:0 0 14px;padding:0}
+  .rc-ing li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dotted color-mix(in srgb,var(--mb) 70%,transparent);font:14.5px/1.4 var(--texte);color:var(--gris)}
+  .rc-ing li:last-child{border-bottom:0}
+  .rc-ing b{color:var(--ice);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .rc-et{list-style:none;counter-reset:et;margin:0;padding:0}
+  .rc-et li{counter-increment:et;position:relative;padding:1px 0 10px 34px;font:15px/1.55 var(--texte);color:var(--gris)}
+  .rc-et li::before{content:counter(et);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--void2);border:1px solid var(--mb);font:600 12px/1 var(--texte);color:var(--ice)}
+  .rc-ast{margin:4px 0 0;padding:10px 12px;border-left:3px solid var(--mb);border-radius:0 10px 10px 0;background:var(--void2);font:14px/1.5 var(--texte);color:var(--gris)}
+  .rc-ast b{display:block;font:600 11.5px/1.2 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-bottom:4px}
+  .rc-photo{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;margin-bottom:12px}
+  .rc-vide{margin:0;font:14.5px/1.5 var(--texte);color:var(--gris)}
+  .rc-box.lock{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:12px;background:var(--void2);border:1px dashed var(--line);padding:12px 14px 2px}
+  .rc-box.lock svg{flex:none;width:16px;height:16px;fill:none;stroke:var(--steel);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .rc-box.lock p{margin:0;font:14.5px/1.45 var(--texte);color:var(--ice)}
+  .rc-box.lock a{grid-column:2;justify-self:start;display:inline-flex;align-items:center;min-height:44px;font:600 13px/1 var(--texte);color:var(--blue)}
+  @media(prefers-reduced-motion:reduce){.rc,.meal.open .rc,.plat .voir svg{transition:none}}
 
   /* ===== C · ALERTES DE LA MESSAGERIE : un encart plutôt qu'un lien gris ===== */
   .notif{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:14px 0 4px;padding:13px 15px;border-radius:14px;
@@ -763,7 +787,7 @@ var PROG = {
 
   // ---- programme intégré : construit le visuel V2 dans #progview (une seule fois) ----
   // ---- DÉMO : ce qui distingue les formules (textes de la page Formules / recap.html) ----
-  // Recettes : celles des coachs (../out/recettes_etapes.json), pour les plats du programme d'exemple.
+  // Recettes d'exemple : celles des coachs (../out/recettes_etapes.json), pour les plats du programme d'exemple.
   var RECETTES_DEMO={
     'Tartines poulet & Saint-Môret':[5,2,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais griller les tranches de pain complet.','Dépose le Saint-Môret puis le blanc de poulet par-dessus.','Poivre, ciboulette, et c\'est prêt.']],
     'Bœuf, pâtes & poivron':[10,12,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire les pâtes dans une grande casserole d\'eau bouillante (temps du paquet), égoutte.','Fais dorer la viande hachée dans une poêle au spray antiadhésif, en l\'émiettant.','Pendant ce temps, coupe le poivron en lanières et fais-le revenir 6 à 8 min à la poêle.','Dresse le tout dans l\'assiette, avec ail, cumin, origan à ton goût, et sers chaud.']],
@@ -772,12 +796,33 @@ var PROG = {
     'Poisson blanc, patate douce & haricots verts':[10,25,['Pèse tous les aliments crus, aux quantités de ta fiche.','Préchauffe le four à 200 °C.','Coupe la patate douce en cubes et fais-la rôtir 25 min au four à 200 °C (ou 15 min à l\'eau bouillante).','Fais cuire le poisson blanc 12 à 15 min au four à 200 °C avec un filet de citron (ou 3 à 4 min par face à la poêle au spray antiadhésif).','Pendant ce temps, fais cuire les haricots verts 8 à 10 min à l\'eau bouillante ou à la vapeur.','Arrose d\'huile d\'olive, crue, au moment de servir.','Dresse le tout dans l\'assiette, avec citron, persil, ail, thym à ton goût, et sers chaud.']],
     'Pâtes au poulet':[10,20,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire les pâtes (temps du paquet), égoutte.','Coupe le poulet en dés et fais-le dorer 6 à 8 min dans une sauteuse au spray antiadhésif avec l\'ail.','Verse la pulpe de tomate, l\'origan et le basilic, et laisse mijoter 8 min.','Mélange les pâtes à la sauce et parsème de parmesan.']],
     'Steak, riz & poivron':[10,15,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire le riz dans une grande casserole d\'eau bouillante (temps du paquet), égoutte.','Saisis le steak 2 à 3 min par face dans une poêle très chaude au spray antiadhésif (plus ou moins selon la cuisson que tu aimes), puis laisse-le reposer 2 min.','Pendant ce temps, coupe le poivron en lanières et fais-le revenir 6 à 8 min à la poêle.','Dresse le tout dans l\'assiette, avec ail, herbes de Provence, citron, poivre à ton goût, et sers chaud.']],
+    'Bœuf, riz & maïs (au Saint-Môret)':[10,15,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire le riz dans une grande casserole d\'eau bouillante (temps du paquet), égoutte.','Pendant ce temps, fais dorer la viande hachée dans une poêle au spray antiadhésif, en l\'émiettant à la spatule.','Égoutte le maïs.','Hors du feu, ajoute le Saint-Môret dans la poêle avec la viande et mélange : il fait une sauce crémeuse.','Dresse le tout dans l\'assiette, avec ail, cumin, origan à ton goût, et sers chaud.'],'Laisse la viande dorer 1 min sans la remuer avant de l\'émietter : elle prend plus de goût.'],
+    'Thon, blé & concombre':[10,12,['Pèse tous les aliments crus, aux quantités de ta fiche.','Fais cuire le blé 10 à 12 min dans une casserole d\'eau bouillante, égoutte, puis laisse tiédir.','Égoutte le thon et émiette-le à la fourchette.','Coupe le concombre en dés.','Mélange le tout dans un bol, arrose d\'huile d\'olive crue, avec citron, ail, persil, poivre à ton goût.','Se mange tiède, ou froid en salade : dans une boîte, il se garde au frais jusqu\'au repas.'],'Prépare-le la veille : les saveurs se mélangent et il t\'attend au frais.'],
     'Poulet, semoule & ratatouille':[10,12,['Pèse tous les aliments crus, aux quantités de ta fiche.','Verse la semoule dans un bol avec la même quantité d\'eau bouillante, couvre 5 min, puis égraine à la fourchette.','Coupe le poulet en dés ou en lanières et fais-le dorer 6 à 8 min dans une poêle au spray antiadhésif.','Pendant ce temps, fais réchauffer la ratatouille dans une casserole.','Dresse le tout dans l\'assiette, avec paprika, ail, herbes de Provence, poivre à ton goût, et sers chaud.']]
   };
-  function recettesDuMenu(){   // les recettes des plats servis, dans l'ordre du menu, sans doublon
-    var R={}; if(DEMO!=='f3') return R;
-    PROG.jours.forEach(function(j){ j.repas.forEach(function(r){ if(RECETTES_DEMO[r.rec]) R[r.rec]=RECETTES_DEMO[r.rec]; }); });
+  // ⚠️ photos du catalogue = vignettes NON licenciées : aucune photo tant que les vraies ne sont pas prêtes
+  //    (l'emplacement existe : passer à true quand `photo_url` pointera vers des photos autorisées).
+  var PHOTOS_RECETTES=false;
+  // RECETTES_DEMO au format de menu.recettes (spec 28/09) : quantités = celles du programme d'exemple,
+  // `variantes` quand elles changent d'un jour à l'autre. Clé = le titre du plat (en démo, pas de clé interne).
+  function recettesDemo(){
+    var R={};
+    PROG.jours.forEach(function(j){ j.repas.forEach(function(r){
+      var x=RECETTES_DEMO[r.rec]; if(!x) return;
+      var ings=r.ings.map(function(i){ var n=String(i[1]||''); return [n.charAt(0).toUpperCase()+n.slice(1), String(i[0]||'')]; }), e=R[r.rec];
+      if(!e){ R[r.rec]={nom:r.rec,temps:'Préparation '+x[0]+' min · Cuisson '+x[1]+' min',etapes:x[2],astuce:x[3]||null,photo_url:null,ingredients:ings,jours:[j.j]}; return; }
+      e.jours.push(j.j);
+      if(JSON.stringify(ings)!==JSON.stringify(e.ingredients)) (e.variantes=e.variantes||[]).push({jours:[j.j],ingredients:ings});
+    }); });
     return R;
+  }
+  // Recettes visibles au clic sur un plat : null = verrou (« disponible avec la Formule Elysium »).
+  // Démo Elysium et comptes « mixte » en vue Tout / Elysium : les recettes d'exemple ;
+  // vrai client Elysium : celles déposées avec son programme (menu.recettes), {} si aucune.
+  function recettesClient(){
+    if(DEMO) return DEMO==='f3' ? recettesDemo() : null;
+    if(ADMIN) return (!VUE||VUE==='f3') ? recettesDemo() : null;
+    return formuleClient()==='f3' ? (PROG.recettes||{}) : null;
   }
   // formule du client : la démo, sinon la clé f1/f2/f3 de son abonnement (repli : son profil). Compte admin : pas de verrou.
   // Comptes « mixte » (Dimitri, Damien, Yoann) : sélecteur « Voir comme » qui transforme l'espace EN DIRECT (null = tout visible)
@@ -857,24 +902,19 @@ var PROG = {
     })();
 
     // -- NAVIGATION (Damien 28/09) : « Mon menu » = les 7 jours en onglets ; juste dessous, bien visibles,
-    //    Conseils · Liste de courses · (Recettes des coachs) · Imprimer, en encadrés à part.
+    //    Conseils · Liste de courses · Imprimer, en encadrés à part. Les recettes : au clic sur un plat.
     //    En démo, ce que la formule n'inclut pas reste visible mais verrouillé (« Disponible avec… »).
     var tabs=document.getElementById('tabs'), acces=document.getElementById('acces'), panels=document.getElementById('panels'), items=[];
     PROG.jours.forEach(function(d){ items.push({id:'j'+d.j,label:'Jour '+d.j,html:dayHTML(d)}); });
     items.push({id:'off',label:'Jour OFF',html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
     var nCourses=0; Object.keys(PROG.courses||{}).forEach(function(k){ nCourses+=(PROG.courses[k]||[]).length; });
-    var nRec=Object.keys(recettesDuMenu()).length;
+    var REC=recettesClient();
     var extras=[{id:'conseils',cls:'a-cons',label:'Conseils',sous:'Les règles, le mode de vie, le suivi',html:adviceHTML(),ic:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>'}];
-    var IC_COURSES='<path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/>',
-        IC_RECETTES='<path d="M4 5a2 2 0 0 1 2-2h5v17H6a2 2 0 0 0-2 2zM20 5a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 1 2 2z"/>';
+    var IC_COURSES='<path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/>';
     var FC=formuleClient();
     if(FC==='f1') extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',lock:'Formule Olympe',ic:IC_COURSES,
       html:verrouHTML('Liste de courses','','la Formule Olympe et la Formule Elysium')});
     else if(nCourses) extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',sous:nCourses+' articles à cocher',ic:IC_COURSES,html:coursesHTML()});
-    // recettes : ouvertes en démo Elysium ; pour un vrai client Elysium, elles arriveront avec le catalogue (menu.recettes)
-    if((DEMO||VUE)==='f3'||(ADMIN&&!DEMO&&!VUE)) extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()});
-    else if(FC==='f1'||FC==='f2') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',lock:'Formule Elysium',ic:IC_RECETTES,
-        html:verrouHTML('Recettes des coachs','Les recettes des coachs pour chaque repas.','la Formule Elysium')});
     var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6
     var todayId=dow===0?'off':'j'+dow;
     if(!items.some(function(it){return it.id===todayId;})) todayId=items[0].id;
@@ -904,12 +944,25 @@ var PROG = {
     function verrouHTML(titre,texte,formules){
       return '<div class="panel"><div class="verrou"><h4>'+titre+'</h4>'+(texte?'<p>'+texte+'</p>':'')+'<span class="dispo">Disponible avec '+formules+'</span></div></div>';
     }
-    function recettesHTML(){
-      var R=recettesDuMenu();
-      return '<div class="panel"><div class="recettes">'+Object.keys(R).map(function(n){ var r=R[n];
-        return '<details class="rct rv"><summary><b>'+n+'</b><i>Préparation '+r[0]+' min · cuisson '+r[1]+' min</i></summary><ol>'+
-          r[2].map(function(e){ return '<li>'+e+'</li>'; }).join('')+'</ol>'+(r[3]?'<p class="astuce">'+r[3]+'</p>':'')+'</details>'; }).join('')+'</div></div>';
+    // la recette d'un plat, dépliée sous lui (construite au premier clic). Textes du moteur : toujours échappés.
+    function recetteHTML(j,i){
+      if(!REC) return '<div class="rc-box lock">'+LOCK+'<p>Recette disponible avec la Formule Elysium</p><a href="formules.html">Voir les formules</a></div>';
+      var jour=PROG.jours.filter(function(x){ return String(x.j)===String(j); })[0], r=jour&&jour.repas[i], x=r&&REC[r.cle||r.rec];
+      if(!x) return '<div class="rc-box"><p class="rc-vide">La recette de ce plat arrive bientôt.</p></div>';
+      var v=(x.variantes||[]).filter(function(v){ return (v.jours||[]).map(String).indexOf(String(j))>-1; })[0], ings=((v||x).ingredients)||[];
+      return '<div class="rc-box">'+(PHOTOS_RECETTES&&x.photo_url?'<img class="rc-photo" src="'+esc(x.photo_url)+'" alt="" loading="lazy">':'')+
+        '<div class="rc-hd"><b>'+esc(x.nom||'')+'</b>'+(x.temps?'<span>'+esc(x.temps)+'</span>':'')+'</div>'+
+        (ings.length?'<h5>Tes quantités</h5><ul class="rc-ing">'+ings.map(function(g){ return '<li><span>'+esc(g[0]||'')+'</span><b>'+esc(deplier(g[1]||''))+'</b></li>'; }).join('')+'</ul>':'')+
+        ((x.etapes||[]).length?'<h5>Préparation</h5><ol class="rc-et">'+x.etapes.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ol>':'')+
+        (x.astuce?'<p class="rc-ast"><b>Astuce</b>'+esc(x.astuce)+'</p>':'')+'</div>';
     }
+    panels.addEventListener('click',function(e){
+      var b=e.target.closest('.plat'); if(!b) return;
+      var card=b.closest('.meal'), box=document.getElementById(b.getAttribute('aria-controls')).firstElementChild;
+      if(!box.hasChildNodes()) box.innerHTML=recetteHTML(b.getAttribute('data-j'),+b.getAttribute('data-i'));
+      var open=b.getAttribute('aria-expanded')!=='true';
+      b.setAttribute('aria-expanded',String(open)); card.classList.toggle('open',open);
+    });
     /* REPAS au style de l'exemple de l'accueil (Damien & Yoann 28/09) : en-tête à la couleur du repas,
        coins arrondis, ingrédients en une phrase, macros en pastilles. Pas d'abréviation (« tr. »). */
     function deplier(q){ return String(q).replace(/(^|\s)(\d+(?:[.,]\d+)?)\s*tr\.?(?=\s|$)/g,function(_,a,n){ return a+n+(parseFloat(n.replace(',','.'))>1?' tranches':' tranche'); }); }
@@ -922,12 +975,15 @@ var PROG = {
       return q+(/^[aeiouyhâéèêëîïôûœ]/i.test(n)?" d'":' de ')+n;              // « 20 g de fromage », « 5 g d'huile »
     }
     function dayHTML(d){
-      var m=d.repas.map(function(r){
-        var ings=r.ings.map(ingPhrase).join(' · ');
+      var m=d.repas.map(function(r,i){
+        var ings=r.ings.map(ingPhrase).join(' · '), id='rc-'+d.j+'-'+i;
         return '<article class="meal '+coulRepas(r.type)+' rv"><div class="meal-hd"><span>'+r.emo+' '+r.type+'</span><i>'+r.kcal+' kcal</i></div>'+
-          '<div class="meal-in"><p class="dish">'+r.rec+'</p><p class="ings-l">'+ings+'</p>'+
+          '<div class="meal-in"><button type="button" class="dish plat" aria-expanded="false" aria-controls="'+id+'" data-j="'+d.j+'" data-i="'+i+'">'+
+            '<span class="dn">'+r.rec+'</span><span class="voir">Voir la recette<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>'+
+          '<p class="ings-l">'+ings+'</p>'+
           (r.seas?'<p class="seas">'+r.seas+'</p>':'')+
-          '<div class="mac"><span class="p">P '+r.m[0]+'</span><span class="g">G '+r.m[1]+'</span><span class="l">L '+r.m[2]+'</span></div></div></article>';
+          '<div class="mac"><span class="p">P '+r.m[0]+'</span><span class="g">G '+r.m[1]+'</span><span class="l">L '+r.m[2]+'</span></div></div>'+
+          '<div class="rc" id="'+id+'"><div class="rc-in"></div></div></article>';
       }).join('');
       return '<div class="panel"><div class="meals">'+m+'</div></div>';
     }
@@ -1048,12 +1104,14 @@ var PROG = {
       jours:jours.map(function(j){ return {j:j.jour, repas:(j.repas||[]).map(function(r){
         var m=r.macros||{};
         return {type:MEALS[r.type]||String(r.type||'').replace(/_/g,' '), emo:EMO[r.type]||'', kcal:r0(m.kcal),
-          rec:esc(r.titre||''),            // ⛔ jamais `recette` (clé interne) côté client
+          rec:esc(r.titre||''),            // ⛔ jamais `recette` (clé interne) AFFICHÉE côté client…
+          cle:r.recette||'',               // …elle sert seulement à retrouver la recette : menu.recettes[repas.recette]
           seas:'', m:[r0(m.proteines),r0(m.glucides),r0(m.lipides)],
           ings:(r.ingredients||[]).map(function(i){
             return i.affichage ? [esc(i.affichage),''] : [r0(i.grammes)+' g', esc(i.aliment||i.ingredient||'')]; })};
       })}; }),
       courses:coursesDepuis(p.menu),       // liste du moteur si déposée, sinon somme du menu
+      recettes:(p.menu||{}).recettes||null, // Formule Elysium seulement (spec 28/09) : {clé: {nom, temps, etapes, astuce, photo_url, ingredients, jours, variantes?}}
       conseils:PROG.conseils, modevie:PROG.modevie
     };
   }

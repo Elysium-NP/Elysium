@@ -234,6 +234,9 @@
   .intro svg{width:90vw;height:auto;overflow:visible;transform-origin:0 0;transition:transform .6s cubic-bezier(.65,0,.25,1),opacity .35s ease}
   .intro path{fill:var(--ink);fill-opacity:0;stroke:var(--ink);stroke-linejoin:round;stroke-linecap:round}
   html.intro-en-cours .status .elg-name{visibility:hidden}
+  /* bouton flottant mobile : caché pendant l'intro, il arrive avec le contenu (Dimitri 28/09) */
+  .dock{transition:opacity .8s ease .5s,transform .8s cubic-bezier(.2,.7,.2,1) .5s}
+  html.intro-en-cours .dock{opacity:0;transform:translateY(24px);pointer-events:none;transition:none}
 
   /* ── ANIMATIONS (Damien : « ça manque un poil d'animation, comme le premier site ») ──
      Posées PAR LE SCRIPT (classe .rv) : sans JS, rien n'est jamais masqué. Sobres : fondu +

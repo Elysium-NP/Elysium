@@ -10,7 +10,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2909g">
+<link rel="stylesheet" href="assets/site.css?v=2909h">
 <style>
   /* MAQUETTE du tableau de bord coachs (28/09) : données d'EXEMPLE, rien n'est branché.
      Sert à montrer la navigation à Damien & Yoann avant de brancher Supabase / Stripe. */
@@ -645,6 +645,7 @@
   .ck .rl-na{margin:6px 0;padding-left:18px}
   details.rl-rq{margin-top:16px;border-top:1px solid var(--line);padding-top:10px}
   .rl-dl{grid-template-columns:auto minmax(0,1fr);gap:8px 14px;font-size:14px;margin-top:8px}
+  .rl-dl dd{overflow-wrap:anywhere}   /* réponse sans espace (« tomates,avocats,… ») : jamais de débordement */
 
   /* décisions : JAMAIS collées à l'écran (Dimitri 28/09 : « ça enlève de la vision »). Deux places fixes dans la page :
      l'en-tête (à côté de la carte de santé) et « Ta décision » en fin de page. Raccourcis V / C inchangés. */

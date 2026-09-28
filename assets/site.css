@@ -486,7 +486,7 @@ h3:not(.intitule){font-size:clamp(19px,1.8vw,23px)!important}
 /* .intitule = étiquette de panneau (espace coachs), en texte courant : hors de l'échelle des titres */
 /* plus d'italique d'appoint : une seule graisse / un seul style de texte courant */
 body *:not(h1):not(h1 *):not(h2):not(h2 *){font-style:normal!important}
-body{font-family:var(--texte)}
+body{font-family:var(--texte);overflow-wrap:break-word}   /* filet : un mot sans espace (réponse client, e-mail) ne sort jamais de sa carte */
 input,select,textarea,button{font-family:var(--texte)}
 
 /* en-tête : bande crème, marque ELYSIUM en Cormorant, menu aligné dessus */

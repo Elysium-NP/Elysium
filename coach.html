@@ -84,6 +84,15 @@
   .etat.valide{color:#2f6b1a;border-color:rgba(110,231,168,.4)}
   .etat.rectification{color:#8a5a00;border-color:rgba(232,176,75,.45)}
   .etat.refuse{color:#9b1c1c;border-color:rgba(240,160,160,.4)}
+  .etat.sans_questionnaire{color:var(--steel);border-color:var(--line)}
+
+  /* ---- tous les clients ---- */
+  .panel.clients{margin-bottom:22px;max-height:none}
+  .cli-outils{padding:12px 18px;border-bottom:1px solid var(--line)}
+  .cli-outils input{width:100%;max-width:360px;font:15px/1.2 var(--texte);color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:999px;padding:10px 16px}
+  #cli-liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));max-height:340px}
+  #cli-liste .empty{grid-column:1/-1}
+  .fitem .retard{color:#b45309}
 
   /* ---- fiche client ---- */
   .idcard{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
@@ -246,8 +255,17 @@
     <button type="button" id="notif-on" hidden style="margin-left:auto;font:600 12px/1 var(--texte);letter-spacing:0;text-transform:none;background:var(--brand);color:#111;border:0;border-radius:999px;padding:9px 14px;cursor:pointer">Activer les alertes de messages</button></h2>
   <div class="msgs" id="msgs"><div class="empty" style="grid-column:1/-1">Chargement…</div></div>
 
+  <!-- ── tous les clients : la file ne montre que le travail à faire ── -->
+  <section class="panel clients">
+    <h2 class="intitule">Tous les clients <span class="n" id="clin"></span></h2>
+    <div class="cli-outils">
+      <input type="search" id="cli-q" placeholder="Rechercher un nom…" aria-label="Rechercher un client" autocomplete="off">
+    </div>
+    <div class="body" id="cli-liste"><div class="empty">Chargement…</div></div>
+  </section>
+
   <!-- ── cockpit ───────────────────────────────────────────────────────── -->
-  <div class="cock">
+  <div class="cock" id="cock">
 
     <section class="panel">
       <h2 class="intitule">La file <span class="n" id="filen"></span></h2>
@@ -349,7 +367,7 @@
 <script>
 (function(){
   "use strict";
-  var sb, moi=null, file=[], sel=null, retours=[];
+  var sb, moi=null, file=[], sel=null, cur=null, retours=[];   // cur = fiche ouverte (depuis la file OU la liste des clients)
   var $=function(id){return document.getElementById(id);};
   function toast(t){ var e=$('toast'); e.textContent=t; e.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(function(){e.classList.remove('on');},2600); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -371,7 +389,7 @@
         '<span>'+(c.questionnaire_valide_at||'').slice(0,10)+'</span></div></button>';
     }).join('');
     box.querySelectorAll('.fitem').forEach(function(b){
-      b.addEventListener('click',function(){ sel=+b.dataset.i; renderFile(); renderClient(); renderProg(); });
+      b.addEventListener('click',function(){ sel=+b.dataset.i; cur=file[sel]; renderFile(); renderClients(); renderClient(); renderProg(); });
     });
     $('filen').textContent=file.length;
   }
@@ -386,14 +404,15 @@
   var ALERTE=['Des aliments que tu refuses','Allergies'];
 
   function renderClient(){
-    var c=file[sel], box=$('client');
+    var c=cur, box=$('client');
     if(!c){ return; }
     var age=c.naissance?(new Date().getFullYear()-+c.naissance.slice(0,4)):'—';
     var h='<div class="idcard"><h3>'+esc(c.prenom)+' '+esc(c.nom)+'</h3>'+
-      '<span class="idmeta">'+(c.sexe==='HOMME'?'Homme':'Femme')+' · <b>'+age+' ans</b> · <b>'+
-      (c.dernier_poids||c.reponses['Poids (en kg)']||'?')+' kg</b> · '+(c.taille_cm||'?')+' cm</span></div>';
+      '<span class="idmeta">'+(c.sexe==='HOMME'?'Homme':c.sexe?'Femme':'—')+' · <b>'+age+' ans</b> · <b>'+
+      (c.dernier_poids||(c.reponses||{})['Poids (en kg)']||'?')+' kg</b> · '+(c.taille_cm||'?')+' cm</span></div>';
     h+='<div class="suivi" id="suivi"><h4>Suivi</h4><div class="chiffres">Chargement des pesées…</div></div>';
     var rep=c.reponses||{}, vus={};
+    if(!Object.keys(rep).length) h+='<div class="empty"><b>Questionnaire pas encore rempli</b>Les réponses apparaîtront ici dès qu’il sera validé.</div>';
     PRIO.forEach(function(p){ Object.keys(rep).forEach(function(k){
       if(!vus[k] && rep[k] && k.indexOf(p)===0){ vus[k]=1; h+=qa(k,rep[k]); } }); });
     Object.keys(rep).forEach(function(k){ if(!vus[k] && rep[k]) h+=qa(k,rep[k]); });
@@ -409,7 +428,7 @@
       sb.from('poids').select('date,kg').eq('user_id',uid).order('date'),
       sb.from('mensurations').select('*').eq('user_id',uid).order('date',{ascending:false}).limit(1)
     ]).then(function(r){
-      var el=$('suivi'); if(!el||!file[sel]||file[sel].user_id!==uid) return;   // on a changé de client entre-temps
+      var el=$('suivi'); if(!el||!cur||cur.user_id!==uid) return;   // on a changé de client entre-temps
       var w=(r[0].data||[]).map(function(x){ return {v:+x.kg,t:new Date(x.date+'T12:00:00').getTime()}; });
       var m=(r[1].data||[])[0], h='<h4>Suivi</h4>';
       if(!w.length){ h+='<div class="chiffres"><span class="retard">Aucune pesée enregistrée</span></div>'; }
@@ -434,12 +453,12 @@
         if(t.length) h+='<div class="mens">Mensurations du '+new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR')+' : '+t.join(' · ')+'</div>'; }
       el.innerHTML=h+'<div class="mens" id="retours-plats"></div><div class="ph-coach" id="ph-coach"></div>';
       // retours du client sur ses plats (table retours), diète la plus récente
-      var pid=file[sel]&&file[sel].programme_id;
+      var pid=cur&&cur.programme_id;
       sb.from('retours').select('plat,avis,programme_id').eq('user_id',uid).then(function(rr){
-        var z=$('retours-plats'); if(!z||rr.error||!file[sel]||file[sel].user_id!==uid) return;
+        var z=$('retours-plats'); if(!z||rr.error||!cur||cur.user_id!==uid) return;
         var L=(rr.data||[]).filter(function(x){ return !pid||x.programme_id===pid; });
         if(!L.length){ z.textContent='Retours sur la diète : aucun pour l’instant.'; return; }
-        var menu=(file[sel]&&file[sel].menu)||{}, titres={};
+        var menu=(cur&&cur.menu)||{}, titres={};
         (menu.jours||[]).forEach(function(j){ (j.repas||[]).forEach(function(rp){ var k=rp.recette_base||rp.recette; if(k&&!titres[k]) titres[k]=rp.titre||k; }); });
         var nom=function(k){ return esc(titres[k]||k); };
         var rv=L.filter(function(x){ return x.avis==='revoir'; }).map(function(x){ return nom(x.plat); });
@@ -450,7 +469,7 @@
       sb.storage.from('photos-suivi').list(uid,{limit:50,sortBy:{column:'name',order:'desc'}}).then(function(p){
         var L=((p&&p.data)||[]).filter(function(f){ return /\.(jpe?g|png|webp)$/i.test(f.name); }); if(!L.length) return;
         return sb.storage.from('photos-suivi').createSignedUrls(L.map(function(f){ return uid+'/'+f.name; }),3600).then(function(s){
-          var c=$('ph-coach'); if(!c||!file[sel]||file[sel].user_id!==uid) return;
+          var c=$('ph-coach'); if(!c||!cur||cur.user_id!==uid) return;
           c.innerHTML='<div class="mens">Photos ('+L.length+')</div><div class="ph-grille">'+(s.data||[]).map(function(x,i){
             return '<a href="'+esc(x.signedUrl)+'" target="_blank" rel="noopener"><img src="'+esc(x.signedUrl)+'" alt="Photo du '+L[i].name.slice(0,10)+'" loading="lazy"><span>'+L[i].name.slice(0,10).split('-').reverse().join('/')+'</span></a>'; }).join('')+'</div>';
         });
@@ -584,9 +603,11 @@
   /* ---------- le programme, à côté ---------- */
   var MEALS={petit_dejeuner:'Petit-déjeuner',collation:'Collation',collation_2:'Collation',dejeuner:'Déjeuner',diner:'Dîner'};
   function renderProg(){
-    var c=file[sel], box=$('prog'), dec=$('decide');
+    var c=cur, box=$('prog'), dec=$('decide');
     if(!c||!c.menu){
-      box.innerHTML='<div class="empty"><b>Programme pas encore généré</b>Le questionnaire est validé : la programmation sera produite puis affichée ici.</div>';
+      box.innerHTML=c&&c.etape==='sans_questionnaire'
+        ? '<div class="empty"><b>Pas encore de programme</b>Le client n’a pas validé son questionnaire.</div>'
+        : '<div class="empty"><b>Programme pas encore généré</b>Le questionnaire est validé : la programmation sera produite puis affichée ici.</div>';
       dec.hidden=true; $('progn').textContent=''; return;
     }
     var m=c.menu, d=c.diagnostic||{};
@@ -648,7 +669,7 @@
 
   /* ---------- décisions ---------- */
   function setStatut(st,msg){
-    var c=file[sel]; if(!c||!c.programme_id) return;
+    var c=cur; if(!c||!c.programme_id) return;
     sb.from('programmes').update({statut:st,traite_par:moi.id,traite_at:new Date().toISOString()})
       .eq('id',c.programme_id).then(function(r){
         if(r.error){ toast("Impossible d'enregistrer — réessaie."); return; }
@@ -681,7 +702,7 @@
     });
   }
   $('r-send').addEventListener('click',function(){
-    var c=file[sel];
+    var c=cur;
     if(!retours.length){ toast('Ajoute au moins un point avant d\'envoyer.'); return; }
     if(!c||!c.programme_id){ toast('Aucun programme sélectionné.'); return; }
     sb.from('retours_coach').insert(retours.map(function(r){
@@ -692,6 +713,63 @@
       retours=[]; renderRetours(); $('retour').classList.remove('on');
       if(c.etape!=='refuse') setStatut('rectification','Remarques envoyées ✓');
       else toast('Remarques envoyées ✓');
+    });
+  });
+
+  /* ---------- tous les clients : recherche, clic = la fiche (questionnaire, suivi, photos, retours, diète) ---------- */
+  var CLIENTS=[], FORM={f1:'Formule 1',f2:'Formule 2',f3:'Formule 3'},
+      ABO={active:'Abonné',trialing:'Abonné',past_due:'Impayé',canceled:'Résilié',aucun:'Pas d’abonnement'};
+  function chargerClients(){
+    return Promise.all([
+      sb.from('profiles').select('id,prenom,nom,sexe,naissance,taille_cm,formule,created_at').order('created_at',{ascending:false}),
+      sb.from('abonnements').select('user_id,formule,statut,resiliation_prevue'),
+      sb.from('poids').select('user_id,date,kg').order('date'),   // ponytail: toutes les pesées, une vue « dernière pesée » quand il y aura des centaines de clients
+      sb.from('questionnaires').select('user_id,statut'),
+      sb.from('admins').select('user_id')
+    ]).then(function(r){
+      var ab={}, pd={}, qv={}, coach={};
+      (r[1].data||[]).forEach(function(a){ ab[a.user_id]=a; });
+      (r[2].data||[]).forEach(function(w){ pd[w.user_id]=w; });
+      (r[3].data||[]).forEach(function(q){ if(q.statut==='valide') qv[q.user_id]=1; });
+      (r[4].data||[]).forEach(function(a){ coach[a.user_id]=1; });
+      CLIENTS=(r[0].data||[]).filter(function(p){ return !coach[p.id]; }).map(function(p){
+        return {p:p, a:ab[p.id], w:pd[p.id], q:!!qv[p.id], nom:((p.prenom||'')+' '+(p.nom||'')).trim()}; });
+      renderClients();
+    }).catch(function(){ $('cli-liste').innerHTML='<div class="empty">Liste indisponible pour le moment.</div>'; });
+  }
+  function sansAccent(s){ return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+  function renderClients(){
+    var t=sansAccent($('cli-q').value.trim()), box=$('cli-liste');
+    var L=CLIENTS.filter(function(c){ return !t||sansAccent(c.nom).indexOf(t)>=0; });
+    $('clin').textContent=CLIENTS.length;
+    if(!L.length){ box.innerHTML='<div class="empty">'+(CLIENTS.length?'Aucun client à ce nom.':'Aucun client pour le moment.')+'</div>'; return; }
+    box.innerHTML=L.map(function(c){
+      var f=(c.a&&c.a.formule)||c.p.formule, st=c.a?c.a.statut:'aucun', j=c.w?Math.floor((Date.now()-new Date(c.w.date+'T12:00:00'))/JOUR):null;
+      return '<button type="button" class="fitem'+(cur&&cur.user_id===c.p.id?' on':'')+'" data-u="'+esc(c.p.id)+'">'+
+        '<div class="nm">'+esc(c.nom||'Sans nom')+'</div>'+
+        '<div class="mt"><span>'+(FORM[f]||'Sans formule')+' · '+(ABO[st]||st)+(c.a&&c.a.resiliation_prevue?' (fin prévue)':'')+'</span></div>'+
+        '<div class="mt"><span'+(j!=null&&j>=7?' class="retard"':'')+'>'+(c.w?'Pesée : '+fr(c.w.kg)+' kg, '+(j?'il y a '+j+' j':'aujourd’hui'):'Aucune pesée')+'</span>'+
+        (c.q?'':'<span>· questionnaire à remplir</span>')+'</div></button>';
+    }).join('');
+  }
+  $('cli-q').addEventListener('input',renderClients);
+  $('cli-liste').addEventListener('click',function(e){
+    var b=e.target.closest('.fitem'); if(!b) return;
+    var id=b.dataset.u, i=file.findIndex(function(x){ return x.user_id===id; });
+    function montrer(){ renderFile(); renderClients(); renderClient(); renderProg(); $('cock').scrollIntoView({behavior:'smooth',block:'start'}); }
+    if(i>=0){ sel=i; cur=file[i]; montrer(); return; }       // déjà dans la file : même fiche, décisions comprises
+    var c=CLIENTS.filter(function(x){ return x.p.id===id; })[0]; if(!c) return;
+    Promise.all([
+      sb.from('questionnaires').select('reponses,statut').eq('user_id',id).order('created_at',{ascending:false}).limit(1),
+      sb.from('programmes').select('id,version,menu,cible,diagnostic,statut').eq('user_id',id).order('version',{ascending:false}).limit(1)
+    ]).then(function(r){
+      var q=(r[0].data||[])[0], pr=(r[1].data||[])[0], p=c.p;
+      sel=null;
+      cur={user_id:id, prenom:p.prenom, nom:p.nom, sexe:p.sexe, naissance:p.naissance, taille_cm:p.taille_cm,
+        reponses:(q&&q.statut==='valide'&&q.reponses)||{}, dernier_poids:c.w?c.w.kg:null,
+        programme_id:pr&&pr.id, version:pr&&pr.version, menu:pr&&pr.menu, cible:pr&&pr.cible, diagnostic:pr&&pr.diagnostic, statut:pr&&pr.statut,
+        etape: pr ? (pr.statut==='en_attente'?'a_relire':pr.statut) : (q&&q.statut==='valide'?'a_generer':'sans_questionnaire')};
+      montrer();
     });
   });
 
@@ -749,7 +827,8 @@
       ]).then(function(res){
         file=(res[0].data)||[]; renderFile(); recount(); compterRetards(); chargerAbo(); chargerMessages();
         renderStats((res[1].data)||[], ((res[2].data)||[]).length);
-        if(file.length){ sel=0; renderFile(); renderClient(); renderProg(); }
+        chargerClients();
+        if(file.length){ sel=0; cur=file[0]; renderFile(); renderClient(); renderProg(); }
         requestAnimationFrame(function(){ document.querySelectorAll('.bf').forEach(function(b){ b.style.width=b.style.width; }); });
       });
     });

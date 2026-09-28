@@ -477,6 +477,30 @@
   #rl-form .rgrid{grid-template-columns:1fr}
   #rl-form .dbtn{padding:12px 18px}
   .rl-on .toast{bottom:120px}
+  /* ==== DOUBLE VÉRIFICATION (condition de Yoann) : Statistiques, Économie, chiffres d'argent ==== */
+  .mfa{max-width:560px;margin:0 auto}
+  .mfa .carte{padding:22px 20px}
+  .mfa-etapes{margin:0 0 14px;padding-left:22px;font-size:15px;line-height:1.55;color:var(--gris)}
+  .mfa-etapes li{margin:0 0 8px}
+  .mfa-etapes b{color:var(--ice)}
+  .mfa-qr{display:flex;justify-content:center;margin:4px 0 12px}
+  .mfa-qr img{display:block;width:200px;height:200px;max-width:100%;background:#fff;padding:10px;border-radius:12px;border:1px solid var(--line)}   /* fond blanc : un QR code se scanne mal sur fond sombre */
+  .mfa-secret{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0 18px}
+  .mfa-secret code{flex:1 1 200px;min-width:0;font:600 15px/1.4 var(--texte);letter-spacing:.08em;color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:10px;padding:8px 10px;word-break:break-all}
+  .mfa-l{display:block;font:600 11px/1.3 var(--texte);letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:6px}
+  .mfa-row{display:flex;gap:8px}
+  .mfa-row input{flex:1;min-width:0;font:600 22px/1.2 var(--texte);letter-spacing:.3em;text-align:center;color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:12px;padding:12px 8px}
+  .mfa-row input:focus{outline:none;border-color:var(--blue)}
+  .mfa-row .btn{flex:none;padding:12px 20px;cursor:pointer}
+  .mfa-row .btn:disabled{opacity:.5;cursor:wait}
+  .mfa-msg{min-height:1.4em;margin:8px 0 0;font-size:14px;line-height:1.45;color:#9b1c1c}
+  .mfa-msg.ok{color:#2f6b1a}
+  html[data-theme="obscur"] .mfa-msg{color:#f29b9b}
+  html[data-theme="obscur"] .mfa-msg.ok{color:#8fd07a}
+  .mfa .leg{margin-top:14px;line-height:1.5}
+  .lien{background:none;border:0;padding:0;font:inherit;color:var(--blue);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .verrou{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 var(--texte);color:var(--blue);background:none;border:1px dashed var(--blue);border-radius:999px;padding:8px 11px;cursor:pointer;white-space:nowrap;text-shadow:none;max-width:100%}
+  .verrou svg{flex:none;width:13px;height:13px}
 </style>
 </head>
 <body>
@@ -712,8 +736,11 @@
       <p class="leg">Chaque barre = combien de personnes passent l’étape ; le pourcentage compare à l’étape d’avant. « Encore là » = abonnement actif 1 mois (2e mois) ou 2 mois (3e mois) après la création du compte.</p></div>
   </div>
 
-    <p class="sous">Cette page sera protégée par la double vérification (un code à 6 chiffres sur votre téléphone) dès qu’elle sera activée.</p>
+    <p class="sous" id="mfa-etat"></p>
   </section>
+
+  <!-- ═════════════ DOUBLE VÉRIFICATION : s'affiche à la place de Statistiques / Économie tant que le code n'est pas tapé ═════════════ -->
+  <section class="page" id="p-mfa" hidden><div class="mfa" id="mfa"></div></section>
 
 </div>
 
@@ -1327,6 +1354,7 @@ var REL=(function(){
   /* ---------- abonnements ---------- */
   var abonnementsOk=false;
   function chargerAbo(){
+    if(!AAL2) return;   // argent : jamais demandé sans le code (et la base le refuserait, supabase/mfa_coachs.sql)
     // ABONNEMENTS STRIPE (table abonnements, écrite par le serveur) : abonnés actifs, montant, résiliations
     sb.from('abonnements').select('formule,statut,montant_cents,resiliation_prevue,stripe_subscription_id').then(function(r){
       if(r.error) return;
@@ -1640,20 +1668,122 @@ var REL=(function(){
 
   /* ================= TABLEAU DE BORD : navigation ================= */
   function voir(p){
+    var aff=PROTEGE[p]&&!AAL2?'mfa':p;                        // sans le code : l'écran de double vérification à la place
+    if(aff==='mfa'&&p!=='mfa') MFA.cible=p;
     document.querySelectorAll('.onglets button').forEach(function(b){ b.setAttribute('aria-selected',b.dataset.p===p); });
-    document.querySelectorAll('.page').forEach(function(x){ x.hidden=x.id!=='p-'+p; });
-    if(p!=='fiche') voir.retour=p;
-    voir.p=p; scrollTo(0,0);
+    document.querySelectorAll('.page').forEach(function(x){ x.hidden=x.id!=='p-'+aff; });
+    if(p!=='fiche'&&p!=='mfa') voir.retour=p;
+    voir.p=aff; scrollTo(0,0);
+    if(aff==='mfa') mfaEcran();
     var on=document.querySelector('.onglets [aria-selected="true"]');     // onglet actif visible sur téléphone
     if(on) on.parentNode.scrollLeft=on.offsetLeft-(on.parentNode.clientWidth-on.offsetWidth)/2;
     if(p==='msgs'&&sb) renderMessages();
     G.refresh();   // les graphiques d'une page cachée se dessinent quand elle s'affiche
     document.body.classList.toggle('rl-on',p==='relire');     // le message éphémère passe au-dessus de la barre de décision
-    try{ history.replaceState(null,'',p==='fiche'||p==='relire'?location.pathname:'#'+p); }catch(e){}
+    try{ history.replaceState(null,'',p==='fiche'||p==='relire'?location.pathname:'#'+(p==='mfa'?MFA.cible:p)); }catch(e){}
   }
   voir.p='jour'; voir.retour='jour';
   document.querySelector('.onglets').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) voir(b.dataset.p); });
   $('f-retour').addEventListener('click',function(){ voir(voir.retour); });
+
+  /* ================= DOUBLE VÉRIFICATION (condition de Yoann, 28/09) =================
+     Statistiques, Économie et tout chiffre d'argent (« Revenu récurrent ») s'ouvrent avec un code
+     à 6 chiffres donné par une application sur le téléphone (Supabase Auth MFA, TOTP).
+     Le vrai verrou est CÔTÉ BASE (supabase/mfa_coachs.sql : lecture des montants seulement si le
+     jeton est « aal2 ») ; ici on n'affiche rien d'argent et on ne le demande même pas sans le code.
+     La session vérifiée dure jusqu'à la déconnexion (Supabase garde le niveau aal2 au rafraîchissement). */
+  var AAL2=false, PROTEGE={stats:1,eco:1}, MFA={cible:'eco',fid:null};
+  function lireNiveau(){
+    return sb.auth.mfa.getAuthenticatorAssuranceLevel().then(function(r){ AAL2=!!(r&&r.data&&r.data.currentLevel==='aal2'); return AAL2; })
+      .catch(function(){ AAL2=false; return false; });
+  }
+  function mfaErreur(err){
+    var t=String((err&&err.code)||'')+' '+String((err&&err.message)||'');
+    if(/not_enabled|disabled|not enabled/i.test(t)) return 'La double vérification n’est pas encore activée sur le serveur : préviens Dimitri.';
+    if((err&&err.status===429)||/rate|too many/i.test(t)) return 'Trop d’essais d’affilée : patiente une minute puis réessaie.';
+    if(/invalid|expired|verification_failed|incorrect/i.test(t)) return 'Code incorrect ou expiré. Tape le code affiché maintenant dans l’application (il change toutes les 30 secondes).';
+    return 'Vérification impossible pour le moment, réessaie dans un instant.'+(err&&err.message?' (détail : '+err.message+')':'');
+  }
+  var TITRE_MFA='<h2 class="t">Double vérification</h2>';
+  function champCode(bouton){
+    return '<form id="mfa-f" novalidate><label class="mfa-l" for="mfa-code">Code à 6 chiffres</label><div class="mfa-row">'+
+      '<input id="mfa-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6" placeholder="000000" aria-describedby="mfa-msg">'+
+      '<button type="submit" class="btn">'+bouton+'</button></div><p class="mfa-msg" id="mfa-msg" role="status" aria-live="polite"></p></form>';
+  }
+  function mfaMsg(t,ok){ var m=$('mfa-msg'); if(m){ m.textContent=t||''; m.className='mfa-msg'+(ok?' ok':''); } }
+  function mfaEcran(){
+    var box=$('mfa'); box.innerHTML='<div class="carte">'+TITRE_MFA+'<p class="rien">Un instant…</p></div>';
+    sb.auth.mfa.listFactors().then(function(r){
+      if(r.error) throw r.error;
+      var ok=(r.data.totp||[])[0];
+      if(ok){ MFA.fid=ok.id;
+        box.innerHTML='<div class="carte">'+TITRE_MFA+'<p class="sous">Ouvre ton application d’authentification (Google Authenticator ou Authy) et tape le code à 6 chiffres affiché sous « Elysium ». Il change toutes les 30 secondes.</p>'+
+          champCode('Valider')+'<p class="leg"><button type="button" class="lien" data-mfa-perdu>Téléphone perdu ou changé ?</button></p><div id="mfa-perdu"></div></div>';
+        $('mfa-code').focus(); return; }
+      // 1re fois : on efface un essai d'activation resté en plan (QR code affiché mais jamais confirmé)
+      var enPlan=(r.data.all||[]).filter(function(f){ return f.factor_type==='totp'&&f.status!=='verified'; });
+      return Promise.all(enPlan.map(function(f){ return sb.auth.mfa.unenroll({factorId:f.id}); }))
+        .then(function(){ return sb.auth.mfa.enroll({factorType:'totp',friendlyName:'Elysium',issuer:'Elysium'}); })
+        .then(function(e){ if(e.error) throw e.error; activation(e.data); });
+    }).catch(function(err){
+      box.innerHTML='<div class="carte">'+TITRE_MFA+'<p class="mfa-msg">'+esc(mfaErreur(err))+'</p><p class="leg"><button type="button" class="lien" data-mfa-reessayer>Réessayer</button></p></div>';
+    });
+  }
+  function activation(d){
+    MFA.fid=d.id;
+    var svg=String(d.totp.qr_code||'').replace(/^data:image\/svg\+xml;[^,]*,/,''), cle=String(d.totp.secret||'');
+    $('mfa').innerHTML='<div class="carte">'+TITRE_MFA+
+      '<p class="sous">Statistiques, Économie et les chiffres d’argent s’ouvrent avec un code à 6 chiffres donné par ton téléphone. À régler une seule fois, en 2 minutes.</p>'+
+      '<ol class="mfa-etapes"><li><b>Installe l’application</b> Google Authenticator ou Authy sur ton téléphone (gratuite, App Store ou Play Store).</li>'+
+      '<li><b>Ajoute Elysium</b> : dans l’application, touche « + » puis « Scanner un QR code », et vise le carré ci-dessous.</li>'+
+      '<li><b>Tape le code</b> à 6 chiffres que l’application affiche sous « Elysium ».</li></ol>'+
+      '<div class="mfa-qr"><img id="mfa-qr" alt="QR code à scanner avec l’application d’authentification" width="200" height="200"></div>'+
+      '<p class="leg" style="margin-top:0">Tu lis cette page sur le téléphone lui-même ? '+(d.totp.uri?'<a class="lien" href="'+esc(d.totp.uri)+'">Ouvre-la dans l’application</a>, ou choisis':'Choisis')+
+      ' « Saisir une clé de configuration » et recopie ce code :</p>'+
+      '<div class="mfa-secret"><code>'+esc(cle.replace(/(.{4})/g,'$1 ').trim())+'</code><button type="button" class="mini" data-mfa-copie="'+esc(cle)+'">Copier</button></div>'+
+      champCode('Activer')+'</div>';
+    $('mfa-qr').src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  }
+  function apresAal2(){
+    toast('Double vérification réussie');
+    chargerAbo(); majMfaEtat(); voir(MFA.cible);
+    chargerTout();                       // relit les abonnements AVEC les montants, redessine revenu et graphiques
+  }
+  function majMfaEtat(){ var el=$('mfa-etat'); if(!el) return;
+    el.innerHTML=AAL2?'Page protégée par la double vérification : code vérifié pour cette session, jusqu’à la déconnexion. <button type="button" class="lien" data-mfa-gerer>Gérer ma double vérification</button>':''; }
+  $('mfa').addEventListener('submit',function(e){
+    e.preventDefault(); var inp=$('mfa-code'), bt=e.target.querySelector('button'), code=inp.value.replace(/\D/g,'');
+    if(code.length!==6){ mfaMsg('Le code fait 6 chiffres.'); inp.focus(); return; }
+    if(bt.disabled) return; bt.disabled=true; mfaMsg('Vérification…',true);
+    sb.auth.mfa.challengeAndVerify({factorId:MFA.fid,code:code}).then(function(r){
+      if(r.error) throw r.error;
+      return lireNiveau().then(function(ok){ if(!ok) throw new Error('niveau non atteint'); apresAal2(); });
+    }).catch(function(err){ bt.disabled=false; inp.value=''; inp.focus(); mfaMsg(mfaErreur(err)); });
+  });
+  $('mfa').addEventListener('input',function(e){       // 6 chiffres tapés -> envoi direct
+    if(e.target.id!=='mfa-code') return; var v=e.target.value.replace(/\D/g,'').slice(0,6); e.target.value=v;
+    if(v.length===6){ var f=$('mfa-f'); if(f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event('submit',{cancelable:true,bubbles:true})); }
+  });
+  document.addEventListener('click',function(e){
+    if(!e.target.closest) return;
+    if(e.target.closest('[data-mfa-reessayer]')){ mfaEcran(); return; }
+    var c=e.target.closest('[data-mfa-copie]');
+    if(c){ var t=c.getAttribute('data-mfa-copie'); if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){ toast('Code copié'); },function(){ toast('Copie impossible : recopie-le à la main.'); }); return; }
+    if(e.target.closest('[data-mfa-perdu]')){
+      // sans le code, personne ne peut supprimer l'ancienne association : sinon le mot de passe seul suffirait
+      $('mfa-perdu').innerHTML='<p class="leg">Tu as encore l’ancien téléphone : tape un code ici, puis « Gérer ma double vérification » en bas de la page Économie pour passer au nouveau.<br>'+
+        'Téléphone perdu : préviens Dimitri. Pour ta sécurité, lui seul peut effacer l’ancienne association ; tu en recréeras une ici en 2 minutes.</p>'; return; }
+    if(e.target.closest('[data-mfa-gerer]')){
+      if(!confirm('Remplacer ton application d’authentification ?\n\nÀ faire si tu changes de téléphone. L’ancien code cessera de marcher et tu scanneras tout de suite un nouveau QR code.')) return;
+      sb.auth.mfa.listFactors().then(function(r){
+        if(r.error) throw r.error;
+        return Promise.all((r.data.all||[]).filter(function(f){ return f.factor_type==='totp'; }).map(function(f){
+          return sb.auth.mfa.unenroll({factorId:f.id}).then(function(x){ if(x.error) throw x.error; }); }));
+      }).then(function(){ return sb.auth.refreshSession().catch(function(){}); }).then(lireNiveau).then(function(){
+        AAL2=false; majMfaEtat(); voir('eco'); chargerTout();   // -> écran d'activation ; plus aucun montant en mémoire
+      }).catch(function(err){ toast(mfaErreur(err)); });
+    }
+  });
 
   /* ================= les données de toutes les pages ================= */
   var D=null, FORM={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Elysium'},
@@ -1674,10 +1804,18 @@ var REL=(function(){
   function typeDiete(x){ var g=geste(x); return g==='reajuster'?'<span class="tag v">Réajustement</span>':g?'<span class="tag j">Nouveau menu</span>':'<span class="tag b">1re diète</span>'; }
   function suivis(){ var act=D.clients.filter(actif); return act.length?act:D.clients.filter(function(c){ return c.q; }); }
 
+  // abonnements : AVEC montants seulement en double vérification ; sinon le quotidien sans argent
+  // (formule, statut, échéance : fonction coach_abonnements_suivi de supabase/mfa_coachs.sql ;
+  //  repli tant que le script n'est pas lancé : la table, sans jamais demander les montants)
+  function abosLecture(){
+    if(AAL2) return sb.from('abonnements').select('user_id,formule,statut,montant_cents,periode_fin,resiliation_prevue');
+    return sb.rpc('coach_abonnements_suivi').then(function(r){
+      return r.error ? sb.from('abonnements').select('user_id,formule,statut,periode_fin,resiliation_prevue') : r; });
+  }
   function chargerTout(){
     return Promise.all([
       sb.from('profiles').select('id,prenom,nom,sexe,naissance,taille_cm,formule,created_at'),
-      sb.from('abonnements').select('user_id,formule,statut,montant_cents,periode_fin,resiliation_prevue'),
+      abosLecture(),
       sb.from('poids').select('user_id,date,kg').order('date'),   // ponytail: toutes les pesées ; une vue agrégée quand il y aura des centaines de clients
       sb.from('questionnaires').select('user_id,statut,reponses'),
       sb.from('admins').select('user_id'),
@@ -1706,7 +1844,8 @@ var REL=(function(){
     // abonnements : même source que l'onglet Économie (tous les comptes, y compris le compte de test de Dimitri)
     $('j-actifs').textContent=D.abos.filter(function(a){ return a.statut==='active'||a.statut==='trialing'; }).length;
     $('j-dietes').textContent=C.reduce(function(t,c){ return t+c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at&&x.traite_at>=mois; }).length; },0);
-    $('j-mrr').innerHTML=euros(D.abos.reduce(function(t,a){ return t+(['active','trialing','past_due'].indexOf(a.statut)>=0?(+a.montant_cents||0):0); },0))+' <small>€</small>';
+    $('j-mrr').innerHTML=AAL2?euros(D.abos.reduce(function(t,a){ return t+(['active','trialing','past_due'].indexOf(a.statut)>=0?(+a.montant_cents||0):0); },0))+' <small>€</small>'
+      :'<button type="button" class="verrou" data-mfa="jour" aria-label="Revenu protégé : taper le code de double vérification"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>code requis</button>';
     var pes=base.filter(function(c){ return c.der&&jours(c.der.date)<7; }).length;
     $('j-pesees').innerHTML=pes+'<small> / '+base.length+'</small>';
     $('j-pesees-s').textContent=base.length?Math.round(pes/base.length*100)+' % des clients suivis':'aucun client suivi pour l’instant';
@@ -1717,7 +1856,7 @@ var REL=(function(){
       .map(function(c){ return {c:c, j:c.der?jours(c.der.date):null}; }).filter(function(x){ return x.j==null||x.j>=7; })
       .sort(function(a,b){ return (b.j==null?999:b.j)-(a.j==null?999:a.j); })
       .map(function(x){ return ligne(nomLien(x.c), x.j==null?'<span class="retard">aucune pesée</span>':'<span'+(x.j>=14?' class="retard"':'')+'>'+x.j+' jours</span>'); });
-    var impayes=C.filter(function(c){ return c.a&&c.a.statut==='past_due'; }).map(function(c){ return ligne(nomLien(c), (FORM[c.a.formule]||'')+' · '+euros(c.a.montant_cents)+' €'); });
+    var impayes=C.filter(function(c){ return c.a&&c.a.statut==='past_due'; }).map(function(c){ return ligne(nomLien(c), (FORM[c.a.formule]||'Impayé')+(AAL2&&c.a.montant_cents!=null?' · '+euros(c.a.montant_cents)+' €':'')); });
     var nl={}; MSG.forEach(function(m){ if(m.auteur_id===m.client_id&&!m.lu_at) nl[m.client_id]=m; });
     var msgs=Object.keys(nl).map(function(id){ var t=nl[id].texte;
       return ligne('<b class="nom" role="button" tabindex="0" data-msg="'+esc(id)+'">'+esc(cl(id).nom)+'</b>', '« '+esc(t.slice(0,46))+(t.length>46?'…':'')+' »'); });
@@ -1795,6 +1934,7 @@ var REL=(function(){
   }
   document.addEventListener('click',function(e){
     if(!e.target.closest) return;
+    var v=e.target.closest('[data-mfa]'); if(v){ MFA.cible=v.getAttribute('data-mfa'); voir('mfa'); return; }
     var m=e.target.closest('[data-msg]'); if(m){ filOuvert=m.getAttribute('data-msg'); voir('msgs'); return; }
     if(e.target.closest('[data-relire]')){ relire(cur); return; }
     var u=e.target.closest('[data-u]'); if(u) ouvrir(u.getAttribute('data-u'));
@@ -1999,8 +2139,10 @@ var REL=(function(){
       return Promise.all([
         sb.from('v_file_coach').select('*'),
         sb.from('v_stats_mensuelles').select('*').limit(24),
-        sb.from('profiles').select('id')
+        sb.from('profiles').select('id'),
+        lireNiveau()                                   // code déjà tapé dans cette session ?
       ]).then(function(res){
+        majMfaEtat();
         file=(res[0].data)||[]; renderFile(); recount(); compterRetards(); chargerAbo(); chargerMessages();
         renderStats((res[1].data)||[], ((res[2].data)||[]).length);
         chargerTout();

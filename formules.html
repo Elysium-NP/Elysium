@@ -35,13 +35,13 @@
   "areaServed": { "@type": "Country", "name": "France" },
   "description": "Programmations nutritionnelle et sportive personnalisées, à distance, construites sur-mesure par les coachs Elysium à partir d'un questionnaire.",
   "offers": [
-    { "@type": "Offer", "priceCurrency": "EUR", "price": "19.90", "itemOffered": { "@type": "Service", "name": "Formule Odyssée · Essentielle (4 semaines)" } },
-    { "@type": "Offer", "priceCurrency": "EUR", "price": "25.90", "itemOffered": { "@type": "Service", "name": "Formule Olympe · Confort (4 semaines)" } },
-    { "@type": "Offer", "priceCurrency": "EUR", "price": "29.90", "itemOffered": { "@type": "Service", "name": "Formule Elysium · Premium (4 semaines)" } }
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "19.90", "itemOffered": { "@type": "Service", "name": "Formule Odyssée", "description": "Essentielle · un menu unique qui évolue (toutes les 4 semaines)" } },
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "25.90", "itemOffered": { "@type": "Service", "name": "Formule Olympe", "description": "Confort · un nouveau menu chaque mois (toutes les 4 semaines)" } },
+    { "@type": "Offer", "priceCurrency": "EUR", "price": "29.90", "itemOffered": { "@type": "Service", "name": "Formule Elysium", "description": "Premium · réajusté chaque semaine + recettes des coachs (toutes les 4 semaines)" } }
   ]
 }
 </script>
-<link rel="stylesheet" href="assets/site.css?v=2809h">
+<link rel="stylesheet" href="assets/site.css?v=2809i">
 <style>
   /* ===== PRIX DES FORMULES (Damien & Yoann 27/07) — retour à un affichage SIMPLE :
      le prix principal, puis les précisions de paiement dessous. PLUS d'ancien prix
@@ -129,56 +129,56 @@
       <div class="plans" id="les-formules">
 
         <!-- Formules du 27/09 (Dimitri) : 19,90 / 25,90 / 29,90 € toutes les 4 semaines -->
-        <article class="plan reveal">
-          <span class="pn">Essentielle</span>
+        <article class="plan niv1 reveal">
+          <div class="niv" aria-hidden="true"><i></i><i></i><i></i></div>
           <h3>Formule Odyssée</h3>
-          <p class="desc">Un menu sur-mesure, qui suit ta progression.</p>
+          <p class="fsous"><b>Essentielle</b> · un menu unique qui évolue</p>
           <div class="price01">
             <div class="now"><span class="n1">19</span><span class="eur">€</span><span class="n2">90</span></div>
           </div>
           <div class="pterm">Toutes les 4 semaines</div>
           <ul>
-            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
-            <li><b>Ton menu</b>, gardé d’un mois à l’autre</li>
+            <li><b>Programmation 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li><b>Suivi du poids et des mensurations</b> dans ton espace</li>
+            <li><b>Un menu unique</b></li>
             <li><b>Quantités réajustées chaque mois</b></li>
-            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
           </ul>
           <a class="btn" href="inscription.html?formule=f1">Choisir cette formule</a>
         </article>
 
-        <article class="plan feat reveal d1">
-          <span class="pn">Confort</span>
+        <article class="plan feat niv2 reveal d1">
+          <div class="niv" aria-hidden="true"><i></i><i></i><i></i></div>
           <h3>Formule Olympe</h3>
-          <p class="desc">Un nouveau menu chaque mois, et les courses déjà faites sur le papier.</p>
+          <p class="fsous"><b>Confort</b> · un nouveau menu chaque mois</p>
           <div class="price01">
             <div class="now"><span class="n1">25</span><span class="eur">€</span><span class="n2">90</span></div>
           </div>
           <div class="pterm">Toutes les 4 semaines</div>
           <ul>
-            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
-            <li class="plus vert"><b>Nouveau menu chaque mois</b></li>
-            <li class="plus bleu"><b>Quantités réajustées</b> à chaque changement de menu</li>
-            <li class="plus jaune"><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
-            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
+            <li><b>Programmation 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li><b>Suivi du poids et des mensurations</b> dans ton espace</li>
+            <li class="plus neuf vert"><span class="vh">En plus : </span><b>Un nouveau menu <strong class="cle">chaque mois</strong></b></li>
+            <li class="plus neuf bleu"><span class="vh">En plus : </span><b>Quantités réajustées <strong class="cle">à chaque nouveau menu</strong></b></li>
+            <li class="plus neuf jaune"><span class="vh">En plus : </span><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
           </ul>
           <a class="btn" href="inscription.html?formule=f2">Choisir cette formule</a>
         </article>
 
-        <article class="plan feat complet reveal d2">
-          <span class="pn">Premium</span>
+        <article class="plan feat complet niv3 reveal d2">
+          <div class="niv" aria-hidden="true"><i></i><i></i><i></i></div>
           <h3>Formule Elysium</h3>
-          <p class="desc">Le suivi le plus serré, avec les recettes de chaque plat.</p>
+          <p class="fsous"><b>Premium</b> · réajusté chaque semaine + recettes des coachs</p>
           <div class="price01">
             <div class="now"><span class="n1">29</span><span class="eur">€</span><span class="n2">90</span></div>
           </div>
           <div class="pterm">Toutes les 4 semaines</div>
           <ul>
-            <li><b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire</li>
-            <li class="plus vert"><b>Nouveau menu chaque mois</b></li>
-            <li class="plus bleu"><b>Quantités réajustées chaque semaine</b></li>
-            <li class="plus violet"><b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise</li>
+            <li><b>Programmation 100 % personnalisée</b>, construite sur ton questionnaire</li>
+            <li><b>Suivi du poids et des mensurations</b> dans ton espace</li>
+            <li class="plus vert"><b>Un nouveau menu chaque mois</b></li>
+            <li class="plus neuf bleu fort"><span class="vh">En plus : </span><b>Quantités réajustées <strong class="cle">chaque semaine</strong></b></li>
             <li class="plus jaune"><b>Liste de courses</b> avec les quantités exactes, pour chaque semaine</li>
-            <li><b>Suivi du poids &amp; des mensurations</b> dans ton espace</li>
+            <li class="plus neuf violet fort"><span class="vh">En plus : </span><b><strong class="cle">Recettes des coachs</strong> pour chaque repas</b>, pour un maximum de gourmandise</li>
           </ul>
           <a class="btn" href="inscription.html?formule=f3">Choisir cette formule</a>
         </article>

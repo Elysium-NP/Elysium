@@ -387,9 +387,7 @@ html.reveal-ready .plan.feat.in::before{transform:translateY(-50%) scale(1);opac
   html.reveal-ready .plan.feat,html.reveal-ready .plan.feat.in::before{transition:none}
   .plan.feat::before{transform:translateY(-50%) scale(1);opacity:1}
 }
-.plan .pn{font-family:var(--disp);font-size:12px;letter-spacing:.2em;color:var(--blue);text-transform:uppercase}
-.plan h3{font-size:30px;margin:8px 0 4px}
-.plan .desc{font-size:16px;color:var(--steel);min-height:40px;line-height:1.45}
+.plan h3{font-size:30px;margin:0 0 6px}
 .plan .price{font-family:var(--disp);font-weight:600;font-size:52px;color:var(--ice);line-height:1;margin:18px 0 2px}
 .plan .price small{font-family:var(--disp);font-size:12px;color:var(--steel);letter-spacing:.06em;margin-left:4px}
 .plan .per{font-family:var(--disp);font-size:12px;letter-spacing:.1em;color:var(--steel);text-transform:uppercase;margin-bottom:22px}
@@ -641,10 +639,45 @@ html.page-sort::before,html.page-sort::after{animation:rideau-vient .75s ease-in
   .plan li.plus::before{left:0;top:1px;width:20px;height:20px;border:0;border-radius:50%;background:var(--pc);transform:none}
   .plan li.plus::after{content:"";position:absolute;left:6px;top:6px;width:8px;height:4px;border-left:2px solid #111;border-bottom:2px solid #111;transform:rotate(-45deg)}
   .plan li.vert{--pc:var(--b-vert)} .plan li.bleu{--pc:var(--b-bleu)} .plan li.jaune{--pc:var(--b-jaune)} .plan li.violet{--pc:var(--b-violet)}
-  /* formule 3 mise en avant aussi, en violet (couleur de son avantage propre : les recettes) */
-  .plan.feat.complet{border-color:var(--b-violet);box-shadow:0 0 0 1px rgba(142,124,195,.35),0 24px 50px -34px rgba(90,70,150,.5)}
-  html.reveal-ready .plan.feat.complet.in{box-shadow:0 0 0 1px rgba(142,124,195,.4),0 24px 50px -34px rgba(90,70,150,.55)}
+  /* formule 3 : bleu PROFOND (le haut de la gamme), touche violette = son avantage propre (les recettes) */
+  .plan.feat.complet{border-color:var(--blue-d);box-shadow:0 0 0 1px rgba(15,79,143,.3),0 34px 60px -30px rgba(15,79,143,.6)}
+  html.reveal-ready .plan.feat.complet.in{box-shadow:0 0 0 1px rgba(15,79,143,.35),0 34px 60px -30px rgba(15,79,143,.65)}
   .plan.feat.complet::before{content:"Le plus complet";background:var(--b-violet);color:#111}
+
+  /* ═══ MONTÉE EN GAMME Odyssée → Olympe → Elysium (Damien 28/09 : « comprendre les différences
+     sans avoir besoin de lire toute la description ») ═══
+     1. un MÊME bleu qui s'intensifie : liseré du haut de plus en plus épais et foncé (pastel →
+        bleu Elysium → bleu profond), fond de plus en plus teinté, relief croissant ;
+     2. une jauge de niveau 1 / 2 / 3 en tête de carte ;
+     3. « + » devant chaque avantage NOUVEAU par rapport à la formule du dessous (pastille de
+        couleur = un avantage en plus d'Odyssée, la même d'une formule à l'autre) ;
+     4. les mots qui font la différence en gras, plus grands, en bleu ; les deux atouts propres à
+        Elysium en encadré. */
+  .plan{--tier:var(--b-bleu);--vio:#55439a;border-top:3px solid var(--tier)}
+  .plan.niv2{--tier:var(--brand);border-top-width:4px;background:color-mix(in srgb,var(--void2) 80%,var(--p-bleu))}
+  .plan.niv3{--tier:var(--blue-d);border-top-width:6px;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--void2) 45%,var(--p-bleu)),color-mix(in srgb,var(--void2) 72%,var(--p-violet)))}
+  .plan.niv2::before{top:-2px} .plan.niv3::before{top:-3px}   /* badge centré sur le liseré épaissi */
+  html[data-theme="obscur"] .plan{--vio:#bcaef2}
+  html[data-theme="obscur"] .plan.feat.complet,html[data-theme="obscur"].reveal-ready .plan.feat.complet.in{box-shadow:0 0 0 1px rgba(93,180,255,.3),0 34px 60px -30px rgba(46,155,255,.45)}
+  .plan .niv{display:flex;gap:5px;margin-bottom:16px}
+  .plan .niv i{width:28px;height:5px;border-radius:3px;background:var(--line)}
+  .plan.niv1 .niv i:first-child,.plan.niv2 .niv i:nth-child(-n+2),.plan.niv3 .niv i{background:var(--tier)}
+  .plan.niv3 .niv i:last-child{background:var(--b-violet)}
+  .plan .fsous{font-size:15.5px;line-height:1.45;color:var(--gris);margin:0}
+  .plan .fsous b{color:var(--blue);font-weight:700}
+  .plan.niv3 .fsous b{color:var(--blue-d)}
+  @media(min-width:901px){ .plan .fsous{min-height:45px} }   /* prix alignés d'une carte à l'autre */
+  .plan li .cle{font-weight:700;font-size:1.12em;color:var(--blue)}
+  .plan.niv3 li .cle{color:var(--blue-d)}
+  .plan li.neuf::after{content:"+";left:0;top:1px;width:20px;height:20px;border:0;transform:none;
+    font:700 17px/20px var(--texte);text-align:center;color:#111}
+  .plan li.fort{padding:11px 12px 11px 44px;border:1px solid var(--pc);border-radius:10px;background:var(--p-bleu);color:var(--ice)}
+  .plan li.fort.violet{background:var(--p-violet)}
+  .plan li.fort::before,.plan li.fort::after{left:13px;top:13px}
+  .plan li.fort .cle{font-size:1.18em}
+  .plan li.fort.violet .cle{color:var(--vio)}
+  .plan .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   @media(max-width:900px){ .plans{grid-template-columns:1fr;max-width:460px;margin:0 auto} }
 
 /* ═══════════════════ VERSION OBSCURE (Dimitri 27/09) ═══════════════════
@@ -710,7 +743,7 @@ html[data-theme="obscur"] .btn.line:hover{color:var(--fond)}
 /* ===== CARTES DE FORMULE : survol / toucher (Yoann 28/09) =====
    F1 : pas de néon, la carte se soulève simplement. F2 et F3 : leur néon s'amplifie. */
 .plan{transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease}
-.plan:not(.feat):hover,.plan:not(.feat):active,html.reveal-ready .plan.reveal.in:not(.feat):hover,html.reveal-ready .plan.reveal.in:not(.feat):active{border-color:var(--line);transform:translateY(-6px);box-shadow:0 22px 40px -28px rgba(60,45,20,.45)}
+.plan:not(.feat):hover,.plan:not(.feat):active,html.reveal-ready .plan.reveal.in:not(.feat):hover,html.reveal-ready .plan.reveal.in:not(.feat):active{border-color:var(--line);border-top-color:var(--tier);transform:translateY(-6px);box-shadow:0 22px 40px -28px rgba(60,45,20,.45)}
 html .plan.feat:hover,html .plan.feat:active,html.reveal-ready .plan.feat.in:hover{transform:translateY(-6px);
   box-shadow:0 0 0 2px rgba(46,155,255,.65),0 0 64px -4px rgba(46,155,255,.7),0 34px 70px -34px rgba(20,102,184,.75)}
 html .plan.feat.complet:hover,html .plan.feat.complet:active,html.reveal-ready .plan.feat.complet.in:hover{

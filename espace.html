@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2809h">
+<link rel="stylesheet" href="assets/site.css?v=2809i">
 <style>
   /* ===== Espace membre v2, tableau de bord « télémétrie » (styles propres à la page) ===== */
   .dash-grid .wide{grid-column:1/-1}
@@ -775,14 +775,16 @@ var PROG = {
     PROG.jours.forEach(function(j){ j.repas.forEach(function(r){ if(RECETTES_DEMO[r.rec]) R[r.rec]=RECETTES_DEMO[r.rec]; }); });
     return R;
   }
-  // rythme de la formule, avec ce qu'elle n'a pas en discret (démo seulement)
+  // formule du client : la démo, sinon la clé f1/f2/f3 de son abonnement (repli : son profil). Compte admin : pas de verrou.
+  function formuleClient(){ if(DEMO) return DEMO; if(ADMIN) return null; var x=moi(); return cleFormule((x.abonnement&&x.abonnement.formule)||x.formule); }
+  // rythme de la formule, avec ce qu'elle n'a pas en discret
   function rythmeHTML(){
-    if(!DEMO) return '';
+    var FC=formuleClient(); if(!FC) return '';
     var LK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     // libellés validés par Damien (28/09), mot pour mot
     var L={f1:[['<b>Un menu unique</b>'],['<b>Quantités réajustées</b> chaque mois'],['Un nouveau menu chaque mois : disponible avec la Formule Olympe',1],['Quantités réajustées chaque semaine : disponible avec la Formule Elysium',1]],
            f2:[['<b>Un nouveau menu</b> chaque mois'],['<b>Quantités réajustées</b> à chaque nouveau menu'],['Quantités réajustées chaque semaine : disponible avec la Formule Elysium',1]],
-           f3:[['<b>Un nouveau menu</b> chaque mois'],['<b>Quantités réajustées</b> chaque semaine']]}[DEMO];
+           f3:[['<b>Un nouveau menu</b> chaque mois'],['<b>Quantités réajustées</b> chaque semaine']]}[FC];
     return '<div class="rythme">'+L.map(function(x){ return '<span'+(x[1]?' class="off">'+LK:'>')+x[0]+'</span>'; }).join('')+'</div>';
   }
 
@@ -849,12 +851,13 @@ var PROG = {
     var extras=[{id:'conseils',cls:'a-cons',label:'Conseils',sous:'Les règles, le mode de vie, le suivi',html:adviceHTML(),ic:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>'}];
     var IC_COURSES='<path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/>',
         IC_RECETTES='<path d="M4 5a2 2 0 0 1 2-2h5v17H6a2 2 0 0 0-2 2zM20 5a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 1 2 2z"/>';
-    if(DEMO==='f1') extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',lock:'Formule Olympe',ic:IC_COURSES,
+    var FC=formuleClient();
+    if(FC==='f1') extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',lock:'Formule Olympe',ic:IC_COURSES,
       html:verrouHTML('Liste de courses','','la Formule Olympe et la Formule Elysium')});
     else if(nCourses) extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',sous:nCourses+' articles à cocher',ic:IC_COURSES,html:coursesHTML()});
-    if(DEMO) extras.push(DEMO==='f3'
-      ? {id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()}
-      : {id:'recettes',cls:'a-rec',label:'Recettes des coachs',lock:'Formule Elysium',ic:IC_RECETTES,
+    // recettes : ouvertes en démo Elysium ; pour un vrai client Elysium, elles arriveront avec le catalogue (menu.recettes)
+    if(DEMO==='f3') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()});
+    else if(FC==='f1'||FC==='f2') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',lock:'Formule Elysium',ic:IC_RECETTES,
         html:verrouHTML('Recettes des coachs','Les recettes des coachs pour chaque repas.','la Formule Elysium')});
     var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6
     var todayId=dow===0?'off':'j'+dow;

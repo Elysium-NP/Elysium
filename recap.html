@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2809h">
+<link rel="stylesheet" href="assets/site.css?v=2809i">
 <style>
   /* RÉCAPITULATIF AVANT PAIEMENT (Yoann 28/09 : « personne ne doit pouvoir dire : je ne savais pas »).
      Contenu = page Formules (mot pour mot) + CGV v3 (art. 4, 7, 8, 10). Rien d'inventé. */
@@ -28,7 +28,8 @@
   .rbloc ul{margin:0;padding-left:20px}
   .rbloc li{margin:4px 0}
   .rtete{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:6px}
-  .rtete .sous{font:600 12px/1 var(--texte);letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+  .rtete .sous{font:15px/1.4 var(--texte);color:var(--gris)}
+  .rtete .sous b{color:var(--blue)}
   .rtete h2{margin:6px 0 0}
   .rprix{font:700 30px/1 var(--texte);color:var(--ice);white-space:nowrap}
   .rprix small{font:600 14px var(--texte);color:var(--steel)}
@@ -140,33 +141,34 @@
 (function(){
   "use strict";
   // Textes = page Formules (mot pour mot) ; rythmes = CGV v3 art. 4.2 à 4.4 et art. 8.
+  var PROG='<b>Programmation 100 % personnalisée</b>, construite sur ton questionnaire',
+      SUIVI='<b>Suivi du poids et des mensurations</b> dans ton espace',
+      COURSES='<b>Liste de courses</b> avec les quantités exactes, pour chaque semaine',
+      MSG='<b>La messagerie</b> de ton espace, pour échanger avec tes coachs';
   var F={
-    f1:{nom:'Formule Odyssée',sous:'Essentielle',prix:'19,90',
-      inclus:['<b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire','<b>Ton menu</b>, gardé d’un mois à l’autre',
-              '<b>Quantités réajustées chaque mois</b>','<b>Suivi du poids &amp; des mensurations</b> dans ton espace','<b>La messagerie</b> de ton espace, pour échanger avec tes coachs'],
+    f1:{nom:'Formule Odyssée',sous:'<b>Essentielle</b> · un menu unique qui évolue',prix:'19,90',
+      inclus:[PROG,SUIVI,'<b>Un menu unique</b>','<b>Quantités réajustées chaque mois</b>',MSG],
       rythme:'Ton menu reste le même d’une période de 4 semaines à l’autre. Tes quantités sont réajustées une fois par période, à partir de tes pesées&nbsp;: pèse-toi au moins une fois par période, avant la fin de celle-ci.'},
-    f2:{nom:'Formule Olympe',sous:'Confort',prix:'25,90',
-      inclus:['<b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire','<b>Nouveau menu chaque mois</b>','<b>Quantités réajustées</b> à chaque changement de menu',
-              '<b>Liste de courses</b> avec les quantités exactes, pour chaque semaine','<b>Suivi du poids &amp; des mensurations</b> dans ton espace','<b>La messagerie</b> de ton espace, pour échanger avec tes coachs'],
+    f2:{nom:'Formule Olympe',sous:'<b>Confort</b> · un nouveau menu chaque mois',prix:'25,90',
+      inclus:[PROG,SUIVI,'<b>Un nouveau menu chaque mois</b>','<b>Quantités réajustées à chaque nouveau menu</b>',COURSES,MSG],
       rythme:'Un nouveau menu à chaque période de 4 semaines. Tes quantités sont réajustées à chaque changement de menu, à partir de tes pesées&nbsp;: pèse-toi au moins une fois par période, avant la fin de celle-ci.'},
-    f3:{nom:'Formule Elysium',sous:'Premium',prix:'29,90',
-      inclus:['<b>Programmation alimentaire 100 % personnalisée</b>, construite sur ton questionnaire','<b>Nouveau menu chaque mois</b>','<b>Quantités réajustées chaque semaine</b>',
-              '<b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise','<b>Liste de courses</b> avec les quantités exactes, pour chaque semaine',
-              '<b>Suivi du poids &amp; des mensurations</b> dans ton espace','<b>La messagerie</b> de ton espace, pour échanger avec tes coachs'],
+    f3:{nom:'Formule Elysium',sous:'<b>Premium</b> · réajusté chaque semaine + recettes des coachs',prix:'29,90',
+      inclus:[PROG,SUIVI,'<b>Un nouveau menu chaque mois</b>','<b>Quantités réajustées chaque semaine</b>',COURSES,
+              '<b>Recettes des coachs pour chaque repas</b>, pour un maximum de gourmandise',MSG],
       rythme:'Le suivi le plus rapproché&nbsp;: un nouveau menu à chaque période de 4 semaines, et tes quantités réajustées chaque semaine, à partir de ta pesée hebdomadaire. Pèse-toi chaque semaine, le même jour, le matin à jeun.'}
   };
-  // ce que les formules du dessus ajoutent (mêmes mots que la page Formules)
+  // ce que les formules du dessus ajoutent (mêmes mots que la page Formules, dans le même ordre)
   var MANQUE={
-    f1:[['<b>Nouveau menu chaque mois</b>','Olympe, Elysium'],['<b>Liste de courses</b> avec les quantités exactes, pour chaque semaine','Olympe, Elysium'],
-        ['<b>Quantités réajustées chaque semaine</b>','Elysium'],['<b>Les recettes des coachs</b> pour chaque plat','Elysium']],
-    f2:[['<b>Quantités réajustées chaque semaine</b>','Elysium'],['<b>Les recettes des coachs</b> pour chaque plat, pour un maximum de gourmandise','Elysium']],
+    f1:[['<b>Un nouveau menu chaque mois</b>','Olympe, Elysium'],['<b>Quantités réajustées à chaque nouveau menu</b>','Olympe'],
+        ['<b>Quantités réajustées chaque semaine</b>','Elysium'],[COURSES,'Olympe, Elysium'],['<b>Recettes des coachs pour chaque repas</b>','Elysium']],
+    f2:[['<b>Quantités réajustées chaque semaine</b>','Elysium'],['<b>Recettes des coachs pour chaque repas</b>, pour un maximum de gourmandise','Elysium']],
     f3:[]
   };
   var q=new URLSearchParams(location.search), k=q.get('formule');
   if(!F[k]){ location.replace('choisir.html'); return; }
   var f=F[k], $=function(id){ return document.getElementById(id); };
   $('demo').hidden=q.get('demo')!=='1';
-  $('f-sous').textContent=f.sous; $('f-nom').textContent=f.nom;
+  $('f-sous').innerHTML=f.sous; $('f-nom').textContent=f.nom;
   $('f-prix').innerHTML=f.prix+' €<small> / 4 semaines</small>';
   $('f-inclus').innerHTML=f.inclus.map(function(x){ return '<li>'+x+'</li>'; }).join('');
   $('f-rythme').innerHTML=f.rythme;

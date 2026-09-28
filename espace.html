@@ -331,7 +331,7 @@
   .acc .tx b{font:400 17px/1.2 var(--titre);color:var(--ice)}
   .acc .tx small{font:12.5px/1.35 var(--texte);color:var(--gris)}
   .acc.a-cons{--pc:var(--p-vert);--bc:var(--b-vert)} .acc.a-cour{--pc:var(--p-jaune);--bc:var(--b-jaune)}
-  .acc.a-print{--pc:var(--p-bleu);--bc:var(--b-bleu)}
+  .acc.a-print{--pc:var(--p-bleu);--bc:var(--b-bleu)} .acc.a-guide{--pc:var(--p-violet);--bc:var(--b-violet)}
   /* ce que la formule n'inclut pas : discret, jamais une erreur */
   .acc.lock{background:none;border-style:dashed;border-color:var(--line)}
   .acc.lock .ic{border-color:var(--line)} .acc.lock .ic svg{stroke:var(--steel)}
@@ -861,6 +861,17 @@ var PROG = {
     VUE=b.getAttribute('data-vue')||null; try{ VUE?sessionStorage.setItem('ely_vue',VUE):sessionStorage.removeItem('ely_vue'); }catch(x){}
     var y=scrollY; progBuilt=false; document.getElementById('progview').innerHTML=''; buildProgView(); scrollTo(0,y);
   });
+  // e-book : lien signé court, délivré par le stockage privé seulement si la règle (Formule Elysium active) l'autorise
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#ebook-dl'); if(!b) return;
+    var m=document.getElementById('ebook-msg'); if(enDemo(m)) return;
+    b.disabled=true; m.textContent='Préparation du téléchargement…';
+    sb.storage.from('guides').createSignedUrl('ebook_elysium.pdf',300,{download:'Elysium - Bien manger, au gramme pres.pdf'}).then(function(r){
+      b.disabled=false;
+      if(r.error||!r.data||!r.data.signedUrl){ m.textContent='Téléchargement indisponible pour le moment. Écris à tes coachs si ça persiste.'; return; }
+      m.textContent=''; location.href=r.data.signedUrl;
+    }).catch(function(){ b.disabled=false; m.textContent='Téléchargement indisponible pour le moment.'; });
+  });
   function buildProgView(){
     if(progBuilt) return; progBuilt=true;
     var uu=moi(); if(uu.prenom){ PROG.nom=[uu.prenom,(uu.nom||'').trim()]; }
@@ -926,6 +937,13 @@ var PROG = {
     if(FC==='f1') extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',lock:'Formule Olympe',ic:IC_COURSES,
       html:verrouHTML('Liste de courses','','la Formule Olympe et la Formule Elysium')});
     else if(nCourses) extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',sous:nCourses+' articles à cocher',ic:IC_COURSES,html:coursesHTML()});
+    // E-BOOK (Damien 28/09) : Formule Elysium uniquement ; fichier dans le stockage PRIVÉ « guides », lien signé de 5 minutes
+    var IC_GUIDE='<path d="M5 4h9a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h9M9 8h5M9 11h4"/>';
+    if(FC==='f3'||(ADMIN&&!DEMO&&!VUE)) extras.push({id:'guide',cls:'a-guide',label:'Mon guide nutrition',sous:'« Bien manger, au gramme près »',ic:IC_GUIDE,
+      html:'<div class="panel"><div class="verrou" style="border-style:solid"><h4>Bien manger, au gramme près</h4><p>Le guide nutrition de tes coachs : les principes de ta diète, pour les appliquer au quotidien.</p>'+
+        '<button type="button" class="btn" id="ebook-dl" style="margin-top:14px">Télécharger mon e-book (PDF)</button><p class="foot-note" id="ebook-msg" aria-live="polite"></p></div></div>'});
+    else if(FC) extras.push({id:'guide',cls:'a-guide',label:'Mon guide nutrition',lock:'Formule Elysium',ic:IC_GUIDE,
+      html:verrouHTML('Mon guide nutrition','Le guide « Bien manger, au gramme près », en e-book.','la Formule Elysium')});
     var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6
     var todayId=dow===0?'off':'j'+dow;
     if(!items.some(function(it){return it.id===todayId;})) todayId=items[0].id;

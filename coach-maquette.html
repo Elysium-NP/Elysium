@@ -91,6 +91,46 @@
   .verrou p{color:var(--gris);font-size:14px;line-height:1.55}
   .code{display:flex;justify-content:center;gap:8px;margin:18px 0}
   .code span{width:40px;height:50px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;font:700 22px var(--texte);color:var(--ice);background:var(--void)}
+  /* noms cliquables : partout, un nom ouvre la fiche */
+  .nom{cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px;transition:color .15s,text-decoration-color .15s}
+  .nom:hover,.nom:focus-visible{color:var(--blue)!important;text-decoration-color:var(--blue)}
+  .cherche{margin-left:auto}
+  .cherche input{font:14px/1.2 var(--texte);color:var(--ice);background:var(--void2);border:1px solid var(--line);border-radius:999px;padding:9px 14px;width:220px;max-width:44vw}
+  .chead .who{margin-left:0}
+  /* fiche client */
+  .retour-btn{font:600 13px/1 var(--texte);background:none;border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;color:var(--gris);margin-bottom:14px}
+  .fmeta{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 16px}
+  .progres{position:relative;height:12px;border-radius:99px;background:var(--line);margin:14px 0 6px}
+  .progres i{position:absolute;left:0;top:0;bottom:0;background:var(--brand);border-radius:99px}
+  .progres-l{display:flex;justify-content:space-between;font-size:12.5px;color:var(--steel)}
+  .courbe svg{width:100%;height:170px;display:block;margin-top:6px}
+  .courbe .l{fill:none;stroke:var(--blue);stroke-width:2.5;vector-effect:non-scaling-stroke}
+  .courbe .a{fill:var(--brand);opacity:.12}
+  .courbe .ideal{stroke:var(--steel);stroke-dasharray:5 5;vector-effect:non-scaling-stroke}
+  .sous-onglets{display:flex;gap:6px;overflow-x:auto;margin:22px 0 12px;scrollbar-width:none}
+  .sous-onglets button{flex:none;font:600 13px/1 var(--texte);border:1px solid var(--line);background:none;border-radius:999px;padding:9px 14px;color:var(--gris);cursor:pointer}
+  .sous-onglets button.on{background:var(--ice);color:var(--fond);border-color:var(--ice)}
+  .bulle{max-width:80%;width:fit-content;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.45;margin:6px 0;color:var(--ice);background:var(--void);border:1px solid var(--line)}
+  .bulle.co{margin-left:auto;background:var(--brand);border-color:var(--brand);color:#111}
+  .bulle small{display:block;font-size:11px;opacity:.65;margin-top:4px}
+  .repondre{display:flex;gap:8px;margin-top:12px}
+  .repondre input{flex:1;min-width:0;font:14px/1.2 var(--texte);color:var(--ice);background:var(--void);border:1px solid var(--line);border-radius:999px;padding:11px 16px}
+  .photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
+  .photos div{aspect-ratio:3/4;border-radius:10px;border:1px dashed var(--line);display:grid;place-items:center;text-align:center;font-size:12px;color:var(--steel);background:var(--void);padding:6px}
+  .qa{padding:10px 0;border-top:1px solid var(--line)}
+  .qa:first-child{border-top:0}
+  .qa dt{font:600 11px/1.3 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
+  .qa dd{margin:4px 0 0;font-size:15px;color:var(--ice)}
+  .qa.alerte dd{color:#b45309;font-weight:600}
+  .fils{display:grid;grid-template-columns:280px minmax(0,1fr);gap:12px;align-items:start}
+  @media(max-width:760px){.fils{grid-template-columns:1fr}.cherche input{width:150px}}
+  .fil{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 2px;cursor:pointer;font:14px/1.3 var(--texte);color:var(--gris)}
+  .fil:first-of-type{border-top:0}
+  .fil b{color:var(--ice)}
+  .fil.on b{color:var(--blue)}
+  .pastille-n{background:var(--blue);color:#fff;border-radius:99px;font:700 11px/1 var(--texte);padding:4px 7px;align-self:center}
+  .mini{font:600 12px/1 var(--texte);border:1px solid var(--line);background:none;border-radius:999px;padding:7px 11px;cursor:pointer;color:var(--gris)}
+  .mini:hover{border-color:var(--blue);color:var(--blue)}
   .btn-p{font:600 15px/1 var(--texte);background:var(--brand);color:#111;border:0;border-radius:999px;padding:13px 22px;cursor:pointer}
 </style>
 </head>
@@ -100,13 +140,14 @@
 <header class="chead">
   <a class="logo" href="index.html" aria-label="Elysium"><span class="elg" style="--h:52px"><span class="elg-name">Elysium</span></span></a>
   <span class="ctag">Espace coachs</span>
-  <span class="who"></span>
+  <span class="cherche"><input type="search" id="g-q" list="g-noms" placeholder="Chercher un client…" aria-label="Chercher un client"><datalist id="g-noms"></datalist></span>
 </header>
 
 <nav class="onglets" role="tablist" aria-label="Pages du tableau de bord">
   <button role="tab" data-p="jour" aria-selected="true">Aujourd’hui</button>
   <button role="tab" data-p="clients">Clients</button>
   <button role="tab" data-p="dietes">Diètes</button>
+  <button role="tab" data-p="msgs">Messages <span class="pastille-n">3</span></button>
   <button role="tab" data-p="suivi">Suivi &amp; résultats</button>
   <button role="tab" data-p="stats">Statistiques<svg class="cad" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-label="protégé"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
   <button role="tab" data-p="eco">Économie<svg class="cad" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-label="protégé"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
@@ -177,6 +218,21 @@
     <div class="kpi"><div class="k">Validées ce mois</div><div class="v">31</div></div>
     <div class="kpi"><div class="k">Délai moyen de validation</div><div class="v">14 <small>h</small></div><div class="s">entre le dépôt et votre validation</div></div>
   </div>
+  <h3 class="s">File de relecture</h3>
+  <div class="grille">
+    <div class="carte"><h4>À relire <span class="n">4</span></h4>
+      <div class="ligne"><b>Camille R.</b><span><span class="tag b">1re diète</span> · déposée il y a 3 h</span></div>
+      <div class="ligne"><b>Julien M.</b><span><span class="tag v">Réajustement</span> · il y a 5 h</span></div>
+      <div class="ligne"><b>Sarah L.</b><span><span class="tag j">Nouveau menu</span> · hier</span></div>
+      <div class="ligne"><b>Karim A.</b><span><span class="tag b">1re diète</span> · il y a 1 h</span></div></div>
+    <div class="carte"><h4>À corriger <span class="n">1</span></h4>
+      <div class="ligne"><b>Thomas B.</b><span>« trop de riz au dîner » · Yoann</span></div></div>
+    <div class="carte"><h4>Validées cette semaine <span class="n">6</span></h4>
+      <div class="ligne"><b>Emma G.</b><span>Damien · lundi</span></div>
+      <div class="ligne"><b>Léa C.</b><span>Yoann · lundi</span></div>
+      <div class="ligne"><b>Nadia F.</b><span>Damien · dimanche</span></div>
+      <div class="ligne"><span>+ 3 autres</span><span></span></div></div>
+  </div>
   <h3 class="s">Échéancier des 4 prochaines semaines</h3>
   <div class="grille">
     <div class="carte"><h4>Semaine du 29/09 <span class="n">9</span></h4>
@@ -198,6 +254,19 @@
   </div>
   <p class="sous" style="margin-top:12px">Rythme : Formule 1 = réajustement 4 semaines après la dernière diète · Formule 2 = nouveau menu toutes les 4 semaines · Formule 3 = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif.</p>
 </section>
+
+<!-- ═════════════ MESSAGES ═════════════ -->
+<section class="page" id="p-msgs" hidden>
+  <h2 class="t">Messages <span class="ex">exemple</span></h2>
+  <p class="sous">Un fil par client. Les non lus remontent en haut.</p>
+  <div class="fils">
+    <div class="carte" id="m-fils"></div>
+    <div class="carte" id="m-conv"></div>
+  </div>
+</section>
+
+<!-- ═════════════ FICHE CLIENT (ouverte depuis n'importe quel nom) ═════════════ -->
+<section class="page" id="p-fiche" hidden></section>
 
 <!-- ═════════════ 4. SUIVI & RÉSULTATS ═════════════ -->
 <section class="page" id="p-suivi" hidden>
@@ -268,6 +337,9 @@
     <div class="kpi"><div class="k">Prévision octobre</div><div class="v">1 140 <small>€</small></div><div class="s">échéances déjà connues</div></div>
   </div>
   <div class="grille" style="margin-top:16px">
+    <div class="carte" style="grid-column:1/-1"><h4>Encaissé par mois</h4>
+      <div class="mois" id="g-eco"></div>
+      <p class="leg"><i></i>2026<i class="old"></i>2025</p></div>
     <div class="carte"><h4>Revenu récurrent par formule</h4><div class="bars">
       <div class="bar"><span>Formule 1</span><span class="bt"><i class="bf" style="width:65%"></i></span><span class="bv">318 €</span></div>
       <div class="bar"><span>Formule 2</span><span class="bt"><i class="bf" style="width:100%"></i></span><span class="bv">492 €</span></div>
@@ -299,18 +371,28 @@
     var cible=((p==='stats'||p==='eco')&&!ouvert)?'verrou':p;
     document.querySelectorAll('.page').forEach(function(s){ s.hidden=s.id!=='p-'+cible; });
     voir.p=p; scrollTo(0,0);
-    var on=document.querySelector('.onglets [aria-selected="true"]'), nav=on.parentNode;   // onglet actif visible sur téléphone
-    nav.scrollLeft=on.offsetLeft-(nav.clientWidth-on.offsetWidth)/2;
+    var on=document.querySelector('.onglets [aria-selected="true"]');   // onglet actif visible sur téléphone (aucun pour la fiche)
+    if(on) on.parentNode.scrollLeft=on.offsetLeft-(on.parentNode.clientWidth-on.offsetWidth)/2;
   }
   document.querySelector('.onglets').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) voir(b.dataset.p); });
   $('deverrouiller').addEventListener('click',function(){ ouvert=true; voir(voir.p); });
+  new MutationObserver(function(){ marquer(); }).observe(document.querySelector('.cwrap'),{childList:true,subtree:true});
 
   // --- clients (exemple) : [nom, formule, abonnement, objectif, jours depuis pesée, échéance, inscription]
   var C=[['Camille R.','Formule 1','Abonné','Perte',2,'2026-10-12','2026-06-02'],['Julien M.','Formule 3','Abonné','Perte',1,'2026-10-04','2026-05-18'],
     ['Sarah L.','Formule 3','Abonné','Prise',3,'2026-10-09','2026-07-21'],['Thomas B.','Formule 2','Abonné','Perte',5,'2026-10-15','2026-08-03'],
     ['Nadia F.','Formule 2','Abonné','Perte',16,'2026-10-01','2026-04-11'],['Lucas P.','Formule 1','Abonné','Maintien',15,'2026-10-20','2026-03-29'],
     ['Emma G.','Formule 2','Abonné','Perte',9,'2026-10-02','2026-07-02'],['Marc V.','Formule 2','Impayé','Prise',4,'2026-09-25','2026-02-14'],
-    ['Hugo T.','Formule 1','Résilié','Perte',8,'—','2026-01-08'],['Inès D.','Formule 3','Abonné','Perte',null,'2026-10-26','2026-09-27']];
+    ['Hugo T.','Formule 1','Résilié','Perte',8,'—','2026-01-08'],['Inès D.','Formule 3','Abonné','Perte',null,'2026-10-26','2026-09-27'],
+    ['Léa C.','Formule 1','Abonné','Perte',7,'2026-10-06','2026-06-16'],['Karim A.','Formule 2','Abonné','Prise',null,'2026-10-26','2026-09-28']];
+  // détails de fiche (exemple) : âge, départ, actuel, idéal
+  var D={'Camille R.':[29,78,70.8,68],'Julien M.':[34,92,85.4,80],'Sarah L.':[26,52,55.1,58],'Thomas B.':[41,98,92,85],'Nadia F.':[38,71,67.9,62],
+    'Lucas P.':[45,81,81.1,80],'Emma G.':[31,66,63.4,60],'Marc V.':[23,68,71.2,75],'Hugo T.':[36,88,86.2,78],'Inès D.':[27,64,64,58],'Léa C.':[33,70,66.5,63],'Karim A.':[22,63,63,70]};
+  var MSG={'Sarah L.':[[0,'Coucou ! Je peux remplacer le saumon par du thon ?','10:12']],
+    'Julien M.':[[1,'Pense à ta pesée de lundi','dim. 18:40'],[0,'Pesée faite, −0,8 kg','08:31']],
+    'Inès D.':[[1,'Bienvenue Inès, ta première diète arrive très vite.','hier'],[0,'Merci !','hier']],
+    'Camille R.':[[0,'Le wrap thon-avocat, vraiment pas pour moi','ven.'],[1,'Noté, il ne reviendra plus.','ven.']]},
+    NL={'Sarah L.':1,'Julien M.':1,'Inès D.':1};
   var tri=4, sens=-1;
   function fd(d){ return d==='—'?d:d.slice(8)+'/'+d.slice(5,7)+'/'+d.slice(0,4); }
   function renderC(){
@@ -328,10 +410,94 @@
     document.querySelectorAll('th').forEach(function(x){ x.removeAttribute('aria-sort'); }); th.setAttribute('aria-sort','x'); renderC(); }); });
   renderC();
 
+  // --- noms cliquables partout : ils ouvrent la fiche
+  var NOMS={}; C.forEach(function(c){ NOMS[c[0]]=c; });
+  function marquer(root){ (root||document).querySelectorAll('.ligne b, td b, .bar > span:first-child').forEach(function(b){
+    if(NOMS[b.textContent.trim()]&&!b.classList.contains('nom')){ b.classList.add('nom'); b.tabIndex=0; b.setAttribute('role','button'); } }); }
+  document.addEventListener('click',function(e){ var n=e.target.closest('.nom'); if(n) fiche(n.textContent.trim()); });
+  document.addEventListener('keydown',function(e){ var n=e.target.closest&&e.target.closest('.nom'); if(n&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); fiche(n.textContent.trim()); } });
+  $('g-noms').innerHTML=C.map(function(c){ return '<option value="'+c[0]+'">'; }).join('');
+  $('g-q').addEventListener('change',function(){ var v=this.value.trim().toLowerCase(), c=C.filter(function(x){ return x[0].toLowerCase().indexOf(v)===0; })[0]; if(c){ fiche(c[0]); this.value=''; this.blur(); } });
+
+  function fr(n){ return String(Math.round(n*10)/10).replace('.',','); }
+  function courbe(d){   // 10 pesées hebdo, du départ à l'actuel, un peu de bruit
+    var n=10, pts=[]; for(var i=0;i<n;i++){ pts.push(d[1]+(d[2]-d[1])*i/(n-1)+(i&&i<n-1?Math.sin(i*2.3)*.35:0)); }
+    var lo=Math.min.apply(null,pts.concat([d[3]]))-1, hi=Math.max.apply(null,pts.concat([d[3]]))+1, y=function(v){ return (hi-v)/(hi-lo)*100; };
+    var l=pts.map(function(v,i){ return (i?'L':'M')+(i/(n-1)*100).toFixed(1)+' '+y(v).toFixed(1); }).join(' ');
+    return '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Courbe de poids"><path class="a" d="'+l+' L100 100 L0 100 Z"/><path class="l" d="'+l+'"/>'+
+      '<line class="ideal" x1="0" x2="100" y1="'+y(d[3])+'" y2="'+y(d[3])+'"/></svg>';
+  }
+  function bulles(nom){ return (MSG[nom]||[]).map(function(m){ return '<div class="bulle'+(m[0]?' co':'')+'">'+m[1]+'<small>'+(m[0]?'Coach · ':'')+m[2]+'</small></div>'; }).join('')||'<p class="leg" style="margin:0">Aucun message pour l’instant.</p>'; }
+  function repondre(nom,box,apres){ box.insertAdjacentHTML('beforeend','<form class="repondre"><input placeholder="Répondre à '+nom.split(' ')[0]+'…" aria-label="Répondre"><button class="btn-p" type="submit">Envoyer</button></form>');
+    box.querySelector('form').addEventListener('submit',function(e){ e.preventDefault(); var t=this.querySelector('input').value.trim(); if(!t) return;
+      (MSG[nom]=MSG[nom]||[]).push([1,t.replace(/[<>&]/g,''),'à l’instant']); delete NL[nom]; apres(); }); }
+
+  var retourVers='jour';
+  function fiche(nom, sous){
+    var c=NOMS[nom], d=D[nom]; if(!c) return;
+    if(voir.p!=='fiche') retourVers=voir.p;
+    var pct=Math.max(0,Math.min(100,Math.round((d[2]-d[1])/(d[3]-d[1])*100)||0)), ev=d[2]-d[1];
+    var tg={Abonné:'v',Impayé:'r',Résilié:''}, prochaine = c[2]!=='Abonné' ? '<span class="retard">bloquée : '+c[2].toLowerCase()+'</span>' : c[4]==null ? 'après sa 1re pesée' : c[4]>=7 ? '<span class="retard">en attente d’une pesée</span>' : fd(c[5]);
+    var h='<button type="button" class="retour-btn" id="f-retour">← Retour</button>'+
+      '<h2 class="t">'+nom+' <span class="ex">exemple</span></h2>'+
+      '<div class="fmeta"><span class="tag b">'+c[1]+'</span><span class="tag '+tg[c[2]]+'">'+c[2]+'</span><span class="tag">'+c[3]+'</span><span class="tag">'+d[0]+' ans</span><span class="tag">inscrit le '+fd(c[6])+'</span></div>'+
+      '<div class="kpis">'+
+        '<div class="kpi"><div class="k">Poids actuel</div><div class="v">'+fr(d[2])+' <small>kg</small></div><div class="s">'+(ev>0?'+':'')+fr(ev)+' kg depuis le départ</div></div>'+
+        '<div class="kpi hot"><div class="k">Vers l’idéal</div><div class="v">'+pct+' <small>%</small></div><div class="s">objectif '+fr(d[3])+' kg</div></div>'+
+        '<div class="kpi"><div class="k">Prochaine diète</div><div class="v" style="font-size:20px;line-height:1.3">'+prochaine+'</div><div class="s">'+(c[1]==='Formule 2'?'nouveau menu':'réajustement')+'</div></div>'+
+        '<div class="kpi"><div class="k">Dernière pesée</div><div class="v" style="font-size:20px;line-height:1.3">'+(c[4]==null?'aucune':'il y a '+c[4]+' j')+'</div><div class="s">'+(c[4]>=7?'<span class="retard">relance conseillée</span>':'à jour')+'</div></div>'+
+      '</div>'+
+      '<div class="carte courbe" style="margin-top:12px"><h4>Poids <span class="n">'+fr(d[1])+' → '+fr(d[2])+' kg</span></h4>'+courbe(d)+
+        '<div class="progres"><i style="width:'+pct+'%"></i></div><div class="progres-l"><span>Départ '+fr(d[1])+' kg</span><span>Idéal '+fr(d[3])+' kg (pointillés)</span></div></div>'+
+      '<div class="sous-onglets" role="tablist">'+['Diètes','Messages','Questionnaire','Mensurations','Photos','Retours sur les plats'].map(function(t,i){ return '<button type="button" data-s="'+i+'">'+t+'</button>'; }).join('')+'</div>'+
+      '<div class="carte" id="f-sous"></div>';
+    var pg=$('p-fiche'); pg.innerHTML=h;
+    function sousPage(i){
+      pg.querySelectorAll('.sous-onglets button').forEach(function(b){ b.classList.toggle('on',+b.dataset.s===i); });
+      var z=$('f-sous');
+      if(i===0) z.innerHTML='<h4>Versions de sa diète</h4>'+
+        [['v4','Réajustement','22/09','Validée par Damien','v'],['v3','Nouveau menu','25/08','Validée par Yoann','j'],['v2','Réajustement','28/07','Validée par Damien','v'],['v1','1re diète','02/06','Validée par Yoann','b']]
+        .map(function(v){ return '<div class="ligne"><span><b>'+v[0]+'</b> · <span class="tag '+v[4]+'">'+v[1]+'</span> · '+v[2]+'</span><span>'+v[3]+' <button class="mini" type="button">Ouvrir</button></span></div>'; }).join('');
+      if(i===1){ z.innerHTML='<h4>Messages</h4>'+bulles(nom); repondre(nom,z,function(){ sousPage(1); }); }
+      if(i===2) z.innerHTML='<h4>Ses réponses au questionnaire</h4><dl style="margin:0">'+
+        [['Objectif principal',c[3]==='Perte'?'Perdre du poids':c[3]==='Prise'?'Prendre de la masse':'Maintenir mon poids'],['Appétit','Plutôt gros mangeur le soir'],
+         ['Aliments refusés','Champignons, poisson pané',1],['Allergies','Aucune'],['Nombre de pas','Entre 10 000 et 13 000'],['À conserver absolument','Le carré de chocolat après le dîner']]
+        .map(function(q){ return '<div class="qa'+(q[2]?' alerte':'')+'"><dt>'+q[0]+'</dt><dd>'+q[1]+'</dd></div>'; }).join('')+'</dl>';
+      if(i===3) z.innerHTML='<h4>Mensurations <span class="n">départ → aujourd’hui</span></h4>'+
+        [['Tour de taille','86 → 79 cm'],['Tour de hanches','104 → 99 cm'],['Tour de cuisse','61 → 58 cm'],['Tour de bras','31 → 30 cm']]
+        .map(function(m){ return '<div class="ligne"><span>'+m[0]+'</span><b>'+m[1]+'</b></div>'; }).join('');
+      if(i===4) z.innerHTML='<h4>Photos <span class="n">privées, visibles des coachs seulement</span></h4><div class="photos"><div>Photo du '+fd(c[6])+'</div><div>Photo du 28/07</div><div>Photo du 22/09</div></div>';
+      if(i===5) z.innerHTML='<h4>Retours sur les plats</h4>'+
+        '<div class="ligne"><span>Wrap thon-avocat</span><span class="tag r">Plus jamais</span></div><div class="ligne"><span>Porridge banane</span><span class="tag j">À revoir</span></div>'+
+        '<p class="leg" style="margin-left:0">Pris en compte automatiquement pour sa prochaine diète.</p>';
+    }
+    pg.querySelector('.sous-onglets').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) sousPage(+b.dataset.s); });
+    $('f-retour').addEventListener('click',function(){ voir(retourVers); });
+    sousPage(sous||0);
+    voir('fiche');
+  }
+
+  // --- messagerie (exemple)
+  var filOuvert='Sarah L.';
+  function renderMsgs(){
+    var noms=Object.keys(MSG).sort(function(a,b){ return (NL[b]||0)-(NL[a]||0); });
+    $('m-fils').innerHTML=noms.map(function(n){ var der=MSG[n][MSG[n].length-1];
+      return '<button type="button" class="fil'+(n===filOuvert?' on':'')+'" data-n="'+n+'"><span><b>'+n+'</b><br>'+der[1].slice(0,38)+(der[1].length>38?'…':'')+'</span>'+(NL[n]?'<span class="pastille-n">'+NL[n]+'</span>':'')+'</button>'; }).join('');
+    var z=$('m-conv'); z.innerHTML='<h4><span class="nom" tabindex="0" role="button">'+filOuvert+'</span> <span class="n">voir sa fiche en cliquant sur son nom</span></h4>'+bulles(filOuvert);
+    repondre(filOuvert,z,renderMsgs);
+    var t=document.querySelector('[data-p=msgs] .pastille-n'), n=Object.keys(NL).length; t.textContent=n; t.hidden=!n;
+  }
+  $('m-fils').addEventListener('click',function(e){ var b=e.target.closest('.fil'); if(!b) return; filOuvert=b.dataset.n; delete NL[filOuvert]; renderMsgs(); });
+  renderMsgs();
+
   // --- statistiques (exemple)
   var M=['J','F','M','A','M','J','J','A','S','O','N','D'], a26=[18,21,26,24,27,22,19,25,31], a25=[12,15,19,20,22,18,14,20,24,26,23,17], mx=31;
   $('g-mois').innerHTML=M.map(function(m,i){
     return '<div><span class="cols"><i class="old" style="height:'+(a25[i]/mx*100)+'%"></i>'+(a26[i]!=null?'<i style="height:'+(a26[i]/mx*100)+'%"></i>':'')+'</span>'+m+'</div>'; }).join('');
+  var e26=[610,690,780,820,870,905,880,960,1164], e25=[380,420,470,500,560,590,540,610,700,760,730,690], ex=1164;
+  $('g-eco').innerHTML=M.map(function(m,i){
+    return '<div><span class="cols"><i class="old" style="height:'+(e25[i]/ex*100)+'%"></i>'+(e26[i]!=null?'<i style="height:'+(e26[i]/ex*100)+'%" title="'+e26[i]+' €"></i>':'')+'</span>'+m+'</div>'; }).join('');
+  marquer();
   var AG=[['16-25',38],['26-35',92],['36-45',71],['46-55',33],['56-65',12],['66+',3]];
   $('g-ages').innerHTML=AG.map(function(a){ return '<div class="bar"><span>'+a[0]+' ans</span><span class="bt"><i class="bf" style="width:'+(a[1]/92*100)+'%"></i></span><span class="bv">'+a[1]+'</span></div>'; }).join('');
 })();

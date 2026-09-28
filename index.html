@@ -217,7 +217,10 @@
   /* ── effet appli sur mobile : action principale toujours sous le pouce ── */
   .dock{display:none}
   @media(max-width:700px){
-    .dock{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:30}
+    /* le bouton est posé dans une barre au FOND de page qui touche le bas de l'écran : Safari iOS 26
+       teinte sa barre d'adresse avec l'élément fixé en bas ; sans ce fond, elle devenait bleue (Yoann 28/09) */
+    .dock{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+      background-color:var(--fond);border-top:1px solid var(--line)}
     .dock .btn{flex:1;box-shadow:0 12px 30px -12px rgba(17,17,17,.45)}
     body{padding-bottom:84px}
   }

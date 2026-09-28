@@ -1087,9 +1087,12 @@ var PROG = {
       if(r.error) return;                                      // table pas encore créée : rien à montrer
       var card=document.getElementById('c-msg'); card.hidden=false;
       // CGV v3 art. 7.3 : paiement échoué -> plus de nouvel échange tant que la période n'est pas réglée (l'historique reste lisible)
-      var ab=(ElyAuth.user()||{}).abonnement, bloque=!ADMIN&&!!ab&&ab.statut==='past_due';
+      // même règle que supabase/messagerie_impayes.sql (past_due, unpaid, canceled)
+      var ab=(ElyAuth.user()||{}).abonnement, st=ab&&ab.statut, bloque=!ADMIN&&['past_due','unpaid','canceled'].indexOf(st)>-1;
       document.getElementById('msg-form').hidden=bloque;
-      if(bloque) document.getElementById('msg-err').textContent='Ton dernier paiement a échoué : la messagerie reprend dès qu’il est réglé (« Mon abonnement » › mettre à jour ta carte).';
+      if(bloque) document.getElementById('msg-err').textContent= st==='canceled'
+        ? 'Ton abonnement est terminé : tu peux relire vos échanges ; pour écrire à tes coachs, reprends une formule.'
+        : 'Ton dernier paiement a échoué : la messagerie reprend dès qu’il est réglé (« Mon abonnement » › mettre à jour ta carte).';
       var L=r.data||[], box=document.getElementById('fil-msg');
       box.innerHTML = L.length ? L.map(function(m){ var moi=m.auteur_id===u.id;
         return '<div class="b '+(moi?'moi':'coach')+'">'+esc(m.texte)+'<time>'+(moi?'':'Coach · ')+new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</time></div>'; }).join('')

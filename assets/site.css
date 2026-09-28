@@ -706,3 +706,16 @@ html[data-theme="obscur"] .btn.line:hover{color:var(--fond)}
    avec son filet de séparation (Yoann 27/09) ; collée en haut pendant le défilement, comme la vitrine et l'espace coachs. */
 .qtop{height:64px;padding:0 var(--edge)!important;align-items:center!important;background:var(--voile)!important;
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+
+/* ===== CARTES DE FORMULE : survol / toucher (Yoann 28/09) =====
+   F1 : pas de néon, la carte se soulève simplement. F2 et F3 : leur néon s'amplifie. */
+.plan{transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease,border-color .4s ease}
+.plan:not(.feat):hover,.plan:not(.feat):active{border-color:var(--line);transform:translateY(-6px);box-shadow:0 22px 40px -28px rgba(60,45,20,.45)}
+html .plan.feat:hover,html .plan.feat:active,html.reveal-ready .plan.feat.in:hover{transform:translateY(-6px);
+  box-shadow:0 0 0 2px rgba(46,155,255,.65),0 0 64px -4px rgba(46,155,255,.7),0 34px 70px -34px rgba(20,102,184,.75)}
+html .plan.feat.complet:hover,html .plan.feat.complet:active,html.reveal-ready .plan.feat.complet.in:hover{
+  box-shadow:0 0 0 2px rgba(142,124,195,.75),0 0 64px -4px rgba(142,124,195,.75),0 34px 70px -34px rgba(90,70,150,.75)}
+@media(prefers-reduced-motion:reduce){.plan:hover,.plan:active{transform:none}}
+
+/* mode nuit : le halo du bas des titres passe du jaune au VIOLET (Yoann 28/09 : le jaune jure la nuit) */
+html[data-theme="obscur"] .phead::before{background:radial-gradient(700px 420px at 82% 10%,var(--p-bleu),transparent 65%),radial-gradient(520px 360px at 12% 90%,var(--p-violet),transparent 70%)}

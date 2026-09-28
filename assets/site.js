@@ -2,6 +2,8 @@
    Zéro dépendance. Dégrade proprement (pas de JS = tout visible, curseur natif). */
 (function(){
   "use strict";
+  // iOS n'applique :active au toucher que si la page écoute les touchers (cartes de formule)
+  document.addEventListener('touchstart', function(){}, { passive:true });
   var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   // Signale que le JS tourne : la CSS ne masque les .reveal QUE si cette classe est là

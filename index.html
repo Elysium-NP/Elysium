@@ -117,6 +117,30 @@
   .dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--fond);margin-left:-4px}
   .dots i:first-child{margin-left:0}
 
+  /* ── AVIS CLIENTS dans le premier écran (Damien 28/09 : « du positif dès l'arrivée ») ──
+     4 retours repris MOT POUR MOT de resultats.html (anonymisés comme là-bas). Défilement
+     horizontal natif (scroll-snap, glisser au doigt) dans son propre cadre ; défilement auto
+     lent posé par le script (pause survol / focus, arrêt au premier geste, rien si
+     « réduire les animations »). */
+  .hero .wrap > div{min-width:0}          /* le rail ne doit jamais élargir la colonne */
+  .avis{margin-top:30px}
+  .avis-t{margin:0 0 10px;font:600 12px/1 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .avis-rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;padding:2px 2px 10px;scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
+  .avis-c{flex:0 0 min(300px,84%);scroll-snap-align:start;margin:0;display:flex;flex-direction:column;gap:8px;
+    padding:14px 16px 12px;background:var(--surface);border:1px solid var(--rule);border-top:3px solid var(--c);border-radius:var(--r)}
+  .avis-c:nth-child(1){--c:var(--pdj)} .avis-c:nth-child(2){--c:var(--dej)} .avis-c:nth-child(3){--c:var(--col)} .avis-c:nth-child(4){--c:var(--din)}
+  .avis-n{margin:0;font:400 24px/1 var(--titre);color:var(--blue-ink)}
+  .avis-n small{margin-left:8px;font:13px/1 var(--texte);color:var(--mute)}
+  .avis-c blockquote{margin:0;padding:0;background:none;border:0;border-radius:0}
+  .avis-c blockquote p{margin:0;font:15px/1.5 var(--texte);color:var(--ink)}
+  .avis-c blockquote b{font-weight:600}
+  .avis-c figcaption{margin-top:auto;padding-top:8px;border-top:1px solid var(--rule);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+  .avis .more{margin-top:10px;font-size:14px}
+  @media(max-width:900px){   /* mobile : le rail va d'un bord à l'autre de l'écran, la carte suivante dépasse */
+    .avis-rail{margin:0 calc(-1*var(--edge));padding:2px var(--edge) 10px;scroll-padding-inline:var(--edge)}
+  }
+
   /* ── SIGNATURE : une colonne « Jour » de leurs fiches ── */
   .dayzone{position:relative;isolation:isolate}
   .dayzone::before{content:"";position:absolute;inset:6% -4% 2%;z-index:-1;border-radius:40px;filter:blur(38px);opacity:.55;
@@ -392,6 +416,33 @@
           <a class="btn line" href="methode.html">Voir la méthode</a>
         </div>
         <p class="sign"><span class="dots" aria-hidden="true"><i style="background:var(--pdj)"></i><i style="background:var(--dej)"></i><i style="background:var(--col)"></i><i style="background:var(--din)"></i></span><span>Composé par <b>Damien &amp; Yoann</b>, tes coachs.</span></p>
+
+        <!-- 4 retours repris MOT POUR MOT de resultats.html (cartes −25 kg et −23 kg, avis « Ce qu'ils
+             en disent » n°2 et n°1) ; même anonymisation, aucune photo de client. -->
+        <div class="avis" role="region" aria-label="Retours de clients Elysium">
+          <p class="avis-t">Ce qu'en disent nos clients</p>
+          <div class="avis-rail">
+            <figure class="avis-c" tabindex="0">
+              <p class="avis-n">−25 kg<small>91 → 66 kg</small></p>
+              <blockquote><p>« Pour la première fois, je n'ai pas eu l'impression de subir mon menu. Aucune contrainte, de la variété, et le résultat a suivi. »</p></blockquote>
+              <figcaption>Client Elysium · Perte de poids</figcaption>
+            </figure>
+            <figure class="avis-c" tabindex="0">
+              <blockquote><p>« J'avais peur des quantités… au final elles sont <b>grosses</b> ! Je ne me sens pas privée du tout, et j'ai l'impression de <b>mieux dormir</b>. »</p></blockquote>
+              <figcaption>Avis client · Perte de poids</figcaption>
+            </figure>
+            <figure class="avis-c" tabindex="0">
+              <p class="avis-n">−23 kg<small>88 → 65 kg</small></p>
+              <blockquote><p>« Au-delà de la perte de poids, je suis extrêmement fière de mon parcours. Aujourd'hui, je ne peux plus vivre sans le sport. »</p></blockquote>
+              <figcaption>Cliente Elysium · Perte de poids</figcaption>
+            </figure>
+            <figure class="avis-c" tabindex="0">
+              <blockquote><p>« Très content : <b>+1 cm de circonférence musculaire par mois</b> sur tout le corps, avec trois séances par semaine. Hâte d'attaquer le prochain programme. »</p></blockquote>
+              <figcaption>Avis client · Prise de masse</figcaption>
+            </figure>
+          </div>
+          <a class="more" href="resultats.html">Voir tous les résultats</a>
+        </div>
       </div>
 
       <figure class="dayzone" style="margin:0">
@@ -490,7 +541,7 @@
       <p class="lede">Pas des barres ni des shakers. De vrais repas, en quantité, calibrés au gramme, pensés pour une vie réelle.</p>
       <div class="plates">
         <article class="plate">
-          <img src="assets/food/web/poke.jpg" alt="Poke bowl au saumon, riz et légumes" loading="lazy" decoding="async" width="600" height="450">
+          <img src="assets/food/web/poke.jpg" alt="Poke bowl au saumon, riz et légumes" loading="lazy" decoding="async" width="600" height="450" style="object-position:50% 15%">
           <div class="plate-in"><span class="tag sig">Signature</span>
             <h3>Poke bowl saumon</h3><p>Riz, saumon, avocat, légumes croquants. Frais, coloré, jamais fade.</p>
             <div class="mac"><span class="p">P 38</span><span class="g">G 56</span><span class="l">L 22</span><span class="kc">590 kcal</span></div></div>
@@ -573,7 +624,7 @@
    ne tourne pas, rien n'est masqué. */
 (function(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-  var H='.hero .eyebrow,.hero h1,.hero .lede,.hero .ctas,.hero .sign,.hero .dayzone';
+  var H='.hero .eyebrow,.hero h1,.hero .lede,.hero .ctas,.hero .sign,.hero .avis,.hero .dayzone';
   var S='main section:not(.hero) :is(.eyebrow,h2,.lede,.more,.fine,.contact,.ctas,blockquote,.figures,.partner,.evo,details,.plate,.steps li)';
   function prepare(sel){ var els=[].slice.call(document.querySelectorAll(sel));
     els.forEach(function(e){ var sec=e.closest('section'), i=[].indexOf.call(sec.querySelectorAll('.rv'),e);
@@ -597,6 +648,28 @@
   var io=new IntersectionObserver(function(en){ en.forEach(function(x){ if(x.isIntersecting){ montre(x.target); io.unobserve(x.target); } }); },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
   reste.forEach(function(e){ io.observe(e); });
   setTimeout(function(){ hero.concat(reste).forEach(function(e){ if(e.classList.contains('rv')&&!e.classList.contains('in')) montre(e); }); },6000);   // filet
+})();
+
+/* AVIS CLIENTS : défilement automatique lent, une carte toutes les 5 s, en boucle. Pause au
+   survol de la souris et quand une carte a le focus clavier ; arrêt définitif dès que la personne
+   fait défiler elle-même (doigt, molette, clic). Seulement quand le bloc est à l'écran, l'onglet
+   visible et l'intro finie. Rien si « réduire les animations » : le glisser natif reste. */
+(function(){
+  var rail=document.querySelector('.avis-rail');
+  if(!rail||matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var arret=false, survol=false, vu=false;
+  function suivant(){
+    if(arret||survol||rail.contains(document.activeElement)||!vu||document.hidden||window.ELY_INTRO) return;
+    var max=rail.scrollWidth-rail.clientWidth; if(max<4) return;
+    if(rail.scrollLeft>=max-4){ rail.scrollTo({left:0,behavior:'smooth'}); return; }
+    var c=rail.firstElementChild, pas=c.getBoundingClientRect().width+(parseFloat(getComputedStyle(rail).columnGap)||0);
+    rail.scrollBy({left:pas,behavior:'smooth'});
+  }
+  rail.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') survol=true; });
+  rail.addEventListener('pointerleave',function(){ survol=false; });
+  ['touchstart','pointerdown','wheel'].forEach(function(t){ rail.addEventListener(t,function(){ arret=true; },{passive:true}); });
+  new IntersectionObserver(function(en){ vu=en[0].isIntersecting; },{threshold:.5}).observe(rail);
+  setInterval(suivant,5000);
 })();
 </script>
 <script src="assets/site.js?v=2809h"></script>

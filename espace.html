@@ -779,7 +779,11 @@ var PROG = {
   function formuleClient(){ if(DEMO) return DEMO; if(ADMIN) return null; var x=moi(); return cleFormule((x.abonnement&&x.abonnement.formule)||x.formule); }
   // rythme de la formule, avec ce qu'elle n'a pas en discret
   function rythmeHTML(){
-    var FC=formuleClient(); if(!FC) return '';
+    var FC=formuleClient();
+    // compte admin : tout visible, sans verrou ; accès direct aux vues client de chaque formule
+    if(!FC&&ADMIN&&!DEMO) return '<div class="rythme"><span>Vue admin : tout est visible. <b>Voir comme un client</b> : '+
+      '<a href="espace.html?demo=f1" style="color:var(--blue)">Odyssée</a> · <a href="espace.html?demo=f2" style="color:var(--blue)">Olympe</a> · <a href="espace.html?demo=f3" style="color:var(--blue)">Elysium</a></span></div>';
+    if(!FC) return '';
     var LK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     // libellés validés par Damien (28/09), mot pour mot
     var L={f1:[['<b>Un menu unique</b>'],['<b>Quantités réajustées</b> chaque mois'],['Un nouveau menu chaque mois : disponible avec la Formule Olympe',1],['Quantités réajustées chaque semaine : disponible avec la Formule Elysium',1]],

@@ -332,6 +332,10 @@
   .acc.lock .ic{border-color:var(--line)} .acc.lock .ic svg{stroke:var(--steel)}
   .acc.lock .tx b{color:var(--gris)}
   .acc .lk{display:inline-flex;align-items:center;gap:5px;color:var(--steel)}
+  .vue-admin{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;padding:8px 10px;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  .vue-admin span{font:600 11px/1 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-right:4px}
+  .vue-admin button{font:600 13px/1 var(--texte);color:var(--gris);background:none;border:1px solid var(--line);border-radius:999px;padding:8px 13px;cursor:pointer}
+  .vue-admin button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
   .verrou{border:1px dashed var(--line);border-radius:14px;padding:26px 20px;text-align:center;max-width:560px;margin:0 auto}
   .verrou h4{font:400 21px/1.25 var(--titre);color:var(--ice);margin:0 0 8px}
   .verrou p{font:15.5px/1.6 var(--texte);color:var(--gris);margin:0}
@@ -776,23 +780,31 @@ var PROG = {
     return R;
   }
   // formule du client : la démo, sinon la clé f1/f2/f3 de son abonnement (repli : son profil). Compte admin : pas de verrou.
-  function formuleClient(){ if(DEMO) return DEMO; if(ADMIN) return null; var x=moi(); return cleFormule((x.abonnement&&x.abonnement.formule)||x.formule); }
+  // Comptes « mixte » (Dimitri, Damien, Yoann) : sélecteur « Voir comme » qui transforme l'espace EN DIRECT (null = tout visible)
+  var VUE=null; try{ VUE=sessionStorage.getItem('ely_vue')||null; }catch(e){}
+  function formuleClient(){ if(DEMO) return DEMO; if(ADMIN) return VUE; var x=moi(); return cleFormule((x.abonnement&&x.abonnement.formule)||x.formule); }
   // rythme de la formule, avec ce qu'elle n'a pas en discret
   function rythmeHTML(){
-    var FC=formuleClient();
-    // compte admin : tout visible, sans verrou ; accès direct aux vues client de chaque formule
-    if(!FC&&ADMIN&&!DEMO) return '<div class="rythme"><span>Vue admin : tout est visible. <b>Voir comme un client</b> : '+
-      '<a href="espace.html?demo=f1" style="color:var(--blue)">Odyssée</a> · <a href="espace.html?demo=f2" style="color:var(--blue)">Olympe</a> · <a href="espace.html?demo=f3" style="color:var(--blue)">Elysium</a></span></div>';
-    if(!FC) return '';
+    var FC=formuleClient(), bar='';
+    if(ADMIN&&!DEMO) bar='<div class="vue-admin" role="group" aria-label="Voir l\u2019espace comme un client"><span>Voir comme</span>'+
+      [['','Tout'],['f1','Odyssée'],['f2','Olympe'],['f3','Elysium']].map(function(x){
+        return '<button type="button" data-vue="'+x[0]+'" aria-pressed="'+(String(VUE||'')===x[0])+'">'+x[1]+'</button>'; }).join('')+'</div>';
+    if(!FC) return bar;
     var LK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     // libellés validés par Damien (28/09), mot pour mot
     var L={f1:[['<b>Un menu unique</b>'],['<b>Quantités réajustées</b> chaque mois'],['Un nouveau menu chaque mois : disponible avec la Formule Olympe',1],['Quantités réajustées chaque semaine : disponible avec la Formule Elysium',1]],
            f2:[['<b>Un nouveau menu</b> chaque mois'],['<b>Quantités réajustées</b> à chaque nouveau menu'],['Quantités réajustées chaque semaine : disponible avec la Formule Elysium',1]],
            f3:[['<b>Un nouveau menu</b> chaque mois'],['<b>Quantités réajustées</b> chaque semaine']]}[FC];
-    return '<div class="rythme">'+L.map(function(x){ return '<span'+(x[1]?' class="off">'+LK:'>')+x[0]+'</span>'; }).join('')+'</div>';
+    return bar+'<div class="rythme">'+L.map(function(x){ return '<span'+(x[1]?' class="off">'+LK:'>')+x[0]+'</span>'; }).join('')+'</div>';
   }
 
   var progBuilt=false;
+  // « Voir comme » : on reconstruit la vue du programme sur place, sans changer de page
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-vue]'); if(!b||!ADMIN) return;
+    VUE=b.getAttribute('data-vue')||null; try{ VUE?sessionStorage.setItem('ely_vue',VUE):sessionStorage.removeItem('ely_vue'); }catch(x){}
+    var y=scrollY; progBuilt=false; document.getElementById('progview').innerHTML=''; buildProgView(); scrollTo(0,y);
+  });
   function buildProgView(){
     if(progBuilt) return; progBuilt=true;
     var uu=moi(); if(uu.prenom){ PROG.nom=[uu.prenom,(uu.nom||'').trim()]; }
@@ -860,7 +872,7 @@ var PROG = {
       html:verrouHTML('Liste de courses','','la Formule Olympe et la Formule Elysium')});
     else if(nCourses) extras.push({id:'courses',cls:'a-cour',label:'Liste de courses',sous:nCourses+' articles à cocher',ic:IC_COURSES,html:coursesHTML()});
     // recettes : ouvertes en démo Elysium ; pour un vrai client Elysium, elles arriveront avec le catalogue (menu.recettes)
-    if(DEMO==='f3') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()});
+    if((DEMO||VUE)==='f3') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',sous:'Pour chaque repas',ic:IC_RECETTES,html:recettesHTML()});
     else if(FC==='f1'||FC==='f2') extras.push({id:'recettes',cls:'a-rec',label:'Recettes des coachs',lock:'Formule Elysium',ic:IC_RECETTES,
         html:verrouHTML('Recettes des coachs','Les recettes des coachs pour chaque repas.','la Formule Elysium')});
     var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6

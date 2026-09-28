@@ -43,9 +43,10 @@
   .suivi .chiffres{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--gris)}
   .suivi .chiffres b{color:var(--ice)}
   .suivi .retard{color:#b45309;font-weight:600}
-  .suivi svg{display:block;width:100%;height:90px;margin:10px 0 4px}
-  .suivi svg path{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
-  .suivi svg circle{fill:var(--blue)}
+  .suivi > svg{display:block;width:100%;height:90px;margin:10px 0 4px}
+  .suivi > svg path{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
+  .suivi > svg circle{fill:var(--blue)}
+  .suivi .gx{margin:10px 0 4px}
   .suivi .mens{font-size:13px;color:var(--steel);margin-top:8px}
   .ph-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:6px}
   .ph-grille a{display:block;text-decoration:none;color:var(--steel);font-size:11px}
@@ -271,6 +272,55 @@
   .ai-n{font-family:var(--disp);font-size:12.5px;line-height:1.6;color:var(--gris);margin:11px 0 0}
   .ai-n b{color:#6b4a00}
   @media(max-width:600px){.ai-k{min-width:0;width:100%}}
+  .large{grid-column:1/-1}
+  /* ==== GRAPHIQUES : SVG faits main (même boîte à outils que coach.html) ==== */
+  .gx{min-width:0}
+  .gx svg{display:block;width:100%;height:auto}
+  .g-ax{font:11px var(--texte);fill:var(--steel)}
+  .g-lab{font:600 12px var(--texte);fill:var(--ice)}
+  .g-val{font:600 11px var(--texte);fill:var(--ice)}
+  .g-in{font:700 11px var(--texte);fill:#111}
+  .g-big{font:700 16px var(--texte);fill:var(--ice)}
+  .g-cel-t{font:600 10px var(--texte)}
+  .g-grid{stroke:var(--line)}
+  .g-zero{stroke:var(--steel);stroke-opacity:.55}
+  .g-l{fill:none;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+  .g-dot{stroke:var(--void2);stroke-width:2}
+  .g-hit{fill:transparent}
+  .g-hit:hover{fill:var(--ice);fill-opacity:.05}
+  [data-t]{cursor:pointer}
+  rect.g-br:hover,rect.g-bh:hover,rect.g-bg:hover,rect.g-cel:hover,circle[data-t]:hover{opacity:.72}
+  .g-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--steel);margin-top:8px}
+  .g-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .g-leg i.tr{width:14px;height:0;border-top:2px dashed var(--steel);border-radius:0;vertical-align:3px}
+  .g-vide{font-size:13px;line-height:1.5;color:var(--steel);border:1px dashed var(--line);border-radius:10px;padding:18px 14px;text-align:center;margin:4px 0 0}
+  .gtip{position:fixed;left:0;top:0;z-index:120;pointer-events:none;background:var(--ice);color:var(--fond);font:600 12.5px/1.4 var(--texte);padding:7px 10px;border-radius:8px;white-space:pre-line;max-width:240px;opacity:0;transform:translate(-50%,calc(-100% - 12px));transition:opacity .12s;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+  .gtip.on{opacity:1}
+  .var{font:600 12px/1.25 var(--texte);margin-top:6px;color:var(--steel)}
+  .var.bon{color:#2f6b1a}.var.mal{color:#9b1c1c}
+  .var span{font-weight:400;color:var(--steel)}
+  html[data-theme="obscur"] .var.bon{color:#8fd07a}
+  html[data-theme="obscur"] .var.mal{color:#f29b9b}
+  .spk{margin-top:8px}
+  .anneaux{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  @media(max-width:760px){.anneaux{grid-template-columns:1fr}}
+  .anneau{display:flex;align-items:center;gap:14px;min-width:0}
+  .anneau svg{flex:none}
+  .anneau b{display:block;font:600 14px/1.3 var(--texte);color:var(--ice)}
+  .anneau span{font-size:12.5px;color:var(--steel)}
+  @media (prefers-reduced-motion:no-preference){
+    .g-tr{stroke-dasharray:1;stroke-dashoffset:1;animation:g-tr 1.2s cubic-bezier(.3,.7,.2,1) forwards}
+    .g-br{transform-box:fill-box;transform-origin:50% 100%;animation:g-up .7s cubic-bezier(.2,.7,.2,1) both}
+    .g-bh{transform-box:fill-box;transform-origin:0 50%;animation:g-rt .7s cubic-bezier(.2,.7,.2,1) both}
+    .g-bg{transform-box:fill-box;transform-origin:100% 50%;animation:g-rt .7s cubic-bezier(.2,.7,.2,1) both}
+    .g-arc{animation:g-arc 1s cubic-bezier(.3,.7,.2,1) both}
+    .g-fd,.g-cel{animation:g-fd .7s ease-out both}
+  }
+  @keyframes g-tr{to{stroke-dashoffset:0}}
+  @keyframes g-up{from{transform:scaleY(0)}}
+  @keyframes g-rt{from{transform:scaleX(0)}}
+  @keyframes g-arc{from{stroke-dasharray:0 100}}
+  @keyframes g-fd{from{opacity:0}}
 </style>
 </head>
 <body>
@@ -311,6 +361,8 @@
       <div class="kpi hot"><div class="k">Revenu récurrent</div><div class="v" id="j-mrr">—</div><div class="s">par période de 4 semaines</div></div>
       <div class="kpi"><div class="k">Pesées de la semaine</div><div class="v" id="j-pesees">—</div><div class="s" id="j-pesees-s">&nbsp;</div></div>
     </div>
+    <h3 class="s">Santé du jour</h3>
+    <div class="carte anneaux" id="j-anneaux"><p class="rien">Chargement…</p></div>
     <div class="grille" id="jour-cartes" style="margin-top:16px"><div class="carte"><p class="rien">Chargement…</p></div></div>
   </section>
 
@@ -348,7 +400,14 @@
       <h2 class="intitule">La file <span class="n" id="filen"></span></h2>
       <div class="body" id="file"></div>
     </section>
+    <h3 class="s">Rythme de relecture</h3>
+    <div class="grille">
+      <div class="carte"><h4>Délai de relecture <span class="n" id="g-delai-n"></span></h4><div id="g-delai"></div>
+        <p class="leg">Temps entre le dépôt d’une diète et la décision d’un coach. Au-delà de 24 h, la barre passe en jaune.</p></div>
+      <div class="carte"><h4>Diètes par type <span class="n" id="g-types-n"></span></h4><div id="g-types"></div></div>
+    </div>
     <h3 class="s">Échéancier des 4 prochaines semaines</h3>
+    <div class="carte" style="margin-bottom:12px"><h4>Charge à venir <span class="n" id="g-charge-n"></span></h4><div id="g-charge"></div></div>
     <div class="grille" id="echeancier"><div class="carte"><p class="rien">Chargement…</p></div></div>
     <p class="sous" style="margin-top:12px">Rythme : Formule Odyssée = réajustement 4 semaines après la dernière diète · Formule Olympe = nouveau menu toutes les 4 semaines · Formule Elysium = réajustement chaque semaine et nouveau menu toutes les 4 semaines. Rien ne part sans pesée ni sans abonnement actif. Les dates suivantes supposent que chaque diète est validée le jour prévu.</p>
   </section>
@@ -445,6 +504,16 @@
         <p class="leg">Kilos perdus (ou pris) depuis la première pesée, sur l’objectif annoncé au questionnaire (« 1 à 4 kilos » → 4 kg).</p></div>
       <div class="carte" id="r-stag"></div>
     </div>
+    <h3 class="s">Évolution moyenne depuis la première pesée · 12 semaines</h3>
+    <div class="grille">
+      <div class="carte"><h4>Perte de poids <span class="n" id="g-Perte-n"></span></h4><div id="g-Perte"></div></div>
+      <div class="carte"><h4>Prise de masse <span class="n" id="g-Prise-n"></span></h4><div id="g-Prise"></div></div>
+      <div class="carte"><h4>Maintien <span class="n" id="g-Maintien-n"></span></h4><div id="g-Maintien"></div></div>
+    </div>
+    <p class="leg">Trait = moyenne du groupe, en kilos par rapport à la première pesée. Zone teintée = du client le plus lent au plus rapide.</p>
+    <h3 class="s">Régularité des pesées</h3>
+    <div class="carte"><h4>Une case = une semaine <span class="n">12 dernières semaines</span></h4><div id="g-regu"></div>
+      <div class="g-leg"><span><i style="background:var(--steel);opacity:.25"></i>aucune pesée</span><span><i style="background:var(--brand);opacity:.6"></i>1 pesée</span><span><i style="background:var(--brand)"></i>2 pesées ou plus</span><span>case absente : pas encore inscrit</span></div></div>
   </section>
 
   <!-- ═════════════ STATISTIQUES ═════════════ -->
@@ -454,6 +523,12 @@
     <h2 class="intitule">Vos statistiques</h2>
     <div class="sgrid" id="stats"></div>
   </section>
+  <div class="grille" style="margin-top:16px">
+    <div class="carte large"><h4>Diètes validées par mois <span class="n" id="g-mois-n"></span></h4><div id="g-mois"></div><div id="g-mois-l"></div></div>
+    <div class="carte"><h4>Pyramide des âges <span class="n" id="g-pyr-n"></span></h4><div id="g-pyr"></div></div>
+    <div class="carte"><h4>Cumul depuis la première diète <span class="n" id="g-cumul-n"></span></h4><div id="g-cumul"></div>
+      <p class="leg">Diètes validées sur le site. L’historique d’avant le site n’est pas encore compté ici.</p></div>
+  </div>
 
   </section>
 
@@ -470,6 +545,13 @@
     <div class="kpi"><div class="k">Résiliations</div><div class="v att" id="k-resil">—</div><div class="s" id="k-resil-s">en attente de Stripe</div></div>
   </div>
   <p id="abo-note" style="font-size:12.5px;color:var(--steel);margin:-12px 0 22px"></p>
+  <div class="grille" style="margin-bottom:18px">
+    <div class="carte"><h4>Répartition par formule <span class="n" id="g-donut-n"></span></h4><div id="g-donut"></div></div>
+    <div class="carte"><h4>Revenu récurrent par formule <span class="n">par période de 4 semaines</span></h4><div id="g-mrr"></div>
+      <p class="leg">La courbe mois par mois se remplira à partir de l’historique des paiements Stripe.</p></div>
+    <div class="carte large"><h4>Du compte créé à l’abonné fidèle</h4><div id="g-funnel"></div>
+      <p class="leg">Chaque barre = combien de personnes passent l’étape ; le pourcentage compare à l’étape d’avant. « Encore là » = abonnement actif 1 mois (2e mois) ou 2 mois (3e mois) après la création du compte.</p></div>
+  </div>
 
     <p class="sous">Cette page sera protégée par la double vérification (un code à 6 chiffres sur votre téléphone) dès qu’elle sera activée.</p>
   </section>
@@ -497,6 +579,208 @@
 <script src="assets/vendor/supabase.min.js"></script>
 <script src="assets/ely-auth.js?v=stripe1"></script>
 <script>
+/* ======================================================================
+   BOÎTE À OUTILS GRAPHIQUES : SVG faits main, aucune librairie, aucun CDN.
+   (copie identique dans coach.html : toute correction se fait dans LES DEUX)
+   Un graphique = une fonction (largeur en px) -> SVG. G.mount(cadre, fn) le
+   dessine à la VRAIE largeur de son cadre et le redessine quand elle change
+   (onglet affiché, rotation du téléphone) : textes à 11-12 px partout, rien
+   d'étiré. Survol ou toucher d'un élément [data-t] = sa valeur exacte.
+   ====================================================================== */
+var G=(function(){
+  "use strict";
+  var uid=0, J=86400000, M=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  function e(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function n(v,d){ var p=(+v).toFixed(d||0).split('.'); p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,' '); var s=p.join(','); return /^-0(,0+)?$/.test(s)?s.slice(1):s.replace('-','−'); }
+  function tip(t){ return t==null?'':' data-t="'+e(t)+'"'; }
+  function svg(w,h,lab,inner){ return '<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" role="img" aria-label="'+e(lab)+'">'+inner+'</svg>'; }
+  function f1(v){ return (+v).toFixed(1); }
+  // domaine « rond » + graduations (k = nombre de pas visé ; entier = pas d'au moins 1)
+  function dom(vals,k,zero,entier){
+    var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+    if(!isFinite(lo)){ lo=0; hi=1; }
+    if(zero){ lo=Math.min(0,lo); hi=Math.max(0,hi); }
+    if(hi-lo<1e-9){ hi+=1; if(!zero||lo<0) lo-=1; }
+    var raw=(hi-lo)/k, b=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10)+1e-9), st=b*10;
+    (b>=10?[1,2,2.5,5]:[1,2,5]).some(function(c){ if(c*b>=raw-1e-9){ st=c*b; return true; } }); if(entier) st=Math.max(1,Math.round(st));
+    lo=Math.floor(lo/st+1e-9)*st; hi=Math.ceil(hi/st-1e-9)*st;
+    var t=[]; for(var v=lo; v<=hi+st/2; v+=st) t.push(+v.toFixed(6));
+    return {lo:lo,hi:hi,t:t,dec:st<1?1:0};
+  }
+  function grille(d,Y,x0,x1,fy){ return d.t.map(function(t){ var y=f1(Y(t));
+    return '<line class="'+(t===0&&d.lo<0?'g-zero':'g-grid')+'" x1="'+x0+'" x2="'+x1+'" y1="'+y+'" y2="'+y+'"/><text class="g-ax" x="'+(x0-6)+'" y="'+(+y+4)+'" text-anchor="end">'+(fy?fy(t):n(t,d.dec))+'</text>'; }).join(''); }
+  function etiq(L,X,y,pw,lw){ var pas=Math.max(1,Math.ceil(L.length*(lw||44)/pw));
+    return L.map(function(l,i){ return i%pas?'':'<text class="g-ax" x="'+f1(X(i))+'" y="'+y+'" text-anchor="middle">'+e(l)+'</text>'; }).join(''); }
+  function chemin(v,X,Y){ var p='',on=false; v.forEach(function(y,i){ if(y==null){ on=false; return; } p+=(on?'L':'M')+f1(X(i))+' '+f1(Y(y))+' '; on=true; }); return p; }
+  function degrade(id,c){ return '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:'+c+';stop-opacity:.34"/><stop offset="1" style="stop-color:'+c+';stop-opacity:0"/></linearGradient></defs>'; }
+
+  /* courbes : o = {x:[libellés], series:[{nom,v:[],c,aire,bande:[[min,max]],pointille}], f, fy, tx(i), cible, cibleT, zone:[a,b], points, zero, h, label} */
+  function ligne(w,o){
+    var h=o.h||210, m={l:o.ml||40,r:24,t:16,b:26}, pw=w-m.l-m.r, ph=h-m.t-m.b, nx=o.x.length, all=[], s='', f=o.f||function(v){ return n(v,1); };
+    o.series.forEach(function(S){ S.v.forEach(function(v){ if(v!=null) all.push(v); }); (S.bande||[]).forEach(function(b){ if(b) all.push(b[0],b[1]); }); });
+    if(o.cible!=null) all.push(o.cible); if(o.zone) all.push(o.zone[0],o.zone[1]);
+    var d=dom(all,o.k||4,o.zero,o.entier), X=function(i){ return m.l+(nx<2?pw/2:i*pw/(nx-1)); }, Y=function(v){ return m.t+ph*(1-(v-d.lo)/(d.hi-d.lo)); };
+    s+=grille(d,Y,m.l,w-m.r,o.fy)+etiq(o.x,X,h-8,pw,o.lw);
+    if(o.zone) s+='<rect class="g-fd" x="'+m.l+'" width="'+pw+'" y="'+f1(Y(o.zone[1]))+'" height="'+f1(Y(o.zone[0])-Y(o.zone[1]))+'" fill="var(--b-vert)" fill-opacity=".22"/>';
+    if(o.cible!=null){ var yc=f1(Y(o.cible)); s+='<line x1="'+m.l+'" x2="'+(w-m.r)+'" y1="'+yc+'" y2="'+yc+'" stroke="var(--steel)" stroke-width="1.5" stroke-dasharray="5 5"/>'+
+      '<text class="g-ax" x="'+(m.l+6)+'" y="'+(yc-6)+'">'+e(o.cibleT||'objectif')+'</text>'; }
+    o.series.forEach(function(S){ var c=S.c||'var(--brand)', p=chemin(S.v,X,Y), i0=-1, i1=-1;
+      S.v.forEach(function(v,i){ if(v!=null){ if(i0<0) i0=i; i1=i; } });
+      if(S.bande){ var up=[],dn=[]; S.bande.forEach(function(b,i){ if(b){ up.push(f1(X(i))+','+f1(Y(b[1]))); dn.unshift(f1(X(i))+','+f1(Y(b[0]))); } });
+        if(up.length>1) s+='<polygon class="g-fd" points="'+up.concat(dn).join(' ')+'" fill="'+c+'" fill-opacity=".15"/>'; }
+      if(S.aire&&p&&S.v.indexOf(null)<0){ var id='gd'+(++uid); s+=degrade(id,c)+'<path class="g-fd" d="'+p+'L'+f1(X(i1))+' '+(m.t+ph)+' L'+f1(X(i0))+' '+(m.t+ph)+' Z" fill="url(#'+id+')"/>'; }
+      if(p) s+=S.pointille?'<path class="g-l g-fd" d="'+p+'" stroke="'+c+'" stroke-dasharray="5 4"/>':'<path class="g-l g-tr" pathLength="1" d="'+p+'" stroke="'+c+'"/>';
+      S.v.forEach(function(v,i){ if(v!=null&&(o.points||i===i1)) s+='<circle class="g-dot g-fd" cx="'+f1(X(i))+'" cy="'+f1(Y(v))+'" r="'+(i===i1?4:3.2)+'" fill="'+c+'"/>'; });
+    });
+    var st=nx<2?pw:pw/(nx-1);
+    o.x.forEach(function(l,i){
+      var t=(o.tx?o.tx(i):l)+o.series.map(function(S){ var v=S.v[i]; if(v==null) return '';
+        return '\n'+(S.nom?S.nom+' : ':'')+f(v)+(S.bande&&S.bande[i]&&i?' (de '+f(S.bande[i][0])+' à '+f(S.bande[i][1])+')':''); }).join('');
+      s+='<rect class="g-hit" x="'+f1(X(i)-st/2)+'" y="'+m.t+'" width="'+f1(st)+'" height="'+ph+'"'+tip(t)+'/>'; });
+    return svg(w,h,o.label,s);
+  }
+
+  /* barres verticales, groupées ou empilées : o = {x, series:[{nom,v,c,cs:[couleur par barre],op}], empile, valeurs, f, tx(i), entier, h, label} */
+  function barres(w,o){
+    var h=o.h||200, S=o.series, emp=!!o.empile, m={l:o.ml||38,r:8,t:o.valeurs?20:12,b:26}, pw=w-m.l-m.r, ph=h-m.t-m.b, nx=o.x.length, all=[0], s='', f=o.f||function(v){ return n(v); };
+    o.x.forEach(function(x,i){ var t=0; S.forEach(function(Se){ var v=Se.v[i]||0; if(emp) t+=v; else all.push(v); }); if(emp) all.push(t); });
+    var d=dom(all,o.k||5,true,o.entier), Y=function(v){ return m.t+ph*(1-(v-d.lo)/(d.hi-d.lo)); }, step=pw/nx, Xc=function(i){ return m.l+step*(i+.5); };
+    var bw=emp?Math.min(step*.62,48):Math.min(step*.8/S.length,32), gap=S.length>1&&!emp?1.5:0;
+    s+=grille(d,Y,m.l,w-m.r,o.fy)+etiq(o.x,Xc,h-8,pw,o.lw);
+    o.x.forEach(function(x,i){ var acc=0, tot=0; S.forEach(function(Se){ tot+=Se.v[i]||0; });
+      S.forEach(function(Se,k){ var v=Se.v[i]; if(v==null||(emp&&!v)) return;
+        var c=(Se.cs&&Se.cs[i])||Se.c||'var(--brand)', x0, y0, y1;
+        if(emp){ x0=Xc(i)-bw/2; y0=Y(acc+v); y1=Y(acc); acc+=v; } else { x0=Xc(i)-bw*S.length/2+k*bw; y0=Y(v); y1=Y(0); }
+        s+='<rect class="g-br" x="'+f1(x0+gap/2)+'" y="'+f1(Math.min(y0,y1-1))+'" width="'+f1(Math.max(1,bw-gap))+'" height="'+f1(Math.max(1,y1-y0))+'" rx="'+f1(Math.min(3,bw/4))+'" fill="'+c+'"'+
+          (Se.op?' fill-opacity="'+Se.op+'"':'')+' style="animation-delay:'+(i*35)+'ms"'+tip((o.tx?o.tx(i):x)+(Se.nom?' · '+Se.nom:'')+'\n'+f(v)+(emp&&S.length>1?'\nTotal : '+f(tot):''))+'/>';
+      });
+      var top=emp?tot:(S.length===1?S[0].v[i]:null);
+      if(o.valeurs&&top!=null&&(top||!emp)) s+='<text class="g-val" x="'+f1(Xc(i))+'" y="'+f1(Y(top)-6)+'" text-anchor="middle">'+(o.fv?o.fv(top):n(top))+'</text>';
+    });
+    return svg(w,h,o.label,s);
+  }
+
+  /* anneau : o = {parts:[[nom,valeur,couleur]], centre, sous, f, label} */
+  function donut(w,o){
+    var P=o.parts, tot=P.reduce(function(t,p){ return t+p[1]; },0), R=56, sw=18, D=2*R+sw+6, cote=w>=D+190,
+        cx=cote?D/2:w/2, cy=D/2, h=cote?Math.max(D,P.length*26):D+14+P.length*24, s='', acc=0, f=o.f||function(v){ return n(v); };
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="var(--line)" stroke-width="'+sw+'"/>';
+    if(tot) P.forEach(function(p,i){ var q=p[1]/tot*100; if(!q) return; var a=Math.max(q-(P.length>1?.8:0),.1);
+      s+='<circle class="g-arc" cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="'+p[2]+'" stroke-width="'+sw+'" pathLength="100" stroke-dasharray="'+a.toFixed(2)+' '+(100-a).toFixed(2)+
+        '" stroke-dashoffset="'+(-acc).toFixed(2)+'" transform="rotate(-90 '+cx+' '+cy+')" style="animation-delay:'+(i*120)+'ms"'+tip(p[0]+'\n'+f(p[1])+' · '+Math.round(q)+' %')+'/>'; acc+=q; });
+    s+='<text class="g-big" x="'+cx+'" y="'+(cy+3)+'" text-anchor="middle">'+e(o.centre==null?n(tot):o.centre)+'</text><text class="g-ax" x="'+cx+'" y="'+(cy+20)+'" text-anchor="middle">'+e(o.sous||'')+'</text>';
+    var lx=cote?D+22:6, ly=cote?(h-P.length*26)/2+17:D+28;
+    P.forEach(function(p,i){ var y=ly+i*(cote?26:24);
+      s+='<rect x="'+lx+'" y="'+(y-10)+'" width="11" height="11" rx="3" fill="'+p[2]+'"/><text class="g-lab" x="'+(lx+18)+'" y="'+y+'">'+e(p[0])+'</text>'+
+        '<text class="g-ax" x="'+(w-4)+'" y="'+y+'" text-anchor="end">'+f(p[1])+' · '+(tot?Math.round(p[1]/tot*100):0)+' %</text>'; });
+    return svg(w,h,o.label,s);
+  }
+
+  /* entonnoir : o = {etapes:[[libellé,valeur]], label} */
+  function entonnoir(w,o){
+    var L=o.etapes, rh=48, h=L.length*rh, max=L[0][1]||1, s='';
+    L.forEach(function(x,i){ var y=i*rh, bw=Math.max(3,w*x[1]/max), pct=i?Math.round(x[1]/(L[i-1][1]||1)*100):null, dedans=bw>54;
+      s+='<text class="g-lab" x="0" y="'+(y+13)+'">'+e(x[0])+'</text>'+(pct==null?'':'<text class="g-ax" x="'+w+'" y="'+(y+13)+'" text-anchor="end">'+pct+' % de l’étape d’avant</text>');
+      s+='<rect class="g-bh" x="0" y="'+(y+19)+'" width="'+f1(bw)+'" height="22" rx="6" fill="var(--brand)" fill-opacity="'+(1-i*.14).toFixed(2)+'" style="animation-delay:'+(i*90)+'ms"'+
+        tip(x[0]+'\n'+n(x[1])+(pct==null?'':' · '+pct+' % de l’étape d’avant')+'\n'+Math.round(x[1]/max*100)+' % du départ')+'/>';
+      s+='<text class="'+(dedans?'g-in':'g-val')+'" x="'+f1(dedans?bw-8:bw+6)+'" y="'+(y+34)+'" text-anchor="'+(dedans?'end':'start')+'" pointer-events="none">'+n(x[1])+'</text>';
+    });
+    return svg(w,h,o.label,s);
+  }
+
+  /* carte de chaleur : o = {lignes, cols, v:[[0..1|null]], t(i,j), txt(i,j), c, lw, max, ch, label} */
+  function heat(w,o){
+    var lw=o.lw||74, nc=o.cols.length, cw=Math.min(o.max||46,(w-lw)/nc), ch=o.ch||Math.min(Math.max(cw,14),26), top=18, h=top+o.lignes.length*ch+2, s='', g=2, pas=Math.max(1,Math.ceil(24/cw));
+    o.cols.forEach(function(c,j){ if(j%pas===0) s+='<text class="g-ax" x="'+f1(lw+cw*(j+.5))+'" y="12" text-anchor="middle">'+e(c)+'</text>'; });
+    o.lignes.forEach(function(l,i){ var y=top+i*ch;
+      s+='<text class="g-ax" x="'+(lw-8)+'" y="'+f1(y+ch/2+4)+'" text-anchor="end">'+e(l)+'</text>';
+      o.cols.forEach(function(c,j){ var v=o.v[i][j]; if(v==null) return; var x=lw+j*cw;
+        s+='<rect class="g-cel" x="'+f1(x+g/2)+'" y="'+f1(y+g/2)+'" width="'+f1(cw-g)+'" height="'+f1(ch-g)+'" rx="3" fill="'+(v>0?(o.c||'var(--brand)'):'var(--steel)')+'"'+
+          ' fill-opacity="'+(v>0?(0.2+0.8*Math.min(1,v)).toFixed(2):'.16')+'"'+' style="animation-delay:'+((i+j)*16)+'ms"'+tip(o.t?o.t(i,j,v):null)+'/>';
+        var tx=o.txt&&o.txt(i,j,v);
+        if(tx!=null&&cw>=24) s+='<text class="g-cel-t" x="'+f1(x+cw/2)+'" y="'+f1(y+ch/2+4)+'" text-anchor="middle" fill="'+(v>.55?'#111':'var(--ice)')+'" pointer-events="none">'+e(tx)+'</text>';
+      }); });
+    return svg(w,h,o.label,s);
+  }
+
+  /* pyramide des âges : o = {t:[tranches], h:[hommes], f:[femmes], label} */
+  function pyramide(w,o){
+    var rh=28, top=24, cw=58, half=(w-cw)/2, room=half-30, max=Math.max.apply(null,o.h.concat(o.f,[1])), s='', h=top+o.t.length*rh;
+    s+='<text class="g-lab" x="'+f1(half-4)+'" y="13" text-anchor="end">Hommes</text><text class="g-lab" x="'+f1(half+cw+4)+'" y="13">Femmes</text>';
+    o.t.forEach(function(t,i){ var y=top+i*rh, bh=rh-8, a=room*o.h[i]/max, b=room*o.f[i]/max, tot=o.h[i]+o.f[i], pc=function(v){ return tot?' ('+Math.round(v/tot*100)+' % de la tranche)':''; };
+      s+='<text class="g-ax" x="'+f1(w/2)+'" y="'+(y+bh/2+4)+'" text-anchor="middle">'+e(t)+'</text>';
+      if(o.h[i]) s+='<rect class="g-bg" x="'+f1(half-a)+'" y="'+y+'" width="'+f1(a)+'" height="'+bh+'" rx="3" fill="var(--brand)" style="animation-delay:'+(i*50)+'ms"'+tip(t+' ans · hommes\n'+o.h[i]+pc(o.h[i]))+'/>';
+      s+='<text class="g-val" x="'+f1(half-a-5)+'" y="'+(y+bh/2+4)+'" text-anchor="end">'+o.h[i]+'</text>';
+      if(o.f[i]) s+='<rect class="g-bh" x="'+f1(half+cw)+'" y="'+y+'" width="'+f1(b)+'" height="'+bh+'" rx="3" fill="var(--b-violet)" style="animation-delay:'+(i*50)+'ms"'+tip(t+' ans · femmes\n'+o.f[i]+pc(o.f[i]))+'/>';
+      s+='<text class="g-val" x="'+f1(half+cw+b+5)+'" y="'+(y+bh/2+4)+'">'+o.f[i]+'</text>';
+    });
+    return svg(w,h,o.label,s);
+  }
+
+  /* anneau de progression (taille fixe) : p en %, null = pas de donnée */
+  function anneau(p,o){ o=o||{}; var c=o.c||'var(--brand)', v=p==null?null:Math.max(0,Math.min(100,Math.round(p)));
+    return '<svg viewBox="0 0 76 76" width="76" height="76" role="img" aria-label="'+e(o.label||(v==null?'pas de donnée':v+' %'))+'"><circle cx="38" cy="38" r="30" fill="none" stroke="var(--line)" stroke-width="8"/>'+
+      (v?'<circle class="g-arc" cx="38" cy="38" r="30" fill="none" stroke="'+c+'" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="'+v+' 100" transform="rotate(-90 38 38)"/>':'')+
+      '<text class="g-big" x="38" y="44" text-anchor="middle">'+(v==null?'—':v+' %')+'</text></svg>'; }
+
+  /* frise : o = {debut, fin (ms), dietes:[{t,lab,c,tip}], pesees:[{t,tip}], label} */
+  function frise(w,o){
+    var h=80, m=18, a=o.debut, b=Math.max(o.fin,a+J), X=function(t){ return m+(w-2*m)*(t-a)/(b-a); }, s='', ax=46, der=-99;
+    s+='<line x1="'+m+'" x2="'+(w-m)+'" y1="'+ax+'" y2="'+ax+'" stroke="var(--line)" stroke-width="2"/>';
+    for(var d=new Date(new Date(a).getFullYear(),new Date(a).getMonth()+1,1); d.getTime()<=b; d=new Date(d.getFullYear(),d.getMonth()+1,1)){
+      var x=X(d.getTime()); if(x-der<34) continue; der=x;
+      s+='<line x1="'+f1(x)+'" x2="'+f1(x)+'" y1="'+(ax-4)+'" y2="'+(ax+4)+'" stroke="var(--steel)" stroke-opacity=".5"/><text class="g-ax" x="'+f1(x)+'" y="'+(h-6)+'" text-anchor="middle">'+M[d.getMonth()]+'</text>'; }
+    (o.pesees||[]).forEach(function(p){ s+='<circle class="g-fd" cx="'+f1(X(p.t))+'" cy="'+ax+'" r="3.5" fill="var(--steel)" stroke="transparent" stroke-width="8"'+tip(p.tip)+'/>'; });
+    der=-99;
+    (o.dietes||[]).forEach(function(v){ var x=X(v.t);
+      s+='<line x1="'+f1(x)+'" x2="'+f1(x)+'" y1="'+(ax-20)+'" y2="'+ax+'" stroke="'+(v.c||'var(--brand)')+'" stroke-width="2"/><circle class="g-fd" cx="'+f1(x)+'" cy="'+(ax-20)+'" r="6.5" fill="'+(v.c||'var(--brand)')+'" stroke="var(--void2)" stroke-width="2"'+tip(v.tip)+'/>';
+      if(x-der>=26){ s+='<text class="g-val" x="'+f1(x)+'" y="12" text-anchor="middle">'+e(v.lab)+'</text>'; der=x; } });
+    return svg(w,h,o.label,s);
+  }
+
+  /* petite courbe de tendance : o = {v, x, tx, f, c, label} */
+  function spark(w,o){
+    var h=36, v=o.v, lo=Math.min.apply(null,v), hi=Math.max.apply(null,v); if(hi-lo<1e-9){ hi+=1; lo-=1; }
+    var X=function(i){ return 4+(w-8)*i/(v.length-1||1); }, Y=function(y){ return 4+(h-8)*(1-(y-lo)/(hi-lo)); }, c=o.c||'var(--brand)', id='gd'+(++uid), p=chemin(v,X,Y), s='', f=o.f||function(y){ return n(y); }, st=(w-8)/(v.length-1||1);
+    s+=degrade(id,c)+'<path class="g-fd" d="'+p+'L'+f1(X(v.length-1))+' '+h+' L'+f1(X(0))+' '+h+' Z" fill="url(#'+id+')"/><path class="g-l g-tr" pathLength="1" style="stroke-width:2" d="'+p+'" stroke="'+c+'"/>'+
+      '<circle class="g-fd" cx="'+f1(X(v.length-1))+'" cy="'+f1(Y(v[v.length-1]))+'" r="3" fill="'+c+'"/>';
+    v.forEach(function(y,i){ s+='<rect class="g-hit" x="'+f1(X(i)-st/2)+'" y="0" width="'+f1(st)+'" height="'+h+'"'+tip((o.tx||'')+(o.x?o.x[i]:'')+'\n'+f(y))+'/>'; });
+    return svg(w,h,o.label||'Tendance',s);
+  }
+
+  // variation vs période précédente (inv : une baisse est une bonne nouvelle)
+  function evol(cur,prev,o){ o=o||{}; if(prev==null||!isFinite(prev)||!prev) return '';
+    var p=(cur-prev)/Math.abs(prev)*100, r=Math.round(Math.abs(p)), vs=' <span>'+e(o.vs||'vs période précédente')+'</span>';
+    if(!r) return '<div class="var">= stable'+vs+'</div>';
+    return '<div class="var '+((o.inv?p<0:p>0)?'bon':'mal')+'">'+(p>0?'▲ +':'▼ −')+r+' %'+vs+'</div>'; }
+  // ajoute variation + tendance 12 semaines à une carte de chiffre clé (rejouable)
+  function kpi(el,o){ if(!el) return; Array.prototype.forEach.call(el.querySelectorAll('.var,.spk'),function(x){ x.remove(); });
+    if(o.prev!=null) el.insertAdjacentHTML('beforeend',evol(o.cur,o.prev,o));
+    if(o.v&&o.v.length>1){ var d=document.createElement('div'); d.className='spk'; el.appendChild(d); mount(d,function(w){ return spark(w,o); }); } }
+  function leg(L){ return '<div class="g-leg">'+L.map(function(x){ return '<span><i'+(x[2]?' class="tr"':' style="background:'+x[1]+'"')+'></i>'+e(x[0])+'</span>'; }).join('')+'</div>'; }
+  function vide(t){ return '<p class="g-vide">'+e(t||'Pas encore assez de données : ce graphique se remplira avec les premiers clients.')+'</p>'; }
+
+  // montage à la largeur réelle + redessin à la demande
+  function dessine(el){ var w=Math.floor(el.clientWidth); if(!w||w===el._w||!el._g) return; el._w=w;
+    try{ el.innerHTML=el._g(w); }catch(err){ el.innerHTML=''; if(window.console) console.error(err); } }
+  function mount(el,fn){ if(typeof el==='string') el=document.getElementById(el); if(!el) return; el._g=fn; el._w=0; el.classList.add('gx'); dessine(el); }
+  function refresh(){ Array.prototype.forEach.call(document.querySelectorAll('.gx'),dessine); }
+  var rt; addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(refresh,120); });
+
+  // bulle de valeur : survol à la souris, toucher sur téléphone
+  var bulle=null;
+  function montre(t,x,y){ if(!bulle){ bulle=document.createElement('div'); bulle.className='gtip'; bulle.setAttribute('aria-hidden','true'); document.body.appendChild(bulle); }
+    bulle.textContent=t; bulle.classList.add('on'); var bw=bulle.offsetWidth, bh=bulle.offsetHeight;
+    bulle.style.left=Math.max(bw/2+8,Math.min(innerWidth-bw/2-8,x))+'px'; bulle.style.top=Math.max(bh+16,y)+'px'; }
+  function cache(){ if(bulle) bulle.classList.remove('on'); }
+  function survol(ev){ var t=ev.target&&ev.target.closest&&ev.target.closest('[data-t]'); if(t) montre(t.getAttribute('data-t'),ev.clientX,ev.clientY); else cache(); }
+  document.addEventListener('pointermove',survol,{passive:true});
+  document.addEventListener('pointerdown',survol,{passive:true});
+  addEventListener('scroll',cache,{passive:true});
+
+  return {J:J,M:M,n:n,e:e,mount:mount,refresh:refresh,ligne:ligne,barres:barres,donut:donut,entonnoir:entonnoir,heat:heat,pyramide:pyramide,anneau:anneau,frise:frise,spark:spark,evol:evol,kpi:kpi,leg:leg,vide:vide};
+})();
+
 (function(){
   "use strict";
   var sb, moi=null, file=[], sel=null, cur=null, retours=[];   // cur = fiche ouverte (depuis la file OU la liste des clients)
@@ -573,17 +857,14 @@
           '<span>Départ : <b>'+fr(dep.v)+' kg</b> ('+new Date(dep.t).toLocaleDateString('fr-FR')+')</span>'+
           '<span>Évolution : <b>'+(ev>0?'+':'')+fr(ev)+' kg</b></span>'+(rythme?'<span>Rythme sur 4 semaines : <b>'+rythme+'</b></span>':'')+
           '<span>'+w.length+' pesée'+(w.length>1?'s':'')+'</span></div>';
-        if(w.length>=2){
-          var lo=Math.min.apply(null,w.map(function(x){return x.v;}))-.5, hi=Math.max.apply(null,w.map(function(x){return x.v;}))+.5,
-            t0=w[0].t, t1=der.t, X=function(t){ return 4+392*(t-t0)/(t1-t0); }, Y=function(v){ return 6+78*(1-(v-lo)/(hi-lo)); };
-          h+='<svg viewBox="0 0 400 90" preserveAspectRatio="none" role="img" aria-label="Courbe de poids"><path d="'+
-            w.map(function(x,i){ return (i?'L':'M')+X(x.t).toFixed(1)+' '+Y(x.v).toFixed(1); }).join(' ')+'"/></svg>';
-        }
+        if(w.length>=2) h+='<div id="suivi-courbe"></div>';
       }
+      h+='<div id="suivi-frise"></div>';
       if(m){ var L={epaules:'Épaules',poitrine:'Poitrine',taille:'Taille',hanches:'Hanches',cuisse:'Cuisse',bras:'Bras'};
         var t=Object.keys(L).filter(function(k){ return m[k]!=null; }).map(function(k){ return L[k]+' '+fr(m[k])+' cm'; });
         if(t.length) h+='<div class="mens">Mensurations du '+new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR')+' : '+t.join(' · ')+'</div>'; }
       el.innerHTML=h+'<div class="mens" id="retours-plats"></div><div class="ph-coach" id="ph-coach"></div>';
+      grapheFiche(uid,w);
       // retours du client sur ses plats (table retours), diète la plus récente
       var pid=cur&&cur.programme_id;
       sb.from('retours').select('plat,avis,programme_id').eq('user_id',uid).then(function(rr){
@@ -607,6 +888,27 @@
         });
       }).catch(function(){});
     }).catch(function(){ var el=$('suivi'); if(el) el.innerHTML='<h4>Suivi</h4><div class="chiffres">Pesées indisponibles pour le moment.</div>'; });
+  }
+  /* courbe de poids riche (points, objectif du questionnaire en pointillés, zone cible ±1 kg)
+     + frise des versions de diète et des pesées. Rien d'inventé : sans objectif chiffré, pas de ligne. */
+  var TYPE_C={'1re diète':'var(--b-bleu)','Réajustement':'var(--b-vert)','Nouveau menu':'var(--b-jaune)'};
+  function grapheFiche(uid,w){
+    var c=D&&D.par[uid], nom=c?c.nom:'ce client', dep=w.length?w[0].v:null, pal=c?palier(c.rep):null, cible=null;
+    if(dep!=null&&pal&&c.obj==='Perte') cible=dep-pal; else if(dep!=null&&pal&&c.obj==='Prise') cible=dep+pal;
+    var jl=function(t){ return new Date(t).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); };
+    if(w.length>=2) G.mount('suivi-courbe',function(lg){ return G.ligne(lg,{h:220,x:w.map(function(p){ return new Date(p.t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }),
+      tx:function(i){ return 'Pesée du '+jl(w[i].t); },points:true,series:[{nom:'',v:w.map(function(p){ return p.v; }),c:'var(--blue)',aire:true}],
+      cible:cible,cibleT:cible==null?'':'objectif '+fr(cible)+' kg',zone:cible==null?null:[cible-1,cible+1],f:function(v){ return G.n(v,1)+' kg'; },
+      label:'Poids de '+nom+' : '+fr(dep)+' kg à la première pesée, '+fr(w[w.length-1].v)+' kg à la dernière'+(cible==null?'':', objectif '+fr(cible)+' kg')})+
+      G.leg([['pesée','var(--blue)']].concat(cible==null?[]:[['objectif du questionnaire','',1],['zone cible (± 1 kg)','color-mix(in srgb,var(--b-vert) 45%,transparent)']])); });
+    var V=((c&&c.prog)||[]).filter(function(x){ return x.traite_at||x.created_at; }).map(function(x,i){ var g=geste(x), ty=g==='reajuster'?'Réajustement':g?'Nouveau menu':'1re diète';
+      return {t:new Date(x.traite_at||x.created_at).getTime(),lab:'v'+(x.version||i+1),c:TYPE_C[ty],tip:'v'+(x.version||i+1)+' · '+ty+'\n'+(ETAT[x.statut]||(x.statut==='en_attente'?'À relire':x.statut||''))+' · '+jl(x.traite_at||x.created_at)}; });
+    var P=w.map(function(p){ return {t:p.t,tip:'Pesée du '+jl(p.t)+'\n'+G.n(p.v,1)+' kg'}; }), T=V.map(function(v){ return v.t; }).concat(P.map(function(p){ return p.t; }));
+    G.mount('suivi-frise',function(lg){ if(!T.length) return '';
+      var deb=Math.min.apply(null,T.concat(c&&c.p.created_at?[new Date(c.p.created_at).getTime()]:[])), fin=Math.max(Date.now(),Math.max.apply(null,T));
+      return '<div class="mens" style="margin-bottom:4px">Parcours : diètes et pesées</div>'+G.frise(lg,{debut:deb,fin:fin,dietes:V,pesees:P,
+        label:'Parcours de '+nom+' : '+V.length+' diète'+(V.length>1?'s':'')+' et '+P.length+' pesée'+(P.length>1?'s':'')})+
+        G.leg([['1re diète','var(--b-bleu)'],['réajustement','var(--b-vert)'],['nouveau menu','var(--b-jaune)'],['pesée','var(--steel)']]); });
   }
   // compteur : clients de la file dont la dernière pesée a 7 jours ou plus (ou aucune pesée)
   function compterRetards(){
@@ -859,6 +1161,7 @@
     var on=document.querySelector('.onglets [aria-selected="true"]');     // onglet actif visible sur téléphone
     if(on) on.parentNode.scrollLeft=on.offsetLeft-(on.parentNode.clientWidth-on.offsetWidth)/2;
     if(p==='msgs'&&sb) renderMessages();
+    G.refresh();   // les graphiques d'une page cachée se dessinent quand elle s'affiche
     try{ history.replaceState(null,'',p==='fiche'?location.pathname:'#'+p); }catch(e){}
   }
   voir.p='jour'; voir.retour='jour';
@@ -904,7 +1207,7 @@
           q:!!(q&&q.statut==='valide'), rep:rep, obj:objectif(rep), prog:pr[p.id]||[]}; })};
       D.clients.forEach(function(c){ D.par[c.id]=c; });
       $('g-noms').innerHTML=D.clients.map(function(c){ return '<option value="'+esc(c.nom)+'">'; }).join('');
-      renderJour(); renderTable(); renderResultats(); renderEcheancier();
+      renderJour(); renderTable(); renderResultats(); renderEcheancier(); renderGraphes();
     }).catch(function(e){ console.error(e); toast('Tableau de bord indisponible, recharge la page.'); });
   }
 
@@ -935,6 +1238,26 @@
     $('jour-cartes').innerHTML=carte('Diètes à relire',relire.length,relire,'Rien à relire.')+carte('Nouveaux questionnaires',nouveaux.length,nouveaux,'Aucun nouveau questionnaire.')+
       carte('Pesées en retard',retard.length,retard,'Tout le monde est à jour.')+carte('Impayés en cours',impayes.length,impayes,'Aucun impayé.')+
       carte('Messages non lus',msgs.length,msgs,'Tout est lu.')+carte('Retours « plus jamais »',pj.length,pj,'Aucun retour pour l’instant.');
+
+    // santé du jour : trois anneaux sur les 7 derniers jours (« — » tant qu'il n'y a rien à mesurer)
+    var s7=Date.now()-7*JOUR, dec=0;
+    C.forEach(function(c){ c.prog.forEach(function(x){ if(x.traite_at&&x.statut!=='en_attente'&&new Date(x.traite_at).getTime()>=s7) dec++; }); });
+    var att=relire.length, mc=MSG.filter(function(m){ return m.auteur_id===m.client_id&&new Date(m.created_at).getTime()>=s7; }), ml=mc.filter(function(m){ return m.lu_at; }).length;
+    $('j-anneaux').innerHTML=[
+      [base.length?pes/base.length*100:null,'Pesées de la semaine',base.length?pes+' client'+(pes>1?'s':'')+' sur '+base.length:'aucun client suivi pour l’instant','var(--brand)'],
+      [dec+att?dec/(dec+att)*100:null,'Diètes relues',dec+att?dec+' sur '+(dec+att)+' cette semaine':'rien à relire cette semaine','var(--b-vert)'],
+      [mc.length?ml/mc.length*100:null,'Messages traités',mc.length?ml+' lu'+(ml>1?'s':'')+' sur '+mc.length+' reçu'+(mc.length>1?'s':'')+' cette semaine':'aucun message reçu cette semaine','var(--b-violet)']
+    ].map(function(a){ return '<div class="anneau">'+G.anneau(a[0],{c:a[3],label:a[1]+' : '+(a[0]==null?'pas encore de donnée':Math.round(a[0])+' %')+', '+a[2]})+'<div><b>'+a[1]+'</b><span>'+a[2]+'</span></div></div>'; }).join('');
+
+    // tendances 12 semaines dans les chiffres clés (seulement quand il y a de quoi tracer)
+    var F=[]; for(var k=11;k>=0;k--) F.push(Date.now()-k*7*JOUR);
+    var lab=F.map(function(t){ return new Date(t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); });
+    var dS=F.map(function(t){ return C.reduce(function(n,c){ return n+c.prog.filter(function(x){ var u=x.traite_at?new Date(x.traite_at).getTime():0; return x.statut==='valide'&&u>t-7*JOUR&&u<=t; }).length; },0); });
+    var pS=F.map(function(t){ return C.filter(function(c){ return c.w.some(function(w){ var u=new Date(w.date+'T12:00:00').getTime(); return u>t-7*JOUR&&u<=t; }); }).length; });
+    var mp=new Date(d.getFullYear(),d.getMonth()-1,1).toISOString(), dMois=+$('j-dietes').textContent,
+        dPrec=C.reduce(function(t,c){ return t+c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at&&x.traite_at>=mp&&x.traite_at<mois; }).length; },0);
+    G.kpi($('j-dietes').parentNode, som(dS)?{v:dS,x:lab,tx:'Semaine au ',cur:dMois,prev:dPrec,vs:'vs le mois dernier',f:function(v){ return v+' diète'+(v>1?'s':'')+' validée'+(v>1?'s':''); },label:'Diètes validées par semaine sur 12 semaines'}:{});
+    G.kpi($('j-pesees').parentNode, som(pS)?{v:pS,x:lab,tx:'Semaine au ',cur:pS[11],prev:pS[10],vs:'vs la semaine d’avant',f:function(v){ return v+' client'+(v>1?'s':'')+' pesé'+(v>1?'s':''); },label:'Clients pesés par semaine sur 12 semaines'}:{});
   }
 
   /* ---------- CLIENTS : tableau filtrable et triable ---------- */
@@ -1019,7 +1342,15 @@
     $('echeancier').innerHTML=sem.map(function(s){ return carte('Semaine du '+jm(s.d), s.L.length, s.L.sort(function(a,b){ return a.d-b.d; }).map(function(x){
       return ligne(nomLien(x.c), x.bloque?'<span class="retard">en attente d’une pesée</span>':(x.g==='menu'?'<span class="tag j">Nouveau menu</span>':'<span class="tag v">Réajustement</span>')+
         ' · '+(FORM[x.c.a.formule]||'')+' · '+(x.d<auj?'<span class="retard">en retard</span>':jm(x.d))); }),'Rien de prévu.'); }).join('');
+    // charge des 4 semaines, en barres empilées (mêmes couleurs que les étiquettes)
+    var nR=sem.map(function(s){ return s.L.filter(function(x){ return x.g!=='menu'; }).length; }), nM=sem.map(function(s){ return s.L.filter(function(x){ return x.g==='menu'; }).length; }), tot=som(nR)+som(nM);
+    $('g-charge-n').textContent=tot?tot+' diète'+(tot>1?'s':''):'';
+    G.mount('g-charge',function(w){ return tot?G.barres(w,{h:180,x:sem.map(function(s){ return 'sem. du '+jm(s.d); }),lw:70,empile:true,valeurs:true,entier:true,
+      series:[{nom:'Réajustement',v:nR,c:'var(--b-vert)'},{nom:'Nouveau menu',v:nM,c:'var(--b-jaune)'}],f:function(v){ return v+' diète'+(v>1?'s':''); },
+      label:'Charge des 4 prochaines semaines : '+sem.map(function(s,i){ return nR[i]+nM[i]; }).join(', ')+' diètes'})+G.leg([['Réajustement','var(--b-vert)'],['Nouveau menu','var(--b-jaune)']])
+      :G.vide('Rien de prévu sur les 4 prochaines semaines : l’échéancier se remplira avec les premières diètes validées.'); });
   }
+  function som(L){ return L.reduce(function(t,x){ return t+(+x||0); },0); }
 
   /* ---------- SUIVI & RÉSULTATS ---------- */
   function renderResultats(){
@@ -1039,6 +1370,95 @@
       .map(function(c){ return ligne(nomLien(c), c.w.slice(-3).map(function(x){ return fr(x.kg); }).join(' · ')+' kg'); });
     $('r-stag').innerHTML='<h4>Poids stable sur 3 pesées <span class="n">'+stag.length+'</span></h4>'+(stag.join('')||'<p class="rien">Aucun client concerné.</p>')+
       '<p class="leg">Affichage seulement : vos règles pour ces cas viendront plus tard.</p>';
+  }
+
+  /* ---------- GRAPHIQUES branchés sur les vraies données (D) ----------
+     Jamais de donnée inventée : sans assez de données, un état vide qui le dit. */
+  var FCOUL={f1:'var(--b-vert)',f2:'var(--brand)',f3:'var(--b-violet)'};
+  function renderGraphes(){
+    if(!D) return;
+    var C=D.clients, maintenant=new Date(), ms=function(d){ return new Date(String(d).length<=10?d+'T12:00:00':d).getTime(); };
+    var kgS=function(v){ return (v>0?'+':'')+G.n(v,1)+' kg'; }, pl=function(n,s){ return n+' '+s+(n>1?'s':''); };
+    var P=[]; C.forEach(function(c){ c.prog.forEach(function(x){ P.push(x); }); });
+    var VAL=P.filter(function(x){ return x.statut==='valide'&&x.traite_at; });
+
+    // ---- DIÈTES : délai de relecture + répartition par type
+    var DEL=['< 2 h','2-6 h','6-12 h','12-24 h','24-48 h','> 48 h'], BO=[2,6,12,24,48,Infinity], dv=[0,0,0,0,0,0], nd=0;
+    P.forEach(function(x){ if(!x.traite_at||!x.created_at||x.statut==='en_attente') return; var h=(ms(x.traite_at)-ms(x.created_at))/3600000; if(h<0) return;
+      for(var i=0;i<BO.length;i++) if(h<BO[i]){ dv[i]++; nd++; break; } });
+    $('g-delai-n').textContent=nd?pl(nd,'diète'):'';
+    G.mount('g-delai',function(w){ return nd?G.barres(w,{h:190,x:DEL,valeurs:true,entier:true,series:[{v:dv,cs:[0,0,0,0,1,1].map(function(j){ return j?'var(--b-jaune)':'var(--brand)'; })}],
+      tx:function(i){ return 'Décidées en '+DEL[i]; },f:function(v){ return pl(v,'diète'); },label:'Délai de relecture : '+DEL.map(function(l,i){ return dv[i]+' en '+l; }).join(', ')}):G.vide(); });
+    var TY=[['1re diète',0,'var(--b-bleu)'],['Réajustement',0,'var(--b-vert)'],['Nouveau menu',0,'var(--b-jaune)']];
+    VAL.forEach(function(x){ var g=geste(x); TY[g==='reajuster'?1:g?2:0][1]++; });
+    $('g-types-n').textContent=VAL.length?pl(VAL.length,'validée'):'';
+    G.mount('g-types',function(w){ return VAL.length?G.donut(w,{parts:TY,sous:'validées',f:function(v){ return pl(v,'diète'); },
+      label:'Diètes validées par type : '+TY.map(function(t){ return t[1]+' '+t[0]; }).join(', ')}):G.vide(); });
+
+    // ---- SUIVI : évolution moyenne par objectif (pesée la plus proche de chaque semaine, à ±3,5 jours)
+    var S13=[]; for(var k=0;k<=12;k++) S13.push(k?'s'+k:'départ');
+    [['Perte','var(--brand)','Perte de poids'],['Prise','var(--b-violet)','Prise de masse'],['Maintien','var(--b-vert)','Maintien']].forEach(function(o){
+      var cols=S13.map(function(){ return []; }), nb=0;
+      C.forEach(function(c){ if(c.obj!==o[0]||c.w.length<2) return; var t0=ms(c.w[0].date), k0=+c.w[0].kg, row=[];
+        for(var k=0;k<=12;k++){ var cib=t0+k*7*JOUR, best=null, bd=3.5*JOUR; c.w.forEach(function(x){ var dd=Math.abs(ms(x.date)-cib); if(dd<=bd){ bd=dd; best=x; } }); row.push(best?+best.kg-k0:null); }
+        if(row.filter(function(v){ return v!=null; }).length<2) return; nb++; row.forEach(function(v,k){ if(v!=null) cols[k].push(v); }); });
+      var moy=cols.map(function(L){ return L.length?L.reduce(function(t,x){ return t+x; },0)/L.length:null; }),
+          ban=cols.map(function(L){ return L.length?[Math.min.apply(null,L),Math.max.apply(null,L)]:null; });
+      $('g-'+o[0]+'-n').textContent=nb?pl(nb,'client'):'';
+      G.mount('g-'+o[0],function(w){ return nb?G.ligne(w,{h:190,x:S13,zero:true,tx:function(i){ return (i?'Semaine '+i:'Départ')+(cols[i].length?' · '+pl(cols[i].length,'client'):''); },
+        series:[{nom:'moyenne',v:moy,c:o[1],bande:ban}],f:kgS,fy:function(v){ return (v>0?'+':'')+G.n(v,v%1?1:0); },
+        label:o[2]+' : évolution moyenne de '+pl(nb,'client')+' depuis la première pesée'}):G.vide(); });
+    });
+    // ---- SUIVI : régularité des pesées, 12 semaines glissantes
+    var FIN=[]; for(k=11;k>=0;k--) FIN.push(Date.now()-k*7*JOUR);
+    var jm=function(t){ return new Date(t).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); };
+    var R=C.filter(function(c){ return c.w.length||actif(c); }).sort(function(a,b){ return a.nom.localeCompare(b.nom,'fr'); }).slice(0,40);
+    var RV=R.map(function(c){ var ins=c.p.created_at?ms(c.p.created_at):0; return FIN.map(function(f){ if(f<=ins) return null;
+      return c.w.filter(function(x){ var u=ms(x.date); return u>f-7*JOUR&&u<=f; }).length; }); });
+    G.mount('g-regu',function(w){ return R.length?G.heat(w,{lignes:R.map(function(c){ var p=c.nom.split(' '); return p[0]+(p[1]?' '+p[1].charAt(0)+'.':''); }),cols:FIN.map(jm),lw:84,max:40,
+      v:RV.map(function(r){ return r.map(function(x){ return x==null?null:Math.min(x,2)/2; }); }),
+      t:function(i,j){ var x=RV[i][j]; return R[i].nom+' · semaine au '+jm(FIN[j])+'\n'+(x?pl(x,'pesée'):'aucune pesée'); },
+      label:'Régularité des pesées de '+pl(R.length,'client')+' sur 12 semaines'}):G.vide(); });
+
+    // ---- STATISTIQUES : diètes validées par mois (cette année / l'an dernier), pyramide des âges, cumul
+    var an=maintenant.getFullYear(), m1=[0,0,0,0,0,0,0,0,0,0,0,0], m0=m1.slice();
+    VAL.forEach(function(x){ var d=new Date(x.traite_at); if(d.getFullYear()===an) m1[d.getMonth()]++; else if(d.getFullYear()===an-1) m0[d.getMonth()]++; });
+    var m1v=m1.map(function(v,i){ return i>maintenant.getMonth()?null:v; }), ML=G.M.map(function(m,i){ return new Date(an,i,1).toLocaleDateString('fr-FR',{month:'long'}); });
+    $('g-mois-n').textContent=VAL.length?an+' face à '+(an-1):'';
+    $('g-mois-l').innerHTML=VAL.length?G.leg([[String(an),'var(--brand)'],[String(an-1),'color-mix(in srgb,var(--steel) 45%,transparent)']]):'';
+    G.mount('g-mois',function(w){ return VAL.length?G.barres(w,{h:210,x:G.M,tx:function(i){ return ML[i]; },entier:true,
+      series:[{nom:String(an),v:m1v,c:'var(--brand)'},{nom:String(an-1),v:m0,c:'var(--steel)',op:.4}],f:function(v){ return pl(v,'diète'); },
+      label:'Diètes validées par mois : '+som(m1)+' en '+an+', '+som(m0)+' en '+(an-1)}):G.vide(); });
+    var TR=['16-25','26-35','36-45','46-55','56-65','66+'], H=[0,0,0,0,0,0], Fm=H.slice(), np=0;
+    C.forEach(function(c){ var nsc=c.p.naissance, sx=c.p.sexe; if(!nsc||!sx) return; var b=new Date(String(nsc).slice(0,10)+'T12:00:00'); if(isNaN(b)) return;
+      var a=an-b.getFullYear()-((maintenant.getMonth()<b.getMonth()||(maintenant.getMonth()===b.getMonth()&&maintenant.getDate()<b.getDate()))?1:0);
+      var i=a<=25?0:a<=35?1:a<=45?2:a<=55?3:a<=65?4:5; (sx==='HOMME'?H:Fm)[i]++; np++; });
+    $('g-pyr-n').textContent=np?pl(np,'client'):'';
+    G.mount('g-pyr',function(w){ return np?G.pyramide(w,{t:TR,h:H,f:Fm,label:'Pyramide des âges : '+som(H)+' hommes, '+som(Fm)+' femmes'}):G.vide(); });
+    var CU=[], CX=[], CL=[];
+    if(VAL.length){ var prem=new Date(Math.min.apply(null,VAL.map(function(x){ return ms(x.traite_at); }))), cum=0;
+      for(var dm=new Date(prem.getFullYear(),prem.getMonth(),1); dm<=maintenant; dm=new Date(dm.getFullYear(),dm.getMonth()+1,1)){
+        var y=dm.getFullYear(), mo=dm.getMonth(); cum+=VAL.filter(function(x){ var d=new Date(x.traite_at); return d.getFullYear()===y&&d.getMonth()===mo; }).length;
+        CU.push(cum); CX.push(G.M[mo]+(mo?'':' '+String(y).slice(2))); CL.push(dm.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})); } }
+    $('g-cumul-n').textContent=VAL.length?pl(VAL.length,'diète'):'';
+    G.mount('g-cumul',function(w){ return VAL.length?G.ligne(w,{h:200,x:CX,lw:50,entier:true,tx:function(i){ return 'Fin '+CL[i]; },series:[{nom:'',v:CU,c:'var(--brand)',aire:true}],
+      f:function(v){ return pl(v,'diète')+' au total'; },label:'Cumul des diètes validées : '+VAL.length}):G.vide(); });
+
+    // ---- ÉCONOMIE : répartition par formule, revenu récurrent par formule, entonnoir
+    var act=D.abos.filter(function(a){ return ['active','trialing','past_due'].indexOf(a.statut)>=0; }), nf={f1:0,f2:0,f3:0}, ef={f1:0,f2:0,f3:0};
+    act.forEach(function(a){ if(nf[a.formule]!=null){ nf[a.formule]++; ef[a.formule]+=(+a.montant_cents||0)/100; } });
+    var nA=nf.f1+nf.f2+nf.f3, mrr=ef.f1+ef.f2+ef.f3, FF=['f1','f2','f3'];
+    $('g-donut-n').textContent=nA?pl(nA,'abonné'):'';
+    G.mount('g-donut',function(w){ return nA?G.donut(w,{parts:FF.map(function(f){ return [FORM[f].replace('Formule ',''),nf[f],FCOUL[f]]; }),centre:euros(mrr*100)+' €',sous:'toutes les 4 sem.',
+      f:function(v){ return pl(v,'abonné'); },label:'Abonnés par formule : '+FF.map(function(f){ return nf[f]+' '+FORM[f]; }).join(', ')}):G.vide(); });
+    G.mount('g-mrr',function(w){ return mrr?G.barres(w,{h:190,x:FF.map(function(f){ return FORM[f].replace('Formule ',''); }),valeurs:true,ml:52,fy:function(v){ return G.n(v)+' €'; },fv:function(v){ return G.n(v,2)+' €'; },
+      series:[{v:FF.map(function(f){ return ef[f]; }),cs:FF.map(function(f){ return FCOUL[f]; })}],tx:function(i){ return FORM[FF[i]]; },f:function(v){ return G.n(v,2)+' € / 4 semaines'; },
+      label:'Revenu récurrent par formule : '+FF.map(function(f){ return FORM[f]+' '+G.n(ef[f],2)+' €'; }).join(', ')}):G.vide(); });
+    // chaque étape est un sous-ensemble de la précédente (l'ordre réel d'inscription peut varier)
+    var eQ=C.filter(function(c){ return c.q; }), eA=eQ.filter(function(c){ return !!c.a; }),
+        e2=eA.filter(function(c){ return actif(c)&&c.p.created_at&&jours(c.p.created_at)>=30; }), e3=e2.filter(function(c){ return jours(c.p.created_at)>=60; });
+    G.mount('g-funnel',function(w){ return C.length?G.entonnoir(w,{etapes:[['Comptes créés',C.length],['Questionnaire validé',eQ.length],['Abonnés',eA.length],['Encore là au 2e mois',e2.length],['Encore là au 3e mois',e3.length]],
+      label:'Entonnoir : '+C.length+' comptes, '+eQ.length+' questionnaires validés, '+eA.length+' abonnés, '+e2.length+' au 2e mois, '+e3.length+' au 3e mois'}):G.vide(); });
   }
 
   /* ---------- chiffres + statistiques ---------- */

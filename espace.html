@@ -210,6 +210,31 @@
   .meal-in .mac span{display:inline-flex;align-items:center;gap:6px}
   .meal-in .mac span::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--c)}
   .meal-in .mac .p{--c:#cc0000} .meal-in .mac .g{--c:#3d85c6} .meal-in .mac .l{--c:#f1c232}
+  /* ===== TOUTE LA PAGE AU MÊME STYLE (Dimitri 28/09 « cohérent jusqu'au bout ») =====
+     blocs : coins arrondis 14 px ; blocs à titre : en-tête pastel (jaune, vert, violet, bleu en alternance) */
+  .cat,.acard,.dayoff,.stat,.phd,.pesee-rappel,.drop{border-radius:14px}
+  .chart-empty{border-radius:12px}
+  .cat,.acard{padding:0 0 10px;overflow:hidden}
+  .cat h4,.acard h4{margin:0 0 6px;padding:10px 16px;border-bottom:1px solid var(--bc);background:var(--pc);color:var(--ice);font:600 13px/1.25 var(--texte);letter-spacing:.06em}
+  .cat .ci{padding-left:16px;padding-right:16px}
+  .acard > :not(h4){margin-left:16px;margin-right:16px}
+  .courses .cat:nth-child(4n+1),.advice .acard:nth-child(4n+1),.suivi .acard:nth-child(4n+3){--pc:var(--p-jaune);--bc:var(--b-jaune)}
+  .courses .cat:nth-child(4n+2),.advice .acard:nth-child(4n+2),.suivi .acard:nth-child(4n+1){--pc:var(--p-vert);--bc:var(--b-vert)}
+  .courses .cat:nth-child(4n+3),.suivi .acard:nth-child(4n+2){--pc:var(--p-violet);--bc:var(--b-violet)}
+  .courses .cat:nth-child(4n+4){--pc:var(--p-bleu);--bc:var(--b-bleu)}
+  .cat h4 .n{border-radius:999px;background:rgba(255,255,255,.55)}
+  html[data-theme="obscur"] .cat h4 .n{background:rgba(0,0,0,.25)}
+  .acard.note{padding-bottom:16px}
+  .acard.note .gohint{margin-top:auto;padding-top:12px}
+  /* jour off : même carte, en-tête de couleur */
+  .dayoff{padding:0 0 30px;border:1px solid var(--b-jaune);border-style:solid;overflow:hidden;background:color-mix(in srgb,var(--fond) 20%,#fff)}
+  html[data-theme="obscur"] .dayoff{background:var(--void2)}
+  .dayoff .t{background:var(--p-jaune);border-bottom:1px solid var(--b-jaune);padding:14px 16px;font:700 20px/1.2 var(--texte);letter-spacing:.04em;color:var(--ice)}
+  .dayoff .s{padding:0 20px;margin-top:22px}
+  /* petits éléments : pilules et champs arrondis, comme le reste du site */
+  .tab{border-radius:10px}
+  .setgoal,.ghostb,.printbtn,.clearbtn,.mens-btn,.demolink{border-radius:999px}
+  .mens-grid input,.mdate-lbl .dpick,.wrow input{border-radius:10px}
   @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.2)}100%{transform:scale(1)}}
   .cat .ci .box.pop{animation:pop .28s ease}
   .rv{opacity:0;transform:translateY(12px)}

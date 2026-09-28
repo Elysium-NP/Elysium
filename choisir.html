@@ -184,7 +184,7 @@
       <div class="optrecap">
         <div class="recline"><span>Toutes les 4 semaines</span><b id="rnow">25,90 €</b></div>
       </div>
-      <button class="btn" id="confirm" type="button">Valider et payer</button>
+      <button class="btn" id="confirm" type="button">Continuer vers le récapitulatif</button>
       <p id="pay-err" role="alert" style="margin:12px 0 0;text-align:center;color:#b45309;font-size:14px"></p>
       <p style="margin:10px 0 0;text-align:center;color:var(--steel);font-size:13px">Paiement sécurisé par Stripe · sans engagement, résiliable à tout moment depuis ton espace.</p>
     </section>
@@ -257,12 +257,8 @@
       uu.formule_prix = f.getAttribute('data-prix') + ' / 4 sem';
       localStorage.setItem('ely_user_demo', JSON.stringify(uu));
     } catch(e){}
-    // PAIEMENT STRIPE : la page de paiement sécurisée de Stripe (carte jamais vue par le site)
-    var b=this, f2=sel(); b.disabled=true; b.textContent='Ouverture du paiement…';
-    ElyAuth.payer(f2.value).catch(function(e){
-      b.disabled=false; b.textContent='Valider et payer';
-      var m=document.getElementById('pay-err'); if(m) m.textContent=e.message||'Paiement indisponible pour le moment.';
-    });
+    // Récapitulatif avant paiement (Yoann 28/09) : tout est écrit sous ses yeux, puis Stripe depuis le récap
+    location.href='recap.html?formule='+sel().value;
   });
 })();
 </script>

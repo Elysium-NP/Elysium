@@ -1179,9 +1179,7 @@ var PROG = {
       if(ub) ub.addEventListener('click',function(e){ e.preventDefault();
         var code=cleFormule(uu.formule);
         if(!code){ location.href='choisir.html'; return; }
-        ub.textContent='Ouverture du paiement…'; ub.style.pointerEvents='none';
-        ElyAuth.payer(code).catch(function(err){ ub.textContent='Réessayer le paiement'; ub.style.pointerEvents='';
-          var m=document.createElement('p'); m.className='foot-note'; m.style.color='#b45309'; m.textContent=err.message; c.appendChild(m); }); });
+        location.href='recap.html?formule='+code; });   // récapitulatif avant paiement, puis Stripe depuis le récap
     } else if(quest){
       pill.textContent='Programmation en cours'; pill.className='pill paid';
       c.className='card wide';

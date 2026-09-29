@@ -619,6 +619,7 @@ html.page-sort::before,html.page-sort::after{animation:rideau-vient .75s ease-in
   .plan .now .n2{font-size:23px;font-weight:700;margin:4px 0 0 1px;letter-spacing:.01em}
   .plan .pterm{font-family:var(--disp);font-size:13px;font-weight:600;letter-spacing:.16em;
     text-transform:uppercase;color:var(--blue);margin-top:12px}
+  .plan .sans-eng{font:600 13.5px/1.4 var(--texte);color:var(--ice);margin:6px 0 0;padding:5px 11px;border:1px solid var(--line);border-radius:999px;display:inline-block}   /* Damien 29/09 : « sans engagement » visible sur chaque carte (CGV : aucune durée minimale) */
   .plan .pfine{font-family:var(--disp);font-size:12.5px;line-height:1.5;color:var(--steel);margin:6px 0 20px}
   /* PACK : total des deux prestations barré + pastille de remise */
   .plan .packold{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--steel);

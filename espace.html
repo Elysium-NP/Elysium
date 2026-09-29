@@ -1451,14 +1451,20 @@ var PROG = {
     Promise.all([chargerPoids(!ADMIN), chargerDepart()]).then(refresh);
     if(ADMIN){
       document.getElementById('coachlink').hidden=false;
-      document.getElementById('democard').style.display='';
+      document.getElementById('democard').style.display=''; etatDemo();
       document.getElementById('demobanner').style.display='';
       renderProgram(); return;
     }
     return chargerReel().then(renderProgram).then(chargerAvis);
   });
-  document.getElementById('togglepaid').addEventListener('click',function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); renderProgram(); });
-  document.getElementById('togglequest').addEventListener('click',function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); renderProgram(); });
+  // coin démo : le résultat s'affiche EN HAUT de la page -> on y remonte (sur téléphone, le clic semblait « ne rien faire », Damien 29/09)
+  function etatDemo(){ var uu=ElyAuth.user()||{};
+    document.getElementById('togglepaid').textContent='Statut « payé » : '+(uu.paid?'oui':'non')+' · basculer';
+    document.getElementById('togglequest').textContent='« Questionnaire rempli » : '+(uu.quest?'oui':'non')+' · basculer'; }
+  function basculeDemo(fn){ fn(); renderProgram(); etatDemo();
+    document.getElementById('statuspill').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'}); }
+  document.getElementById('togglepaid').addEventListener('click',function(){ basculeDemo(function(){ ElyAuth.setPaid(!(ElyAuth.user()||{}).paid); }); });
+  document.getElementById('togglequest').addEventListener('click',function(){ basculeDemo(function(){ ElyAuth.setQuest(!(ElyAuth.user()||{}).quest); }); });
 
   // ---- messagerie : la carte n'apparaît que si la table existe (script tableau_de_bord_coach.sql) ----
   var vusMsg=null, TITRE=document.title;

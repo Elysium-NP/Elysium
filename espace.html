@@ -944,12 +944,15 @@ var PROG = {
               {type:'Collation',emo:'🍎',kcal:292,rec:'Smoothie banane & cacahuète',seas:'Extrait de vanille',ings:[['250 g',"lait d'amande"],['1','banane'],['15 g','beurre de cacahuète'],['10 g','miel']],m:[7,41,12]}];
   // cible affichée en tête : celle du menu d'exemple + la moyenne des collations ajoutées (en-tête cohérent avec 3 / 4 / 5 repas)
   function cibleVue(){ var J=joursVus(); if(J===PROG.jours) return {kcal:PROG.kcal,P:PROG.P,G:PROG.G,L:PROG.L,n:PROG.jours[0].repas.length};
-    var aj={kcal:0,P:0,G:0,L:0}; J.forEach(function(d,i){ d.repas.slice(PROG.jours[i].repas.length-1,d.repas.length-1).forEach(function(r){
+    var aj={kcal:0,P:0,G:0,L:0}; J.forEach(function(d){ d.repas.filter(function(r){ return r.aj; }).forEach(function(r){
       aj.kcal+=r.kcal; aj.P+=r.m[0]; aj.G+=r.m[1]; aj.L+=r.m[2]; }); });
     var n=J.length; return {kcal:Math.round(PROG.kcal+aj.kcal/n),P:Math.round(PROG.P+aj.P/n),G:Math.round(PROG.G+aj.G/n),L:Math.round(PROG.L+aj.L/n),n:J[0].repas.length}; }
   function joursVus(){ if(!ADMIN||DEMO||NREP===3) return PROG.jours;
-    return PROG.jours.map(function(d,i){ var R=d.repas.slice(), din=R.length-1, aj=NREP===5?[COLLAS[0],COLLAS[1]]:[COLLAS[i%2]];
-      R.splice.apply(R,[din,0].concat(aj)); return Object.assign({},d,{repas:R}); }); }
+    function c(x,lib){ return Object.assign({},x,{type:lib,aj:1}); }
+    return PROG.jours.map(function(d,i){ var R=d.repas.slice();
+      if(NREP===5){ R.splice(R.length-1,0,c(COLLAS[1],'Collation · après-midi')); R.splice(1,0,c(COLLAS[0],'Collation · matin')); }
+      else R.splice(R.length-1,0,c(COLLAS[i%2],'Collation · après-midi'));
+      return Object.assign({},d,{repas:R}); }); }
   if(['f1','f2','f3'].indexOf(VUE)<0) VUE=null;   // seule une formule est une « vue » valable
   function formuleClient(){ if(DEMO) return DEMO; if(ADMIN) return VUE; var x=moi(); return cleFormule((x.abonnement&&x.abonnement.formule)||x.formule); }
   // rythme de la formule, avec ce qu'elle n'a pas en discret
@@ -1317,9 +1320,12 @@ var PROG = {
     return {
       nom:PROG.nom, objectif:(rep||{})['Quel est ton objectif principal ?']||'',
       kcal:r0(c.kcal), P:r0(c.proteines), G:r0(c.glucides), L:r0(c.lipides),
-      jours:jours.map(function(j){ return {j:j.jour, repas:(j.repas||[]).map(function(r){
+      jours:jours.map(function(j){ var deux=(j.repas||[]).some(function(r){ return r.type==='collation_2'; });
+        var ORD=deux?{petit_dejeuner:0,collation:1,dejeuner:2,collation_2:3,diner:4}:{petit_dejeuner:0,dejeuner:1,collation:2,collation_2:3,diner:4};
+        var LIB={collation:deux?'Collation · matin':'Collation · après-midi',collation_2:'Collation · après-midi'};
+        return {j:j.jour, repas:(j.repas||[]).slice().sort(function(a,b){ return (ORD[a.type]!=null?ORD[a.type]:9)-(ORD[b.type]!=null?ORD[b.type]:9); }).map(function(r){
         var m=r.macros||{};
-        return {type:MEALS[r.type]||String(r.type||'').replace(/_/g,' '), emo:EMO[r.type]||'', kcal:r0(m.kcal),
+        return {type:LIB[r.type]||MEALS[r.type]||String(r.type||'').replace(/_/g,' '), emo:EMO[r.type]||'', kcal:r0(m.kcal),
           rec:esc(r.titre||''),            // ⛔ jamais `recette` (clé interne) AFFICHÉE côté client…
           cle:r.recette||'',               // …elle sert seulement à retrouver la recette : menu.recettes[repas.recette]
           seas:'', m:[r0(m.proteines),r0(m.glucides),r0(m.lipides)],

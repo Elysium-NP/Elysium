@@ -959,7 +959,7 @@ var PROG = {
     var C=Object.assign({},PROG.courses);
     C['Pour tes collations']=ordre.map(function(n){ var a=A[n];
       var q=a.g? (a.g>=1000?(Math.round(a.g/100)/10).toString().replace('.',',')+' kg':Math.round(a.g)+' g') : String(Math.round(a.u*10)/10).replace('.',',');
-      return [n,q]; });
+      return [n.charAt(0).toUpperCase()+n.slice(1),q]; });
     return C; }
   function joursVus(){ if(!ADMIN||DEMO||NREP===3) return PROG.jours;
     function c(x,lib){ return Object.assign({},x,{type:lib,aj:1}); }

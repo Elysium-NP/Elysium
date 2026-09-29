@@ -1576,6 +1576,9 @@ var REL=(function(){
     if(rc.jours_refaits||na.length) h+=na.length?ck('ko','Corrections non appliquées','À reprendre à la main :<ul class="rl-na">'+
       na.map(function(x){ return '<li>'+e(propre(lib[x.id]||('Correction n° '+x.id)))+' : '+e(propre(x.raison||''))+'</li>'; }).join('')+'</ul>'+(rc.jours_refaits?(rc.jours_refaits==='tous'?'Semaine entière refaite.':'Jours refaits : '+[].concat(rc.jours_refaits).join(', ')+'.'):''))
       :ck('ok','Corrections appliquées',rc.jours_refaits==='tous'?'Semaine entière refaite.':'Jours refaits : '+[].concat(rc.jours_refaits).join(', ')+'.');
+    // jour refait hors ±5 g sur P, G ou L : écrit en clair, à ajuster à la main (rectification.a_ajuster, 29/09)
+    var aj=Array.isArray(rc.a_ajuster)?rc.a_ajuster.filter(Boolean):[];
+    if(aj.length) h+=ck('ko','Macros à ajuster à la main','<ul class="rl-na">'+aj.map(function(t){ return '<li>'+e(propre(t))+'</li>'; }).join('')+'</ul>Clique le jour concerné, puis <b>Modifier</b> pour corriger les grammages.');
     var nk=L.filter(function(x){ return x!=='ok'; }).length;
     return '<h4 class="rl-h">À vérifier avant d’envoyer <span class="n'+(nk?' av':' ok')+'">'+(nk?nbS(nk,'point à regarder','points à regarder'):'tout est bon')+'</span></h4><div class="cks">'+h+'</div>'+
       '<details class="rl-rq" open><summary>Ce que le client a répondu</summary><dl class="rl-dl">'+[['Objectif',rp.objectif||'—'],['Aliments refusés',rp.refuses||'Aucun'],['Allergies',rp.allergies||'Aucune'],['Régime',rp.regime||'Aucun'],['À conserver',rp.conserver||'—']]

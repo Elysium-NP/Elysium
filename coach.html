@@ -1606,7 +1606,7 @@ var REL=(function(){
         .filter(function(m){ return o[m[0]]!=null; }).map(function(m){ return m[1]+' '+Math.round(+o[m[0]])+m[2]; }).join(' · '); };
       var aVoir=rj.some(function(x){ return /NON|à vérifier|à la main|non reprise/i.test(String(x.raison||'')); });
       h+=ck(aVoir?'av':'ok','Ce qui a changé depuis la version validée','<ul class="rl-na">'+rj.map(function(x){ var t;
-        if(x.jour!=null&&x.repas) t='Jour '+x.jour+' · '+ml(x.repas).toLowerCase()+' : « '+nomPlat(x.avant)+' » → « '+nomPlat(x.apres)+' »'+(x.raison?' — '+x.raison:'');
+        if(x.jour!=null&&x.repas) t='Jour '+x.jour+' · '+ml(x.repas).toLowerCase()+' : « '+(x.titre_avant||nomPlat(x.avant))+' » → « '+(x.titre_apres||nomPlat(x.apres))+' »'+(x.raison?' — '+x.raison:'');
         else if(x.quoi==='cible') t='Cible : '+(x.raison||'')+((mac(x.avant)||mac(x.apres))?' ('+(mac(x.avant)?mac(x.avant)+' → ':'')+(mac(x.apres)||'—')+')':'');
         else t=x.texte||x.raison||'';
         return '<li>'+e(propre(String(t).replace(/\s*->\s*/g,' → ')))+'</li>'; }).join('')+'</ul>');

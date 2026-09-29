@@ -311,9 +311,9 @@
   .esp-nav .bdg{position:absolute;top:5px;right:calc(50% - 20px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#cc0000;color:#fff;font:700 10.5px/17px var(--texte);font-style:normal;text-align:center}
   .esp-nav .bdg:empty{min-width:9px;width:9px;height:9px;padding:0;top:7px;right:calc(50% - 16px)}
   @media(min-width:700px){.esp-nav button{flex-direction:row;gap:8px;font-size:13.5px;min-height:46px}.esp-nav .bdg{position:static}}
-  main.dash[data-vue="menu"] [data-rub]:not([data-rub="menu"]),main.dash[data-vue="suivi"] [data-rub]:not([data-rub="suivi"]),
-  main.dash[data-vue="plats"] [data-rub]:not([data-rub="plats"]),main.dash[data-vue="messages"] [data-rub]:not([data-rub="messages"]),
-  main.dash[data-vue="compte"] [data-rub]:not([data-rub="compte"]){display:none!important}
+  main.dash[data-rubrique="menu"] [data-rub]:not([data-rub="menu"]),main.dash[data-rubrique="suivi"] [data-rub]:not([data-rub="suivi"]),
+  main.dash[data-rubrique="plats"] [data-rub]:not([data-rub="plats"]),main.dash[data-rubrique="messages"] [data-rub]:not([data-rub="messages"]),
+  main.dash[data-rubrique="compte"] [data-rub]:not([data-rub="compte"]){display:none!important}
   #c-avis:not([hidden]) ~ .plats-vide{display:none!important}
   .plats-vide p{margin:0;color:var(--gris)}
   .esp-nav span{white-space:nowrap}
@@ -1516,7 +1516,7 @@ var PROG = {
   // ---- cartes suivi cliquables : scroll + flash vers l'outil du tableau de bord ----
   // ---- RUBRIQUES ----
   var VUES=['menu','suivi','plats','messages','compte'], dash=document.querySelector('main.dash');
-  function vue(v,haut){ if(VUES.indexOf(v)<0) v='menu'; dash.dataset.vue=v; try{ sessionStorage.setItem('ely_rub',v); }catch(e){}
+  function vue(v,haut){ if(VUES.indexOf(v)<0) v='menu'; dash.dataset.rubrique=v; try{ sessionStorage.setItem('ely_rub',v); }catch(e){}
     [].forEach.call(document.querySelectorAll('#esp-nav [data-rubrique]'),function(b){ b.setAttribute('aria-current',String(b.dataset.rubrique===v)); });
     [].forEach.call(document.querySelectorAll('[data-rub="'+v+'"] .rv'),function(x){ x.classList.add('in'); });
     if(haut){ var n=document.getElementById('esp-nav'); if(n.getBoundingClientRect().top<=64) window.scrollTo({top:Math.max(0,n.offsetTop-70),behavior:'auto'}); }
@@ -1528,7 +1528,7 @@ var PROG = {
   function badge(v,n){ var b=document.querySelector('#esp-nav [data-rubrique="'+v+'"] .bdg'); if(!b) return; b.hidden=!n; b.textContent=n===true?'':(n||''); }
   function gotoCard(id){
     var t=document.getElementById(id); if(!t) return;
-    var r=t.closest('[data-rub]'); if(r&&r.dataset.rub!==dash.dataset.vue) vue(r.dataset.rub);
+    var r=t.closest('[data-rub]'); if(r&&r.dataset.rub!==dash.dataset.rubrique) vue(r.dataset.rub);
     var y0=window.scrollY;
     t.scrollIntoView({behavior:'smooth',block:'center'});
     // filet : si le smooth n'a rien bougé (vieux navigateur / env sans smooth), scroll instantané garanti

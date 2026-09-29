@@ -2194,6 +2194,8 @@ var ED=(function(){
     function ligne(k,veille){ var v=String(rep[k]), vide=qVide(v);
       return '<div class="qx'+(veille?(vide?' ok':' fort'):'')+'"><dt>'+esc(qCourt(k))+'</dt><dd>'+(veille&&vide?'Rien à signaler':esc(v))+'</dd></div>'; }
     var h='<h4>Ses réponses au questionnaire <span class="n">'+n+' réponse'+(n>1?'s':'')+'</span></h4>'+aInterp(c.diagnostic);
+    var OV=[/^Des aliments que tu refuses/i,/^Allergies/i,/^As-tu un régime/i,/^Y a-t-il des aliments/i];   // toujours le même ordre
+    if(G.veille) G.veille.sort(function(x,y){ function r(k){ for(var i=0;i<OV.length;i++) if(OV[i].test(k.trim())) return i; return 9; } return r(x)-r(y); });
     if(G.veille) h+='<div class="q-veille"><h5>À surveiller <small>ce qui change le menu</small></h5><dl>'+G.veille.map(function(k){ return ligne(k,1); }).join('')+'</dl></div>';
     var cartes=QGR.filter(function(g){ return g.id!=='veille'&&g.id!=='admin'&&G[g.id]; }).map(function(g){ return '<div class="q-bloc"><h5>'+g.t+'</h5><dl>'+G[g.id].map(function(k){ return ligne(k,0); }).join('')+'</dl></div>'; });
     if(autres.length) cartes.push('<div class="q-bloc"><h5>Autres réponses</h5><dl>'+autres.map(function(k){ return ligne(k,0); }).join('')+'</dl></div>');

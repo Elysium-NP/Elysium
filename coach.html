@@ -338,10 +338,11 @@
   .rl-ai p{margin:8px 0 0;font-size:12.5px}
   .rl-ai .ai-l{margin-top:8px}
   .rl-ai .ai-l .w{margin:0 0 6px}
-  .rl-ai .ai-a{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));border:1px solid var(--b-jaune);border-radius:10px;overflow:hidden}
-  .rl-ai .ai-a button{min-height:34px;padding:6px 4px;border:0;border-left:1px solid var(--b-jaune);background:transparent;color:inherit;font:600 12.5px/1.2 var(--texte);cursor:pointer;min-width:0;overflow-wrap:anywhere}
-  .rl-ai .ai-a button:first-child{border-left:0}
-  .rl-ai .ai-a button:hover{background:color-mix(in srgb,var(--b-jaune) 25%,transparent)}
+  .rl-ai .ai-a{border:1px solid var(--b-jaune);border-radius:10px;overflow:hidden}
+  .rl-ai .ai-a button{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;min-height:36px;padding:7px 11px;border:0;border-top:1px solid color-mix(in srgb,var(--b-jaune) 55%,transparent);background:transparent;color:inherit;font:600 13px/1.25 var(--texte);text-align:left;cursor:pointer}
+  .rl-ai .ai-a button:first-child{border-top:0}
+  .rl-ai .ai-a button::after{content:"›";font-size:17px;line-height:1;opacity:.7}
+  .rl-ai .ai-a button:hover{background:color-mix(in srgb,var(--b-jaune) 22%,transparent)}
   .rl-ai .ai-a button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
   .rl-ok{color:#2f6b1a;font-weight:600;font-size:13.5px;margin-top:10px}
   .rl-ko{color:#9b1c1c;font-weight:600;font-size:13.5px;margin-top:10px}
@@ -1557,7 +1558,7 @@ var REL=(function(){
       bl.map(function(b){ return '<span class="k">'+b[0]+'</span>'+b[1].map(function(w){
         // réponse du coach : ouvre le renvoi en correction déjà rempli (action connue + le mot du client en précision)
         function bt(q,t,ti){ return '<button type="button" data-act="mot" data-q="'+q+'" data-mot="'+e(w)+'" data-k="'+e(b[0])+'" title="'+ti+'">'+t+'</button>'; }
-        return '<div class="ai-l"><span class="w">'+e(w)+'</span><div class="ai-a">'+(b[2]?bt('exclure','Exclure','Exclure un aliment pour ce client')+bt('remplacer','Remplacer','Remplacer un aliment dans la diète'):'')+bt('note','Consigne','Écrire une consigne libre')+'</div></div>'; }).join(''); }).join('')+
+        return '<div class="ai-l"><span class="w">'+e(w)+'</span><div class="ai-a">'+(b[2]?bt('exclure','Exclure un aliment','Exclure un aliment pour ce client')+bt('remplacer','Remplacer un aliment','Remplacer un aliment dans la diète'):'')+bt('note','Écrire une consigne','Écrire une consigne libre')+'</div></div>'; }).join(''); }).join('')+
       '<p>Pas retirés du menu. Un bouton ouvre la correction avec le mot du client déjà joint. Rien à changer&nbsp;? Valide.</p></div>')
       :ck('ok','Rien à interpréter','Tout ce que le client a écrit est connu.');
     // plats imposés (suivi, coach, client) retirés car ils contenaient un aliment refusé : diagnostic.alertes_impose (28/09 soir)

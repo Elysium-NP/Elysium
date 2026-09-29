@@ -904,7 +904,7 @@ var PROG = {
     if(droitEbook()) return h+'<button type="button" class="btn ebook-dl" style="margin-top:14px">Télécharger mon e-book (PDF)</button><p class="foot-note" aria-live="polite"></p>';
     if(!abonneF12()) return h+'<span class="dispo">Offert avec la <a href="formules.html">Formule Elysium</a></span>';
     var prix=window.ELY_PRIX_EBOOK||'', ouvert=!DEMO&&ACHAT.dispo;
-    return h+'<span class="dispo">E-book disponible à l’unité</span>'+
+    return h+   // Yoann 29/09 : pas de pastille « à l'unité » (doublon avec le bouton), le Bon à savoir juste sous la description
       // juste avant de payer, sans forcer : les deux choix restent ouverts (Damien & Yoann 29/09)
       '<div class="bon-savoir"><b>Bon à savoir</b> : avec la Formule Elysium, l’e-book est offert. Tu as aussi tes quantités réajustées chaque semaine et les recettes des coachs pour chaque plat. <a href="#c-abo">Passer à la Formule Elysium</a></div>'+
       '<label class="renonce"><input type="checkbox" class="ebook-ok"'+(ouvert?'':' disabled')+'><span>Je demande l’accès immédiat au contenu et je reconnais perdre mon droit de rétractation dès le téléchargement (<a href="cgv.html">CGV</a>).</span></label>'+

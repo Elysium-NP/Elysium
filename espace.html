@@ -1115,7 +1115,7 @@ var PROG = {
       var b=document.createElement('button'); b.type='button'; b.className='acc '+x.cls+(x.lock?' lock':''); if(x.id) b.dataset.t=x.id;
       b.innerHTML='<span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">'+x.ic+'</svg></span><span class="tx"><b>'+x.label+'</b><small>'+
         (x.lock?'<span class="lk">'+LOCK+x.lock+'</span>':x.sous)+'</small></span>';
-      if(x.id==='courses'&&!x.lock) accesTop.insertBefore(b,accesTop.firstChild); else (x.id==='conseils'?accesTop:acces).appendChild(b); return b;   // 2 en haut, 2 en bas (Dimitri 29/09)
+      if(x.id==='courses') accesTop.insertBefore(b,accesTop.firstChild); else (x.id==='conseils'?accesTop:acces).appendChild(b); return b;   // courses en haut même verrouillée   // 2 en haut, 2 en bas (Dimitri 29/09)
     }
     // un accès du bas ouvre son contenu à la place du menu : on remonte jusqu'à lui
     extras.forEach(function(x){ tuile(x).addEventListener('click',function(){ select(x.id);

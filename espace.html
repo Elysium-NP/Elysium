@@ -374,8 +374,11 @@
   #tabs .tab b{font:600 13px/1 var(--texte)} #tabs .tab small{font:700 17px/1 var(--texte);font-variant-numeric:tabular-nums}
   #tabs .tab.today::after{right:5px;top:5px}
   .acces-top:empty{display:none}
+  .acces-top{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin-top:12px}
+  .acces-top .acc{margin-top:0!important}
   .acces-top .acc{width:100%;margin-top:12px;flex-direction:row!important;align-items:center!important;padding:14px 16px!important}
-  .acces-top .acc .tx b{font-size:18px!important}
+  .acces-top .acc .tx b{font-size:17px!important}
+  @media(max-width:520px){.acces-top .acc{padding:12px!important;gap:10px}.acces-top .acc .tx b{font-size:15.5px!important}}
   #panels{scroll-margin-top:80px}
   .acc{display:flex;align-items:center;gap:12px;text-align:left;min-width:0;padding:13px 14px;border-radius:14px;cursor:pointer;
     background:var(--pc);border:1px solid var(--bc);color:var(--ice);font:inherit;transition:transform .2s,box-shadow .2s}
@@ -450,6 +453,12 @@
   .rc-box.lock p{margin:0;font:14.5px/1.45 var(--texte);color:var(--ice)}
   .rc-box.lock a{grid-column:2;justify-self:start;display:inline-flex;align-items:center;min-height:44px;font:600 13px/1 var(--texte);color:var(--blue)}
   @media(prefers-reduced-motion:reduce){.rc,.meal.open .rc,.plat .voir svg{transition:none}}
+  /* recette ouverte : hauteur bornée, elle défile dans son cadre (Dimitri 29/09 : certaines déroulaient très bas),
+     le bouton « Replier » reste collé en bas du cadre */
+  .meal.open .rc-box{max-height:min(460px,62vh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+  .rc-fermer{position:sticky;bottom:-14px;display:block;width:calc(100% + 30px);margin:10px -15px -14px;padding:11px 0;border:0;
+    border-top:1px solid color-mix(in srgb,var(--mb) 55%,transparent);background:color-mix(in srgb,var(--mp) 55%,var(--void2));
+    font:600 13.5px/1 var(--texte);color:var(--blue);cursor:pointer;border-radius:0 0 12px 12px}
 
   /* ===== C · ALERTES DE LA MESSAGERIE : un encart plutôt qu'un lien gris ===== */
   .notif{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:14px 0 4px;padding:13px 15px;border-radius:14px;
@@ -1106,7 +1115,7 @@ var PROG = {
       var b=document.createElement('button'); b.type='button'; b.className='acc '+x.cls+(x.lock?' lock':''); if(x.id) b.dataset.t=x.id;
       b.innerHTML='<span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">'+x.ic+'</svg></span><span class="tx"><b>'+x.label+'</b><small>'+
         (x.lock?'<span class="lk">'+LOCK+x.lock+'</span>':x.sous)+'</small></span>';
-      (x.id==='courses'&&!x.lock?accesTop:acces).appendChild(b); return b;
+      if(x.id==='courses'&&!x.lock) accesTop.insertBefore(b,accesTop.firstChild); else (x.id==='conseils'?accesTop:acces).appendChild(b); return b;   // 2 en haut, 2 en bas (Dimitri 29/09)
     }
     // un accès du bas ouvre son contenu à la place du menu : on remonte jusqu'à lui
     extras.forEach(function(x){ tuile(x).addEventListener('click',function(){ select(x.id);
@@ -1132,9 +1141,12 @@ var PROG = {
         '<div class="rc-hd"><b>'+esc(x.nom||'')+'</b>'+(x.temps?'<span>'+esc(x.temps)+'</span>':'')+'</div>'+
         (ings.length?'<h5>Tes quantités</h5><ul class="rc-ing">'+ings.map(function(g){ return '<li><span>'+esc(g[0]||'')+'</span><b>'+esc(deplier(g[1]||''))+'</b></li>'; }).join('')+'</ul>':'')+
         ((x.etapes||[]).length?'<h5>Préparation</h5><ol class="rc-et">'+x.etapes.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ol>':'')+
-        (x.astuce?'<p class="rc-ast"><b>Astuce</b>'+esc(x.astuce)+'</p>':'')+'</div>';
+        (x.astuce?'<p class="rc-ast"><b>Astuce</b>'+esc(x.astuce)+'</p>':'')+
+        '<button type="button" class="rc-fermer">Replier la recette</button></div>';
     }
     panels.addEventListener('click',function(e){
+      var f=e.target.closest('.rc-fermer');   // replier depuis le bas de la recette, et revenir sur le plat
+      if(f){ var mc=f.closest('.meal'); mc.querySelector('.plat').click(); mc.scrollIntoView({behavior:'smooth',block:'nearest'}); return; }
       var b=e.target.closest('.plat'); if(!b) return;
       var card=b.closest('.meal'), box=document.getElementById(b.getAttribute('aria-controls')).firstElementChild;
       if(!box.hasChildNodes()) box.innerHTML=recetteHTML(b.getAttribute('data-j'),+b.getAttribute('data-i'));

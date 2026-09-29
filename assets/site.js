@@ -3,7 +3,7 @@
 // PRIX DE L'E-BOOK « Bien manger, au gramme près » : UNE seule valeur pour tout le site
 // (valeur offerte avec la Formule Elysium + achat à l'unité). À changer ici, et dans supabase/boutique.sql
 // (produits.prix_cents) pour le montant réellement encaissé par Stripe.
-window.ELY_PRIX_EBOOK = '9,90 €';
+window.ELY_PRIX_EBOOK = '14,90 €';
 (function(){
   "use strict";
   // valeur de l'e-book offert, partout où la page la demande (<span class="valeur-ebook">)

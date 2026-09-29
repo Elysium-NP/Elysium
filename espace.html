@@ -351,6 +351,8 @@
   .renonce input{flex:none;width:18px;height:18px;margin:2px 0 0;accent-color:var(--blue)}
   .renonce a,.verrou .foot-note a{color:var(--blue)}
   .ebook-achat:disabled{opacity:.45;cursor:not-allowed}
+  .bon-savoir{max-width:460px;margin:16px auto 0;text-align:left;font:14px/1.55 var(--texte);color:var(--gris);padding:10px 14px;border-radius:12px;border:1px solid var(--b-violet);background:color-mix(in srgb,var(--p-violet) 45%,transparent)}
+  .bon-savoir b{color:var(--ice)} .bon-savoir a{color:var(--blue);white-space:nowrap}
   @media(max-width:520px){.acces{grid-template-columns:1fr 1fr;gap:8px}.acc{flex-direction:column;align-items:flex-start;gap:8px;padding:12px}.acc .tx b{font-size:16px}}
   /* ===== RECETTE AU CLIC SUR UN PLAT (Damien & Dimitri 28/09) =====
      Plus d'encadré « Recettes » : on touche un plat du menu et sa recette se déroule dessous, aux
@@ -591,7 +593,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
      restent en maquette. Un bandeau qui ment sur l'état réel finit par tromper tout le monde. -->
 <div class="demo-banner" id="demobanner" style="display:none">⚠︎ Compte et questionnaire sont réels et sécurisés. En revanche, le paiement est simulé et le programme affiché est un exemple — le tien arrivera une fois ta programmation faite.</div>
 
-<script src="assets/site.js?v=prix1"></script>
+<script src="assets/site.js?v=prix2"></script>
 <script>
 /* Exemple de programme (en prod : chargé depuis l'API du membre une fois construit par le coach). Structure identique au moteur. */
 var PROG = {
@@ -647,7 +649,8 @@ var PROG = {
   // VENTE DE L'E-BOOK À L'UNITÉ (Damien 28/09) : false = RIEN ne change, pour personne.
   // Passer à true seulement quand supabase/boutique.sql est lancé ET les deux fonctions Stripe redéployées.
   // Prix affiché : window.ELY_PRIX_EBOOK (assets/site.js) ; prix encaissé : table `produits` (prix_cents).
-  var ACHAT_EBOOK=false, EBOOK='ebook_bien_manger';
+  // ?demo=f1|f2&ebook=1 : APERÇU de la vente (maquette pour Damien & Yoann) ; en démo, aucun paiement ne peut partir
+  var ACHAT_EBOOK=false||(!!DEMO&&/[?&]ebook=1(?:&|#|$)/.test(location.search)), EBOOK='ebook_bien_manger';
   var ACHAT={dispo:false, achete:false};   // en vente (produits.actif) ? déjà payé (achats) ?
   var u=DEMO ? {id:'demo',prenom:'Sophie',nom:'Martin',sexe:'Femme',naissance:'1991-03-14',age:35,taille:165,email:'sophie.martin@example.com',
       created:Date.now()-92*JOUR_MS,paid:true,formule:DEMO,
@@ -893,22 +896,27 @@ var PROG = {
   // ---- E-BOOK À L'UNITÉ (derrière ACHAT_EBOOK) : Formule Elysium = offert ; sinon achat Stripe, puis même téléchargement ----
   function f3Actif(){ var a=moi().abonnement; return !!(a&&a.formule==='f3'&&['active','trialing'].indexOf(a.statut)>-1); }   // = règle du stockage
   function droitEbook(){ return f3Actif()||ACHAT.achete||(ADMIN&&!DEMO&&!VUE); }
+  // vente réservée aux abonnés Odyssée / Olympe en cours (Damien & Yoann 29/09) — même règle que la fonction stripe-paiement
+  function abonneF12(){ if(DEMO) return DEMO==='f1'||DEMO==='f2'; var a=moi().abonnement;
+    return !!(a&&(a.formule==='f1'||a.formule==='f2')&&['active','trialing'].indexOf(a.statut)>-1); }
   function guideVenteHTML(){
     var h='<h4>Bien manger, au gramme près</h4><p>Le guide nutrition de tes coachs : les principes de ta diète, pour les appliquer au quotidien.</p>';
     if(droitEbook()) return h+'<button type="button" class="btn ebook-dl" style="margin-top:14px">Télécharger mon e-book (PDF)</button><p class="foot-note" aria-live="polite"></p>';
+    if(!abonneF12()) return h+'<span class="dispo">Offert avec la <a href="formules.html">Formule Elysium</a></span>';
     var prix=window.ELY_PRIX_EBOOK||'', ouvert=!DEMO&&ACHAT.dispo;
     return h+'<span class="dispo">E-book disponible à l’unité</span>'+
+      // juste avant de payer, sans forcer : les deux choix restent ouverts (Damien & Yoann 29/09)
+      '<div class="bon-savoir"><b>Bon à savoir</b> : avec la Formule Elysium, l’e-book est offert. Tu as aussi tes quantités réajustées chaque semaine et les recettes des coachs pour chaque plat. <a href="#c-abo">Passer à la Formule Elysium</a></div>'+
       '<label class="renonce"><input type="checkbox" class="ebook-ok"'+(ouvert?'':' disabled')+'><span>Je demande l’accès immédiat au contenu et je reconnais perdre mon droit de rétractation dès le téléchargement (<a href="cgv.html">CGV</a>).</span></label>'+
       '<button type="button" class="btn ebook-achat" style="margin-top:14px"'+(ouvert?'':' disabled')+'>'+
         (ACHAT.dispo||DEMO ? 'L’acheter à l’unité'+(prix?' · '+prix:'') : 'Bientôt disponible')+'</button>'+
-      '<p class="foot-note" aria-live="polite">'+(DEMO?'Désactivé en démonstration : rien n’est enregistré.':'')+'</p>'+
-      '<p class="foot-note">Offert avec la <a href="formules.html">Formule Elysium</a>.</p>';
+      '<p class="foot-note" aria-live="polite">'+(DEMO?'Aperçu : aucun paiement ne part d’ici.':'')+'</p>';
   }
   function renderGuides(){
     if(!ACHAT_EBOOK) return;
     var d=droitEbook();
     [].forEach.call(document.querySelectorAll('.guide-vente'),function(x){ x.innerHTML=guideVenteHTML(); x.style.borderStyle=d?'solid':''; });
-    document.getElementById('c-guide').hidden=!!DEMO||!document.getElementById('progview').hidden;   // hors programme seulement
+    document.getElementById('c-guide').hidden=!!DEMO||!document.getElementById('progview').hidden||!(d||abonneF12());   // hors programme, abonnés seulement
   }
   function chargerAchat(){
     if(!ACHAT_EBOOK||DEMO) return Promise.resolve();

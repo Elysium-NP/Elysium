@@ -229,7 +229,16 @@
   .avis-b button[data-a="revoir"].on{background:var(--p-jaune);border-color:var(--b-jaune);color:var(--ice)}
   .avis-b button[data-a="plus_jamais"].on{background:#f6dcdc;border-color:#d98c8c;color:#7a1f1f}
   html[data-theme="obscur"] .avis-b button[data-a="plus_jamais"].on{background:#3a1b1b;border-color:#8a3a3a;color:#f3b4b4}
-  @media(max-width:520px){.avis-l{flex-direction:column;align-items:flex-start}}
+  @media(max-width:520px){.avis-l{flex-direction:column;align-items:stretch}.avis-b{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.avis-b button{padding:10px 4px}}
+  /* glow up 29/09 : un intitulé par repas, légende en 3 lignes courtes, compteur */
+  .avis-g{font:700 11px/1.3 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:18px 0 2px}
+  .avis-liste .avis-g:first-child{margin-top:4px}
+  .avis-leg li{display:flex;gap:8px;align-items:baseline}
+  .avis-leg li b{flex:none;min-width:84px}
+  #c-avis .avis-sans{font-size:13px;line-height:1.5;color:var(--steel);margin:6px 0 0}
+  .avis-compte{margin:14px 0 0;padding:9px 12px;border-radius:10px;background:var(--void);border:1px solid var(--line);font:600 13.5px/1.3 var(--texte);color:var(--gris)}
+  .avis-compte b{color:var(--ice);font-size:15px}
+  .avis-b button{min-height:40px}
   /* galerie des photos de suivi */
   .galerie{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:12px}
   .galerie:empty{display:none}
@@ -290,6 +299,44 @@
   /* en-tête : groupe d'actions (raccourci coachs + déconnexion) */
   .hd-act{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:auto}   /* reste à droite quand « Bonjour » est masqué */
   .dash-hd .coachlink{text-decoration:none;color:var(--blue);border-color:rgba(46,155,255,.45)}
+  /* RUBRIQUES : barre collée sous l'en-tête, 5 cases égales (tient à 375 px), une rubrique affichée à la fois */
+  .esp-nav{position:sticky;top:64px;z-index:20;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:0 0 18px;padding:6px;
+    border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--fond) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .esp-nav button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:52px;padding:6px 2px;border:0;border-radius:11px;
+    background:none;color:var(--steel);font:600 11.5px/1.15 var(--texte);cursor:pointer;transition:background .2s,color .2s}
+  .esp-nav button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .esp-nav button:hover{color:var(--ice)}
+  .esp-nav button[aria-current="true"]{background:var(--blue);color:#fff}
+  .esp-nav button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .esp-nav .bdg{position:absolute;top:5px;right:calc(50% - 20px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#cc0000;color:#fff;font:700 10.5px/17px var(--texte);font-style:normal;text-align:center}
+  .esp-nav .bdg:empty{min-width:9px;width:9px;height:9px;padding:0;top:7px;right:calc(50% - 16px)}
+  @media(min-width:700px){.esp-nav button{flex-direction:row;gap:8px;font-size:13.5px;min-height:46px}.esp-nav .bdg{position:static}}
+  main.dash[data-vue="menu"] [data-rub]:not([data-rub="menu"]),main.dash[data-vue="suivi"] [data-rub]:not([data-rub="suivi"]),
+  main.dash[data-vue="plats"] [data-rub]:not([data-rub="plats"]),main.dash[data-vue="messages"] [data-rub]:not([data-rub="messages"]),
+  main.dash[data-vue="compte"] [data-rub]:not([data-rub="compte"]){display:none!important}
+  #c-avis:not([hidden]) ~ .plats-vide{display:none!important}
+  .plats-vide p{margin:0;color:var(--gris)}
+  .esp-nav span{white-space:nowrap}
+  /* saisie du poids : vrais boutons (ils passaient sous les champs, écrasés à 12 px de haut) */
+  .wrow button{flex:1 1 130px;min-height:46px;padding:0 18px;border-radius:999px;font:600 14.5px/1 var(--texte);letter-spacing:0;text-transform:none}
+  .wrow button.ghostb{background:none;color:var(--blue);border:1.5px solid var(--blue)}
+  /* haut de page resserré : les rubriques arrivent tout de suite sous l'en-tête */
+  main.dash{padding-top:84px}
+  .dash-sub{margin-bottom:12px}
+  .dash-hd h1{margin-bottom:6px}
+  /* en-tête du programme compact sur téléphone : anneau et macros côte à côte (le menu remonte de ~250 px) */
+  @media(max-width:600px){
+    .phd{gap:14px!important;padding:16px!important}
+    .phd .macros{flex-direction:row!important;align-items:center!important;gap:16px!important}
+    .phd .donut{width:112px;height:112px}
+    .phd .donut .c .v{font-size:25px}
+    .phd .mlist{gap:9px;flex:1;min-width:0}
+    .phd .donut svg{width:100%;height:100%}
+    .phd .mrow .top{gap:6px}
+    .phd .mrow .l{font-size:10.5px;letter-spacing:.06em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .phd .mrow .g{font-size:15px;white-space:nowrap}
+    .phd .mrow .p{width:30px}
+  }
   .dash-hd .coachlink:hover{background:rgba(46,155,255,.1);color:var(--ice)}
   .dash-hd .coachlink[hidden]{display:none}
 
@@ -461,26 +508,33 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
   </div>
   <button type="button" class="pesee-rappel goto" id="msg-bandeau" data-goto="c-msg" hidden style="width:100%;margin:0 0 14px;text-align:left;cursor:pointer;font-family:var(--texte)"></button>
   <!-- retour de Stripe après l'achat de l'e-book (?achat=ok|annule) : seulement si ACHAT_EBOOK -->
-  <div class="pesee-rappel" id="achat-bandeau" hidden style="margin:0 0 14px"><span></span><button type="button" class="ebook-dl" hidden>Télécharger mon e-book</button><span class="foot-note" aria-live="polite" style="margin:0"></span></div>
+  <div class="pesee-rappel" id="achat-bandeau" data-rub="menu" hidden style="margin:0 0 14px"><span></span><button type="button" class="ebook-dl" hidden>Télécharger mon e-book</button><span class="foot-note" aria-live="polite" style="margin:0"></span></div>
   <div class="dash-sub">
     <span id="statuspill" class="pill free">Compte gratuit</span>
-    <span>Ton suivi, en direct, plus tu pèses régulièrement, plus la courbe parle.</span>
   </div>
+  <!-- RUBRIQUES (29/09, glow up comme l'espace coachs) : une rubrique à la fois au lieu d'une page de 8 000 px -->
+  <nav class="esp-nav" id="esp-nav" aria-label="Rubriques de mon espace">
+    <button type="button" data-vue="menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg><span>Menu</span></button>
+    <button type="button" data-vue="suivi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span>Suivi</span><i class="bdg" hidden></i></button>
+    <button type="button" data-vue="plats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.6 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>Mes plats</span></button>
+    <button type="button" data-vue="messages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Messages</span><i class="bdg" hidden></i></button>
+    <button type="button" data-vue="compte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a4 4 0 1 0 .01 0M4 21a8 8 0 0 1 16 0"/></svg><span>Compte</span></button>
+  </nav>
 
   <!-- ===== SECTION 1 · QUESTIONNAIRE & PROGRAMMATION (Dimitri 25/07) ===== -->
   <!-- PROGRAMME V2 intégré : visible seulement si payé + questionnaire rempli -->
-  <section id="progview" hidden></section>
+  <section id="progview" data-rub="menu" hidden></section>
   <!-- Carte programme (verrou / CTA questionnaire) — mutuellement exclusive avec #progview -->
-  <div class="card wide locked" id="progcard" style="margin-bottom:16px"></div>
+  <div class="card wide locked" id="progcard" data-rub="menu" style="margin-bottom:16px"></div>
 
   <!-- ===== SECTION 2 · POIDS & MENSURATIONS (suivi physique) ===== -->
   <!-- TUILES DE TÉLÉMÉTRIE (poids) -->
-  <div class="stats" id="stats"></div>
+  <div class="stats" id="stats" data-rub="suivi"></div>
 
   <div class="dash-grid">
 
     <!-- COURBE DE POIDS -->
-    <div class="card wide rv" id="c-courbe">
+    <div class="card wide rv" id="c-courbe" data-rub="suivi">
       <div class="ch"><h3>Ma courbe</h3><span class="tag">Poids</span></div>
       <div class="chart" id="chart"></div>
       <div class="wrow">
@@ -493,7 +547,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- MENSURATIONS (regroupé avec le poids — suivi physique) -->
-    <div class="card rv" id="c-mens">
+    <div class="card rv" id="c-mens" data-rub="suivi">
       <div class="ch"><h3>Mes mensurations</h3><span class="tag">Suivi</span></div>
       <p>Tes tours (épaules, poitrine, taille, hanches, cuisse, bras) en cm, une fois par mois. Optionnel, mais ça affine le suivi.</p>
       <div class="mens-grid">
@@ -510,7 +564,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- PHOTOS (suivi physique) -->
-    <div class="card rv" id="c-photos">
+    <div class="card rv" id="c-photos" data-rub="suivi">
       <div class="ch"><h3>Mes photos</h3><span class="tag">Suivi</span></div>
       <p>Une photo toutes les 2 semaines vaut mille pesées. Elles restent 100&nbsp;% privées.</p>
       <label class="drop" id="drop">Glisse une photo ici, ou clique pour choisir
@@ -521,21 +575,24 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- AVIS SUR LES PLATS (table retours) : lu par le suivi pour la prochaine diète -->
-    <div class="card wide rv" id="c-avis" hidden>
+    <div class="card wide rv" id="c-avis" data-rub="plats" hidden>
       <div class="ch"><h3>Ton avis sur tes plats</h3><span class="tag">Prochaine diète</span></div>
       <p>Pour chaque plat, dis-nous ce que tu veux pour ta prochaine diète. Tu peux changer d'avis jusque-là.</p>
       <ul class="avis-leg">
-        <li><b class="g">À garder</b> : le plat revient à coup sûr dans ta prochaine diète.</li>
-        <li><b class="r">À revoir</b> : tu as aimé, il peut revenir, sans être imposé.</li>
-        <li><b class="n">Plus jamais</b> : il ne revient plus.</li>
-        <li>Sans avis, on varie : ta prochaine diète ne reprend pas les plats de ce mois-ci.</li>
+        <li><b class="g">À garder</b> revient à coup sûr</li>
+        <li><b class="r">À revoir</b> peut revenir, sans être imposé</li>
+        <li><b class="n">Plus jamais</b> ne revient plus</li>
       </ul>
+      <p class="avis-sans">Sans avis, on varie : ta prochaine diète ne reprend pas les plats de ce mois-ci.</p>
+      <p class="avis-compte" id="avis-compte" aria-live="polite"></p>
       <div class="avis-liste" id="avis-liste"></div>
       <p id="avis-msg" class="foot-note" aria-live="polite"></p>
     </div>
 
     <!-- MESSAGES avec les coachs (table messages) -->
-    <div class="card wide rv" id="c-msg" hidden>
+    <div class="card wide plats-vide" data-rub="plats"><div class="ch"><h3>Ton avis sur tes plats</h3></div><p>Dès que ton programme est en ligne, tu retrouves ici chacun de tes plats pour dire à tes coachs ce que tu veux garder, revoir ou ne plus jamais voir.</p></div>
+
+    <div class="card wide rv" id="c-msg" data-rub="messages" hidden>
       <div class="ch"><h3>Mes messages</h3><span class="tag" id="msg-tag">Coachs</span></div>
       <p>Une question sur ton programme ? Écris à Damien &amp; Yoann, ils te répondent ici.</p>
       <!-- alertes navigateur : visible seulement tant que la permission n'a pas été demandée -->
@@ -550,13 +607,13 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- MON GUIDE NUTRITION hors programme (sans formule, ou programme pas encore prêt) : seulement si ACHAT_EBOOK -->
-    <div class="card rv" id="c-guide" hidden>
+    <div class="card rv" id="c-guide" data-rub="menu" hidden>
       <div class="ch"><h3>Mon guide nutrition</h3><span class="tag">E-book</span></div>
       <div class="verrou guide-vente" style="max-width:none"></div>
     </div>
 
     <!-- MON ABONNEMENT (Stripe) : formule, prix, échéance ; changer / résilier via le portail Stripe -->
-    <div class="card rv hors-appli" id="c-abo" hidden>
+    <div class="card rv hors-appli" id="c-abo" data-rub="compte" hidden>
       <div class="ch"><h3>Mon abonnement</h3><span class="tag" id="abo-tag">Actif</span></div>
       <div id="abo-corps"></div>
       <div class="dashcta"><button type="button" class="btn" id="abo-portail">Changer de formule ou résilier</button></div>
@@ -564,7 +621,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- PROFIL -->
-    <div class="card rv" id="c-profil">
+    <div class="card rv" id="c-profil" data-rub="compte">
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
       <p>Prénom : <b id="pprenom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
       <p style="margin-top:8px">Nom : <b id="pnom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
@@ -577,7 +634,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- DÉMO -->
-    <div class="card rv" id="democard" style="display:none">
+    <div class="card rv" id="democard" data-rub="compte" style="display:none">
       <div class="ch"><h3>Coin démo</h3><span class="tag">Maquette</span></div>
       <p>Pour visualiser l'espace <b style="color:var(--ice)">plein</b> (simulation, en attendant Stripe &amp; Supabase). Le programme s'affiche seulement si <b style="color:var(--ice)">payé</b> ET <b style="color:var(--ice)">questionnaire rempli</b> :</p>
       <div class="dashcta">
@@ -774,6 +831,7 @@ var PROG = {
     var quand = depuis<=0 ? "aujourd'hui" : depuis===1 ? 'hier' : 'il y a '+depuis+' jours';
     var rappel = !pes.length ? 'Enregistre ta première pesée : ta courbe démarre aussitôt, avec ton poids du questionnaire comme point de départ.'
       : depuis>=7 ? 'Ta dernière pesée date de '+depuis+' jours. Pèse-toi : c’est elle qui permet à tes coachs d’ajuster ta diète.' : '';
+    badge('suivi',!!rappel);
     el.innerHTML=(rappel ? '<div class="pesee-rappel"><span>'+rappel+'</span><button type="button" class="goto" data-goto="c-courbe">Noter mon poids</button></div>' : '')+
       tile('Poids actuel',cur.toFixed(1),'kg','',w[w.length-1].q?'Questionnaire':'Pesée '+quand)+tile('Départ',start.toFixed(1),'kg','',new Date(w[0].t).toLocaleDateString('fr-FR')+(w[0].q?' · questionnaire':''))+
       tile('Évolution',ds,'kg','accent',rythme)+ringTile;
@@ -1344,6 +1402,15 @@ var PROG = {
   // ---- AVIS SUR LES PLATS (table retours) ----
   // Un plat = sa CLÉ MOTEUR (recette_base, sinon recette) : c'est ce que le suivi relit. Le titre n'est qu'affiché.
   var AVIS={};
+  // liste des plats regroupée par repas (un intitulé par repas, plus un par plat) ; L = [{k, t, type}]
+  function avisHTML(L){ var prec=null;
+    return L.map(function(p){ var h=p.type!==prec?'<h4 class="avis-g">'+esc(p.type)+'</h4>':''; prec=p.type;
+      return h+'<div class="avis-l"><span class="avis-t">'+esc(p.t)+'</span><div class="avis-b">'+
+        '<button type="button" data-a="garder" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='garder'?' class="on"':'')+'>À garder</button>'+
+        '<button type="button" data-a="revoir" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='revoir'?' class="on"':'')+'>À revoir</button>'+
+        '<button type="button" data-a="plus_jamais" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='plus_jamais'?' class="on"':'')+'>Plus jamais</button></div></div>'; }).join(''); }
+  function avisCompte(){ var n=document.querySelectorAll('#avis-liste .avis-l').length, f=document.querySelectorAll('#avis-liste .avis-l button.on').length;
+    document.getElementById('avis-compte').innerHTML='<b>'+f+'</b> plat'+(f>1?'s':'')+' noté'+(f>1?'s':'')+' sur '+n; }
   function chargerAvis(){
     var card=document.getElementById('c-avis');
     if(ADMIN||!REEL.pid||!REEL.menu){ card.hidden=true; return; }
@@ -1356,11 +1423,7 @@ var PROG = {
         L.push({k:k,t:rp.titre||k,type:MEALS[rp.type]||'',o:ordre[rp.type]!=null?ordre[rp.type]:9}); }); });
       if(!L.length){ card.hidden=true; return; }
       L.sort(function(a,b){ return a.o-b.o; });
-      document.getElementById('avis-liste').innerHTML=L.map(function(p){
-        return '<div class="avis-l"><span class="avis-t"><small>'+esc(p.type)+'</small>'+esc(p.t)+'</span><div class="avis-b">'+
-          '<button type="button" data-a="garder" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='garder'?' class="on"':'')+'>À garder</button>'+
-          '<button type="button" data-a="revoir" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='revoir'?' class="on"':'')+'>À revoir</button>'+
-          '<button type="button" data-a="plus_jamais" data-k="'+esc(p.k)+'"'+(AVIS[p.k]==='plus_jamais'?' class="on"':'')+'>Plus jamais</button></div></div>'; }).join('');
+      document.getElementById('avis-liste').innerHTML=avisHTML(L); avisCompte();
       card.hidden=false;
     }).catch(function(){ card.hidden=true; });
   }
@@ -1369,7 +1432,7 @@ var PROG = {
     var k=b.getAttribute('data-k'), a=b.getAttribute('data-a'), msg=document.getElementById('avis-msg');
     if(DEMO){ if(AVIS[k]===a) delete AVIS[k]; else AVIS[k]=a;
       b.parentNode.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',AVIS[k]===x.getAttribute('data-a')); });
-      msg.textContent='Démonstration : rien n’est enregistré.'; return; }
+      msg.textContent='Démonstration : rien n’est enregistré.'; avisCompte(); return; }
     if(enDemo(msg)) return;
     var req = AVIS[k]===a
       ? sb.from('retours').delete().eq('user_id',u.id).eq('programme_id',REEL.pid).eq('plat',k)          // re-clic = neutre
@@ -1379,7 +1442,7 @@ var PROG = {
       if(r.error){ msg.textContent='Avis non enregistré, réessaie dans un instant.'; return; }
       if(AVIS[k]===a) delete AVIS[k]; else AVIS[k]=a;
       b.parentNode.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',AVIS[k]===x.getAttribute('data-a')); });
-      msg.textContent='Avis enregistré : tes coachs le verront pour ta prochaine diète.'; });
+      msg.textContent='Avis enregistré : tes coachs le verront pour ta prochaine diète.'; avisCompte(); });
   });
 
   // ---- PHOTOS DE SUIVI : stockage PRIVÉ Supabase (bucket photos-suivi, dossier du client) ----
@@ -1450,8 +1513,21 @@ var PROG = {
   });
 
   // ---- cartes suivi cliquables : scroll + flash vers l'outil du tableau de bord ----
+  // ---- RUBRIQUES ----
+  var VUES=['menu','suivi','plats','messages','compte'], dash=document.querySelector('main.dash');
+  function vue(v,haut){ if(VUES.indexOf(v)<0) v='menu'; dash.dataset.vue=v; try{ sessionStorage.setItem('ely_rub',v); }catch(e){}
+    [].forEach.call(document.querySelectorAll('#esp-nav [data-vue]'),function(b){ b.setAttribute('aria-current',String(b.dataset.vue===v)); });
+    [].forEach.call(document.querySelectorAll('[data-rub="'+v+'"] .rv'),function(x){ x.classList.add('in'); });
+    if(haut){ var n=document.getElementById('esp-nav'); if(n.getBoundingClientRect().top<=64) window.scrollTo({top:Math.max(0,n.offsetTop-70),behavior:'auto'}); }
+    if(v==='suivi') window.dispatchEvent(new Event('resize'));   // la courbe se redessine à sa vraie largeur
+  }
+  document.getElementById('esp-nav').addEventListener('click',function(e){ var b=e.target.closest('[data-vue]'); if(b) vue(b.dataset.vue,true); });
+  (function(){ var h=(location.hash||'').slice(1), v=null; if(VUES.indexOf(h)>-1) v=h; else if(h==='c-msg') v='messages';
+    if(!v){ try{ v=sessionStorage.getItem('ely_rub'); }catch(e){} } vue(v||'menu'); })();
+  function badge(v,n){ var b=document.querySelector('#esp-nav [data-vue="'+v+'"] .bdg'); if(!b) return; b.hidden=!n; b.textContent=n===true?'':(n||''); }
   function gotoCard(id){
     var t=document.getElementById(id); if(!t) return;
+    var r=t.closest('[data-rub]'); if(r&&r.dataset.rub!==dash.dataset.vue) vue(r.dataset.rub);
     var y0=window.scrollY;
     t.scrollIntoView({behavior:'smooth',block:'center'});
     // filet : si le smooth n'a rien bougé (vieux navigateur / env sans smooth), scroll instantané garanti
@@ -1524,7 +1600,7 @@ var PROG = {
         var n=new Notification('Elysium · tes coachs t’ont répondu',{body:m.texte.slice(0,140),tag:'ely-msg-'+m.id,icon:'assets/apple-touch-icon.png'});
         n.onclick=function(){ window.focus(); document.getElementById('c-msg').scrollIntoView({block:'center'}); n.close(); }; });
       vusMsg={}; L.forEach(function(m){ vusMsg[m.id]=1; });
-      var k=aLire.length, bd=document.getElementById('msg-bandeau');
+      var k=aLire.length, bd=document.getElementById('msg-bandeau'); badge('messages',k);
       document.getElementById('msg-tag').textContent = k ? k+' nouveau'+(k>1?'x':'') : 'Coachs';
       document.title=(k?'('+k+') ':'')+TITRE;
       bd.hidden=!k; if(k) bd.textContent=(k>1?k+' nouveaux messages':'Nouveau message')+' de tes coachs · Lire';
@@ -1568,11 +1644,9 @@ var PROG = {
     // avis sur les plats : les plats du programme d'exemple
     var vus={}, L=[];
     PROG.jours.forEach(function(j){ j.repas.forEach(function(r){ if(!vus[r.rec]){ vus[r.rec]=1; L.push(r); } }); });
-    document.getElementById('avis-liste').innerHTML=L.map(function(r){
-      return '<div class="avis-l"><span class="avis-t"><small>'+esc(r.type)+'</small>'+esc(r.rec)+'</span><div class="avis-b">'+
-        '<button type="button" data-a="garder" data-k="'+esc(r.rec)+'"'+(AVIS[r.rec]==='garder'?' class="on"':'')+'>À garder</button>'+
-          '<button type="button" data-a="revoir" data-k="'+esc(r.rec)+'"'+(AVIS[r.rec]==='revoir'?' class="on"':'')+'>À revoir</button>'+
-          '<button type="button" data-a="plus_jamais" data-k="'+esc(r.rec)+'"'+(AVIS[r.rec]==='plus_jamais'?' class="on"':'')+'>Plus jamais</button></div></div>'; }).join('');
+    var ord={'Petit-déjeuner':0,'Déjeuner':1,'Collation':2,'Dîner':3};
+    L.sort(function(a,b){ return (ord[a.type]!=null?ord[a.type]:9)-(ord[b.type]!=null?ord[b.type]:9); });
+    document.getElementById('avis-liste').innerHTML=avisHTML(L.map(function(r){ return {k:r.rec,t:r.rec,type:r.type}; })); avisCompte();
     document.getElementById('c-avis').hidden=false;
     // messagerie : un échange d'exemple, envoi désactivé
     var il=function(j,h){ var d=new Date(Date.now()-j*JOUR_MS); d.setHours(h,12,0,0); return d.toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); };

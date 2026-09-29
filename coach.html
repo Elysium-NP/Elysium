@@ -2191,6 +2191,8 @@ var ED=(function(){
     if(!n) return '<h4>Ses réponses au questionnaire</h4><p class="rien">Questionnaire pas encore rempli : les réponses apparaîtront ici dès qu’il sera validé.</p>';
     var G={}, autres=[];
     K.forEach(function(k){ var g=null; for(var i=0;i<QGR.length&&!g;i++) if(QGR[i].re.test(k.trim())) g=QGR[i].id; (g?(G[g]=G[g]||[]):autres).push(k); });
+    function rang(k){ for(var i=0;i<QCOURT.length;i++) if(QCOURT[i][0].test(k.trim())) return i; return 99; }   // ordre logique dans chaque carte
+    Object.keys(G).forEach(function(g){ G[g].sort(function(x,y){ return rang(x)-rang(y); }); });
     function ligne(k,veille){ var v=String(rep[k]), vide=qVide(v);
       return '<div class="qx'+(veille?(vide?' ok':' fort'):'')+'"><dt>'+esc(qCourt(k))+'</dt><dd>'+(veille&&vide?'Rien à signaler':esc(v))+'</dd></div>'; }
     var h='<h4>Ses réponses au questionnaire <span class="n">'+n+' réponse'+(n>1?'s':'')+'</span></h4>'+aInterp(c.diagnostic);

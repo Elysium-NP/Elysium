@@ -397,6 +397,9 @@
   .acc.lock .tx b{color:var(--gris)}
   .acc .lk{display:inline-flex;align-items:center;gap:5px;color:var(--steel)}
   .vue-admin{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;padding:8px 10px;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  .vue-admin .va-sep{margin-left:10px;padding-left:12px;border-left:1px solid var(--line)}
+  .vue-admin button[data-nrep]{min-width:40px}
+  .vue-admin button[data-nrep][aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
   .vue-admin span{font:600 11px/1 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-right:4px}
   .vue-admin button{font:600 13px/1 var(--texte);color:var(--gris);background:none;border:1px solid var(--line);border-radius:999px;padding:8px 13px;cursor:pointer}
   .vue-admin button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
@@ -935,6 +938,13 @@ var PROG = {
   // formule du client : la démo, sinon la clé f1/f2/f3 de son abonnement (repli : son profil). Compte admin : pas de verrou.
   // Comptes « mixte » (Dimitri, Damien, Yoann) : sélecteur « Voir comme » qui transforme l'espace EN DIRECT (null = tout visible)
   var VUE=null; try{ VUE=sessionStorage.getItem('ely_vue')||null; }catch(e){}
+  // comptes mixte : voir aussi le menu à 4 ou 5 repas (1 ou 2 collations, placées comme dans les diètes : entre déjeuner et dîner)
+  var NREP=3; try{ NREP=+sessionStorage.getItem('ely_nrep')||3; }catch(e){} if([3,4,5].indexOf(NREP)<0) NREP=3;
+  var COLLAS=[{type:'Collation',emo:'🍎',kcal:180,rec:'Fromage blanc & pomme',seas:'',ings:[['150 g','fromage blanc 0%'],['1','pomme']],m:[12,28,1]},
+              {type:'Collation',emo:'🍎',kcal:292,rec:'Smoothie banane & cacahuète',seas:'Extrait de vanille',ings:[['250 g',"lait d'amande"],['1','banane'],['15 g','beurre de cacahuète'],['10 g','miel']],m:[7,41,12]}];
+  function joursVus(){ if(!ADMIN||DEMO||NREP===3) return PROG.jours;
+    return PROG.jours.map(function(d,i){ var R=d.repas.slice(), din=R.length-1, aj=NREP===5?[COLLAS[0],COLLAS[1]]:[COLLAS[i%2]];
+      R.splice.apply(R,[din,0].concat(aj)); return Object.assign({},d,{repas:R}); }); }
   if(['f1','f2','f3'].indexOf(VUE)<0) VUE=null;   // seule une formule est une « vue » valable
   function formuleClient(){ if(DEMO) return DEMO; if(ADMIN) return VUE; var x=moi(); return cleFormule((x.abonnement&&x.abonnement.formule)||x.formule); }
   // rythme de la formule, avec ce qu'elle n'a pas en discret
@@ -942,7 +952,9 @@ var PROG = {
     var FC=formuleClient(), bar='';
     if(ADMIN&&!DEMO) bar='<div class="vue-admin" role="group" aria-label="Voir l\u2019espace comme un client"><span>Voir comme</span>'+
       [['','Tout'],['f1','Odyssée'],['f2','Olympe'],['f3','Elysium']].map(function(x){
-        return '<button type="button" data-vue="'+x[0]+'" aria-pressed="'+(String(VUE||'')===x[0])+'">'+x[1]+'</button>'; }).join('')+'</div>';
+        return '<button type="button" data-vue="'+x[0]+'" aria-pressed="'+(String(VUE||'')===x[0])+'">'+x[1]+'</button>'; }).join('')+
+      '<span class="va-sep">Repas / jour</span>'+[3,4,5].map(function(n){
+        return '<button type="button" data-nrep="'+n+'" aria-pressed="'+(NREP===n)+'">'+n+'</button>'; }).join('')+'</div>';
     if(!FC) return bar;
     var LK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     // libellés validés par Damien (28/09), mot pour mot
@@ -953,6 +965,11 @@ var PROG = {
   }
 
   var progBuilt=false;
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-nrep]'); if(!b||!ADMIN) return;
+    NREP=+b.getAttribute('data-nrep'); try{ sessionStorage.setItem('ely_nrep',NREP); }catch(x){}
+    var y=scrollY; progBuilt=false; document.getElementById('progview').innerHTML=''; buildProgView(); scrollTo(0,y);
+  });
   // « Voir comme » : on reconstruit la vue du programme sur place, sans changer de page
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('[data-vue]'); if(!b||!ADMIN) return;
@@ -1077,7 +1094,7 @@ var PROG = {
     // jour N du menu = N-ième jour de la semaine (lundi = Jour 1, dimanche = jour off, comme « aujourd'hui » plus bas) : on montre la date de cette semaine
     var JS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'], JL=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'], lun=new Date(); lun.setDate(lun.getDate()-((lun.getDay()+6)%7));
     function dateJour(n){ var d=new Date(lun); d.setDate(lun.getDate()+n-1); return d.getDate(); }
-    PROG.jours.forEach(function(d){ var n=+d.j, ok=n>=1&&n<=6;
+    joursVus().forEach(function(d){ var n=+d.j, ok=n>=1&&n<=6;
       items.push({id:'j'+d.j,label:'Jour '+d.j,court:ok?'<b>'+JS[n-1]+'</b><small>'+dateJour(n)+'</small>':'<b>J'+d.j+'</b>',aria:'Jour '+d.j+(ok?', '+JL[n-1]+' '+dateJour(n):''),html:dayHTML(d)}); });
     items.push({id:'off',label:'Jour OFF',court:'<b>Off</b><small>'+dateJour(7)+'</small>',aria:'Jour off, dimanche '+dateJour(7),html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
     var nCourses=0; Object.keys(PROG.courses||{}).forEach(function(k){ nCourses+=(PROG.courses[k]||[]).length; });

@@ -149,6 +149,25 @@
   html[data-theme="obscur"] .qa.alerte dd{color:#f0b35a}
   /* questionnaire complet repliable (relecture d'un client du Google Form) */
   .q-rep{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  /* questionnaire de la fiche (29/09) : À surveiller en tête, thèmes en cartes, administratif replié */
+  .q-veille{border:1px solid var(--b-jaune);background:color-mix(in srgb,var(--p-jaune) 55%,transparent);border-radius:14px;padding:12px 14px;margin:4px 0 14px}
+  .q-veille h5,.q-bloc h5{font:700 11px/1.3 var(--texte);letter-spacing:.12em;text-transform:uppercase;color:var(--steel);margin:0 0 6px}
+  .q-veille h5{color:var(--ice)} .q-veille h5 small{font-weight:600;letter-spacing:.04em;text-transform:none;color:var(--steel);margin-left:6px}
+  .q-veille dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:8px 18px;margin:0}
+  .q-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+  .q-bloc{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--void)}
+  .q-bloc dl,.q-admin dl{margin:0}
+  .qx{display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);gap:10px;padding:7px 0;border-top:1px solid var(--line);align-items:baseline}
+  .q-bloc .qx:first-child,.q-admin .qx:first-child{border-top:0}
+  .qx dt{font:600 12.5px/1.35 var(--texte);color:var(--steel)}
+  .qx dd{margin:0;font:600 14.5px/1.45 var(--texte);color:var(--ice);overflow-wrap:anywhere;white-space:pre-line}
+  .q-veille .qx{display:block;border:0;padding:4px 0}
+  .q-veille .qx dd{font-size:15px;margin-top:2px}
+  .q-veille .qx.fort dd{color:#b45309} html[data-theme="obscur"] .q-veille .qx.fort dd{color:#f0b35a}
+  .q-veille .qx.ok dd{color:var(--steel);font-weight:400}
+  .q-admin{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+  .q-admin summary{cursor:pointer;min-height:40px;display:flex;align-items:center;font:600 13.5px/1.3 var(--texte);color:var(--blue)}
+  .q-admin[open]{padding-bottom:10px}
   .q-rep summary{cursor:pointer;font:600 13.5px/1.3 var(--texte);color:var(--blue);min-height:32px;display:flex;align-items:center}
   .q-rep .qa dd{font-size:14px;overflow-wrap:anywhere}
 
@@ -2103,9 +2122,6 @@ var ED=(function(){
      et ce que renderSuivi lit à l'ouverture (pesées, mensurations, questionnaire, retours, photos) dans FS. */
   // réponses du questionnaire : ce qui compte pour juger une diète d'abord, repéré par DÉBUT de libellé
   // (couvre l'ancien formulaire et celui refondu le 04/09)
-  var PRIO=['Quel est ton objectif principal','Comment décrirais-tu ton appétit',
-    'Des aliments que tu refuses','Allergies','As-tu un régime particulier',
-    'Y a-t-il des aliments que tu souhaites absolument conserver','FACULTATIF - Pour aller plus loin'];
   var ALERTE=['Des aliments que tu refuses','Allergies'];
   var SOUS=['Diètes','Messages','Questionnaire','Mensurations','Photos','Retours sur les plats','Notes internes'];
   var FS={uid:null,s:0};
@@ -2152,13 +2168,40 @@ var ED=(function(){
     return '<div class="rl-ai'+(bl.some(function(b){ return b[2]; })?' fort':'')+'" style="margin:0 0 10px"><b>À interpréter</b> · mots écrits par le client, absents de notre liste d’aliments'+
       bl.map(function(b){ return '<span class="k">'+b[0]+'</span>'+b[1].map(function(w){ return '<span class="w">'+esc(w)+'</span>'; }).join(''); }).join('')+
       '<p>Ces mots n’ont <b>pas</b> été retirés du menu. À toi de juger ce que ça implique (une famille entière ? une source à remplacer ?) et de le signaler si le menu doit changer.</p></div>'; }
+  /* QUESTIONNAIRE lu d'un coup d'œil (Dimitri 29/09) : ce qui change le menu en tête, puis par thème, libellés courts ;
+     les coordonnées et l'administratif repliés en bas. Une question inconnue n'est jamais perdue (« Autres réponses »). */
+  var QGR=[
+    {id:'veille',t:'À surveiller',re:/^(Des aliments que tu refuses|Allergies|As-tu un régime|Y a-t-il des aliments que tu souhaites)/i},
+    {id:'obj',t:'Objectif et corps',re:/^(Quel est ton objectif|Te sens-tu|Poids|Si l.aspect du poids|Taille|Sexe|Âge|Age|Date de naissance)/i},
+    {id:'vie',t:'Activité',re:/^(Quelle est ton activité|Ton métier|Nombre moyen de pas|En moyenne, combien de séances|Sais-tu que nous réalisons|Serais-tu intéressé)/i},
+    {id:'ali',t:'Habitudes alimentaires',re:/^(Comment décrirais-tu ton appétit|Es-tu plutôt team|FACULTATIF|Combien de repas|Grignot|Tu cuisines|Budget)/i},
+    {id:'admin',t:'Coordonnées et administratif',re:/^(Numéro de téléphone|Adresse|Code postal|Ville|Conditions Générales|Comment as-tu connu|Si vous avez sélectionné|E-?mail|Adresse e-?mail|Nom|Prénom)/i}];
+  var QCOURT=[[/^Quel est ton objectif/i,'Objectif'],[/^Te sens-tu/i,'Se sent plutôt'],[/^Poids/i,'Poids (kg)'],[/^Si l.aspect du poids/i,'Poids idéal visé'],
+    [/^Des aliments que tu refuses/i,'Refuse / n’aime pas'],[/^Allergies/i,'Allergies, intolérances, pathologies'],[/^As-tu un régime/i,'Régime'],
+    [/^Y a-t-il des aliments que tu souhaites/i,'À conserver absolument'],[/^Quelle est ton activité/i,'Métier'],[/^Ton métier/i,'Au travail'],
+    [/^Nombre moyen de pas/i,'Pas par jour'],[/^En moyenne, combien de séances/i,'Séances de sport / semaine'],[/^Sais-tu que nous réalisons/i,'Connaît nos programmes sport'],
+    [/^Serais-tu intéressé/i,'Intéressé par l’entraînement'],[/^Comment décrirais-tu ton appétit/i,'Appétit'],[/^Es-tu plutôt team/i,'Petit-déjeuner'],
+    [/^FACULTATIF/i,'Pour aller plus loin'],[/^Numéro de téléphone/i,'Téléphone'],[/^Adresse de facturation/i,'Adresse'],[/^Comment as-tu connu/i,'Nous a connus par'],
+    [/^Si vous avez sélectionné/i,'Entreprise / CSE'],[/^Conditions Générales/i,'CGV']];
+  function qCourt(k){ for(var i=0;i<QCOURT.length;i++) if(QCOURT[i][0].test(k)) return QCOURT[i][1];
+    return k.split('⚠')[0].split('\n(')[0].replace(/\s+/g,' ').replace(/\s*\(.*?\)\s*$/,'').replace(/\s*\?\s*$/,'').slice(0,60); }
+  function qVide(v){ return /^\s*(rien|aucun|aucune|non|rien de particulier|pas de|nothing|-|—|néant|neant|ras)\s*\.?\s*$/i.test(String(v)); }
   function questionnaire(c){
-    var rep=c.reponses||((D&&D.par[c.user_id])||{}).rep||{}, vus={}, L=[], n=Object.keys(rep).filter(function(k){ return rep[k]; }).length;
+    var rep=c.reponses||((D&&D.par[c.user_id])||{}).rep||{}, K=Object.keys(rep).filter(function(k){ return rep[k]!=null&&String(rep[k]).trim()!==''; }), n=K.length;
     if(!n) return '<h4>Ses réponses au questionnaire</h4><p class="rien">Questionnaire pas encore rempli : les réponses apparaîtront ici dès qu’il sera validé.</p>';
-    PRIO.forEach(function(p){ Object.keys(rep).forEach(function(k){ if(!vus[k]&&rep[k]&&k.indexOf(p)===0){ vus[k]=1; L.push(qa(k,rep[k])); } }); });
-    Object.keys(rep).forEach(function(k){ if(!vus[k]&&rep[k]) L.push(qa(k,rep[k])); });
-    return '<h4>Ses réponses au questionnaire <span class="n">'+n+' réponse'+(n>1?'s':'')+'</span></h4>'+aInterp(c.diagnostic)+'<dl style="margin:0">'+L.join('')+'</dl>';
+    var G={}, autres=[];
+    K.forEach(function(k){ var g=null; for(var i=0;i<QGR.length&&!g;i++) if(QGR[i].re.test(k.trim())) g=QGR[i].id; (g?(G[g]=G[g]||[]):autres).push(k); });
+    function ligne(k,veille){ var v=String(rep[k]), vide=qVide(v);
+      return '<div class="qx'+(veille?(vide?' ok':' fort'):'')+'"><dt>'+esc(qCourt(k))+'</dt><dd>'+(veille&&vide?'Rien à signaler':esc(v))+'</dd></div>'; }
+    var h='<h4>Ses réponses au questionnaire <span class="n">'+n+' réponse'+(n>1?'s':'')+'</span></h4>'+aInterp(c.diagnostic);
+    if(G.veille) h+='<div class="q-veille"><h5>À surveiller <small>ce qui change le menu</small></h5><dl>'+G.veille.map(function(k){ return ligne(k,1); }).join('')+'</dl></div>';
+    var cartes=QGR.filter(function(g){ return g.id!=='veille'&&g.id!=='admin'&&G[g.id]; }).map(function(g){ return '<div class="q-bloc"><h5>'+g.t+'</h5><dl>'+G[g.id].map(function(k){ return ligne(k,0); }).join('')+'</dl></div>'; });
+    if(autres.length) cartes.push('<div class="q-bloc"><h5>Autres réponses</h5><dl>'+autres.map(function(k){ return ligne(k,0); }).join('')+'</dl></div>');
+    h+='<div class="q-grille">'+cartes.join('')+'</div>';
+    if(G.admin) h+='<details class="q-admin"><summary>Coordonnées et administratif · '+G.admin.length+'</summary><dl>'+G.admin.map(function(k){ return ligne(k,0); }).join('')+'</dl></details>';
+    return h;
   }
+
   var MENS=[['taille','Tour de taille'],['hanches','Tour de hanches'],['poitrine','Tour de poitrine'],['epaules','Épaules'],['cuisse','Tour de cuisse'],['bras','Tour de bras']];
   function mensurations(){ var M=FS.mens, dj=function(m){ return new Date(m.date+'T12:00:00').toLocaleDateString('fr-FR'); };
     if(M==null) return '<h4>Mensurations</h4><p class="rien">Chargement…</p>';

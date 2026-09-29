@@ -170,6 +170,12 @@
   .p{--c:var(--mP)} .g{--c:var(--mG)} .l{--c:var(--mL)}
   .day-ft{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 18px;background:var(--card);font-size:13px}
   .day-ft b{font-family:var(--texte);font-weight:400;font-size:20px}
+  .recois{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+  .recois li{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid var(--rule);border-radius:14px;background:var(--surface);font-size:15.5px;line-height:1.5;color:var(--ink2)}
+  .recois li b{color:var(--ink);font-weight:600}
+  .recois svg{flex:none;width:22px;height:22px;margin-top:1px;padding:3px;border-radius:50%;background:var(--brand);fill:none;stroke:#111;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .recois-prix{margin:20px 0 0;font-size:16.5px;color:var(--ink2)}
+  .recois-prix b{color:var(--ink);font-size:19px}
   .day-note{font-size:12px;color:var(--mute);text-align:center;margin:12px 0 0}
   @media(prefers-reduced-motion:no-preference){
     .day.go .meal{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
@@ -577,19 +583,21 @@
     </div>
   </section>
 
-  <!-- LA MÉTHODE -->
+  <!-- CE QUE TU REÇOIS (Damien 29/09, texte validé mot pour mot) : remplace « Du profil à l'assiette » (4 étapes) -->
   <section class="soft">
     <div class="wrap">
-      <p class="eyebrow">La méthode</p>
-      <h2>Du profil à l'assiette.</h2>
-      <p class="lede">Quatre étapes, toutes tournées vers toi. On pose tes chiffres, on construit tes plats, on ajuste au gramme, et on te livre.</p>
-      <ol class="steps">
-        <li><h3>Le profil</h3><p>Ton questionnaire : objectif, rythme de vie, goûts, contraintes.</p></li>
-        <li><h3>Le calcul</h3><p>Tes besoins posés en chiffres : calories, protéines, glucides, lipides.</p></li>
-        <li><h3>La construction</h3><p>Tes plats, composés un par un et ajustés au gramme.</p></li>
-        <li><h3>La livraison</h3><p>Ton programme dans ton espace, et en PDF à imprimer.</p></li>
-      </ol>
-      <a class="more" href="methode.html">Découvrir la méthode</a>
+      <p class="eyebrow">Ce que tu reçois</p>
+      <h2>Concrètement, tu reçois quoi&nbsp;?</h2>
+      <p class="lede">Ta semaine alimentaire, construite pour toi par Damien &amp; Yoann.</p>
+      <ul class="recois">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>6 jours de repas + 1 jour off</b>, pour garder ta liberté</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Des plats que tu aimes, aux quantités <b>pesées au gramme</b> pour ton objectif</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Calée sur ton quotidien : ton niveau d’activité (travail, sport, vie quotidienne), tes contraintes, tes préférences</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Ta diète <b>évolue avec toi</b> : tu notes ta pesée dans ton espace, on réajuste tes quantités</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Selon ta formule : un nouveau menu chaque mois, la liste de courses, les recettes des coachs</span></li>
+      </ul>
+      <p class="recois-prix">Dès <b>19,90&nbsp;€</b> toutes les 4 semaines, sans engagement.</p>
+      <div class="ctas"><a class="btn main" href="formules.html">Construire mon programme</a><a class="btn line" href="formules.html">Choisir ma formule</a></div>
     </div>
   </section>
 

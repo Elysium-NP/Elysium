@@ -179,7 +179,8 @@
     resetPassword: function (email) {
       if (!sb) return Promise.reject(new Error("Supabase indisponible"));
       return sb.auth.resetPasswordForEmail((email || "").trim(),
-        { redirectTo: location.origin + "/connexion.html" });
+        // appli MyEly : l'origine y est https://localhost -> le lien du mail pointe vers le site
+        { redirectTo: (/^https?:\/\/localhost(:|$)/.test(location.origin) ? "https://elysium-x57.pages.dev" : location.origin) + "/connexion.html" });
     },
 
     /* Garde des pages privées : test synchrone immédiat, puis confirmation réseau. */

@@ -148,6 +148,17 @@
   .qcard.hop .dot::after{animation:coche .45s ease .1s both}
   @keyframes coche{from{opacity:0;transform:rotate(45deg) scale(.3)}to{opacity:1;transform:rotate(45deg) scale(1)}}
   .qfield input,.qfield select,.qfield textarea{border-radius:10px}
+  /* TUILES (Damien 29/09) : chaque choix = une tuile, picto au trait + libellé ; posées par le script (classe .tuiles).
+     Rien ne change dans le formulaire : mêmes inputs, mêmes data-q, mêmes valeurs. */
+  .qcards.tuiles{grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:10px}
+  .qcards.tuiles .qcard{flex-direction:column;justify-content:center;gap:10px;min-height:124px;padding:16px 10px 14px;text-align:center}
+  .qcards.tuiles .qcard .pic{width:34px;height:34px;color:var(--ice);opacity:.85}
+  .qcards.tuiles .qcard .pic svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .qcards.tuiles .qcard .tx{font-size:14.5px;line-height:1.3}
+  .qcards.tuiles .qcard .dot{position:absolute;top:9px;right:9px;width:20px;height:20px;opacity:0;transition:opacity .25s}
+  .qcards.tuiles .qcard:has(input:checked) .dot{opacity:1}
+  .qcards.tuiles .qcard:has(input:checked) .pic{opacity:1}
+  .qcards.tuiles .qcard:has(input:focus-visible){outline:2px solid var(--blue);outline-offset:2px}
   /* numéro du bloc -> pastille cochée quand le bloc est complet */
   .qstep h2::before{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:2px solid var(--bc);
     color:var(--ice);font-size:12px;letter-spacing:0;margin-bottom:12px;transition:background .5s,border-color .5s}
@@ -398,7 +409,7 @@
   </div>
 </main>
 
-<footer class="site-foot">
+<footer class="site-foot hors-appli">
   <img class="foot-logo" src="assets/logo-pied.png" alt="Elysium · Nutrition &amp; Performance" width="200" height="105" loading="lazy" decoding="async">
   <div class="foot-links"><a href="index.html">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
   <div class="foot-legal">© 2026 SAS Elysium · Nutrition &amp; Performance · Protocole v.2026</div>
@@ -423,7 +434,7 @@
 <div class="qfull" id="scr-lock"><div class="qfull-in">
   <div class="em">◆</div><h2>Programme à activer</h2>
   <p>Le questionnaire s'ouvre une fois ta formule choisie. C'est lui qui sert à construire ta programmation sur-mesure.</p>
-  <a class="btn" href="choisir.html">Choisir ma formule</a>
+  <a class="btn hors-appli" href="choisir.html">Choisir ma formule</a>
 </div></div>
 
 <!-- écran : déjà validé -->
@@ -738,6 +749,36 @@
   } else tous.forEach(function(b){ b.classList.add('vu'); });
   maj(false); document.addEventListener('ely:restaure',function(){ maj(false); });
   setTimeout(function(){ pret=true; },1500);   // pas d'encouragement pendant la reprise du brouillon
+
+  /* ---------- TUILES : un picto au trait par choix (présentation seulement) ---------- */
+  (function(){
+    var P={
+      bas:'M12 4v16M6 14l6 6 6-6', haut:'M12 20V4M6 10l6-6 6 6', egal:'M5 9h14M5 15h14',
+      halt:'M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12', balance:'M12 4v16M7 20h10M4 8h16M6 8l-3 6h6zM18 8l-3 6h6z',
+      n1:'M4 20h16M7 20v-5', n2:'M4 20h16M7 20v-5M12 20v-9', n3:'M4 20h16M7 20v-5M12 20v-9M17 20v-13',
+      chaise:'M7 3v10h10v7M7 13v7M17 13V8', marche:'M13 4.5a1.5 1.5 0 1 0 0 .01M10 21l2.5-6.5 3 3V21M12.5 14.5 11 9l4 1.5 2 3M11 9l-3 1.5-1 3',
+      caisse:'M3 8l9-5 9 5v8l-9 5-9-5zM3 8l9 5 9-5M12 13v8', sucre:'M12 3a9 9 0 1 0 .01 0M9 9h.01M14 8h.01M15.5 13h.01M10 14.5h.01',
+      oeuf:'M12 3c3.5 0 6 5.5 6 9.5a6 6 0 0 1-12 0C6 8.5 8.5 3 12 3z', ok:'M12 3a9 9 0 1 0 .01 0M8 12l3 3 5-6',
+      poisson:'M3 12c3-5 11-6 15 0-4 6-12 5-15 0zM18 12l3-3v6zM8 11h.01', sans:'M12 3a9 9 0 1 0 .01 0M5.6 5.6l12.8 12.8',
+      feuille:'M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM5 19l8-8', repete:'M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4',
+      trois:'M5 12h.01M12 12h.01M19 12h.01M3 12a2 2 0 1 0 4 0 2 2 0 1 0-4 0M10 12a2 2 0 1 0 4 0 2 2 0 1 0-4 0M17 12a2 2 0 1 0 4 0 2 2 0 1 0-4 0',
+      horloge:'M12 3a9 9 0 1 0 .01 0M12 7v5l3 2', froid:'M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9', non:'M12 3a9 9 0 1 0 .01 0M9 9l6 6M15 9l-6 6',
+      etoile:'M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.6 6.7 19.4l1.2-6L3.4 9.3l6-.7z', photo:'M4 4h16v16H4zM12 8a4 4 0 1 0 .01 0M17 6.5h.01',
+      bulle:'M4 5h16v11H9l-5 4z', personne:'M12 4a4 4 0 1 0 .01 0M4 21a8 8 0 0 1 16 0', immeuble:'M5 21V4h9v17M14 9h5v12M8 8h3M8 12h3M8 16h3', points:'M6 12h.01M12 12h.01M18 12h.01'};
+    var R=[[/^Perte de poids/,'bas'],[/^Prise de masse/,'halt'],[/^Rééquilibrage/,'balance'],[/^En surpoids/,'haut'],[/^À ton poids/,'egal'],[/^En sous-poids/,'bas'],
+      [/^Je souhaite maintenir/,'egal'],[/^1 à 4/,'n1'],[/^5 à 8/,'n2'],[/^9 kilos/,'n3'],[/^Rester assis/,'chaise'],[/^Être debout/,'marche'],[/^Faire un travail physique/,'caisse'],
+      [/^</,'n1'],[/^10\.000/,'n2'],[/^>/,'n3'],[/^Sucré/,'sucre'],[/^Salé/,'oeuf'],[/^Aucun/,'ok'],[/^Pescétarien/,'poisson'],[/^Sans /,'sans'],[/FODMAP/,'feuille'],
+      [/même petit déjeuner/,'repete'],[/3 repas/,'trois'],[/veille au soir/,'horloge'],[/froids/,'froid'],[/^Oui/,'ok'],[/^Non/,'non'],[/^Peut-être/,'horloge'],[/pack complet/,'etoile'],
+      [/^Instagram/,'photo'],[/^Bouche/,'bulle'],[/^Ancien/,'personne'],[/salle de sport/,'halt'],[/^Partenariat/,'immeuble'],[/^Autre/,'points']];
+    [].forEach.call(document.querySelectorAll('.qcards'),function(g){
+      if(g.querySelector('input[name=cgv]')) return;                    // l'acceptation des CGV reste une ligne
+      g.classList.add('tuiles');
+      [].forEach.call(g.querySelectorAll('.qcard'),function(c){ var v=(c.querySelector('input')||{}).value||'', k='points';
+        for(var i=0;i<R.length;i++) if(R[i][0].test(v)){ k=R[i][1]; break; }
+        var sp=document.createElement('span'); sp.className='pic'; sp.setAttribute('aria-hidden','true');
+        sp.innerHTML='<svg viewBox="0 0 24 24"><path d="'+P[k]+'"/></svg>'; c.insertBefore(sp,c.querySelector('.tx')); });
+    });
+  })();
 })();
 </script>
 </body>

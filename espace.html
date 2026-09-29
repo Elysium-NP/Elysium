@@ -423,6 +423,9 @@
   .meal.pdj{--mp:var(--p-jaune);--mb:var(--b-jaune)} .meal.dej{--mp:var(--p-vert);--mb:var(--b-vert)}
   .meal.col{--mp:var(--p-violet);--mb:var(--b-violet)} .meal.din{--mp:var(--p-bleu);--mb:var(--b-bleu)}
   .meals:has(.meal.open){align-items:start}
+  /* 4 et 5 repas (Dimitri 30/09) : 2 colonnes par moment de la journée au lieu d'une carte orpheline ;
+     5 repas = matin (petit-déj · collation), midi (déjeuner · collation), soir (dîner sur toute la largeur) */
+  @media(min-width:700px){.meals.n4,.meals.n5{grid-template-columns:repeat(2,minmax(0,1fr))}.meals.n5 .meal:last-child{grid-column:1/-1}}
   .meal-in .plat{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;width:100%;min-height:44px;margin:-6px 0 2px;padding:6px 0;
     background:none;border:0;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
   .plat .dn{flex:1 1 150px;min-width:0}
@@ -1201,7 +1204,7 @@ var PROG = {
           '<div class="mac"><span class="p">P '+r.m[0]+'</span><span class="g">G '+r.m[1]+'</span><span class="l">L '+r.m[2]+'</span></div></div>'+
           '<div class="rc" id="'+id+'"><div class="rc-in"></div></div></article>';
       }).join('');
-      return '<div class="panel"><div class="meals">'+m+'</div></div>';
+      return '<div class="panel"><div class="meals n'+d.repas.length+'">'+m+'</div></div>';   // n4 / n5 : grille par moment de la journée
     }
     function coursesHTML(){
       function catEmo(n){ n=n.toLowerCase();

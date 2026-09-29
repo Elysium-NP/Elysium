@@ -950,6 +950,17 @@ var PROG = {
     var aj={kcal:0,P:0,G:0,L:0}; J.forEach(function(d){ d.repas.filter(function(r){ return r.aj; }).forEach(function(r){
       aj.kcal+=r.kcal; aj.P+=r.m[0]; aj.G+=r.m[1]; aj.L+=r.m[2]; }); });
     var n=J.length; return {kcal:Math.round(PROG.kcal+aj.kcal/n),P:Math.round(PROG.P+aj.P/n),G:Math.round(PROG.G+aj.G/n),L:Math.round(PROG.L+aj.L/n),n:J[0].repas.length}; }
+  function coursesVues(){ var J=joursVus(); if(J===PROG.jours) return PROG.courses;
+    var A={}, ordre=[];
+    J.forEach(function(d){ d.repas.filter(function(r){ return r.aj; }).forEach(function(r){ r.ings.forEach(function(i){
+      var q=String(i[0]).trim(), n=String(i[1]).trim(), m=/^([\d.,]+)\s*g$/.exec(q), u=/^[\d.,\/½]+$/.test(q);
+      if(!A[n]){ A[n]={g:0,u:0}; ordre.push(n); }
+      if(m) A[n].g+=parseFloat(m[1].replace(',','.')); else if(u) A[n].u+=(q==='1/2'||q==='½')?0.5:parseFloat(q.replace(',','.')); }); }); });
+    var C=Object.assign({},PROG.courses);
+    C['Pour tes collations']=ordre.map(function(n){ var a=A[n];
+      var q=a.g? (a.g>=1000?(Math.round(a.g/100)/10).toString().replace('.',',')+' kg':Math.round(a.g)+' g') : String(Math.round(a.u*10)/10).replace('.',',');
+      return [n,q]; });
+    return C; }
   function joursVus(){ if(!ADMIN||DEMO||NREP===3) return PROG.jours;
     function c(x,lib){ return Object.assign({},x,{type:lib,aj:1}); }
     return PROG.jours.map(function(d,i){ var R=d.repas.slice();
@@ -1109,7 +1120,7 @@ var PROG = {
     joursVus().forEach(function(d){ var n=+d.j, ok=n>=1&&n<=6;
       items.push({id:'j'+d.j,label:'Jour '+d.j,court:ok?'<b>'+JS[n-1]+'</b><small>'+dateJour(n)+'</small>':'<b>J'+d.j+'</b>',aria:'Jour '+d.j+(ok?', '+JL[n-1]+' '+dateJour(n):''),html:dayHTML(d)}); });
     items.push({id:'off',label:'Jour OFF',court:'<b>Off</b><small>'+dateJour(7)+'</small>',aria:'Jour off, dimanche '+dateJour(7),html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
-    var nCourses=0; Object.keys(PROG.courses||{}).forEach(function(k){ nCourses+=(PROG.courses[k]||[]).length; });
+    var COURSES=coursesVues(), nCourses=0; Object.keys(COURSES||{}).forEach(function(k){ nCourses+=(COURSES[k]||[]).length; });
     var REC=recettesClient();
     var extras=[{id:'conseils',cls:'a-cons',label:'Conseils',sous:'Les règles, le mode de vie, le suivi',html:adviceHTML(),ic:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>'}];
     var IC_COURSES='<path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/>';
@@ -1163,7 +1174,7 @@ var PROG = {
     // la recette d'un plat, dépliée sous lui (construite au premier clic). Textes du moteur : toujours échappés.
     function recetteHTML(j,i){
       if(!REC) return '<div class="rc-box lock">'+LOCK+'<p>Recette disponible avec la Formule Elysium</p><a class="hors-appli" href="formules.html">Voir les formules</a></div>';
-      var jour=PROG.jours.filter(function(x){ return String(x.j)===String(j); })[0], r=jour&&jour.repas[i], x=r&&REC[r.cle||r.rec];
+      var jour=joursVus().filter(function(x){ return String(x.j)===String(j); })[0], r=jour&&jour.repas[i], x=r&&REC[r.cle||r.rec];   // même liste que l'affichage (collations ajoutées comprises)
       if(!x) return '<div class="rc-box"><p class="rc-vide">La recette de ce plat arrive bientôt.</p></div>';
       var v=(x.variantes||[]).filter(function(v){ return (v.jours||[]).map(String).indexOf(String(j))>-1; })[0], ings=((v||x).ingredients)||[];
       return '<div class="rc-box">'+(PHOTOS_RECETTES&&x.photo_url?'<img class="rc-photo" src="'+esc(x.photo_url)+'" alt="" loading="lazy">':'')+
@@ -1215,8 +1226,8 @@ var PROG = {
         if(/féculent|feculent|céréale|cereale/.test(n)) return '🥖';
         return '🛒'; }
       var total=0;
-      var cats=Object.keys(PROG.courses).map(function(cn){
-        var arr=PROG.courses[cn]; total+=arr.length;
+      var CO=coursesVues(), cats=Object.keys(CO).map(function(cn){
+        var arr=CO[cn]; total+=arr.length;
         var li=arr.map(function(x){return '<label class="ci" data-k="'+encodeURIComponent(cn+'::'+x[0])+'"><input type="checkbox"><span class="box"></span><span class="nm">'+x[0]+'</span><b>'+deplier(x[1])+'</b></label>';}).join('');
         return '<div class="cat rv"><h4><span class="cn">'+(/^[A-Za-zÀ-ÿ]/.test(cn)?catEmo(cn)+' ':'')+cn+'</span><span class="n"><b class="done">0</b> / '+arr.length+'</span></h4>'+li+'</div>';
       }).join('');

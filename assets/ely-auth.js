@@ -180,7 +180,7 @@
       if (!sb) return Promise.reject(new Error("Supabase indisponible"));
       return sb.auth.resetPasswordForEmail((email || "").trim(),
         // appli MyEly : l'origine y est https://localhost -> le lien du mail pointe vers le site
-        { redirectTo: (/^https?:\/\/localhost(:|$)/.test(location.origin) ? "https://elysium-x57.pages.dev" : location.origin) + "/connexion.html" });
+        { redirectTo: (location.hostname === "localhost" ? "https://elysium-x57.pages.dev" : location.origin) + "/connexion.html" });   // Android https://localhost, iOS capacitor://localhost
     },
 
     /* Garde des pages privées : test synchrone immédiat, puis confirmation réseau. */

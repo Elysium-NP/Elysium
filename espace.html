@@ -1084,7 +1084,7 @@ var PROG = {
       var P=CIB.P,G=CIB.G,L=CIB.L, kc=P*4+G*4+L*9;
       var pp=Math.round(P*4/kc*100), gp=Math.round(G*4/kc*100), lp=Math.round(L*9/kc*100);
       var R=54, C=2*Math.PI*R;
-      var segs=[['g','#2E9BFF',G*4],['p','#14A5C2',P*4],['l','#8C84FF',L*9]];
+      var segs=[['g','#3d85c6',G*4],['p','#cc0000',P*4],['l','#f1c232',L*9]];
       var rmo=matchMedia('(prefers-reduced-motion:reduce)').matches||/\bstatic\b/.test(location.search);
       var donut=document.getElementById('p-donut');
       donut.innerHTML='<svg viewBox="0 0 140 140" width="152" height="152">'+
@@ -1092,7 +1092,7 @@ var PROG = {
         segs.map(function(s){return '<circle class="arc a-'+s[0]+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="'+s[1]+'" color="'+s[1]+'" stroke-width="15" stroke-dasharray="0 '+C.toFixed(1)+'" transform="rotate(-90 70 70)"/>';}).join('')+
         '</svg><div class="c"><div class="v" id="p-kc">0</div><div class="u">kcal / jour</div></div>';
       document.getElementById('p-mlist').innerHTML=
-        lrow('g','#2E9BFF','Glucides',G,gp)+lrow('p','#14A5C2','Protéines',P,pp)+lrow('l','#8C84FF','Lipides',L,lp);
+        lrow('g','#3d85c6','Glucides',G,gp)+lrow('p','#cc0000','Protéines',P,pp)+lrow('l','#f1c232','Lipides',L,lp);
       function lrow(id,cc,l,g,p){ return '<div class="mrow" data-arc="'+id+'"><div class="top"><span class="sw" style="background:'+cc+';color:'+cc+'"></span><span class="l">'+l+'</span><span class="g">'+g+' g</span><span class="p">'+p+'%</span></div><div class="bar"><i style="background:'+cc+';color:'+cc+'" data-w="'+p+'"></i></div></div>'; }
       [].forEach.call(host.querySelectorAll('.mrow'),function(r){
         r.addEventListener('mouseenter',function(){ donut.classList.add('dim'); var a=donut.querySelector('.a-'+r.dataset.arc); if(a) a.classList.add('hot'); });

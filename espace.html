@@ -942,6 +942,11 @@ var PROG = {
   var NREP=3; try{ NREP=+sessionStorage.getItem('ely_nrep')||3; }catch(e){} if([3,4,5].indexOf(NREP)<0) NREP=3;
   var COLLAS=[{type:'Collation',emo:'🍎',kcal:180,rec:'Fromage blanc & pomme',seas:'',ings:[['150 g','fromage blanc 0%'],['1','pomme']],m:[12,28,1]},
               {type:'Collation',emo:'🍎',kcal:292,rec:'Smoothie banane & cacahuète',seas:'Extrait de vanille',ings:[['250 g',"lait d'amande"],['1','banane'],['15 g','beurre de cacahuète'],['10 g','miel']],m:[7,41,12]}];
+  // cible affichée en tête : celle du menu d'exemple + la moyenne des collations ajoutées (en-tête cohérent avec 3 / 4 / 5 repas)
+  function cibleVue(){ var J=joursVus(); if(J===PROG.jours) return {kcal:PROG.kcal,P:PROG.P,G:PROG.G,L:PROG.L,n:PROG.jours[0].repas.length};
+    var aj={kcal:0,P:0,G:0,L:0}; J.forEach(function(d,i){ d.repas.slice(PROG.jours[i].repas.length-1,d.repas.length-1).forEach(function(r){
+      aj.kcal+=r.kcal; aj.P+=r.m[0]; aj.G+=r.m[1]; aj.L+=r.m[2]; }); });
+    var n=J.length; return {kcal:Math.round(PROG.kcal+aj.kcal/n),P:Math.round(PROG.P+aj.P/n),G:Math.round(PROG.G+aj.G/n),L:Math.round(PROG.L+aj.L/n),n:J[0].repas.length}; }
   function joursVus(){ if(!ADMIN||DEMO||NREP===3) return PROG.jours;
     return PROG.jours.map(function(d,i){ var R=d.repas.slice(), din=R.length-1, aj=NREP===5?[COLLAS[0],COLLAS[1]]:[COLLAS[i%2]];
       R.splice.apply(R,[din,0].concat(aj)); return Object.assign({},d,{repas:R}); }); }
@@ -1037,6 +1042,7 @@ var PROG = {
   });
   function buildProgView(){
     if(progBuilt) return; progBuilt=true;
+    var CIB=cibleVue();
     var uu=moi(); if(uu.prenom){ PROG.nom=[uu.prenom,(uu.nom||'').trim()]; }
     var host=document.getElementById('progview');
     host.innerHTML=
@@ -1054,11 +1060,11 @@ var PROG = {
     document.getElementById('p-obj').innerHTML=
       '<span class="obj-lead">Objectif</span>'+
       '<span class="obj-goal">'+(PROG.objectif||'').replace(/\s*uniquement\.?\s*$/i,'').trim()+'</span>'+   /* espace perso : sans « uniquement » (Dimitri 25/07) — le questionnaire garde la formulation complète */
-      '<span class="obj-meta">6 jours · '+PROG.jours[0].repas.length+' repas/jour · <b>'+PROG.kcal+' kcal</b>/jour</span>';
+      '<span class="obj-meta">6 jours · '+CIB.n+' repas/jour · <b>'+CIB.kcal+' kcal</b>/jour</span>';
 
     // -- macros : donut néon qui se dessine + kcal qui monte + barres + survol --
     (function(){
-      var P=PROG.P,G=PROG.G,L=PROG.L, kc=P*4+G*4+L*9;
+      var P=CIB.P,G=CIB.G,L=CIB.L, kc=P*4+G*4+L*9;
       var pp=Math.round(P*4/kc*100), gp=Math.round(G*4/kc*100), lp=Math.round(L*9/kc*100);
       var R=54, C=2*Math.PI*R;
       var segs=[['g','#2E9BFF',G*4],['p','#79C2FF',P*4],['l','#8AA0E0',L*9]];
@@ -1078,11 +1084,11 @@ var PROG = {
       function setArcs(t){ var acc=0; segs.forEach(function(s){ var len=s[2]/kc*C*t, el=donut.querySelector('.a-'+s[0]);
         el.setAttribute('stroke-dasharray',len.toFixed(1)+' '+(C-len).toFixed(1)); el.setAttribute('stroke-dashoffset',(-acc).toFixed(1)); acc+=len; }); }
       function fillBars(){ [].forEach.call(host.querySelectorAll('.bar i'),function(i){ i.style.width=i.dataset.w+'%'; }); }
-      if(rmo){ setArcs(1); document.getElementById('p-kc').textContent=PROG.kcal; fillBars(); }
+      if(rmo){ setArcs(1); document.getElementById('p-kc').textContent=CIB.kcal; fillBars(); }
       else{
         var t0=null, dur=1050, ease=function(x){return 1-Math.pow(1-x,3);};
         requestAnimationFrame(function frame(ts){ if(!t0)t0=ts; var t=Math.min(1,(ts-t0)/dur), e=ease(t);
-          setArcs(e); document.getElementById('p-kc').textContent=Math.round(PROG.kcal*e); if(t<1) requestAnimationFrame(frame); });
+          setArcs(e); document.getElementById('p-kc').textContent=Math.round(CIB.kcal*e); if(t<1) requestAnimationFrame(frame); });
         setTimeout(fillBars,140);
       }
     })();

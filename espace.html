@@ -649,8 +649,8 @@ var PROG = {
   // VENTE DE L'E-BOOK À L'UNITÉ (Damien 28/09) : false = RIEN ne change, pour personne.
   // Passer à true seulement quand supabase/boutique.sql est lancé ET les deux fonctions Stripe redéployées.
   // Prix affiché : window.ELY_PRIX_EBOOK (assets/site.js) ; prix encaissé : table `produits` (prix_cents).
-  // ?demo=f1|f2&ebook=1 : APERÇU de la vente (maquette pour Damien & Yoann) ; en démo, aucun paiement ne peut partir
-  var ACHAT_EBOOK=false||(!!DEMO&&/[?&]ebook=1(?:&|#|$)/.test(location.search)), EBOOK='ebook_bien_manger';
+  // démo (?demo=f1|f2) : la vente est montrée telle qu'elle sera (bouton inactif, aucun paiement ne peut partir d'une démo)
+  var ACHAT_EBOOK=false||!!DEMO, EBOOK='ebook_bien_manger';
   var ACHAT={dispo:false, achete:false};   // en vente (produits.actif) ? déjà payé (achats) ?
   var u=DEMO ? {id:'demo',prenom:'Sophie',nom:'Martin',sexe:'Femme',naissance:'1991-03-14',age:35,taille:165,email:'sophie.martin@example.com',
       created:Date.now()-92*JOUR_MS,paid:true,formule:DEMO,
@@ -1011,7 +1011,8 @@ var PROG = {
       html:'<div class="panel"><div class="verrou" style="border-style:solid"><h4>Bien manger, au gramme près</h4><p>Le guide nutrition de tes coachs : les principes de ta diète, pour les appliquer au quotidien.</p>'+
         '<button type="button" class="btn" id="ebook-dl" style="margin-top:14px">Télécharger mon e-book (PDF)</button><p class="foot-note" id="ebook-msg" aria-live="polite"></p></div></div>'});
     else if(ACHAT_EBOOK&&FC) extras.push({id:'guide',cls:'a-guide',label:'Mon guide nutrition',ic:IC_GUIDE,   // vente à l'unité : contenu posé par renderGuides
-      lock:droitEbook()?null:'E-book disponible à l’unité',sous:'« Bien manger, au gramme près »',
+      // pas de cadenas : un Odyssée / Olympe PEUT l'avoir (à l'unité) ; acheté -> même sous-titre que l'Elysium
+      sous:droitEbook()?'« Bien manger, au gramme près »':'À l’unité · '+(window.ELY_PRIX_EBOOK||''),
       html:'<div class="panel"><div class="verrou guide-vente"></div></div>'});
     else if(FC) extras.push({id:'guide',cls:'a-guide',label:'Mon guide nutrition',lock:'Formule Elysium',ic:IC_GUIDE,
       html:verrouHTML('Mon guide nutrition','Le guide « Bien manger, au gramme près », en e-book.','la Formule Elysium')});

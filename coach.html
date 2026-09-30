@@ -355,6 +355,7 @@
   .rl-ai .w{display:inline-block;background:rgba(255,255,255,.65);border:1px solid var(--b-jaune);border-radius:99px;padding:3px 8px;margin:3px 4px 0 0;font-weight:600}
   .rl-ai.fort .w{border-color:#d98c8c}
   .rl-ai p{margin:8px 0 0;font-size:12.5px}
+  .gf-l{display:block;margin-top:5px}
   .rl-ai .ai-l{margin-top:8px}
   .rl-ai .ai-l .w{margin:0 0 6px}
   .rl-ai .ai-a{border:1px solid var(--b-jaune);border-radius:10px;overflow:hidden;margin-bottom:10px}
@@ -2532,7 +2533,7 @@ var ED=(function(){
         EXT.par=P;
         return Object.keys(P).map(function(k){ return ligneExt(P[k][P[k].length-1]); });
       },function(){ return []; }).then(null,function(){ return []; }); }
-  function nomExt(c){ return '<b class="nom" role="button" tabindex="0" data-x="'+esc(c.ext_id)+'" title="Ouvrir la fiche">'+esc(((c.prenom||'')+' '+(c.nom||'')).trim()||'Client')+'</b> '+BADGE_GF; }
+  function nomExt(c){ return '<b class="nom" role="button" tabindex="0" data-x="'+esc(c.ext_id)+'" title="Ouvrir la fiche">'+esc(((c.prenom||'')+' '+(c.nom||'')).trim()||'Client')+'</b><span class="gf-l">'+BADGE_GF+'</span>'; }   // badge toujours sous le nom (Dimitri 30/09)
   // réponse du questionnaire : début de libellé (comme pour le site), puis, pour le Google Form seulement, mots-clés
   var MOTS_GF={'Quel est ton objectif principal':/objectif/,'Des aliments que tu refuses':/refus|aimes? pas|deteste/,'Allergies':/allergi|intoleran/,
     'As-tu un régime particulier':/regime/,'Y a-t-il des aliments que tu souhaites absolument conserver':/conserver|\bgarder/};

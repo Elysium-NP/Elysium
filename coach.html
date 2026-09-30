@@ -1050,12 +1050,54 @@
   /* en-tête de relecture en TROIS zones côte à côte, pour exploiter la largeur (Dimitri 01/10) :
      qui (nom, étiquettes, cibles en 2 × 2) | les 4 contrôles empilés | Ta décision */
   @media(min-width:1101px){
-    .rl-v2 .rl-hero{grid-template-columns:fit-content(460px) minmax(250px,1fr) auto;align-items:stretch;column-gap:0}
+    .rl-v2 .rl-hero{grid-template-columns:max-content minmax(260px,1fr) auto;align-items:stretch;column-gap:0}
+    .rl-v2 .rl-hero .rl-qui .rl-info{max-width:440px}
+    .rl-v2 .rl-hero h2.rl-nom{white-space:nowrap}
     .rl-v2 .rl-hero .rl-qui{grid-column:1;grid-row:1;padding-right:24px}
-    .rl-v2 .rl-hero .rl-sante{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr);align-content:center;gap:6px;padding:0 24px;border-left:1px solid var(--line)}
+    .rl-v2 .rl-hero .rl-sante{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:6px;padding:0 24px;border-left:1px solid var(--line)}
+    .rl-v2 .rl-hero .rl-sante-t{display:block}
+    .rl-v2 .rl-hero .rl-sante .vy{padding:6px 14px 6px 6px;border-radius:14px}
+    .rl-v2 .rl-hero .rl-sante .vy-t{flex-direction:column;align-items:flex-start;gap:2px}
+    .rl-v2 .rl-hero .rl-sante .vy small{white-space:nowrap}
     .rl-v2 .rl-hero .rl-dec-top{grid-column:3;grid-row:1}
     .rl-v2 .rl-hero .rl-cible{display:grid;grid-template-columns:repeat(2,max-content);gap:6px;margin-top:12px}
     .rl-v2 .rl-hero .rl-cible .rl-cl{grid-column:1/-1;margin:0 0 2px}
+  }
+
+  /* vue « Les courses » : habillage */
+  .rl-cour-t>div{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px}
+  .rl-cour-n{font:600 13px/1 var(--texte);color:var(--gris)}
+  .rl-cour{display:block;columns:3 250px;column-gap:14px}
+  .rl-cour-c{--pc:var(--p-jaune);--bc:var(--b-jaune);break-inside:avoid;margin:0 0 14px;padding:0 0 6px;border:1px solid var(--line);border-top:4px solid var(--bc);border-radius:16px;background:var(--void);overflow:hidden}
+  .rl-cour-c:nth-child(4n+2){--pc:var(--p-vert);--bc:var(--b-vert)} .rl-cour-c:nth-child(4n+3){--pc:var(--p-violet);--bc:var(--b-violet)} .rl-cour-c:nth-child(4n+4){--pc:var(--p-bleu);--bc:var(--b-bleu)}
+  .rl-cour-c h4{display:flex;align-items:center;gap:10px;margin:0;padding:12px 14px;background:color-mix(in srgb,var(--pc) 55%,transparent);font:700 14px/1.25 var(--texte);color:var(--ice)}
+  .rl-cour-c h4 .ic{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--void);font-style:normal;font-size:17px;box-shadow:0 1px 0 color-mix(in srgb,var(--ice) 8%,transparent)}
+  .rl-cour-c h4 span{flex:1;min-width:0}
+  .rl-cour-c h4 small{flex:none;min-width:24px;padding:3px 8px;border-radius:999px;background:var(--void);font:700 11.5px/1.2 var(--texte);color:var(--gris);text-align:center}
+  .rl-cour-c ul{padding:4px 14px 0}
+  .rl-cour li{align-items:baseline;gap:8px;padding:7px 0;font-size:13.5px;color:var(--ice)}
+  .rl-cour li span{flex:none;max-width:70%}
+  .rl-cour li::after{content:"";order:1;flex:1;border-bottom:1px dotted color-mix(in srgb,var(--steel) 55%,transparent);transform:translateY(-3px)}
+  .rl-cour li b{order:2;font-size:13.5px}
+  .rl-cour li b.vide{font-weight:500;font-style:italic;color:var(--steel)}
+  .rl-cour li:hover span{color:var(--blue)}
+  html[data-theme="obscur"] .rl-cour li:hover span{color:#7cc0ff}
+  html[data-theme="obscur"] .rl-cour-c h4{background:color-mix(in srgb,var(--bc) 16%,transparent)}
+  .rl-cour-d{border-radius:16px;padding:16px 18px}
+  .rl-cour-d h4{font-size:14px}
+  .rl-cour-d ul{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+  .rl-cour-d li{padding:10px 12px;border-radius:12px;background:var(--void)}
+  .rl-cour-d em{padding:2px 8px;border-radius:999px;font-size:12.5px}
+  .rl-cour-d em.ok{background:color-mix(in srgb,#93c47d 24%,transparent)} .rl-cour-d em.ko{background:color-mix(in srgb,#e07a7a 22%,transparent)}
+
+  /* titre de la zone « contrôles », au niveau de « Relecture » */
+  .rl-sante-t{display:none;grid-column:1/-1;margin:2px 0 8px;font:600 11px/1.3 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+  html[data-theme="obscur"] .rl-sante-t{color:var(--brand)}
+  /* cible du jour : les calories en tête, P / G / L dessous */
+  @media(min-width:1101px){
+    .rl-v2 .rl-hero .rl-cible{grid-template-columns:repeat(3,max-content)}
+    .rl-v2 .rl-hero .rl-cible .mc.k{grid-column:1/-1;justify-self:start;font-size:14px}
+    .rl-v2 .rl-hero .rl-cible .mc.k b{font:400 20px/1 var(--titre)}
   }
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
@@ -1608,7 +1650,7 @@ var REL=(function(){
         ', '+nr+' retour'+(nr>1?'s':'')+' du client pris en compte'+(Array.isArray(sv.retours)&&nr?' : '+sv.retours.map(function(x){ return '« '+e(x)+' »'; }).join(', '):'')+'</span></p>'; }
     h+='<div class="rl-cible"><span class="rl-cl">Cible du jour</span><span class="mc k"><b>'+g0(c.kcal)+'</b> kcal</span>'+
       MAC.slice(1).map(function(k){ return '<span class="mc '+k[2]+'"><i class="mac '+k[2]+'"></i>'+k[1]+' <b>'+g0(c[k[0]])+' g</b></span>'; }).join('')+'</div></div>'+
-      '<div class="rl-sante" aria-label="Carte de santé de la diète">'+sante(R).map(function(v){
+      '<div class="rl-sante" aria-label="Carte de santé de la diète"><div class="rl-sante-t">Contrôles de la diète</div>'+sante(R).map(function(v){
         return '<button type="button" class="vy '+v.et+'" data-act="va" data-va="'+v.va+'"><span class="vy-i">'+ico(IC[v.et])+'</span><span class="vy-t"><small>'+v.k+'</small><b>'+v.v+'</b></span></button>'; }).join('')+'</div></div>';
     if(R.note) h+='<div class="rl-note j">Correction déjà demandée par <b>'+e(R.note.par)+'</b> : « '+e(R.note.texte)+' »</div>';
     return h;
@@ -2974,7 +3016,7 @@ var ED=(function(){
       x.g+=+i.grammes||0; if(i.unites) x.u+=+i.unites; }); }); }); return t; }
     function q(x){ return x.g>=1000?(Math.round(x.g/100)/10+' kg').replace('.',','):Math.round(x.g)+' g'; }
     function cap(n){ return n.charAt(0).toUpperCase()+n.slice(1); }
-    var T=tot(cur), h='<div class="rl-cour-t"><h3 class="rl-h">Liste de courses</h3>';
+    var T=tot(cur), h='<div class="rl-cour-t"><div><h3 class="rl-h">Liste de courses</h3></div>';
     if(!ref){   // aucune liste déposée : la somme exacte du menu, sans les règles d'achat
       var L=Object.keys(T).sort().map(function(k){ return '<li><span>'+esc(cap(T[k].n))+'</span><b>'+q(T[k])+'</b></li>'; }).join('');
       el.innerHTML=h+'<span class="rl-cour-src av">Pas de liste déposée pour cette version : total du menu, sans unités d’achat</span></div><div class="rl-cour"><div class="rl-cour-c"><h4>Pour la semaine</h4><ul>'+L+'</ul></div></div>'; return; }
@@ -2987,8 +3029,11 @@ var ED=(function(){
     h+=(D.length?'<span class="rl-cour-src av">'+D.length+' aliment'+(D.length>1?'s':'')+' à ajuster'+(src?' · '+src:'')+'</span>':'<span class="rl-cour-src ok">Identique à la fiche PDF</span>')+'</div>';
     if(D.length) h+='<div class="rl-cour-d"><h4>Ce que tes retouches changent sur la liste</h4><ul>'+D.map(function(d){
       return '<li><span>'+esc(d[0])+'</span><em class="'+d[2]+'">'+d[1]+'</em><small>'+d[3]+'</small></li>'; }).join('')+'</ul></div>';
-    h+='<div class="rl-cour">'+Object.keys(ref.courses).map(function(c){ return '<div class="rl-cour-c"><h4>'+esc(c)+'</h4><ul>'+(ref.courses[c]||[]).map(function(l){
-      return '<li><span>'+esc(l[0]||'')+'</span><b>'+esc(l[1]==null?'':l[1])+'</b></li>'; }).join('')+'</ul></div>'; }).join('')+'</div>';
+    var K=Object.keys(ref.courses), nb=K.reduce(function(a,c){ return a+(ref.courses[c]||[]).length; },0);
+    h=h.replace('</h3>','</h3><span class="rl-cour-n">'+nb+' articles · '+K.length+' rayon'+(K.length>1?'s':'')+'</span>');
+    h+='<div class="rl-cour">'+K.map(function(c){ var m=/^(\p{Extended_Pictographic}️?)\s*(.*)$/u.exec(c), ic=m?m[1]:'', nm=m?m[2]:c, L=ref.courses[c]||[];
+      return '<div class="rl-cour-c"><h4>'+(ic?'<i class="ic">'+ic+'</i>':'')+'<span>'+esc(nm)+'</span><small>'+L.length+'</small></h4><ul>'+L.map(function(l){
+      var q=l[1]==null?'':String(l[1]); return '<li><span>'+esc(l[0]||'')+'</span><b'+(q?'':' class="vide"')+'>'+esc(q||'au besoin')+'</b></li>'; }).join('')+'</ul></div>'; }).join('')+'</div>';
     el.innerHTML=h; }
   function rlBarre(){ var s=suivante(); $('rl-barre').innerHTML=REL.barreOutils(RL.R,{i:RL.i,edit:!!RL.S,plein:RL.plein,lecture:lecture(),suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
   // ligne d'aide en tête, masquable (retenue sur l'appareil)

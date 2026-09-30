@@ -891,6 +891,12 @@
   .rl-ecarts td b{display:block;font-weight:700}
   .rl-ecarts td small{display:block;margin-top:4px;font:500 11.5px/1.2 var(--texte);color:var(--gris);font-variant-numeric:tabular-nums}
   .rl-ecarts tbody th small{display:block;margin-top:3px;font:400 11px/1.2 var(--texte);color:var(--steel)}
+  /* la cible : sa propre colonne, en évidence, pour comparer d'un coup d'œil (Dimitri 30/09) */
+  .rl-ecarts th.cib{color:var(--blue);font-size:12px}
+  .rl-ecarts td.cib{background:color-mix(in srgb,var(--brand) 16%,transparent);box-shadow:inset 0 0 0 2px var(--brand);padding:8px 10px}
+  .rl-ecarts td.cib b{font-size:16px;color:var(--ice)}
+  .rl-ecarts td.cib small{color:var(--blue);font-weight:700}
+  html[data-theme="obscur"] .rl-ecarts td.cib small,html[data-theme="obscur"] .rl-ecarts th.cib{color:var(--brand)}
   .rl-ecarts td{padding:8px 4px}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
@@ -1370,9 +1376,9 @@ var REL=(function(){
   // (vert : ±5 % · jaune : jusqu'à ±10 % · rouge : au-delà)
   function ecartsTable(R){ var m=R.menu||{}, c=m.cible||{}, J=(m.jours||[]).filter(function(j){ return !j.off; });
     var L=[['kcal','Calories'],['proteines','Protéines'],['glucides','Glucides'],['lipides','Lipides']];
-    return '<div class="rl-ecarts"><table><thead><tr><th></th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
+    return '<div class="rl-ecarts"><table><thead><tr><th></th><th class="cib">Cible</th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
       L.map(function(l){ var u=l[0]==='kcal'?' kcal':' g';
-        return '<tr><th>'+l[1]+'<small>cible '+g0(c[l[0]])+u+'</small></th>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
+        return '<tr><th>'+l[1]+'</th><td class="cib"><b>'+g0(c[l[0]])+'</b><small>'+u.trim()+'</small></td>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
         if(!isFinite(x)) return '<td>—</td>';
         var a=Math.abs(x), cl=a<=TOL?'ok':a<=0.10?'av':'ko';
         return '<td class="'+cl+'"><b>'+Math.round(100+x*100)+' %</b><small>'+g0(s[l[0]])+u+'</small></td>'; }).join('')+'</tr>'; }).join('')+

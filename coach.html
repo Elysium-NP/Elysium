@@ -1011,8 +1011,10 @@
   .rl-v2 .rl-hero .rl-dec-top .db.ok{padding:8px 15px;font-size:13.5px}
   .rl-v2 .rl-hero .rl-dec-top .db kbd{display:none}   /* les raccourcis C / V restent affichés dans « Ta décision » en bas, et marchent partout */
 
-  .rl-v2 .rl-hero.rl-dec-2 .rl-sante{grid-column:1;display:grid;grid-template-columns:repeat(2,max-content);gap:6px}
-  .rl-v2 .rl-hero.rl-dec-2 .rl-dec-top{grid-row:1/3;align-self:start}
+  /* voyants toujours 2 par 2, à gauche ; « Ta décision » à côté, sur la hauteur des deux lignes */
+  .rl-v2 .rl-sante{display:grid;grid-template-columns:repeat(2,max-content);gap:6px}
+  @media(min-width:1101px){.rl-v2 .rl-hero .rl-sante{grid-column:1}.rl-v2 .rl-hero .rl-dec-top{grid-row:1/3;align-self:stretch;grid-template-rows:auto auto 1fr}.rl-v2 .rl-hero .rl-dec-top .rl-dec-aide{align-self:end}}
+  @media(max-width:560px){.rl-v2 .rl-sante{grid-template-columns:1fr}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -2864,13 +2866,12 @@ var ED=(function(){
   function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px');
     var br=$('rl-barre'); if(br) document.documentElement.style.setProperty('--bh',br.offsetHeight+'px'); decLargeur(); }
   addEventListener('resize',hauteur);
-  // essai : « Ta décision » (en haut) commence juste après la dernière pastille des voyants.
-  // Pas la place (écran étroit) : le cadre descend à côté des voyants, qui passent à la ligne à sa gauche.
+  // « Ta décision » (en haut) s'élargit jusqu'au contenu de gauche (voyants 2 par 2, cibles), à 16 px près ; jamais plus étroit que ses boutons
   function decLargeur(){ var h=document.querySelector('#p-relire.rl-v2 .rl-hero'), b=$('rl-dec-top'), v=h&&h.querySelector('.rl-sante');
-    if(!h||!b||!v) return; h.classList.remove('rl-dec-2'); b.style.width='';
-    if(innerWidth<1101||!v.lastElementChild) return;
-    var fin=v.lastElementChild.getBoundingClientRect().right, dispo=Math.floor(b.getBoundingClientRect().right-fin-16);
-    if(dispo>=b.offsetWidth) b.style.width=dispo+'px'; else h.classList.add('rl-dec-2'); }
+    if(!h||!b||!v) return; b.style.width='';
+    if(innerWidth<1101||!v.children.length) return;
+    var fin=Math.max.apply(null,[].map.call(h.querySelectorAll('.rl-sante>*,.rl-qui *'),function(x){ return x.getBoundingClientRect().right; })), dispo=Math.floor(b.getBoundingClientRect().right-fin-16);
+    if(dispo>b.offsetWidth) b.style.width=dispo+'px'; }
   addEventListener('beforeunload',function(e){ if(RL.S&&ED.modifie(RL.S)){ e.preventDefault(); e.returnValue=''; } });
 
   function relire(c,force){

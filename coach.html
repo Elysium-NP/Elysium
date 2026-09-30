@@ -821,6 +821,40 @@
   .fl-go{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 var(--texte);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 40%,var(--line));border-radius:999px;padding:0 14px;min-height:40px}
   .fl:hover .fl-go{background:var(--blue);border-color:var(--blue);color:#fff}
   @media(max-width:560px){.fl{grid-template-columns:auto minmax(0,1fr) auto}.fl-q{grid-column:2/-1;text-align:left;max-width:none}.fl-q b,.fl-q small{display:inline}.fl-q small::before{content:" · "}.fl-go{grid-row:1;grid-column:3;padding:0 12px}.fl-go svg{display:none}}
+
+  /* ===== NOUVELLE DISPOSITION DE LA RELECTURE (essai 30/09, uniquement sous .rl-v2) =====
+     rien n'est retiré : chaque information change de place. */
+  .rl-vues,.rl-stabs{display:none}
+  .rl-v2 .rl-vues,.rl-v2 .rl-stabs{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--void2)}
+  .rl-v2 .rl-vues button,.rl-v2 .rl-stabs button{flex:1;position:relative;min-height:40px;border:0;border-radius:10px;background:none;color:var(--gris);font:600 14px/1 var(--texte);cursor:pointer}
+  .rl-v2 .rl-vues button[aria-selected="true"],.rl-v2 .rl-stabs button[aria-selected="true"]{background:var(--blue);color:#fff}
+  .rl-v2 .rl-vues{align-self:flex-start;min-width:280px}
+  .rl-v2 .rl-stabs .bdg{position:static;display:inline-block;margin-left:6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#f0b35a;color:#111;font:700 11px/18px var(--texte);font-style:normal}
+  /* la diète : la semaine OU le jour (un clic sur une case de la semaine ouvre son jour) */
+  .rl-v2 .rl-main[data-v="sem"] #rl-jour,.rl-v2 .rl-main[data-v="jour"] #rl-sem{display:none}
+  /* le panneau de droite reste visible quand on descend dans la diète */
+  @media(min-width:1101px){.rl-v2 .rl-side{position:sticky;top:calc(var(--hh,0px) + var(--bh,60px) + 12px);max-height:calc(100vh - var(--hh,0px) - var(--bh,60px) - 24px);overflow:auto;scrollbar-width:thin;padding-bottom:4px}}
+  /* ses 3 onglets */
+  .rl-v2 .rl-side[data-s="verif"] #rl-notes,.rl-v2 .rl-side[data-s="verif"] #rl-ctrl .rl-rq,.rl-v2 .rl-side[data-s="verif"] #rl-ctrl .q-rep{display:none}
+  .rl-v2 .rl-side[data-s="client"] #rl-notes,.rl-v2 .rl-side[data-s="client"] #rl-comp,.rl-v2 .rl-side[data-s="client"] #rl-ctrl>.rl-h,.rl-v2 .rl-side[data-s="client"] #rl-ctrl>.cks{display:none}
+  .rl-v2 .rl-side[data-s="client"] #rl-ctrl .rl-rq{margin-top:0;border-top:0;padding-top:0}
+  .rl-v2 .rl-side[data-s="notes"] #rl-ctrl,.rl-v2 .rl-side[data-s="notes"] #rl-comp{display:none}
+  /* l'en-tête : une bande compacte (qui · cible · voyants · décision) au lieu d'un grand bloc */
+  .rl-v2 .rl-hero{grid-template-columns:minmax(0,1fr) auto;gap:10px 24px;padding:14px 18px;border-radius:16px;align-items:center}
+  .rl-v2 .rl-qui{grid-column:1;grid-row:1}
+  .rl-v2 h2.rl-nom{font-size:24px;margin:4px 0 6px}
+  .rl-v2 .rl-qui .fmeta{margin:0 0 8px}
+  .rl-v2 .rl-qui .rl-info{margin:0 0 6px;font-size:13px}
+  .rl-v2 .rl-sante{grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;gap:6px}
+  .rl-v2 .vy{min-height:0;padding:6px 12px 6px 6px;border-radius:999px;gap:8px}
+  .rl-v2 .vy-i{width:24px;height:24px}
+  .rl-v2 .vy-i svg{width:14px;height:14px}
+  .rl-v2 .vy-t{display:flex;align-items:baseline;gap:6px}
+  .rl-v2 .vy small{font-size:10px}
+  .rl-v2 .vy b{font-size:13px}
+  .rl-v2 .rl-dec-top{grid-column:2;grid-row:1;border-top:0;padding-top:0}
+  .rl-v2 .rl-dec-top .rl-etat{text-align:right;margin-bottom:8px;font-size:13px}
+  @media(max-width:1100px){.rl-v2 .rl-hero{grid-template-columns:1fr}.rl-v2 .rl-dec-top{grid-column:1;grid-row:3}.rl-v2 .rl-dec-top .rl-etat{text-align:left}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -2628,6 +2662,9 @@ var ED=(function(){
      une décision. Tant que supabase/edition_programmes.sql n'est pas lancé : message clair pour
      l'édition, et les corrections partent comme des remarques écrites (sans la colonne action). */
   var RL={R:null,co:{}}, FE={cb:null,filtre:null,retour:null,t:0}, ALIM=null;
+  // NOUVELLE DISPOSITION DE LA RELECTURE (essai 30/09) : active dans la maquette, et sur la vraie page avec ?essai=1
+  var ESSAI=!!window.ELY_MAQUETTE_COACH;
+  try{ var qe=/[?&]essai=([01])/.exec(location.search); if(qe) localStorage.setItem('ely_rl_essai',qe[1]); ESSAI=ESSAI||localStorage.getItem('ely_rl_essai')==='1'; }catch(e){}
   function depuis(t){ if(!t) return '—'; var h=(Date.now()-new Date(t).getTime())/3600000;
     return h<1?'il y a moins d’une heure':h<24?'il y a '+Math.floor(h)+' h':h<48?'hier':'le '+dateFr(t); }
   function avecCible(menu,cible){ return (!menu||menu.cible||!cible)?menu:Object.assign({},menu,{cible:cible}); }
@@ -2650,7 +2687,8 @@ var ED=(function(){
   function vue(){ if(!RL.S) return RL.R; var v={}, k; for(k in RL.R) v[k]=RL.R[k]; v.menu=avecCible(RL.S.menu,RL.R.menu.cible); return v; }
   function lecture(){ var e=RL.R.etat; return RL.R.archive?'Ancienne version : lecture seule.':e==='valide'?'Diète déjà validée et envoyée : lecture seule.':e==='refuse'?'Diète refusée : elle sera entièrement refaite.':e==='remplace'?'Une version plus récente existe.':null; }
   function suivante(){ var k=file.indexOf(cur); for(var d=1;d<=file.length;d++){ var x=file[(k+d+file.length)%file.length]; if(x&&x!==cur&&x.etape==='a_relire'&&x.menu&&x.programme_id) return x; } return null; }
-  function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px'); }
+  function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px');
+    var br=$('rl-barre'); if(br) document.documentElement.style.setProperty('--bh',br.offsetHeight+'px'); }
   addEventListener('resize',hauteur);
   addEventListener('beforeunload',function(e){ if(RL.S&&ED.modifie(RL.S)){ e.preventDefault(); e.returnValue=''; } });
 
@@ -2663,9 +2701,16 @@ var ED=(function(){
     RL={R:R,i:0,mode:'coach',hl:null,S:null,swap:null,eq:{mac:'glucides',cle:null},co:coVide(),envoyes:0,arme:false,envoi:false,
       plein:document.body.classList.contains('rl-plein'),consignes:[],consignesAbsentes:false,retour:c.retour||null};   // retour : ouverte depuis l'historique d'une fiche
     document.body.classList.remove('rl-edit');
-    $('p-relire').innerHTML='<div class="rl-barre" id="rl-barre"></div><div id="rl-tete"></div><div class="rl-cols"><div class="rl-main"><div class="carte" id="rl-sem"></div><div class="carte" id="rl-jour"></div></div>'+
-      '<aside class="rl-side"><div class="carte" id="rl-co" hidden></div><div class="carte" id="rl-live" hidden></div><div class="carte" id="rl-modifs" hidden></div><div class="carte" id="rl-ctrl"></div><div class="carte" id="rl-comp" hidden></div><div class="carte" id="rl-notes"></div></aside></div>'+
+    $('p-relire').innerHTML='<div class="rl-barre" id="rl-barre"></div><div id="rl-tete"></div><div class="rl-cols"><div class="rl-main" data-v="sem">'+
+      '<div class="rl-vues" role="tablist" aria-label="Affichage de la diète"><button type="button" role="tab" data-act="vue" data-v="sem" aria-selected="true">La semaine</button><button type="button" role="tab" data-act="vue" data-v="jour" aria-selected="false">Le jour</button></div>'+
+      '<div class="carte" id="rl-sem"></div><div class="carte" id="rl-jour"></div></div>'+
+      '<aside class="rl-side" data-s="verif"><div class="rl-stabs" role="tablist" aria-label="Panneau de relecture">'+
+        '<button type="button" role="tab" data-act="side" data-s="verif" aria-selected="true">À vérifier<i class="bdg" hidden></i></button>'+
+        '<button type="button" role="tab" data-act="side" data-s="client" aria-selected="false">Client</button>'+
+        '<button type="button" role="tab" data-act="side" data-s="notes" aria-selected="false">Notes</button></div>'+
+      '<div class="carte" id="rl-co" hidden></div><div class="carte" id="rl-live" hidden></div><div class="carte" id="rl-modifs" hidden></div><div class="carte" id="rl-ctrl"></div><div class="carte" id="rl-comp" hidden></div><div class="carte" id="rl-notes"></div></aside></div>'+
       '<div class="rl-dec" id="rl-dec"></div>';
+    $('p-relire').classList.toggle('rl-v2',ESSAI);
     tout(); rlNotes(); renderFile(); voir('relire'); hauteur();
     if(!c.externe) chargerNotes(c.user_id).then(function(){ afficherNotes(c.user_id); });   // notes liées au compte : pas pour le Google Form
     // en différé, sans bloquer l'écran : la version d'avant (comparaison), la dernière demande de correction, les consignes durables
@@ -2738,7 +2783,8 @@ var ED=(function(){
     $('rl-live').hidden=!ed; $('rl-modifs').hidden=!ed;
     if(ed){ $('rl-live').innerHTML=REL.controlesDirect(V,horsReperes(),ED.deplaces(RL.S)); $('rl-modifs').innerHTML=REL.modifs(ED.journal(RL.S),{undo:RL.S.passe.length,redo:RL.S.futur.length}); }
     $('rl-ctrl').innerHTML=REL.controle(V)+(RL.R.xid&&cur&&cur.externe?questionnaireReplie(cur):'');
-    if(RL.R.precedent){ $('rl-comp').innerHTML=REL.comparer(V); $('rl-comp').hidden=false; } }
+    if(RL.R.precedent){ $('rl-comp').innerHTML=REL.comparer(V); $('rl-comp').hidden=false; }
+    rlSideMaj(); }
   /* ---- NOTES INTERNES PARTAGÉES (table notes_coachs, supabase/notes_coachs.sql) ----
      Tant que la table n'existe pas : l'ancien fonctionnement (localStorage ely_notes_<uid>, sur cet appareil), dit à l'écran.
      Au premier chargement réussi, les notes gardées sur l'appareil sont recopiées dans la table puis effacées de l'appareil. */
@@ -2812,7 +2858,17 @@ var ED=(function(){
     else h=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:sn,attente:(RL.co.liste||[]).length});
     d.innerHTML='<h4 class="rl-h">Ta décision</h4>'+h;
     if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML=h; } }
-  function allerJour(i,ty){ var n=(RL.R.menu.jours||[]).length; if(!n) return; RL.i=(i+n)%n; RL.eq.cle=null; rlJour(); rlBarre();
+  // essai : la diète s'affiche en « semaine » OU en « jour » (au lieu des deux l'une sous l'autre)
+  function rlVue(v){ var m=document.querySelector('#p-relire .rl-main'); if(!m) return; m.dataset.v=v;
+    [].forEach.call(m.querySelectorAll('.rl-vues [data-v]'),function(b){ b.setAttribute('aria-selected',String(b.dataset.v===v)); }); }
+  // essai : le panneau de droite en 3 onglets (À vérifier · Client · Notes)
+  function rlOnglet(o){ var a=document.querySelector('#p-relire .rl-side'); if(!a) return; a.dataset.s=o;
+    [].forEach.call(a.querySelectorAll('.rl-stabs [data-s]'),function(b){ b.setAttribute('aria-selected',String(b.dataset.s===o)); });
+    if(o==='client') [].forEach.call(a.querySelectorAll('.rl-rq,.q-rep'),function(d){ d.open=true; }); }
+  function rlSideMaj(){ var a=document.querySelector('#p-relire .rl-side'); if(!a) return;
+    var n=a.querySelectorAll('#rl-ctrl .ck:not(.ok)').length, bg=a.querySelector('.rl-stabs .bdg'); if(bg){ bg.hidden=!n; bg.textContent=n||''; }
+    if(a.dataset.s==='client') rlOnglet('client'); }
+  function allerJour(i,ty){ var n=(RL.R.menu.jours||[]).length; if(!n) return; RL.i=(i+n)%n; RL.eq.cle=null; rlVue('jour'); rlJour(); rlBarre();
     var t=ty&&$('rl-m-'+ty); if(t){ t.scrollIntoView({behavior:'smooth',block:'start'}); t.classList.add('flash'); setTimeout(function(){ t.classList.remove('flash'); },1400); } }
 
   /* ---- feuille d'actions (bas d'écran sur téléphone, fenêtre au centre sur ordinateur) ---- */
@@ -2982,6 +3038,8 @@ var ED=(function(){
     switch(a){
       case 'file': var rt=RL.retour, rx=!!RL.R.xid; sortir(function(){ sortiePlein(); if(rt){ if(rx) ouvrirExt(rt); else ouvrir(rt); } else voir('dietes'); }); break;
       case 'suivante': var s=suivante(); if(s) relire(s); break;
+      case 'vue': rlVue(b.dataset.v); break;
+      case 'side': rlOnglet(b.dataset.s); break;
       case 'sem-detail': var sm=document.querySelector('#p-relire .rl-sem'); if(!sm) break; var on=!sm.classList.contains('detail');
         sm.classList.toggle('detail',on); b.setAttribute('aria-pressed',String(on)); b.textContent=on?'Vue compacte':'Voir le détail';
         try{ localStorage.setItem('ely_sem_compact',on?'0':'1'); }catch(x){} break;

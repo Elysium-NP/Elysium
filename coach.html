@@ -1136,6 +1136,44 @@
     .rl-v2 .rl-hero .rl-dec-top{border-radius:14px;background:var(--void)}
     .rl-v2 .rl-hero .rl-dec-top .rl-dec-titre{font-size:18px}
   }
+
+  /* ===== glow up de fin (01/10) : tout le reste de la relecture parle le langage de l'en-tête ===== */
+  /* 1. onglets (vue de la diète · panneau de droite) : même contrôle segmenté, plus d'air */
+  .rl-v2 .rl-vues,.rl-v2 .rl-stabs{padding:5px;gap:4px;border-radius:16px;background:var(--void)}
+  .rl-v2 .rl-vues{min-width:0}
+  .rl-v2 .rl-vues button,.rl-v2 .rl-stabs button{min-height:40px;padding:0 18px;border-radius:11px;font:600 14px/1 var(--texte);white-space:nowrap;transition:background-color .15s,color .15s,box-shadow .15s}
+  .rl-v2 .rl-vues button:hover:not([aria-selected="true"]),.rl-v2 .rl-stabs button:hover:not([aria-selected="true"]){background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--ice)}
+  .rl-v2 .rl-vues button[aria-selected="true"],.rl-v2 .rl-stabs button[aria-selected="true"]{box-shadow:0 4px 14px color-mix(in srgb,var(--brand) 32%,transparent)}
+  .rl-v2 .rl-vues button:focus-visible,.rl-v2 .rl-stabs button:focus-visible{outline:3px solid color-mix(in srgb,var(--brand) 55%,transparent);outline-offset:2px}
+  /* 2. titres de section : les petites capitales bleues de « Relecture » / « Contrôles de la diète », partout */
+  .rl-v2 .rl-sub,.rl-v2 #rl-rep .rl-sub,.rl-v2 .rl-freq .rl-sub{font:600 11px/1.3 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+  html[data-theme="obscur"] .rl-v2 .rl-sub{color:var(--brand)}
+  .rl-v2 .rl-freq .rl-sub span{color:var(--steel)}
+  /* 3. « Analyse détaillée » : une vraie barre à déplier */
+  .rl-v2 details.rl-plus{border-top:0;padding-top:0}
+  .rl-v2 details.rl-plus>summary{padding:10px 16px;border:1px solid var(--line);border-radius:14px;background:var(--void);transition:border-color .15s,background-color .15s}
+  .rl-v2 details.rl-plus>summary:hover{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 6%,var(--void))}
+  .rl-v2 details[open].rl-plus>summary{border-color:color-mix(in srgb,var(--brand) 55%,var(--line));margin-bottom:6px}
+  /* 4. panneau « À vérifier » : titre + compteur en pastille, contrôles dans un cadre à filets */
+  .rl-v2 #rl-ctrl>h4.rl-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px}
+  .rl-v2 #rl-ctrl>h4.rl-h .n{padding:5px 10px;border-radius:999px;font:700 12px/1.2 var(--texte)}
+  .rl-v2 #rl-ctrl>h4.rl-h .n.av{background:color-mix(in srgb,#f0b35a 24%,transparent);color:#8a5a00}
+  .rl-v2 #rl-ctrl>h4.rl-h .n.ok{background:color-mix(in srgb,#93c47d 26%,transparent);color:#2f6b1a}
+  html[data-theme="obscur"] .rl-v2 #rl-ctrl>h4.rl-h .n.av{color:#f5c27a} html[data-theme="obscur"] .rl-v2 #rl-ctrl>h4.rl-h .n.ok{color:#9ad884}
+  .rl-v2 .cks{gap:0}
+  .rl-v2 .cks>.ck{border-radius:0;border-width:1px 1px 0;border-color:var(--line);background:var(--void)}
+  .rl-v2 .cks>.ck:first-child{border-radius:14px 14px 0 0}
+  .rl-v2 .cks>.ck:last-child{border-radius:0 0 14px 14px;border-bottom-width:1px}
+  .rl-v2 .cks>.ck:only-child{border-radius:14px}
+  .rl-v2 .cks>.ck.av{background:color-mix(in srgb,#f0b35a 8%,var(--void))}
+  .rl-v2 .cks>.ck.ko{background:color-mix(in srgb,#e07a7a 10%,var(--void))}
+  /* 5. « Ce que le client a répondu » : une ligne par réponse, séparée d'un filet */
+  .rl-v2 .rl-dl{gap:0 16px;margin-top:10px;padding:2px 14px;border:1px solid var(--line);border-radius:14px;background:var(--void)}
+  .rl-v2 .rl-dl dt,.rl-v2 .rl-dl dd{padding:10px 0;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+  .rl-v2 .rl-dl dt:first-of-type,.rl-v2 .rl-dl dd:first-of-type{border-top:0}
+  .rl-v2 .rl-dl dt{font:600 10.5px/1.5 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
+  .rl-v2 .rl-dl dd{font-size:13.5px;line-height:1.45}
+  @media(prefers-reduced-motion:reduce){.rl-v2 .rl-vues button,.rl-v2 .rl-stabs button,.rl-v2 details.rl-plus>summary{transition:none}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>

@@ -693,7 +693,7 @@ var PROG = {
   document.getElementById('whoname').textContent=u.prenom||'';
   document.getElementById('pprenom').textContent=u.prenom||'—';
   document.getElementById('pnom').textContent=u.nom||'—';
-  document.getElementById('psexe').textContent=u.sexe||'—';
+  document.getElementById('psexe').textContent=u.sexe?String(u.sexe).charAt(0).toUpperCase()+String(u.sexe).slice(1).toLowerCase():'—';   // « HOMME » -> « Homme »
   document.getElementById('pnais').textContent=u.naissance?(new Date(u.naissance).toLocaleDateString('fr-FR')+(u.age!=null?' · '+u.age+' ans':'')):'—';
   document.getElementById('ptaille').textContent=u.taille?(u.taille+' cm'):'—';
   document.getElementById('pemail').textContent=u.email||'—';

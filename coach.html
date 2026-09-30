@@ -1013,44 +1013,49 @@
 
   /* voyants toujours 2 par 2, à gauche ; « Ta décision » à côté, sur la hauteur des deux lignes */
   .rl-v2 .rl-sante{display:grid;grid-template-columns:repeat(2,max-content);gap:6px}
-  @media(min-width:1101px){.rl-v2 .rl-hero .rl-sante{grid-column:1}.rl-v2 .rl-hero .rl-dec-top{grid-row:1/3;align-self:start}}
+  @media(min-width:1101px){.rl-v2 .rl-hero .rl-sante{grid-column:1}.rl-v2 .rl-hero .rl-dec-top{grid-row:1/3;align-self:stretch;grid-template-rows:auto auto 1fr}.rl-v2 .rl-hero .rl-dec-top .rl-dec-aide{align-self:end}}
   @media(max-width:560px){.rl-v2 .rl-sante{grid-template-columns:1fr}}
 
-  /* en-tête de relecture : la partie gauche, aérée et habillée */
-  .rl-v2 .rl-hero{padding:20px 22px;row-gap:18px;border-radius:20px}
-  .rl-v2 .rl-qui .rl-l1{margin-bottom:10px}
-  .rl-v2 h2.rl-nom{font-size:34px;line-height:1.1;margin:0 0 12px;letter-spacing:-.01em}
-  .rl-v2 .rl-qui .fmeta{margin:0 0 16px;gap:6px}
-  .rl-v2 .rl-qui .rl-info{margin:0 0 14px;font-size:13.5px;line-height:1.5}
-  .rl-v2 .rl-cible{gap:8px;padding-top:14px;border-top:1px solid var(--line)}
-  .rl-v2 .rl-cl{margin-right:8px;color:var(--ice)}
-  .rl-v2 .mc{padding:8px 14px;font-size:13.5px;border-width:1.5px;background:var(--void)}
-  .rl-v2 .mc b{font-size:14.5px}
-  .rl-v2 .mc.k{border-color:color-mix(in srgb,var(--brand) 60%,var(--line));background:color-mix(in srgb,var(--brand) 10%,var(--void))}
-  .rl-v2 .mc.p{border-color:color-mix(in srgb,#cc0000 45%,var(--line))}
-  .rl-v2 .mc.g{border-color:color-mix(in srgb,#3d85c6 55%,var(--line))}
-  .rl-v2 .mc.l{border-color:color-mix(in srgb,#f1c232 60%,var(--line))}
-  /* les voyants : 2 colonnes de même largeur, plus grands, cliquables */
-  .rl-v2 .rl-sante{grid-template-columns:repeat(2,max-content);gap:10px}
-  .rl-v2 .vy{padding:9px 18px 9px 9px;gap:10px;border-width:1.5px;transition:transform .15s,border-color .15s,box-shadow .15s}
-  .rl-v2 .vy-i{width:30px;height:30px}
-  .rl-v2 .vy-i svg{width:16px;height:16px}
-  .rl-v2 .vy small{font-size:10.5px}
-  .rl-v2 .vy b{font-size:14px}
-  .rl-v2 .vy.ok{border-color:color-mix(in srgb,var(--b-vert) 45%,var(--line))}
-  .rl-v2 .vy:hover{transform:translateY(-1px);border-color:var(--brand);box-shadow:0 4px 14px color-mix(in srgb,var(--brand) 18%,transparent)}
-  .rl-v2 .vy:focus-visible{outline:3px solid color-mix(in srgb,var(--brand) 55%,transparent);outline-offset:2px}
-  @media(max-width:560px){.rl-v2 .rl-sante{grid-template-columns:1fr;width:auto}.rl-v2 h2.rl-nom{font-size:28px}}
-  @media(prefers-reduced-motion:reduce){.rl-v2 .vy{transition:none}.rl-v2 .vy:hover{transform:none}}
 
   /* le formulaire s'ouvre sous la tuile choisie, sur toute la largeur de la grille */
   .rl-chips>.co-box{grid-column:1/-1;flex-basis:100%;margin:2px 0 8px}
   .rl-v2 #rl-co .rl-chips>.co-box{margin:2px 0 8px}
 
-  /* l'espace libre revient à la partie gauche : cibles et voyants s'étalent jusqu'au cadre « Ta décision » (qui garde la largeur de ses boutons) */
+
+  /* liste de courses dans la relecture (vue « Les courses ») */
+  #rl-courses{display:none}
+  .rl-v2 .rl-main[data-v="courses"] #rl-sem,.rl-v2 .rl-main[data-v="courses"] #rl-jour{display:none}
+  .rl-v2 .rl-main[data-v="courses"] #rl-courses{display:block}
+  .rl-cour-t{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;margin-bottom:16px}
+  .rl-cour-t .rl-h{margin:0;font:400 22px/1.2 var(--titre);color:var(--ice);text-transform:none;letter-spacing:0}
+  .rl-cour-src{padding:5px 11px;border-radius:999px;font:700 12px/1.2 var(--texte)}
+  .rl-cour-src.ok{background:color-mix(in srgb,#93c47d 26%,transparent);color:#2f6b1a}
+  .rl-cour-src.av{background:color-mix(in srgb,#f0b35a 28%,transparent);color:#8a5a00}
+  .rl-cour{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .rl-cour-c{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--void)}
+  .rl-cour-c h4,.rl-cour-d h4{margin:0 0 8px;font:700 13px/1.3 var(--texte);color:var(--ice)}
+  .rl-cour ul,.rl-cour-d ul{list-style:none;margin:0;padding:0}
+  .rl-cour li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);font-size:13.5px;color:var(--gris)}
+  .rl-cour li:first-child{border-top:0}
+  .rl-cour li b{color:var(--ice);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rl-cour-d{margin-bottom:14px;padding:14px 16px;border:1.5px solid color-mix(in srgb,#f0b35a 60%,var(--line));border-radius:14px;background:color-mix(in srgb,#f0b35a 8%,var(--void))}
+  .rl-cour-d li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:6px 0;font-size:13.5px;color:var(--ice)}
+  .rl-cour-d li small{grid-column:1/-1;color:var(--steel);font-size:12px}
+  .rl-cour-d em{font-style:normal;font-weight:700;font-variant-numeric:tabular-nums}
+  .rl-cour-d em.ok{color:#2f6b1a} .rl-cour-d em.ko{color:#9b1c1c}
+  html[data-theme="obscur"] .rl-cour-src.ok,html[data-theme="obscur"] .rl-cour-d em.ok{color:#9ad884}
+  html[data-theme="obscur"] .rl-cour-src.av{color:#f5c27a}
+  html[data-theme="obscur"] .rl-cour-d em.ko{color:#f3a5a5}
+
+  /* en-tête de relecture en TROIS zones côte à côte, pour exploiter la largeur (Dimitri 01/10) :
+     qui (nom, étiquettes, cibles en 2 × 2) | les 4 contrôles empilés | Ta décision */
   @media(min-width:1101px){
-    .rl-v2 .rl-sante{grid-template-columns:repeat(2,minmax(max-content,1fr))}
-    .rl-v2 .rl-cible .mc{flex:1 1 auto;justify-content:center}
+    .rl-v2 .rl-hero{grid-template-columns:fit-content(460px) minmax(250px,1fr) auto;align-items:stretch;column-gap:0}
+    .rl-v2 .rl-hero .rl-qui{grid-column:1;grid-row:1;padding-right:24px}
+    .rl-v2 .rl-hero .rl-sante{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr);align-content:center;gap:6px;padding:0 24px;border-left:1px solid var(--line)}
+    .rl-v2 .rl-hero .rl-dec-top{grid-column:3;grid-row:1}
+    .rl-v2 .rl-hero .rl-cible{display:grid;grid-template-columns:repeat(2,max-content);gap:6px;margin-top:12px}
+    .rl-v2 .rl-hero .rl-cible .rl-cl{grid-column:1/-1;margin:0 0 2px}
   }
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
@@ -2916,8 +2921,8 @@ var ED=(function(){
       plein:document.body.classList.contains('rl-plein'),consignes:[],consignesAbsentes:false,retour:c.retour||null};   // retour : ouverte depuis l'historique d'une fiche
     document.body.classList.remove('rl-edit');
     $('p-relire').innerHTML='<div class="rl-barre" id="rl-barre"></div><div id="rl-tete"></div><div class="rl-cols"><div class="rl-main" data-v="sem">'+
-      '<div class="rl-vues" role="tablist" aria-label="Affichage de la diète"><button type="button" role="tab" data-act="vue" data-v="sem" aria-selected="true">La semaine</button><button type="button" role="tab" data-act="vue" data-v="jour" aria-selected="false">Le jour</button></div>'+
-      '<div class="carte" id="rl-sem"></div><div class="carte" id="rl-jour"></div></div>'+
+      '<div class="rl-vues" role="tablist" aria-label="Affichage de la diète"><button type="button" role="tab" data-act="vue" data-v="sem" aria-selected="true">La semaine</button><button type="button" role="tab" data-act="vue" data-v="jour" aria-selected="false">Le jour</button><button type="button" role="tab" data-act="vue" data-v="courses" aria-selected="false">Les courses</button></div>'+
+      '<div class="carte" id="rl-sem"></div><div class="carte" id="rl-jour"></div><div class="carte" id="rl-courses"></div></div>'+
       '<aside class="rl-side" data-s="verif"><div class="rl-stabs" role="tablist" aria-label="Panneau de relecture">'+
         '<button type="button" role="tab" data-act="side" data-s="verif" aria-selected="true">À vérifier<i class="bdg" hidden></i></button>'+
         '<button type="button" role="tab" data-act="side" data-s="client" aria-selected="false">Client</button>'+
@@ -2954,8 +2959,37 @@ var ED=(function(){
           .map(function(x){ return {id:x.id,texte:String(REL.propre(x.attendu||x.action.type)).slice(0,90)}; });
         if(RL.co.ouvert) rlCo(); }); }).catch(function(){});
   }
-  function tout(){ if(RL.co.ouvert) lireCo(); rlBarre(); rlTete(); rlSem(); rlJour(); rlSide(); rlDec(); rlCo(); }
-  function majEd(){ rlBarre(); rlTete(); rlSem(); rlJour(); rlSide(); rlDec(); }
+  function tout(){ if(RL.co.ouvert) lireCo(); rlBarre(); rlTete(); rlSem(); rlJour(); rlCourses(); rlSide(); rlDec(); rlCo(); }
+  function majEd(){ rlBarre(); rlTete(); rlSem(); rlJour(); rlCourses(); rlSide(); rlDec(); }
+  /* LISTE DE COURSES dans la relecture (demande de Damien, 01/10).
+     La liste = celle du moteur (menu.courses), la MÊME que la page du PDF : unités d'achat, rayons et
+     anti-gaspillage sont des règles du moteur, on ne les refait pas ici. Une retouche la supprime
+     (ED.resultat) : on reprend alors celle de la version déposée d'avant, et on liste EN DIRECT,
+     aliment par aliment, ce que les retouches changent (somme des grammes du menu, avant → après). */
+  function rlCourses(){ var el=$('rl-courses'); if(!el||!RL.R) return;
+    var cur=vue().menu||{}, ref=null;
+    [RL.S&&RL.S.orig, RL.R.menu, RL.R.precedent].some(function(m){ if(m&&m.courses&&Object.keys(m.courses).length){ ref=m; return true; } });
+    function tot(m){ var t={}; ((m&&m.jours)||[]).forEach(function(j){ if(j.off) return; (j.repas||[]).forEach(function(r){ (r.ingredients||[]).forEach(function(i){
+      var n=String(i.aliment||i.ingredient||'').trim(), k=n.toLowerCase(); if(!k) return; var x=t[k]||(t[k]={n:n,g:0,u:0});
+      x.g+=+i.grammes||0; if(i.unites) x.u+=+i.unites; }); }); }); return t; }
+    function q(x){ return x.g>=1000?(Math.round(x.g/100)/10+' kg').replace('.',','):Math.round(x.g)+' g'; }
+    function cap(n){ return n.charAt(0).toUpperCase()+n.slice(1); }
+    var T=tot(cur), h='<div class="rl-cour-t"><h3 class="rl-h">Liste de courses</h3>';
+    if(!ref){   // aucune liste déposée : la somme exacte du menu, sans les règles d'achat
+      var L=Object.keys(T).sort().map(function(k){ return '<li><span>'+esc(cap(T[k].n))+'</span><b>'+q(T[k])+'</b></li>'; }).join('');
+      el.innerHTML=h+'<span class="rl-cour-src av">Pas de liste déposée pour cette version : total du menu, sans unités d’achat</span></div><div class="rl-cour"><div class="rl-cour-c"><h4>Pour la semaine</h4><ul>'+L+'</ul></div></div>'; return; }
+    var O=tot(ref), D=[];
+    Object.keys(Object.assign({},O,T)).forEach(function(k){ var a=O[k], b=T[k];
+      if(!b) D.push([cap(a.n),'retiré','ko',q(a)+' en moins']);
+      else if(!a) D.push([cap(b.n),'nouveau','ok',q(b)]);
+      else if(Math.abs(b.g-a.g)>=1) D.push([cap(b.n),(b.g>a.g?'+':'−')+Math.round(Math.abs(b.g-a.g))+' g',b.g>a.g?'ok':'ko',q(a)+' → '+q(b)]); });
+    var src=ref===cur?'':(ref===RL.R.precedent?'liste de la version v'+esc(RL.R.precedentVersion)+', la dernière déposée':'liste déposée de cette version');
+    h+=(D.length?'<span class="rl-cour-src av">'+D.length+' aliment'+(D.length>1?'s':'')+' à ajuster'+(src?' · '+src:'')+'</span>':'<span class="rl-cour-src ok">Identique à la fiche PDF</span>')+'</div>';
+    if(D.length) h+='<div class="rl-cour-d"><h4>Ce que tes retouches changent sur la liste</h4><ul>'+D.map(function(d){
+      return '<li><span>'+esc(d[0])+'</span><em class="'+d[2]+'">'+d[1]+'</em><small>'+d[3]+'</small></li>'; }).join('')+'</ul></div>';
+    h+='<div class="rl-cour">'+Object.keys(ref.courses).map(function(c){ return '<div class="rl-cour-c"><h4>'+esc(c)+'</h4><ul>'+(ref.courses[c]||[]).map(function(l){
+      return '<li><span>'+esc(l[0]||'')+'</span><b>'+esc(l[1]==null?'':l[1])+'</b></li>'; }).join('')+'</ul></div>'; }).join('')+'</div>';
+    el.innerHTML=h; }
   function rlBarre(){ var s=suivante(); $('rl-barre').innerHTML=REL.barreOutils(RL.R,{i:RL.i,edit:!!RL.S,plein:RL.plein,lecture:lecture(),suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
   // ligne d'aide en tête, masquable (retenue sur l'appareil)
   function guideVu(){ try{ return localStorage.getItem('ely_rl_guide')==='1'; }catch(err){ return false; } }

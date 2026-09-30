@@ -1114,6 +1114,26 @@
   .rl-cib4 em{font:500 12px/1 var(--texte);font-style:normal;color:var(--gris)}
   .rl-cib4 .k{background:color-mix(in srgb,var(--brand) 8%,transparent)}
   @media(max-width:560px){.rl-cib4{min-width:100%;display:grid;grid-auto-flow:row;grid-template-columns:1fr 1fr}.rl-cib4>div:nth-child(3){border-left:0}.rl-cib4>div:nth-child(n+3){border-top:1px solid var(--line)}}
+
+  /* en-tête : un seul langage visuel pour les 3 zones (Dimitri 01/10, sur le modèle de la cible du jour) :
+     titre en petites capitales · contenu dans un cadre à filets · bas des 3 zones alignés */
+  @media(min-width:1101px){
+    .rl-v2 .rl-hero .rl-qui{display:flex;flex-direction:column}
+    .rl-v2 .rl-hero .rl-qui .rl-cible{margin-top:auto;padding-top:14px}
+    .rl-v2 .rl-hero .rl-sante{display:flex;flex-direction:column;align-items:stretch;gap:0}
+    .rl-v2 .rl-hero .rl-sante .vy{width:100%;box-sizing:border-box}
+    .rl-v2 .rl-hero .rl-sante-t{margin:2px 0 10px}
+    .rl-v2 .rl-hero .rl-sante .vy{flex:1;border-radius:0;border-width:1px 1px 0;border-color:var(--line);background:var(--void);padding:7px 14px 7px 10px;transition:background-color .15s}
+    .rl-v2 .rl-hero .rl-sante .vy:nth-child(2){border-radius:14px 14px 0 0}
+    .rl-v2 .rl-hero .rl-sante .vy:last-child{border-radius:0 0 14px 14px;border-bottom-width:1px}
+    .rl-v2 .rl-hero .rl-sante .vy.av{background:color-mix(in srgb,#f0b35a 10%,var(--void))}
+    .rl-v2 .rl-hero .rl-sante .vy.ko{background:color-mix(in srgb,#e07a7a 12%,var(--void))}
+    .rl-v2 .rl-hero .rl-sante .vy:hover{border-color:var(--line);background:color-mix(in srgb,var(--brand) 10%,var(--void))}
+    .rl-v2 .rl-hero .rl-sante .vy small{font:600 10.5px/1.2 var(--texte);letter-spacing:.08em;color:var(--steel)}
+    .rl-v2 .rl-hero .rl-sante .vy b{font:700 14px/1.2 var(--texte)}
+    .rl-v2 .rl-hero .rl-dec-top{border-radius:14px;background:var(--void)}
+    .rl-v2 .rl-hero .rl-dec-top .rl-dec-titre{font-size:18px}
+  }
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>

@@ -267,14 +267,15 @@
   .rl-cel .rl-x.v{background:#f6dcdc;color:#7a1f1f}
   /* détail de la semaine (30/09) : la diète complète dans la grille, comme la fiche PDF */
   .rl-det{margin-left:auto}
-  .rl-sem.detail .rl-t{min-width:1080px}
+  .rl-sem.detail .rl-t{min-width:0}   /* la grille s'ajuste à la colonne (plein écran : toute la largeur) */
   .rl-cel .rl-ci,.rl-cel .rl-cm{display:none}
   .rl-sem.detail .rl-cel .rl-ci{display:block;margin-top:7px;padding-top:6px;border-top:1px solid rgba(0,0,0,.08);font:400 11.5px/1.35 var(--texte);color:inherit;opacity:.88}
   .rl-sem.detail .rl-cel .rl-ci span{display:block;padding:1.5px 0}
   .rl-sem.detail .rl-cel .rl-ci .rf{color:#9b1c1c;font-weight:700;text-decoration:underline wavy #d98c8c}
   .rl-sem.detail .rl-cel .rl-ci .h1{background:color-mix(in srgb,var(--blue) 22%,transparent);border-radius:4px}
-  .rl-sem.detail .rl-cel .rl-cm{display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;margin-top:7px;font:700 11px/1.2 var(--texte);font-variant-numeric:tabular-nums}
-  .rl-sem.detail .rl-cel .rl-cm .mac{margin-left:4px}
+  .rl-sem.detail .rl-cel .rl-cm{display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;margin-top:7px;font:600 11px/1.3 var(--texte);font-variant-numeric:tabular-nums}
+  .rl-sem.detail .rl-cel .rl-cm b{flex-basis:100%;font-weight:700;font-size:11.5px}
+  .rl-sem.detail .rl-cel .rl-cm span{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
   html[data-theme="obscur"] .rl-sem.detail .rl-cel .rl-ci{border-top-color:rgba(255,255,255,.1)}
   html[data-theme="obscur"] .rl-sem.detail .rl-cel .rl-ci .rf{color:#f3b4b4}
   .rl-cel .rl-r{display:block;margin-top:4px;font:700 10.5px/1 var(--texte);color:#9b1c1c}
@@ -1362,7 +1363,7 @@ var REL=(function(){
           // la diète complète, comme sur la fiche PDF (Dimitri 30/09) : ingrédients pesés + macros du repas
           '<span class="rl-ci">'+(r.ingredients||[]).map(function(x){ var rf=refuse(x.ingredient,INT), h1=hl&&x.ingredient===hl;
             return '<span class="'+(rf?'rf':'')+(h1?' h1':'')+'">'+e(ingLabel(x))+'</span>'; }).join('')+'</span>'+
-          '<span class="rl-cm">'+(function(ma){ return g0(ma.kcal)+' kcal · <i class="mac p"></i>'+g0(ma.proteines)+' <i class="mac g"></i>'+g0(ma.glucides)+' <i class="mac l"></i>'+g0(ma.lipides); })(r.macros||somme(r.ingredients||[]))+'</span>'+
+          '<span class="rl-cm">'+(function(ma){ return '<b>'+g0(ma.kcal)+' kcal</b><span><i class="mac p"></i>P '+g0(ma.proteines)+'</span><span><i class="mac g"></i>G '+g0(ma.glucides)+'</span><span><i class="mac l"></i>L '+g0(ma.lipides)+'</span>'; })(r.macros||somme(r.ingredients||[]))+'</span>'+
           '</button></td>';
       });
       h+='</tr>';

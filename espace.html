@@ -267,7 +267,7 @@
   .hd-act{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:auto}   /* reste à droite quand « Bonjour » est masqué */
   .dash-hd .coachlink{text-decoration:none;color:var(--blue);border-color:rgba(46,155,255,.45)}
   /* RUBRIQUES : barre collée sous l'en-tête, 5 cases égales (tient à 375 px), une rubrique affichée à la fois */
-  .esp-nav{position:sticky;top:64px;z-index:20;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:0 0 18px;padding:6px;
+  .esp-nav{position:sticky;top:64px;z-index:20;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 18px;padding:6px;
     border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--fond) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .esp-nav button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:52px;padding:6px 2px;border:0;border-radius:11px;
     background:none;color:var(--steel);font:600 11.5px/1.15 var(--texte);cursor:pointer;transition:background .2s,color .2s}
@@ -281,8 +281,6 @@
   main.dash[data-rubrique="menu"] [data-rub]:not([data-rub="menu"]),main.dash[data-rubrique="suivi"] [data-rub]:not([data-rub="suivi"]),
   main.dash[data-rubrique="plats"] [data-rub]:not([data-rub="plats"]),main.dash[data-rubrique="messages"] [data-rub]:not([data-rub="messages"]),
   main.dash[data-rubrique="compte"] [data-rub]:not([data-rub="compte"]){display:none!important}
-  #c-avis:not([hidden]) ~ .plats-vide{display:none!important}
-  .plats-vide p{margin:0;color:var(--gris)}
   .esp-nav span{white-space:nowrap}
   /* saisie du poids : vrais boutons (ils passaient sous les champs, écrasés à 12 px de haut) */
   .wrow button{flex:1 1 130px;min-height:46px;padding:0 18px;border-radius:999px;font:600 14.5px/1 var(--texte);letter-spacing:0;text-transform:none}
@@ -338,7 +336,9 @@
   /* bandeau des jours : 7 cases égales, jour + date, sans défilement même à 375 px */
   #tabs.tabs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:5px;overflow:visible;flex-wrap:nowrap}
   #tabs .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:54px;padding:7px 0;letter-spacing:0;text-transform:none}
-  #tabs .tab b{font:600 13px/1 var(--texte)} #tabs .tab small{font:700 17px/1 var(--texte);font-variant-numeric:tabular-nums}
+  #tabs .tab b{font:700 16px/1.1 var(--texte);text-align:center} #tabs .tab small{font:700 17px/1 var(--texte);font-variant-numeric:tabular-nums}
+  @media(max-width:420px){#tabs .tab b{font-size:14px}}
+  #tabs .tab b{white-space:normal;line-height:1.05}   /* « Jour off » passe sur 2 lignes dans une case étroite */
   #tabs .tab.today::after{right:5px;top:5px}
   .acces-top:empty{display:none}
   .acces-top{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin-top:12px}
@@ -451,7 +451,6 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
   <nav class="esp-nav" id="esp-nav" aria-label="Rubriques de mon espace">
     <button type="button" data-rubrique="menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg><span>Menu</span></button>
     <button type="button" data-rubrique="suivi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span>Suivi</span><i class="bdg" hidden></i></button>
-    <button type="button" data-rubrique="plats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.6 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>Mes plats</span></button>
     <button type="button" data-rubrique="messages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Messages</span><i class="bdg" hidden></i></button>
     <button type="button" data-rubrique="compte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a4 4 0 1 0 .01 0M4 21a8 8 0 0 1 16 0"/></svg><span>Compte</span></button>
   </nav>
@@ -510,9 +509,11 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- AVIS SUR LES PLATS (table retours) : lu par le suivi pour la prochaine diète -->
-    <div class="card wide rv" id="c-avis" data-rub="plats" hidden>
-      <div class="ch"><h3>Ton avis sur tes plats</h3><span class="tag">Prochaine diète</span></div>
-      <p>Pour chaque plat, dis-nous ce que tu veux pour ta prochaine diète. Tu peux changer d'avis jusque-là.</p>
+    <!-- QUESTIONNAIRE DE RÉACTUALISATION (Damien 30/09) : visible seulement à partir de la 4e semaine de la diète en cours,
+         pour que le client ne demande pas de corriger ses plats tout de suite. Même table `retours` qu'avant. -->
+    <div class="card wide rv" id="c-avis" data-rub="suivi" hidden>
+      <div class="ch"><h3>Questionnaire de réactualisation</h3><span class="tag">4<sup>e</sup> semaine</span></div>
+      <p>Voilà ton menu de ces dernières semaines. Pour ta prochaine diète, dis-nous ce que tu veux garder, revoir ou ne plus voir.</p>
       <ul class="avis-leg">
         <li><b class="g">À garder</b> revient à coup sûr</li>
         <li><b class="r">À revoir</b> peut revenir, sans être imposé</li>
@@ -525,9 +526,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     </div>
 
     <!-- MESSAGES avec les coachs (table messages) -->
-    <div class="card wide plats-vide" data-rub="plats"><div class="ch"><h3>Ton avis sur tes plats</h3></div><p>Dès que ton programme est en ligne, tu retrouves ici chacun de tes plats pour dire à tes coachs ce que tu veux garder, revoir ou ne plus jamais voir.</p></div>
-
-    <div class="card wide rv" id="c-msg" data-rub="messages" hidden>
+<div class="card wide rv" id="c-msg" data-rub="messages" hidden>
       <div class="ch"><h3>Mes messages</h3><span class="tag" id="msg-tag">Coachs</span></div>
       <p>Une question sur ton programme ? Écris à Damien &amp; Yoann, ils te répondent ici.</p>
       <!-- alertes navigateur : visible seulement tant que la permission n'a pas été demandée -->
@@ -1034,12 +1033,9 @@ var PROG = {
     //    Conseils · Liste de courses · Imprimer, en encadrés à part. Les recettes : au clic sur un plat.
     //    En démo, ce que la formule n'inclut pas reste visible mais verrouillé (« Disponible avec… »).
     var tabs=document.getElementById('tabs'), acces=document.getElementById('acces'), accesTop=document.getElementById('acces-top'), panels=document.getElementById('panels'), items=[];
-    // jour N du menu = N-ième jour de la semaine (lundi = Jour 1, dimanche = jour off, comme « aujourd'hui » plus bas) : on montre la date de cette semaine
-    var JS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'], JL=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'], lun=new Date(); lun.setDate(lun.getDate()-((lun.getDay()+6)%7));
-    function dateJour(n){ var d=new Date(lun); d.setDate(lun.getDate()+n-1); return d.getDate(); }
-    joursVus().forEach(function(d){ var n=+d.j, ok=n>=1&&n<=6;
-      items.push({id:'j'+d.j,label:'Jour '+d.j,court:ok?'<b>'+JS[n-1]+'</b><small>'+dateJour(n)+'</small>':'<b>J'+d.j+'</b>',aria:'Jour '+d.j+(ok?', '+JL[n-1]+' '+dateJour(n):''),html:dayHTML(d)}); });
-    items.push({id:'off',label:'Jour OFF',court:'<b>Off</b><small>'+dateJour(7)+'</small>',aria:'Jour off, dimanche '+dateJour(7),html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
+    // J1 … J6 puis « Jour off », SANS date (Damien 30/09 : le client peut intervertir ses jours comme il veut)
+    joursVus().forEach(function(d){ items.push({id:'j'+d.j,label:'Jour '+d.j,court:'<b>J'+d.j+'</b>',aria:'Jour '+d.j,html:dayHTML(d)}); });
+    items.push({id:'off',label:'Jour OFF',court:'<b>Jour off</b>',aria:'Jour off',html:'<div class="panel"><div class="dayoff"><div class="t">Jour off</div><div class="s">Repas libres · 1 cheat meal possible<br>Profite et recharge, sans culpabiliser.</div></div></div>'});
     var COURSES=coursesVues(), nCourses=0; Object.keys(COURSES||{}).forEach(function(k){ nCourses+=(COURSES[k]||[]).length; });
     var REC=recettesClient();
     var extras=[{id:'conseils',cls:'a-cons',label:'Conseils',sous:'Les règles, le mode de vie, le suivi',html:adviceHTML(),ic:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>'}];
@@ -1059,15 +1055,13 @@ var PROG = {
       html:'<div class="panel"><div class="verrou guide-vente"></div></div>'});
     else if(FC) extras.push({id:'guide',cls:'a-guide hors-appli',label:'Mon guide nutrition',lock:'Formule Elysium',ic:IC_GUIDE,
       html:verrouHTML('Mon guide nutrition','Le guide « Bien manger, au gramme près », en e-book.','la Formule Elysium')});
-    var dow=new Date().getDay(); // 0=dim -> jour off, 1..6 -> Jour 1..6
-    var todayId=dow===0?'off':'j'+dow;
+    var todayId='j1';   // les jours ne suivent pas le calendrier (Damien 30/09) : on ouvre sur J1
     if(!items.some(function(it){return it.id===todayId;})) todayId=items[0].id;
     function panneau(it,on){ var wrap=document.createElement('div'); wrap.innerHTML=it.html; var pan=wrap.firstElementChild; pan.id='pan-'+it.id; if(on) pan.classList.add('on'); panels.appendChild(pan); }
     var LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     items.forEach(function(it){
       var on=it.id===todayId;
-      var b=document.createElement('button'); b.type='button'; b.className='tab'+(on?' on today':''); b.innerHTML=it.court; b.setAttribute('aria-label',it.aria); b.dataset.t=it.id;
-      if(on) b.title='Aujourd\'hui';
+      var b=document.createElement('button'); b.type='button'; b.className='tab'+(on?' on':''); b.innerHTML=it.court; b.setAttribute('aria-label',it.aria); b.dataset.t=it.id;
       b.addEventListener('click',function(){ select(it.id); }); tabs.appendChild(b);
       panneau(it,on);
     });
@@ -1245,12 +1239,12 @@ var PROG = {
     var sb=ElyAuth.client, id=u.id;
     return Promise.all([
       sb.from('questionnaires').select('statut,reponses').eq('user_id',id).eq('type','nutrition').maybeSingle(),
-      sb.from('programmes').select('id,version,menu,cible,pdf:diagnostic->pdf').eq('user_id',id).eq('statut','valide')
+      sb.from('programmes').select('id,version,menu,cible,traite_at,created_at,pdf:diagnostic->pdf').eq('user_id',id).eq('statut','valide')
         .order('version',{ascending:false}).limit(1)
     ]).then(function(r){
       var q=r[0]&&r[0].data, p=r[1]&&r[1].data&&r[1].data[0];
       REEL.quest=!!(q&&q.statut==='valide');
-      if(p&&p.menu){ PROG=depuisBase(p, q&&q.reponses); REEL.prog=true; REEL.pid=p.id; REEL.menu=p.menu;
+      if(p&&p.menu){ PROG=depuisBase(p, q&&q.reponses); REEL.prog=true; REEL.pid=p.id; REEL.menu=p.menu; REEL.depuis=p.traite_at||p.created_at;
         REEL.pdf=p.pdf&&p.pdf.chemin&&+p.pdf.version===+p.version?p.pdf.chemin:null; }   // fiche de CETTE version seulement (une version retouchée hérite du diagnostic)
     }).catch(function(){});
   }
@@ -1359,6 +1353,8 @@ var PROG = {
   function chargerAvis(){
     var card=document.getElementById('c-avis');
     if(ADMIN||!REEL.pid||!REEL.menu){ card.hidden=true; return; }
+    var jr=REEL.depuis?(Date.now()-new Date(REEL.depuis).getTime())/86400000:0;
+    if(jr<21){ card.hidden=true; return; }        // avant la 4e semaine : rien à noter (Damien 30/09)
     return sb.from('retours').select('plat,avis').eq('user_id',u.id).eq('programme_id',REEL.pid).then(function(r){
       if(r.error){ card.hidden=true; return; }                       // table pas encore créée
       AVIS={}; (r.data||[]).forEach(function(x){ AVIS[x.plat]=x.avis; });
@@ -1459,7 +1455,7 @@ var PROG = {
 
   // ---- cartes suivi cliquables : scroll + flash vers l'outil du tableau de bord ----
   // ---- RUBRIQUES ----
-  var VUES=['menu','suivi','plats','messages','compte'], dash=document.querySelector('main.dash');
+  var VUES=['menu','suivi','messages','compte'], dash=document.querySelector('main.dash');
   function vue(v,haut){ if(VUES.indexOf(v)<0) v='menu'; dash.dataset.rubrique=v; try{ sessionStorage.setItem('ely_rub',v); }catch(e){}
     [].forEach.call(document.querySelectorAll('#esp-nav [data-rubrique]'),function(b){ b.setAttribute('aria-current',String(b.dataset.rubrique===v)); });
     [].forEach.call(document.querySelectorAll('[data-rub="'+v+'"] .rv'),function(x){ x.classList.add('in'); });

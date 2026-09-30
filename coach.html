@@ -1118,8 +1118,10 @@
   /* en-tête : un seul langage visuel pour les 3 zones (Dimitri 01/10, sur le modèle de la cible du jour) :
      titre en petites capitales · contenu dans un cadre à filets · bas des 3 zones alignés */
   @media(min-width:1101px){
-    .rl-v2 .rl-hero .rl-qui{display:flex;flex-direction:column}
-    .rl-v2 .rl-hero .rl-qui .rl-cible{margin-top:auto;padding-top:14px}
+    /* l'espace libre de la colonne se répartit ENTRE les lignes (Relecture · nom · étiquettes · cible) au lieu de s'entasser au même endroit */
+    .rl-v2 .rl-hero .rl-qui{display:flex;flex-direction:column;justify-content:space-between;gap:8px}
+    .rl-v2 .rl-hero .rl-qui>*{margin-top:0;margin-bottom:0}
+    .rl-v2 .rl-hero .rl-qui .rl-cible{padding-top:0}
     .rl-v2 .rl-hero .rl-sante{display:flex;flex-direction:column;align-items:stretch;gap:0}
     .rl-v2 .rl-hero .rl-sante .vy{width:100%;box-sizing:border-box}
     .rl-v2 .rl-hero .rl-sante-t{margin:2px 0 10px}

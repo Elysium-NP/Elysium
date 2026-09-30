@@ -1010,6 +1010,9 @@
   .rl-v2 .rl-hero .rl-dec-top .db{padding:8px 12px;font-size:13px;gap:5px}
   .rl-v2 .rl-hero .rl-dec-top .db.ok{padding:8px 15px;font-size:13.5px}
   .rl-v2 .rl-hero .rl-dec-top .db kbd{display:none}   /* les raccourcis C / V restent affichés dans « Ta décision » en bas, et marchent partout */
+
+  .rl-v2 .rl-hero.rl-dec-2 .rl-sante{grid-column:1}
+  .rl-v2 .rl-hero.rl-dec-2 .rl-dec-top{grid-row:1/3;align-self:start}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -2858,8 +2861,15 @@ var ED=(function(){
   function lecture(){ var e=RL.R.etat; return RL.R.archive?'Ancienne version : lecture seule.':e==='valide'?'Diète déjà validée et envoyée : lecture seule.':e==='refuse'?'Diète refusée : elle sera entièrement refaite.':e==='remplace'?'Une version plus récente existe.':null; }
   function suivante(){ var k=file.indexOf(cur); for(var d=1;d<=file.length;d++){ var x=file[(k+d+file.length)%file.length]; if(x&&x!==cur&&x.etape==='a_relire'&&x.menu&&x.programme_id) return x; } return null; }
   function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px');
-    var br=$('rl-barre'); if(br) document.documentElement.style.setProperty('--bh',br.offsetHeight+'px'); }
+    var br=$('rl-barre'); if(br) document.documentElement.style.setProperty('--bh',br.offsetHeight+'px'); decLargeur(); }
   addEventListener('resize',hauteur);
+  // essai : « Ta décision » (en haut) commence juste après la dernière pastille des voyants.
+  // Pas la place (écran étroit) : le cadre descend à côté des voyants, qui passent à la ligne à sa gauche.
+  function decLargeur(){ var h=document.querySelector('#p-relire.rl-v2 .rl-hero'), b=$('rl-dec-top'), v=h&&h.querySelector('.rl-sante');
+    if(!h||!b||!v) return; h.classList.remove('rl-dec-2'); b.style.width='';
+    if(innerWidth<1101||!v.lastElementChild) return;
+    var fin=v.lastElementChild.getBoundingClientRect().right, dispo=Math.floor(b.getBoundingClientRect().right-fin-16);
+    if(dispo>=b.offsetWidth) b.style.width=dispo+'px'; else h.classList.add('rl-dec-2'); }
   addEventListener('beforeunload',function(e){ if(RL.S&&ED.modifie(RL.S)){ e.preventDefault(); e.returnValue=''; } });
 
   function relire(c,force){
@@ -3027,7 +3037,7 @@ var ED=(function(){
         '<button type="button" class="db" data-act="pdf">Aperçu de la fiche PDF</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(sn)+' →</button>':'')+'</div>';
     else h=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:sn,attente:(RL.co.liste||[]).length});
     d.innerHTML='<h4 class="rl-h">Ta décision</h4>'+h;
-    if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML='<h4 class="rl-h rl-dec-titre">Ta décision</h4>'+h; } }
+    if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML='<h4 class="rl-h rl-dec-titre">Ta décision</h4>'+h; decLargeur(); } }
   // essai : la diète s'affiche en « semaine » OU en « jour » (au lieu des deux l'une sous l'autre)
   function rlVue(v){ var m=document.querySelector('#p-relire .rl-main'); if(!m) return; m.dataset.v=v;
     [].forEach.call(m.querySelectorAll('.rl-vues [data-v]'),function(b){ b.setAttribute('aria-selected',String(b.dataset.v===v)); }); }

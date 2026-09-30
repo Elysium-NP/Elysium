@@ -1060,8 +1060,6 @@
     .rl-v2 .rl-hero .rl-sante .vy-t{flex-direction:column;align-items:flex-start;gap:2px}
     .rl-v2 .rl-hero .rl-sante .vy small{white-space:nowrap}
     .rl-v2 .rl-hero .rl-dec-top{grid-column:3;grid-row:1}
-    .rl-v2 .rl-hero .rl-cible{display:grid;grid-template-columns:repeat(2,max-content);gap:6px;margin-top:12px}
-    .rl-v2 .rl-hero .rl-cible .rl-cl{grid-column:1/-1;margin:0 0 2px}
   }
 
   /* vue « Les courses » : habillage */
@@ -1095,10 +1093,27 @@
   html[data-theme="obscur"] .rl-sante-t{color:var(--brand)}
   /* cible du jour : les calories en tête, P / G / L dessous */
   @media(min-width:1101px){
-    .rl-v2 .rl-hero .rl-cible{grid-template-columns:repeat(3,max-content)}
-    .rl-v2 .rl-hero .rl-cible .mc.k{grid-column:1/-1;justify-self:start;font-size:14px}
-    .rl-v2 .rl-hero .rl-cible .mc.k b{font:400 20px/1 var(--titre)}
   }
+
+  .rl-cour{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start;columns:auto}
+  .rl-cour-col{display:flex;flex-direction:column;gap:14px}
+  .rl-cour-col .rl-cour-c{margin:0}
+  .rl-cour-c.c0{--pc:var(--p-jaune);--bc:var(--b-jaune)} .rl-cour-c.c1{--pc:var(--p-vert);--bc:var(--b-vert)} .rl-cour-c.c2{--pc:var(--p-violet);--bc:var(--b-violet)} .rl-cour-c.c3{--pc:var(--p-bleu);--bc:var(--b-bleu)}
+  @media(max-width:900px){.rl-cour{grid-template-columns:1fr}}
+
+  /* cible du jour : un cadre, 4 chiffres séparés par un filet, un trait de couleur par macro */
+  .rl-cible{display:block;margin-top:14px}
+  .rl-cible .rl-cl{display:block;margin:0 0 6px}
+  .rl-cib4{width:0;min-width:max(100%,440px);box-sizing:border-box;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border:1px solid var(--line);border-radius:14px;background:var(--void);overflow:hidden}
+  .rl-cib4>div{--m:var(--brand);display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;padding:10px 14px 11px}
+  .rl-cib4>div+div{border-left:1px solid var(--line)}
+  .rl-cib4 small::before{content:"";display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:50%;background:var(--m);vertical-align:0}
+  .rl-cib4 .k{--m:var(--steel)} .rl-cib4 .p{--m:#cc0000} .rl-cib4 .g{--m:#3d85c6} .rl-cib4 .l{--m:#f1c232}
+  .rl-cib4 small{flex-basis:100%;margin-bottom:5px;white-space:nowrap;font:600 10.5px/1.2 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
+  .rl-cib4 b{font:700 19px/1 var(--texte);color:var(--ice);font-variant-numeric:tabular-nums lining-nums}
+  .rl-cib4 em{font:500 12px/1 var(--texte);font-style:normal;color:var(--gris)}
+  .rl-cib4 .k{background:color-mix(in srgb,var(--brand) 8%,transparent)}
+  @media(max-width:560px){.rl-cib4{min-width:100%;display:grid;grid-auto-flow:row;grid-template-columns:1fr 1fr}.rl-cib4>div:nth-child(3){border-left:0}.rl-cib4>div:nth-child(n+3){border-top:1px solid var(--line)}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1648,8 +1663,10 @@ var REL=(function(){
     if(sv&&sv.geste){ var nr=Array.isArray(sv.retours)?sv.retours.length:(+sv.retours||0);
       h+='<p class="rl-info"><span><b>'+(sv.geste==='reajuster'?'Réajustement des grammes':'Nouveau menu')+'</b>'+(sv.poids!=null?' à <b>'+e(String(sv.poids).replace('.',','))+' kg</b>':'')+
         ', '+nr+' retour'+(nr>1?'s':'')+' du client pris en compte'+(Array.isArray(sv.retours)&&nr?' : '+sv.retours.map(function(x){ return '« '+e(x)+' »'; }).join(', '):'')+'</span></p>'; }
-    h+='<div class="rl-cible"><span class="rl-cl">Cible du jour</span><span class="mc k"><b>'+g0(c.kcal)+'</b> kcal</span>'+
-      MAC.slice(1).map(function(k){ return '<span class="mc '+k[2]+'"><i class="mac '+k[2]+'"></i>'+k[1]+' <b>'+g0(c[k[0]])+' g</b></span>'; }).join('')+'</div></div>'+
+    // cible du jour : 4 chiffres côte à côte dans un seul cadre, chacun avec sa couleur de macro (celles du PDF)
+    h+='<div class="rl-cible"><span class="rl-cl">Cible du jour</span><div class="rl-cib4">'+
+      '<div class="k"><small>Calories</small><b>'+g0(c.kcal)+'</b><em>kcal</em></div>'+
+      MAC.slice(1).map(function(k){ return '<div class="'+k[2]+'"><small>'+k[1]+'</small><b>'+g0(c[k[0]])+'</b><em>g</em></div>'; }).join('')+'</div></div></div>'+
       '<div class="rl-sante" aria-label="Carte de santé de la diète"><div class="rl-sante-t">Contrôles de la diète</div>'+sante(R).map(function(v){
         return '<button type="button" class="vy '+v.et+'" data-act="va" data-va="'+v.va+'"><span class="vy-i">'+ico(IC[v.et])+'</span><span class="vy-t"><small>'+v.k+'</small><b>'+v.v+'</b></span></button>'; }).join('')+'</div></div>';
     if(R.note) h+='<div class="rl-note j">Correction déjà demandée par <b>'+e(R.note.par)+'</b> : « '+e(R.note.texte)+' »</div>';
@@ -3031,9 +3048,12 @@ var ED=(function(){
       return '<li><span>'+esc(d[0])+'</span><em class="'+d[2]+'">'+d[1]+'</em><small>'+d[3]+'</small></li>'; }).join('')+'</ul></div>';
     var K=Object.keys(ref.courses), nb=K.reduce(function(a,c){ return a+(ref.courses[c]||[]).length; },0);
     h=h.replace('</h3>','</h3><span class="rl-cour-n">'+nb+' articles · '+K.length+' rayon'+(K.length>1?'s':'')+'</span>');
-    h+='<div class="rl-cour">'+K.map(function(c){ var m=/^(\p{Extended_Pictographic}️?)\s*(.*)$/u.exec(c), ic=m?m[1]:'', nm=m?m[2]:c, L=ref.courses[c]||[];
-      return '<div class="rl-cour-c"><h4>'+(ic?'<i class="ic">'+ic+'</i>':'')+'<span>'+esc(nm)+'</span><small>'+L.length+'</small></h4><ul>'+L.map(function(l){
-      var q=l[1]==null?'':String(l[1]); return '<li><span>'+esc(l[0]||'')+'</span><b'+(q?'':' class="vide"')+'>'+esc(q||'au besoin')+'</b></li>'; }).join('')+'</ul></div>'; }).join('')+'</div>';
+    // 3 colonnes (Dimitri 01/10) : féculents + protéines | fruits & légumes | laitiers + oléagineux (et le reste)
+    var COL=[[],[],[]]; K.forEach(function(c){ var n=c.toLowerCase(); COL[/f[ée]culent|c[ée]r[ée]ale|prot[ée]in/.test(n)?0:/l[ée]gume|fruit/.test(n)?1:2].push(c); });
+    function carte(c){ var m=/^(\p{Extended_Pictographic}️?)\s*(.*)$/u.exec(c), ic=m?m[1]:'', nm=m?m[2]:c, L=ref.courses[c]||[];
+      return '<div class="rl-cour-c c'+(K.indexOf(c)%4)+'"><h4>'+(ic?'<i class="ic">'+ic+'</i>':'')+'<span>'+esc(nm)+'</span><small>'+L.length+'</small></h4><ul>'+L.map(function(l){
+      var q=l[1]==null?'':String(l[1]); return '<li><span>'+esc(l[0]||'')+'</span><b'+(q?'':' class="vide"')+'>'+esc(q||'au besoin')+'</b></li>'; }).join('')+'</ul></div>'; }
+    h+='<div class="rl-cour">'+COL.filter(function(x){ return x.length; }).map(function(x){ return '<div class="rl-cour-col">'+x.map(carte).join('')+'</div>'; }).join('')+'</div>';
     el.innerHTML=h; }
   function rlBarre(){ var s=suivante(); $('rl-barre').innerHTML=REL.barreOutils(RL.R,{i:RL.i,edit:!!RL.S,plein:RL.plein,lecture:lecture(),suivante:s&&((s.prenom||'')+' '+(s.nom||'')).trim()}); }
   // ligne d'aide en tête, masquable (retenue sur l'appareil)

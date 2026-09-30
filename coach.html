@@ -855,6 +855,32 @@
   .rl-v2 .rl-dec-top{grid-column:2;grid-row:1;border-top:0;padding-top:0}
   .rl-v2 .rl-dec-top .rl-etat{text-align:right;margin-bottom:8px;font-size:13px}
   @media(max-width:1100px){.rl-v2 .rl-hero{grid-template-columns:1fr}.rl-v2 .rl-dec-top{grid-column:1;grid-row:3}.rl-v2 .rl-dec-top .rl-etat{text-align:left}}
+
+  /* essai 30/09 (suite) — 1. décision : l'état puis les boutons, alignés à droite */
+  .rl-v2 .rl-dec-top{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:10px}
+  .rl-v2 .rl-dec-top .rl-etat{flex:0 0 auto;margin:0}
+  .rl-v2 .rl-dec-top .in{flex:0 0 auto;justify-content:flex-end}
+  @media(max-width:1100px){.rl-v2 .rl-dec-top{align-items:stretch}.rl-v2 .rl-dec-top .in{justify-content:flex-start}}
+  /* 2. plats répétés : un encadré, un plat par pastille colorée (vert : accepté · orange : à vérifier) */
+  .rl-v2 #rl-rep{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--void)}
+  .rl-v2 #rl-rep .rl-sub{margin:0 0 10px;font-size:12px;color:var(--ice)}
+  .rl-v2 #rl-rep .rl-chips{gap:8px}
+  .rl-v2 #rl-rep .rl-chip{font-size:13.5px;padding:9px 14px;cursor:default;border-width:1.5px;border-color:var(--b-vert);background:color-mix(in srgb,var(--p-vert) 40%,transparent);color:var(--ice)}
+  .rl-v2 #rl-rep .rl-chip.v{border-color:#e0a24a;background:color-mix(in srgb,#f0b35a 22%,transparent)}
+  .rl-v2 #rl-rep .leg{margin-top:10px!important}
+  /* 3. écarts à la cible : le tableau coloré à la place du graphique */
+  .rl-ecarts{display:none}
+  .rl-v2 .rl-graphe{display:none}
+  .rl-v2 .rl-ecarts{display:block;overflow-x:auto}
+  .rl-ecarts table{width:100%;border-collapse:separate;border-spacing:4px;font:600 13.5px/1 var(--texte);font-variant-numeric:tabular-nums}
+  .rl-ecarts th{font-size:11.5px;letter-spacing:.06em;color:var(--steel);text-align:center;padding:4px}
+  .rl-ecarts tbody th{text-align:left;letter-spacing:0;font-size:13px;color:var(--gris);white-space:nowrap;padding-right:10px}
+  .rl-ecarts td{text-align:center;padding:10px 4px;border-radius:8px;background:var(--void2);color:var(--ice)}
+  .rl-ecarts td.ok{background:rgba(111,183,82,.28);box-shadow:inset 0 0 0 1px rgba(111,183,82,.55)}
+  .rl-ecarts td.av{background:rgba(240,179,90,.32);box-shadow:inset 0 0 0 1px rgba(240,179,90,.7)}
+  .rl-ecarts td.ko{background:rgba(217,110,110,.34);box-shadow:inset 0 0 0 1px rgba(217,110,110,.75)}
+  .rl-ecarts .leg b.ok{color:#2f6b1a} .rl-ecarts .leg b.av{color:#8a5a00} .rl-ecarts .leg b.ko{color:#9b1c1c}
+  html[data-theme="obscur"] .rl-ecarts .leg b.ok{color:#8fd07a} html[data-theme="obscur"] .rl-ecarts .leg b.av{color:#f0b35a} html[data-theme="obscur"] .rl-ecarts .leg b.ko{color:#f3b4b4}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1329,6 +1355,16 @@ var REL=(function(){
   function somme(L){ var s={kcal:0,proteines:0,glucides:0,lipides:0}; L.forEach(function(x){ if(x) MAC.forEach(function(k){ s[k[0]]+=+x[k[0]]||0; }); }); return s; }
   function totJour(j){ return j.macros||somme((j.repas||[]).map(function(r){ return r.macros||somme(r.ingredients||[]); })); }
   function ecart(v,c){ return c?(v-c)/c:NaN; }
+  // tableau lisible d'un coup d'œil : un jour par colonne, une macro par ligne, le % de la cible coloré
+  // (vert : ±5 % · jaune : jusqu'à ±10 % · rouge : au-delà)
+  function ecartsTable(R){ var m=R.menu||{}, c=m.cible||{}, J=(m.jours||[]).filter(function(j){ return !j.off; });
+    var L=[['kcal','Calories'],['proteines','Protéines'],['glucides','Glucides'],['lipides','Lipides']];
+    return '<div class="rl-ecarts"><table><thead><tr><th></th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
+      L.map(function(l){ return '<tr><th>'+l[1]+'</th>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
+        if(!isFinite(x)) return '<td>—</td>';
+        var a=Math.abs(x), cl=a<=TOL?'ok':a<=0.10?'av':'ko';
+        return '<td class="'+cl+'" title="'+g0(s[l[0]])+(l[0]==='kcal'?' kcal':' g')+' pour '+g0(c[l[0]])+' visés">'+Math.round(100+x*100)+' %</td>'; }).join('')+'</tr>'; }).join('')+
+      '</tbody></table><p class="leg" style="margin:6px 0 0">% de la cible · <b class="ok">vert</b> ±5 % · <b class="av">jaune</b> jusqu’à ±10 % · <b class="ko">rouge</b> au-delà. Survole une case pour les grammes.</p></div>'; }
   function pct(x){ var s=n(x*100,1); return (x>0&&s!=='0'?'+':'')+s+' %'; }
   function g0(v){ return n(Math.round(+v||0)); }
   function gx(v){ return v==null||v===''||!isFinite(+v)?'—':g0(v); }
@@ -1443,8 +1479,9 @@ var REL=(function(){
     var fq=Object.keys(F.aliments).filter(function(k){ return F.aliments[k].jours>3; }).sort(function(a,b){ return F.aliments[b].jours-F.aliments[a].jours; });
     // l'analyse fine reste à portée, repliée : la grille d'abord
     h+='<details class="rl-plus" id="rl-plus"'+(o.plus||hl?' open':'')+'><summary>Analyse détaillée <span>macros jour par jour · '+nbS(fq.length,'aliment très présent','aliments très présents')+'</span></summary>'+
-      '<div class="rl-sub">Macros par jour, en % de la cible</div><div id="rl-graph"></div>'+
-      G.leg([['Calories','var(--steel)'],['Protéines','#cc0000'],['Glucides','#3d85c6'],['Lipides','#f1c232'],['zone ±5 %','color-mix(in srgb,var(--b-vert) 45%,transparent)']])+
+      '<div class="rl-sub">Macros par jour, en % de la cible</div><div class="rl-graphe"><div id="rl-graph"></div>'+
+      G.leg([['Calories','var(--steel)'],['Protéines','#cc0000'],['Glucides','#3d85c6'],['Lipides','#f1c232'],['zone ±5 %','color-mix(in srgb,var(--b-vert) 45%,transparent)']])+'</div>'+
+      ecartsTable(R)+
       '<div class="rl-sub">Aliments très présents <span style="text-transform:none;letter-spacing:0;font-weight:400">(plus de 3 jours sur '+actifs(m).length+', clic = surligner dans la grille)</span></div>'+
       (fq.length?'<div class="rl-chips">'+fq.map(function(k){ var a=F.aliments[k];
         return '<button type="button" class="rl-chip'+(k===hl?' on':'')+'" data-act="surligne" data-ing="'+e(k)+'">'+e(cap(k))+' · '+a.jours+' jours · '+g0(a.g)+' g</button>'; }).join('')+'</div>':'<p class="leg" style="margin-left:0">Aucun aliment au-delà de 3 jours.</p>')+'</details>';

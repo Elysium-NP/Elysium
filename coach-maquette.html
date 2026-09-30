@@ -265,6 +265,15 @@
   .rl-mode button.on{background:var(--blue);color:#fff}
   .rl-aide{font-size:12px;color:var(--steel)}
   .rl-meals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:10px}
+  /* relecture plus légère (Dimitri 30/09) */
+  .rl-meal{display:flex;flex-direction:column}                 /* macros, barre et « Signaler » toujours en bas du cadre */
+  .rl-meal>.rl-mm{margin-top:auto}
+  .rl-t col.h{width:30px!important}                             /* colonne des repas : une fine bande, libellé à la verticale */
+  .rl-t tbody th{writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;padding:8px 2px!important;
+    font:700 9.5px/1 var(--texte)!important;letter-spacing:.14em!important;text-transform:uppercase;color:var(--steel);white-space:nowrap!important}
+  .rl-t tbody th .rl-rt{display:block;margin:0 auto 6px;width:6px;height:6px}
+  .ck.ok{padding:8px 12px;align-items:center;background:none}  /* un contrôle au vert = une ligne ; seuls les points à regarder se déplient */
+  .ck.ok .ck-i{width:24px;height:24px} .ck.ok .ck-d{display:none} .ck.ok .ck-c>b{font-size:13.5px;font-weight:600}
   .rl-ing.h span,.ed-ing.h span{white-space:nowrap}   /* « Grammes » ne se coupe plus en « Gramme / s » */
   /* 4 et 5 repas (Dimitri 30/09) : 2 colonnes au lieu de 3 + 1 orphelin ; à 5, le dernier (dîner) sur toute la largeur */
   @media(min-width:760px){.rl-meals.n4,.rl-meals.n5{grid-template-columns:repeat(2,minmax(0,1fr))}.rl-meals.n5>:last-child{grid-column:1/-1}}
@@ -1571,7 +1580,7 @@ var REL=(function(){
       :ck('ok','Corrections appliquées',rc.jours_refaits==='tous'?'Semaine entière refaite.':'Jours refaits : '+[].concat(rc.jours_refaits).join(', ')+'.');
     var nk=L.filter(function(x){ return x!=='ok'; }).length;
     return '<h4 class="rl-h">À vérifier avant d’envoyer <span class="n'+(nk?' av':' ok')+'">'+(nk?nbS(nk,'point à regarder','points à regarder'):'tout est bon')+'</span></h4><div class="cks">'+h+'</div>'+
-      '<details class="rl-rq" open><summary>Ce que le client a répondu</summary><dl class="rl-dl">'+[['Objectif',rp.objectif||'—'],['Aliments refusés',rp.refuses||'Aucun'],['Allergies',rp.allergies||'Aucune'],['Régime',rp.regime||'Aucun'],['À conserver',rp.conserver||'—']]
+      '<details class="rl-rq"><summary>Ce que le client a répondu</summary><dl class="rl-dl">'+[['Objectif',rp.objectif||'—'],['Aliments refusés',rp.refuses||'Aucun'],['Allergies',rp.allergies||'Aucune'],['Régime',rp.regime||'Aucun'],['À conserver',rp.conserver||'—']]
       .map(function(q){ return '<dt>'+q[0]+'</dt><dd>'+e(q[1])+'</dd>'; }).join('')+'</dl></details>';
   }
 

@@ -1013,8 +1013,35 @@
 
   /* voyants toujours 2 par 2, à gauche ; « Ta décision » à côté, sur la hauteur des deux lignes */
   .rl-v2 .rl-sante{display:grid;grid-template-columns:repeat(2,max-content);gap:6px}
-  @media(min-width:1101px){.rl-v2 .rl-hero .rl-sante{grid-column:1}.rl-v2 .rl-hero .rl-dec-top{grid-row:1/3;align-self:stretch;grid-template-rows:auto auto 1fr}.rl-v2 .rl-hero .rl-dec-top .rl-dec-aide{align-self:end}}
+  @media(min-width:1101px){.rl-v2 .rl-hero .rl-sante{grid-column:1}.rl-v2 .rl-hero .rl-dec-top{grid-row:1/3;align-self:stretch;grid-template-rows:auto 1fr auto}.rl-v2 .rl-hero .rl-dec-top .in{align-self:center}.rl-v2 .rl-hero .rl-dec-top .rl-dec-aide{align-self:end}}
   @media(max-width:560px){.rl-v2 .rl-sante{grid-template-columns:1fr}}
+
+  /* en-tête de relecture : la partie gauche, aérée et habillée */
+  .rl-v2 .rl-hero{padding:20px 22px;row-gap:18px;border-radius:20px}
+  .rl-v2 .rl-qui .rl-l1{margin-bottom:10px}
+  .rl-v2 h2.rl-nom{font-size:34px;line-height:1.1;margin:0 0 12px;letter-spacing:-.01em}
+  .rl-v2 .rl-qui .fmeta{margin:0 0 16px;gap:6px}
+  .rl-v2 .rl-qui .rl-info{margin:0 0 14px;font-size:13.5px;line-height:1.5}
+  .rl-v2 .rl-cible{gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+  .rl-v2 .rl-cl{margin-right:8px;color:var(--ice)}
+  .rl-v2 .mc{padding:8px 14px;font-size:13.5px;border-width:1.5px;background:var(--void)}
+  .rl-v2 .mc b{font-size:14.5px}
+  .rl-v2 .mc.k{border-color:color-mix(in srgb,var(--brand) 60%,var(--line));background:color-mix(in srgb,var(--brand) 10%,var(--void))}
+  .rl-v2 .mc.p{border-color:color-mix(in srgb,#cc0000 45%,var(--line))}
+  .rl-v2 .mc.g{border-color:color-mix(in srgb,#3d85c6 55%,var(--line))}
+  .rl-v2 .mc.l{border-color:color-mix(in srgb,#f1c232 60%,var(--line))}
+  /* les voyants : 2 colonnes de même largeur, plus grands, cliquables */
+  .rl-v2 .rl-sante{grid-template-columns:repeat(2,max-content);gap:10px}
+  .rl-v2 .vy{padding:9px 18px 9px 9px;gap:10px;border-width:1.5px;transition:transform .15s,border-color .15s,box-shadow .15s}
+  .rl-v2 .vy-i{width:30px;height:30px}
+  .rl-v2 .vy-i svg{width:16px;height:16px}
+  .rl-v2 .vy small{font-size:10.5px}
+  .rl-v2 .vy b{font-size:14px}
+  .rl-v2 .vy.ok{border-color:color-mix(in srgb,var(--b-vert) 45%,var(--line))}
+  .rl-v2 .vy:hover{transform:translateY(-1px);border-color:var(--brand);box-shadow:0 4px 14px color-mix(in srgb,var(--brand) 18%,transparent)}
+  .rl-v2 .vy:focus-visible{outline:3px solid color-mix(in srgb,var(--brand) 55%,transparent);outline-offset:2px}
+  @media(max-width:560px){.rl-v2 .rl-sante{grid-template-columns:1fr;width:auto}.rl-v2 h2.rl-nom{font-size:28px}}
+  @media(prefers-reduced-motion:reduce){.rl-v2 .vy{transition:none}.rl-v2 .vy:hover{transform:none}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -2866,12 +2893,18 @@ var ED=(function(){
   function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px');
     var br=$('rl-barre'); if(br) document.documentElement.style.setProperty('--bh',br.offsetHeight+'px'); decLargeur(); }
   addEventListener('resize',hauteur);
-  // « Ta décision » (en haut) s'élargit jusqu'au contenu de gauche (voyants 2 par 2, cibles), à 16 px près ; jamais plus étroit que ses boutons
-  function decLargeur(){ var h=document.querySelector('#p-relire.rl-v2 .rl-hero'), b=$('rl-dec-top'), v=h&&h.querySelector('.rl-sante');
-    if(!h||!b||!v) return; b.style.width='';
-    if(innerWidth<1101||!v.children.length) return;
-    var fin=Math.max.apply(null,[].map.call(h.querySelectorAll('.rl-sante>*,.rl-qui *'),function(x){ return x.getBoundingClientRect().right; })), dispo=Math.floor(b.getBoundingClientRect().right-fin-16);
-    if(dispo>b.offsetWidth) b.style.width=dispo+'px'; }
+  // « Ta décision » (en haut) s'élargit jusqu'au contenu de gauche (voyants 2 par 2, cibles), à l'écart de colonne près ; jamais plus étroit que ses boutons
+  function decLargeur(){ var h=document.querySelector('#p-relire.rl-v2 .rl-hero'), b=$('rl-dec-top'), q=h&&h.querySelector('.rl-qui'), v=h&&h.querySelector('.rl-sante');
+    if(!h||!b||!q||!v) return; b.style.width='';
+    if(innerWidth<1101) return;
+    // on élargit tant que le contenu de gauche (nom, cibles, voyants 2 par 2) ne passe pas à la ligne
+    function ht(el){ return el.lastElementChild?el.lastElementChild.getBoundingClientRect().bottom-el.getBoundingClientRect().top:0; }   // hauteur du CONTENU (la case de grille, elle, s'étire)
+    var hq=ht(q), hv=ht(v), bas=b.offsetWidth, haut=Math.floor(h.clientWidth*0.62);
+    function tient(w){ b.style.width=w+'px'; var g=b.getBoundingClientRect().left-8;
+      return ht(q)<=hq+1&&ht(v)<=hv+1&&[].every.call(v.children,function(x){ return x.getBoundingClientRect().right<=g; }); }
+    if(tient(haut)) return;
+    while(haut-bas>4){ var m=(bas+haut)>>1; if(tient(m)) bas=m; else haut=m; }
+    b.style.width=bas+'px'; }
   addEventListener('beforeunload',function(e){ if(RL.S&&ED.modifie(RL.S)){ e.preventDefault(); e.returnValue=''; } });
 
   function relire(c,force){

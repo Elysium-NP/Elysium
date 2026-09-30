@@ -1013,7 +1013,7 @@
 
   /* voyants toujours 2 par 2, à gauche ; « Ta décision » à côté, sur la hauteur des deux lignes */
   .rl-v2 .rl-sante{display:grid;grid-template-columns:repeat(2,max-content);gap:6px}
-  @media(min-width:1101px){.rl-v2 .rl-hero .rl-sante{grid-column:1}.rl-v2 .rl-hero .rl-dec-top{grid-row:1/3;align-self:stretch;grid-template-rows:auto 1fr auto}.rl-v2 .rl-hero .rl-dec-top .in{align-self:center}.rl-v2 .rl-hero .rl-dec-top .rl-dec-aide{align-self:end}}
+  @media(min-width:1101px){.rl-v2 .rl-hero .rl-sante{grid-column:1}.rl-v2 .rl-hero .rl-dec-top{grid-row:1/3;align-self:start}}
   @media(max-width:560px){.rl-v2 .rl-sante{grid-template-columns:1fr}}
 
   /* en-tête de relecture : la partie gauche, aérée et habillée */
@@ -1042,6 +1042,16 @@
   .rl-v2 .vy:focus-visible{outline:3px solid color-mix(in srgb,var(--brand) 55%,transparent);outline-offset:2px}
   @media(max-width:560px){.rl-v2 .rl-sante{grid-template-columns:1fr;width:auto}.rl-v2 h2.rl-nom{font-size:28px}}
   @media(prefers-reduced-motion:reduce){.rl-v2 .vy{transition:none}.rl-v2 .vy:hover{transform:none}}
+
+  /* le formulaire s'ouvre sous la tuile choisie, sur toute la largeur de la grille */
+  .rl-chips>.co-box{grid-column:1/-1;flex-basis:100%;margin:2px 0 8px}
+  .rl-v2 #rl-co .rl-chips>.co-box{margin:2px 0 8px}
+
+  /* l'espace libre revient à la partie gauche : cibles et voyants s'étalent jusqu'au cadre « Ta décision » (qui garde la largeur de ses boutons) */
+  @media(min-width:1101px){
+    .rl-v2 .rl-sante{grid-template-columns:repeat(2,minmax(max-content,1fr))}
+    .rl-v2 .rl-cible .mc{flex:1 1 auto;justify-content:center}
+  }
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -2009,7 +2019,7 @@ var REL=(function(){
       (C.avecEdition?'<div class="ed-bandeau" style="margin:0 0 10px">Tes <b>'+C.avecEdition+' modification'+(C.avecEdition>1?'s':'')+'</b> seront d’abord enregistrées (nouvelle version de la diète), puis ces actions lui seront attachées.</div>':'')+
       '<p class="leg" style="margin:0">Choisis ce qui doit changer, précise, ajoute à la liste. Empile autant d’actions que nécessaire, puis envoie tout d’un coup.</p>'+
       grp.map(function(g){ return '<div class="co-grp">'+g+'</div><div class="rl-chips">'+ACTIONS.filter(function(a){ return a.g===g; }).map(function(a){
-        return '<button type="button" class="rl-chip'+(a.id===C.act?' on':'')+'" data-act="co-act" data-a="'+a.id+'">'+a.lib+'</button>'; }).join('')+'</div>'; }).join('');
+        return '<button type="button" class="rl-chip'+(a.id===C.act?' on':'')+'" data-act="co-act" data-a="'+a.id+'">'+a.lib+'</button>'+(a.id===C.act?'@@CO@@':''); }).join('')+'</div>'; }).join('');
     if(A){
       var F=A.f, fh='', po=A.po?(A.po.indexOf(C.portee)>=0?C.portee:A.po[0]):null, jours=[['','—']].concat(X.jours.map(function(n1){ return [n1,'Jour '+n1]; })),
           reps=[['','—']].concat(X.types.map(function(t){ return [t,ml(t)]; }));
@@ -2032,13 +2042,14 @@ var REL=(function(){
         return '<button type="button" data-act="co-multi" data-v="'+t+'" aria-pressed="'+(mu.indexOf(t)>=0)+'"'+(mu.indexOf(t)>=0?' class="on"':'')+'>'+ml(t)+'</button>'; }).join('')+'</div></div>'; }
       if(F.indexOf('ref')>=0) fh+=X.consignes.length?champ('Consigne à lever',sel('ref',[['','—']].concat(X.consignes.map(function(c){ return [c.id,c.texte]; })),x.ref),1)
         :'<p class="leg full" style="margin:0">'+(X.consignesAbsentes?'Les consignes durables ne sont pas encore lisibles (base pas encore à jour).':'Aucune consigne durable pour ce client.')+'</p>';
-      h+='<div class="co-box"><div class="co-t">'+A.lib+'</div><div class="rl-f">'+fh+'</div>'+
+      var bx='<div class="co-box"><div class="co-t">'+A.lib+'</div><div class="rl-f">'+fh+'</div>'+
         (A.po&&A.po.length>1?'<span class="co-lab">Portée</span><div class="seg" role="group" aria-label="Portée">'+A.po.map(function(k){ return '<button type="button" data-act="co-portee" data-v="'+k+'"'+(k===po?' class="on"':'')+'>'+PORTEE[k]+'</button>'; }).join('')+'</div>'
           :po?'<p class="leg" style="margin:10px 0 0">Portée : <b>'+PORTEE[po].toLowerCase()+'</b> (relue à chaque nouvelle diète, suivi compris).</p>':'')+
         '<div class="rl-f" style="margin-top:12px"><div><label for="co-motif">Pourquoi</label>'+sel('motif',Object.keys(MOTIF).map(function(k){ return [k,MOTIF[k]]; }),C.motif||A.motif)+'</div></div>'+
         '<span class="co-lab">Gravité</span><div class="seg" role="group" aria-label="Gravité">'+Object.keys(GRAV).map(function(k){ return '<button type="button" data-act="co-grav" data-v="'+k+'" class="'+(k===(C.grav||'a_revoir')?'on':'')+(k==='bloquant'?' bl':'')+'">'+GRAV[k]+'</button>'; }).join('')+'</div>'+
         '<label class="co-lab" for="co-note">'+(A.id==='note'?'Ta note (comme à un stagiaire)':'Précision (facultatif)')+'</label><div class="rl-f"><div class="full"><textarea id="co-note" placeholder="Ex. « 25 g de riz minimum par wrap, sinon ça ne ressemble à rien ».">'+v('note')+'</textarea></div></div>'+
         '<div class="rl-btns"><button type="button" class="db rec" data-act="co-ajouter">+ Ajouter à la liste</button></div></div>';
+      h=h.replace('@@CO@@',bx);
     }
     if(C.liste.length){ var nb=C.liste.filter(function(a){ return a.gravite==='bloquant'; }).length;
       h+='<div class="rl-sub">À envoyer</div>'+C.liste.map(function(a,k){
@@ -2891,20 +2902,8 @@ var ED=(function(){
   function lecture(){ var e=RL.R.etat; return RL.R.archive?'Ancienne version : lecture seule.':e==='valide'?'Diète déjà validée et envoyée : lecture seule.':e==='refuse'?'Diète refusée : elle sera entièrement refaite.':e==='remplace'?'Une version plus récente existe.':null; }
   function suivante(){ var k=file.indexOf(cur); for(var d=1;d<=file.length;d++){ var x=file[(k+d+file.length)%file.length]; if(x&&x!==cur&&x.etape==='a_relire'&&x.menu&&x.programme_id) return x; } return null; }
   function hauteur(){ var h=document.querySelector('.chead'); document.documentElement.style.setProperty('--hh',(document.body.classList.contains('rl-plein')||!h?0:h.offsetHeight)+'px');
-    var br=$('rl-barre'); if(br) document.documentElement.style.setProperty('--bh',br.offsetHeight+'px'); decLargeur(); }
+    var br=$('rl-barre'); if(br) document.documentElement.style.setProperty('--bh',br.offsetHeight+'px'); }
   addEventListener('resize',hauteur);
-  // « Ta décision » (en haut) s'élargit jusqu'au contenu de gauche (voyants 2 par 2, cibles), à l'écart de colonne près ; jamais plus étroit que ses boutons
-  function decLargeur(){ var h=document.querySelector('#p-relire.rl-v2 .rl-hero'), b=$('rl-dec-top'), q=h&&h.querySelector('.rl-qui'), v=h&&h.querySelector('.rl-sante');
-    if(!h||!b||!q||!v) return; b.style.width='';
-    if(innerWidth<1101) return;
-    // on élargit tant que le contenu de gauche (nom, cibles, voyants 2 par 2) ne passe pas à la ligne
-    function ht(el){ return el.lastElementChild?el.lastElementChild.getBoundingClientRect().bottom-el.getBoundingClientRect().top:0; }   // hauteur du CONTENU (la case de grille, elle, s'étire)
-    var hq=ht(q), hv=ht(v), bas=b.offsetWidth, haut=Math.floor(h.clientWidth*0.62);
-    function tient(w){ b.style.width=w+'px'; var g=b.getBoundingClientRect().left-8;
-      return ht(q)<=hq+1&&ht(v)<=hv+1&&[].every.call(v.children,function(x){ return x.getBoundingClientRect().right<=g; }); }
-    if(tient(haut)) return;
-    while(haut-bas>4){ var m=(bas+haut)>>1; if(tient(m)) bas=m; else haut=m; }
-    b.style.width=bas+'px'; }
   addEventListener('beforeunload',function(e){ if(RL.S&&ED.modifie(RL.S)){ e.preventDefault(); e.returnValue=''; } });
 
   function relire(c,force){
@@ -3072,7 +3071,7 @@ var ED=(function(){
         '<button type="button" class="db" data-act="pdf">Aperçu de la fiche PDF</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(sn)+' →</button>':'')+'</div>';
     else h=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:sn,attente:(RL.co.liste||[]).length});
     d.innerHTML='<h4 class="rl-h">Ta décision</h4>'+h;
-    if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML='<h4 class="rl-h rl-dec-titre">Ta décision</h4>'+h; decLargeur(); } }
+    if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML='<h4 class="rl-h rl-dec-titre">Ta décision</h4>'+h; } }
   // essai : la diète s'affiche en « semaine » OU en « jour » (au lieu des deux l'une sous l'autre)
   function rlVue(v){ var m=document.querySelector('#p-relire .rl-main'); if(!m) return; m.dataset.v=v;
     [].forEach.call(m.querySelectorAll('.rl-vues [data-v]'),function(b){ b.setAttribute('aria-selected',String(b.dataset.v===v)); }); }

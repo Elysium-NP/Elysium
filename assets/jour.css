@@ -1,0 +1,86 @@
+/* UN JOUR DU PROGRAMME (cartes repas, recette au clic, macros) : partagé par l'espace client (espace.html)
+   et la journée exemple de l'accueil (index.html) — le même rendu, pas une copie (Damien & Yoann 30/09). */
+.meals{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.meal{border:1px solid var(--line);background:var(--void2);padding:16px 17px;display:flex;flex-direction:column}
+.meal .mh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.meal .mt{font-family:var(--disp);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:7px}
+.meal .mk{font-family:var(--disp);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);white-space:nowrap}
+.meal .rec{font-family:var(--disp);font-weight:600;font-size:18px;text-transform:uppercase;color:var(--ice);letter-spacing:.01em;line-height:1.1}
+.meal .ings{list-style:none;margin:12px 0 0;display:flex;flex-direction:column;gap:7px}
+.meal .ings li{font-family:var(--serif);font-size:16px;color:var(--gris);display:flex;gap:10px;line-height:1.35}
+.meal .ings li b{color:var(--ice);font-weight:600;font-family:var(--disp);font-size:14px;min-width:52px}
+.meal .mac{margin-top:14px;padding-top:11px;border-top:1px solid rgba(60,45,20,.06);font-family:var(--disp);font-size:11px;letter-spacing:.05em;color:var(--steel);display:flex;gap:14px}
+.meal .mac b{color:var(--gris);font-weight:600}
+.meal .seas{margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--steel)}
+.meal .seas::before{content:"🌿 ";font-style:normal}
+
+.meal{transition:border-color .3s,transform .3s,box-shadow .3s}
+.meal:hover{border-color:rgba(46,155,255,.32);transform:translateY(-2px);box-shadow:0 8px 24px rgba(60,45,20,.18)}
+/* ===== REPAS AU STYLE DE L'EXEMPLE DE L'ACCUEIL (Damien & Yoann 28/09) =====
+   en-tête à la couleur du repas (celles de leurs fiches), coins arrondis, macros en pastilles. */
+.meals .meal{padding:0;border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--fond) 20%,#fff)}
+html[data-theme="obscur"] .meals .meal{background:var(--void2)}
+.meal-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;font:600 14px/1.2 var(--texte);color:var(--ice);border-bottom:1px solid}
+.meal-hd i{font-style:normal;font-weight:700;font-size:13px;white-space:nowrap}
+.meal.pdj .meal-hd{background:var(--p-jaune);border-color:var(--b-jaune)}
+.meal.dej .meal-hd{background:var(--p-vert);border-color:var(--b-vert)}
+.meal.col .meal-hd{background:var(--p-violet);border-color:var(--b-violet)}
+.meal.din .meal-hd{background:var(--p-bleu);border-color:var(--b-bleu)}
+.meal-in{padding:12px 14px 13px;display:flex;flex-direction:column;flex:1}
+.meal-in .dish{font:700 16px/1.3 var(--texte);color:var(--ice);margin:0 0 5px}
+.meal-in .ings-l{font:15px/1.55 var(--texte);color:var(--gris);margin:0}
+.meal-in .seas{margin-top:8px;font-style:normal}
+.meal-in .mac{display:flex;gap:14px;margin-top:auto;padding-top:10px;border-top:0;font:600 13px/1 var(--texte);color:var(--ice);font-variant-numeric:tabular-nums;letter-spacing:0}
+.meal-in .mac span{display:inline-flex;align-items:center;gap:6px}
+.meal-in .mac span::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--c)}
+.meal-in .mac .p{--c:#cc0000} .meal-in .mac .g{--c:#3d85c6} .meal-in .mac .l{--c:#f1c232}
+
+/* ===== RECETTE AU CLIC SUR UN PLAT (Damien & Dimitri 28/09) =====
+   Plus d'encadré « Recettes » : on touche un plat du menu et sa recette se déroule dessous, aux
+   couleurs du repas. Formule Elysium : la recette ; sinon un encart « disponible avec… ». Plusieurs
+   recettes peuvent rester ouvertes (sur iPhone, refermer celle du dessus ferait sauter la page). */
+.meal.pdj{--mp:var(--p-jaune);--mb:var(--b-jaune)} .meal.dej{--mp:var(--p-vert);--mb:var(--b-vert)}
+.meal.col{--mp:var(--p-violet);--mb:var(--b-violet)} .meal.din{--mp:var(--p-bleu);--mb:var(--b-bleu)}
+.meals:has(.meal.open){align-items:start}
+/* 4 et 5 repas (Dimitri 30/09) : 2 colonnes par moment de la journée au lieu d'une carte orpheline ;
+   5 repas = matin (petit-déj · collation), midi (déjeuner · collation), soir (dîner sur toute la largeur) */
+@media(min-width:700px){.meals.n4,.meals.n5{grid-template-columns:repeat(2,minmax(0,1fr))}.meals.n5 .meal:last-child{grid-column:1/-1}}
+.meal-in .plat{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;width:100%;min-height:44px;margin:-6px 0 2px;padding:6px 0;
+  background:none;border:0;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.plat .dn{flex:1 1 150px;min-width:0}
+.plat .voir{flex:none;display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1 var(--texte);color:var(--blue)}
+.plat .voir svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+.plat[aria-expanded="true"] .voir svg{transform:rotate(180deg)}
+.plat:hover .dn{text-decoration:underline;text-decoration-color:var(--mb);text-underline-offset:3px}
+.plat:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+.rc{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .35s ease,visibility 0s .35s}
+.meal.open .rc{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .35s ease}
+.rc-in{min-height:0;overflow:hidden}
+.rc-box{margin:0 14px 14px;padding:14px 15px;border-radius:12px;background:color-mix(in srgb,var(--mp) 55%,var(--void2));border:1px solid color-mix(in srgb,var(--mb) 55%,transparent)}
+.rc-hd{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--mb) 60%,transparent)}
+.rc-hd b{font:400 18px/1.3 var(--titre);color:var(--ice)}
+.rc-hd span{font:13px/1.4 var(--texte);color:var(--steel)}
+.rc-box h5{font:600 11.5px/1.2 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin:0 0 8px}
+.rc-ing{list-style:none;margin:0 0 14px;padding:0}
+.rc-ing li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dotted color-mix(in srgb,var(--mb) 70%,transparent);font:14.5px/1.4 var(--texte);color:var(--gris)}
+.rc-ing li:last-child{border-bottom:0}
+.rc-ing b{color:var(--ice);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rc-et{list-style:none;counter-reset:et;margin:0;padding:0}
+.rc-et li{counter-increment:et;position:relative;padding:1px 0 10px 34px;font:15px/1.55 var(--texte);color:var(--gris)}
+.rc-et li::before{content:counter(et);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--void2);border:1px solid var(--mb);font:600 12px/1 var(--texte);color:var(--ice)}
+.rc-ast{margin:4px 0 0;padding:10px 12px;border-left:3px solid var(--mb);border-radius:0 10px 10px 0;background:var(--void2);font:14px/1.5 var(--texte);color:var(--gris)}
+.rc-ast b{display:block;font:600 11.5px/1.2 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-bottom:4px}
+.rc-photo{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;margin-bottom:12px}
+.rc-vide{margin:0;font:14.5px/1.5 var(--texte);color:var(--gris)}
+.rc-box.lock{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:12px;background:var(--void2);border:1px dashed var(--line);padding:12px 14px 2px}
+.rc-box.lock svg{flex:none;width:16px;height:16px;fill:none;stroke:var(--steel);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rc-box.lock p{margin:0;font:14.5px/1.45 var(--texte);color:var(--ice)}
+.rc-box.lock a{grid-column:2;justify-self:start;display:inline-flex;align-items:center;min-height:44px;font:600 13px/1 var(--texte);color:var(--blue)}
+@media(prefers-reduced-motion:reduce){.rc,.meal.open .rc,.plat .voir svg{transition:none}}
+/* recette ouverte : hauteur bornée, elle défile dans son cadre (Dimitri 29/09 : certaines déroulaient très bas),
+   le bouton « Replier » reste collé en bas du cadre */
+.meal.open .rc-box{max-height:min(460px,62vh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.rc-fermer{position:sticky;bottom:-14px;display:block;width:calc(100% + 30px);margin:10px -15px -14px;padding:11px 0;border:0;
+  border-top:1px solid color-mix(in srgb,var(--mb) 55%,transparent);background:color-mix(in srgb,var(--mp) 55%,var(--void2));
+  font:600 13.5px/1 var(--texte);color:var(--blue);cursor:pointer;border-radius:0 0 12px 12px}

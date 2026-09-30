@@ -265,6 +265,18 @@
   .rl-cel.ref{border-color:#d98c8c;box-shadow:inset 0 0 0 1px #d98c8c}
   .rl-cel .rl-x{display:inline-block;margin-top:4px;font:700 10.5px/1 var(--texte);border-radius:99px;padding:3px 6px;background:rgba(0,0,0,.07)}
   .rl-cel .rl-x.v{background:#f6dcdc;color:#7a1f1f}
+  /* détail de la semaine (30/09) : la diète complète dans la grille, comme la fiche PDF */
+  .rl-det{margin-left:auto}
+  .rl-sem.detail .rl-t{min-width:1080px}
+  .rl-cel .rl-ci,.rl-cel .rl-cm{display:none}
+  .rl-sem.detail .rl-cel .rl-ci{display:block;margin-top:7px;padding-top:6px;border-top:1px solid rgba(0,0,0,.08);font:400 11.5px/1.35 var(--texte);color:inherit;opacity:.88}
+  .rl-sem.detail .rl-cel .rl-ci span{display:block;padding:1.5px 0}
+  .rl-sem.detail .rl-cel .rl-ci .rf{color:#9b1c1c;font-weight:700;text-decoration:underline wavy #d98c8c}
+  .rl-sem.detail .rl-cel .rl-ci .h1{background:color-mix(in srgb,var(--blue) 22%,transparent);border-radius:4px}
+  .rl-sem.detail .rl-cel .rl-cm{display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;margin-top:7px;font:700 11px/1.2 var(--texte);font-variant-numeric:tabular-nums}
+  .rl-sem.detail .rl-cel .rl-cm .mac{margin-left:4px}
+  html[data-theme="obscur"] .rl-sem.detail .rl-cel .rl-ci{border-top-color:rgba(255,255,255,.1)}
+  html[data-theme="obscur"] .rl-sem.detail .rl-cel .rl-ci .rf{color:#f3b4b4}
   .rl-cel .rl-r{display:block;margin-top:4px;font:700 10.5px/1 var(--texte);color:#9b1c1c}
   .m-jaune{background:var(--p-jaune);border-left-color:var(--b-jaune)}
   .m-vert{background:var(--p-vert);border-left-color:var(--b-vert)}
@@ -1330,10 +1342,12 @@ var REL=(function(){
   /* 2. VUE D'ENSEMBLE : grille repas × jours (+ OFF), totaux, écart à la cible, répétitions */
   function semaine(R,o){ o=o||{};
     var m=R.menu||{}, c=m.cible||{}, J=m.jours||[], T=types(m), F=frequences(m), INT=interdits(R), hl=o.surligne, act=o.jour;
-    var h='<h4 class="rl-h">La semaine <span class="n">'+joursOk(R)+'/'+actifs(m).length+' jours à ±5 % de la cible</span></h4>'+
+    var det=true; try{ det=localStorage.getItem('ely_sem_compact')!=='1'; }catch(x){}
+    var h='<h4 class="rl-h">La semaine <span class="n">'+joursOk(R)+'/'+actifs(m).length+' jours à ±5 % de la cible</span>'+
+      '<button type="button" class="mini rl-det" data-act="sem-detail" aria-pressed="'+det+'">'+(det?'Vue compacte':'Voir le détail')+'</button></h4>'+
       (o.swap?'<div class="ed-swap"><span>Échange en cours : touche le repas qui doit prendre la place de <b>'+e(titre(repasDe(J[o.swap.i],o.swap.ty)||{}))+'</b>.</span><button type="button" class="mini" data-act="ed-swap-stop">Annuler l’échange</button></div>':
        o.edit?'<p class="leg" style="margin:0 0 8px">Glisse un plat sur un autre pour les échanger, ou utilise « Échanger » sous le repas. Point bleu = modifié.</p>':'')+
-      '<div class="rl-sem"><table class="rl-t"><colgroup><col class="h">'+J.map(function(){ return '<col>'; }).join('')+'</colgroup><thead><tr><th></th>'+J.map(function(j,i){ return '<th data-c="'+i+'"'+(i===act?' class="sel"':'')+'><button type="button" data-act="jour" data-i="'+i+'"'+(i===act?' class="on"':'')+'>'+(j.off?'OFF':'Jour '+j.jour)+'</button></th>'; }).join('')+'</tr></thead><tbody>';
+      '<div class="rl-sem'+(det?' detail':'')+'"><table class="rl-t"><colgroup><col class="h">'+J.map(function(){ return '<col>'; }).join('')+'</colgroup><thead><tr><th></th>'+J.map(function(j,i){ return '<th data-c="'+i+'"'+(i===act?' class="sel"':'')+'><button type="button" data-act="jour" data-i="'+i+'"'+(i===act?' class="on"':'')+'>'+(j.off?'OFF':'Jour '+j.jour)+'</button></th>'; }).join('')+'</tr></thead><tbody>';
     function td(i,cl){ return '<td data-c="'+i+'" class="'+(cl||'')+(i===act?' sel':'')+'"'; }
     T.forEach(function(t,k){
       h+='<tr><th><span class="rl-rt m-'+(PASTEL[t]||'bleu')+'"></span>'+ml(t)+'</th>';
@@ -1344,7 +1358,12 @@ var REL=(function(){
             a=hl&&(r.ingredients||[]).some(function(x){ return x.ingredient===hl; }),
             oj=o.orig&&(o.orig.jours||[])[i], md=oj&&sig(repasDe(oj,t))!==sig(r), sw=o.swap&&o.swap.i===i&&o.swap.ty===t;
         h+=td(i)+'><button type="button" class="rl-cel m-'+(PASTEL[t]||'bleu')+(ref?' ref':'')+(a?' hl':'')+(md?' mod':'')+(sw?' src':'')+'" data-act="repas" data-i="'+i+'" data-ty="'+t+'"'+(o.edit?' draggable="true"':'')+' title="'+e(ti)+' · '+g0((r.macros||{}).kcal)+' kcal'+(md?' · modifié':'')+'">'+e(ti)+
-          (p.n>1?'<br><span class="rl-x'+(repetition(t)?'':' v')+'" title="servi '+p.n+' fois dans la semaine">×'+p.n+'</span>':'')+(ref?'<span class="rl-r">aliment refusé</span>':'')+'</button></td>';
+          (p.n>1?'<br><span class="rl-x'+(repetition(t)?'':' v')+'" title="servi '+p.n+' fois dans la semaine">×'+p.n+'</span>':'')+(ref?'<span class="rl-r">aliment refusé</span>':'')+
+          // la diète complète, comme sur la fiche PDF (Dimitri 30/09) : ingrédients pesés + macros du repas
+          '<span class="rl-ci">'+(r.ingredients||[]).map(function(x){ var rf=refuse(x.ingredient,INT), h1=hl&&x.ingredient===hl;
+            return '<span class="'+(rf?'rf':'')+(h1?' h1':'')+'">'+e(ingLabel(x))+'</span>'; }).join('')+'</span>'+
+          '<span class="rl-cm">'+(function(ma){ return g0(ma.kcal)+' kcal · <i class="mac p"></i>'+g0(ma.proteines)+' <i class="mac g"></i>'+g0(ma.glucides)+' <i class="mac l"></i>'+g0(ma.lipides); })(r.macros||somme(r.ingredients||[]))+'</span>'+
+          '</button></td>';
       });
       h+='</tr>';
     });
@@ -2935,6 +2954,9 @@ var ED=(function(){
     switch(a){
       case 'file': var rt=RL.retour, rx=!!RL.R.xid; sortir(function(){ sortiePlein(); if(rt){ if(rx) ouvrirExt(rt); else ouvrir(rt); } else voir('dietes'); }); break;
       case 'suivante': var s=suivante(); if(s) relire(s); break;
+      case 'sem-detail': var sm=document.querySelector('#p-relire .rl-sem'); if(!sm) break; var on=!sm.classList.contains('detail');
+        sm.classList.toggle('detail',on); b.setAttribute('aria-pressed',String(on)); b.textContent=on?'Vue compacte':'Voir le détail';
+        try{ localStorage.setItem('ely_sem_compact',on?'0':'1'); }catch(x){} break;
       case 'mot': var q=b.dataset.q; ouvrirCo({act:q==='exclure'?'exclure_aliment':q==='remplacer'?'remplacer_aliment':'note', portee:q==='remplacer'?'diete':null,
           ctx:{note:'Le client a écrit « '+b.dataset.mot+' » ('+String(b.dataset.k).toLowerCase()+'). '}}); break;
       case 'pdf': var pf=(RL.R.diagnostic||{}).pdf;   // fiche de CETTE version seulement : une version retouchée hérite du diagnostic de la précédente

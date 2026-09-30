@@ -881,6 +881,17 @@
   .rl-ecarts td.ko{background:rgba(217,110,110,.34);box-shadow:inset 0 0 0 1px rgba(217,110,110,.75)}
   .rl-ecarts .leg b.ok{color:#2f6b1a} .rl-ecarts .leg b.av{color:#8a5a00} .rl-ecarts .leg b.ko{color:#9b1c1c}
   html[data-theme="obscur"] .rl-ecarts .leg b.ok{color:#8fd07a} html[data-theme="obscur"] .rl-ecarts .leg b.av{color:#f0b35a} html[data-theme="obscur"] .rl-ecarts .leg b.ko{color:#f3b4b4}
+
+  /* essai 30/09 (suite 2) */
+  .rl-dec-aide{display:none}
+  .rl-v2 .rl-dec .rl-dec-aide{display:flex;flex-direction:column;gap:3px;flex-basis:100%;max-width:470px;margin:2px 0 0;font-size:12.5px;line-height:1.45;color:var(--steel);text-align:right}
+  .rl-v2 .rl-dec-fin .rl-dec-aide{text-align:left}
+  .rl-v2 .rl-dec .rl-dec-aide b{color:var(--gris);font-weight:600}
+  @media(max-width:1100px){.rl-v2 .rl-dec .rl-dec-aide{text-align:left}}
+  .rl-ecarts td b{display:block;font-weight:700}
+  .rl-ecarts td small{display:block;margin-top:4px;font:500 11.5px/1.2 var(--texte);color:var(--gris);font-variant-numeric:tabular-nums}
+  .rl-ecarts tbody th small{display:block;margin-top:3px;font:400 11px/1.2 var(--texte);color:var(--steel)}
+  .rl-ecarts td{padding:8px 4px}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1360,11 +1371,12 @@ var REL=(function(){
   function ecartsTable(R){ var m=R.menu||{}, c=m.cible||{}, J=(m.jours||[]).filter(function(j){ return !j.off; });
     var L=[['kcal','Calories'],['proteines','Protéines'],['glucides','Glucides'],['lipides','Lipides']];
     return '<div class="rl-ecarts"><table><thead><tr><th></th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
-      L.map(function(l){ return '<tr><th>'+l[1]+'</th>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
+      L.map(function(l){ var u=l[0]==='kcal'?' kcal':' g';
+        return '<tr><th>'+l[1]+'<small>cible '+g0(c[l[0]])+u+'</small></th>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
         if(!isFinite(x)) return '<td>—</td>';
         var a=Math.abs(x), cl=a<=TOL?'ok':a<=0.10?'av':'ko';
-        return '<td class="'+cl+'" title="'+g0(s[l[0]])+(l[0]==='kcal'?' kcal':' g')+' pour '+g0(c[l[0]])+' visés">'+Math.round(100+x*100)+' %</td>'; }).join('')+'</tr>'; }).join('')+
-      '</tbody></table><p class="leg" style="margin:6px 0 0">% de la cible · <b class="ok">vert</b> ±5 % · <b class="av">jaune</b> jusqu’à ±10 % · <b class="ko">rouge</b> au-delà. Survole une case pour les grammes.</p></div>'; }
+        return '<td class="'+cl+'"><b>'+Math.round(100+x*100)+' %</b><small>'+g0(s[l[0]])+u+'</small></td>'; }).join('')+'</tr>'; }).join('')+
+      '</tbody></table><p class="leg" style="margin:6px 0 0">% de la cible · <b class="ok">vert</b> ±5 % · <b class="av">jaune</b> jusqu’à ±10 % · <b class="ko">rouge</b> au-delà.</p></div>'; }
   function pct(x){ var s=n(x*100,1); return (x>0&&s!=='0'?'+':'')+s+' %'; }
   function g0(v){ return n(Math.round(+v||0)); }
   function gx(v){ return v==null||v===''||!isFinite(+v)?'—':g0(v); }
@@ -1910,7 +1922,7 @@ var REL=(function(){
     // navigation + outils seulement : les DÉCISIONS (valider, corriger, refuser) vivent dans la barre du bas, une seule fois
     return '<button type="button" class="tb" data-act="file" title="Retour à la file de relecture" aria-label="Retour à la file">'+ico(IC.back)+'<span class="tl">File</span></button><span class="sep"></span>'+
       '<span class="tb-j"><button type="button" class="tb ic" data-act="prec" aria-label="Jour précédent" title="Jour précédent (J ou ←)">'+ico(IC.prev)+'</button><span class="tb jr" aria-live="polite">'+(j.off?'Jour OFF':'Jour '+(j.jour||''))+'</span><button type="button" class="tb ic" data-act="suiv" aria-label="Jour suivant" title="Jour suivant (K ou →)">'+ico(IC.next)+'</button></span><span class="sep"></span>'+
-      '<button type="button" class="tb '+(o.edit?'on':'p')+'" data-act="edition"'+(o.lecture&&!o.edit?' disabled title="'+e(o.lecture)+'"':'')+'>'+ico(IC.edit)+'<span>'+(o.edit?'Terminer l’édition':'Modifier')+'</span> <kbd>E</kbd></button>'+
+      '<button type="button" class="tb '+(o.edit?'on':'p')+'" data-act="edition"'+(o.lecture&&!o.edit?' disabled title="'+e(o.lecture)+'"':' title="Tu retouches toi-même cette diète, tout de suite (grammes, plats, aliments). Vaut pour cette version seulement."')+'>'+ico(IC.edit)+'<span>'+(o.edit?'Terminer l’édition':'Modifier')+'</span> <kbd>E</kbd></button>'+
       (!R.archive&&/^(a_relire|rectification|valide)$/.test(R.etat)?'<button type="button" class="tb" data-act="pdf" title="Ouvrir la fiche PDF de cette version">'+ico(IC.note)+'<span class="tl">Aperçu PDF</span></button>':'')+
       '<button type="button" class="tb" data-act="notes" aria-label="Notes internes">'+ico(IC.note)+'<span class="tl">Notes</span> <kbd>N</kbd></button>'+
       '<button type="button" class="tb ic'+(o.plein?' on':'')+'" data-act="plein" aria-label="Plein écran" title="Plein écran (F)">'+ico(IC.plein)+'</button>'+
@@ -1943,9 +1955,11 @@ var REL=(function(){
     else et='<div class="rl-etat"><span class="rl-pt-'+(pts?'av':'ok')+'">'+(pts?nbS(pts,'point à regarder','points à regarder'):'Tout est au vert')+'</span> · <b>'+at+'</b> '+(at>1?'corrections':'correction')+' en attente'+(at?' (panneau « Renvoyer en correction »)':'')+'</div>';
     // ordre de lecture : le geste risqué à gauche, discret ; le geste attendu à droite, en plein
     return et+'<div class="in"><button type="button" class="db no'+(o.arme?' arme':'')+'" data-act="refuser">'+(o.arme?'Confirmer le refus':'Refuser')+'</button>'+
-      '<button type="button" class="db rec" data-act="corriger"><span class="lg">Renvoyer en correction</span><span class="sm">Corriger</span> <kbd>C</kbd></button>'+
+      '<button type="button" class="db rec" data-act="corriger" title="Tu donnes des consignes, la diète est refaite en les respectant. Une consigne « durable » vaut aussi pour les prochaines diètes du client."><span class="lg">Renvoyer en correction</span><span class="sm">Corriger</span> <kbd>C</kbd></button>'+
       '<button type="button" class="db ok" data-act="valider"><span class="lg">'+(R.xid?'Valider la diète':'Valider et envoyer')+'</span><span class="sm">Valider</span> <kbd>V</kbd></button></div>'+
-      (o.arme?'<div class="rl-etat rl-arme">La diète sera entièrement refaite. Ajoute au moins une action pour qu’on sache quoi changer.</div>':'');
+      (o.arme?'<div class="rl-etat rl-arme">La diète sera entièrement refaite. Ajoute au moins une action pour qu’on sache quoi changer.</div>':'')+
+      '<p class="rl-dec-aide"><span><b>Modifier</b> : tu retouches toi-même, tout de suite, cette version seulement.</span>'+
+      '<span><b>Renvoyer en correction</b> : tu donnes des consignes, la diète est refaite ; une consigne durable vaut aussi pour les prochaines.</span></p>';
   }
 
   return {MEALS:MEALS,ETAT:ETAT,ML:ML,titre:titre,actifs:actifs,totJour:totJour,somme:somme,ecart:ecart,joursOk:joursOk,repasDe:repasDe,sig:sig,sigJ:sigJ,

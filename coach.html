@@ -919,6 +919,36 @@
   html[data-theme="obscur"] .rl-ecarts td.cib small,html[data-theme="obscur"] .rl-ecarts thead th.cib{color:var(--brand)}
   html[data-theme="obscur"] .rl-ecarts td:not(.cib):hover{box-shadow:0 4px 14px rgba(0,0,0,.4)}
   @media(prefers-reduced-motion:reduce){.rl-ecarts td{transition:none}.rl-ecarts td:hover{transform:none}}
+
+  /* essai : les 3 boutons de décision, qu'on voie tout de suite que ce sont des boutons et ce qu'ils font */
+  .rl-v2 .rl-dec .in{gap:10px}
+  .rl-v2 .rl-dec .db{min-height:48px;padding:12px 20px;border-width:1.5px;font-weight:700;letter-spacing:.01em;transition:transform .15s,box-shadow .15s,background-color .15s,border-color .15s,color .15s}
+  .rl-v2 .rl-dec .db .ico{width:17px;height:17px;flex:none}
+  .rl-v2 .rl-dec .db:hover:not(:disabled){transform:translateY(-2px)}
+  .rl-v2 .rl-dec .db:active:not(:disabled){transform:translateY(0)}
+  .rl-v2 .rl-dec .db:focus-visible{outline:3px solid color-mix(in srgb,var(--brand) 55%,transparent);outline-offset:3px}
+  .rl-v2 .rl-dec .db.no:not(.arme){background:color-mix(in srgb,#d96e6e 10%,transparent);border-color:color-mix(in srgb,#d96e6e 55%,transparent);color:#9b1c1c}
+  .rl-v2 .rl-dec .db.no:not(.arme):hover{background:color-mix(in srgb,#d96e6e 20%,transparent);border-color:#d96e6e;box-shadow:0 6px 16px color-mix(in srgb,#d96e6e 22%,transparent)}
+  .rl-v2 .rl-dec .db.rec{background:color-mix(in srgb,var(--brand) 12%,transparent);border-color:color-mix(in srgb,var(--brand) 70%,transparent);color:var(--blue)}
+  .rl-v2 .rl-dec .db.rec:hover{background:color-mix(in srgb,var(--brand) 22%,transparent);border-color:var(--brand);box-shadow:0 6px 16px color-mix(in srgb,var(--brand) 25%,transparent)}
+  .rl-v2 .rl-dec .db.rec kbd{background:var(--void2);color:var(--blue);border-color:color-mix(in srgb,var(--brand) 45%,transparent)}
+  .rl-v2 .rl-dec .db.ok{padding:12px 30px;font-size:15.5px;box-shadow:0 6px 20px color-mix(in srgb,var(--brand) 38%,transparent)}
+  .rl-v2 .rl-dec .db.ok:hover:not(:disabled){filter:brightness(1.07);box-shadow:0 10px 26px color-mix(in srgb,var(--brand) 48%,transparent)}
+  .rl-v2 .rl-dec .db.ok .ico{stroke-width:3}
+  html[data-theme="obscur"] .rl-v2 .rl-dec .db.no:not(.arme){color:#f4a6a6}
+  html[data-theme="obscur"] .rl-v2 .rl-dec .db.rec{color:#7cc0ff}
+  html[data-theme="obscur"] .rl-v2 .rl-dec .db.rec kbd{color:#7cc0ff;background:rgba(0,0,0,.25)}
+  @media(prefers-reduced-motion:reduce){.rl-v2 .rl-dec .db{transition:none}.rl-v2 .rl-dec .db:hover{transform:none}}
+
+  /* essai : en haut, un vrai coin « Ta décision » (encadré, titre, état, boutons, aide) au lieu de boutons qui flottent */
+  .rl-dec-titre{display:none}
+  .rl-v2 .rl-hero .rl-dec-top{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px 18px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--void);box-shadow:0 1px 0 color-mix(in srgb,var(--ice) 4%,transparent)}
+  .rl-v2 .rl-hero .rl-dec-top>*{grid-column:1/-1;margin:0}
+  .rl-v2 .rl-hero .rl-dec-top .rl-dec-titre{display:block;grid-column:1;font:400 20px/1.2 var(--titre);color:var(--ice);text-transform:none;letter-spacing:0}
+  .rl-v2 .rl-hero .rl-dec-top>.rl-etat:first-of-type{grid-column:2;text-align:right;font-size:13px}
+  .rl-v2 .rl-hero .rl-dec-top .in{display:flex;justify-content:flex-start}
+  .rl-v2 .rl-hero .rl-dec-top .rl-dec-aide{text-align:left;max-width:none;padding-top:12px;border-top:1px solid var(--line)}
+  @media(max-width:560px){.rl-v2 .rl-hero .rl-dec-top{grid-template-columns:1fr}.rl-v2 .rl-hero .rl-dec-top>.rl-etat:first-of-type{grid-column:1;text-align:left}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1440,7 +1470,7 @@ var REL=(function(){
 
   // pictos (SVG, trait = couleur du texte) : jamais d'emoji
   function ico(p){ return '<svg class="ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+p+'</svg>'; }
-  var IC={ok:'<polyline points="20 6 9 17 4 12"/>',av:'<path d="M12 3 2 21h20L12 3z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="17.5" x2="12" y2="17.6"/>',
+  var IC={croix:'<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',renv:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><polyline points="3 3 3 8 8 8"/>',ok:'<polyline points="20 6 9 17 4 12"/>',av:'<path d="M12 3 2 21h20L12 3z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="17.5" x2="12" y2="17.6"/>',
     ko:'<circle cx="12" cy="12" r="9"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/>',
     back:'<polyline points="15 18 9 12 15 6"/>',prev:'<polyline points="15 18 9 12 15 6"/>',next:'<polyline points="9 18 15 12 9 6"/>',
     edit:'<path d="M4 20h4L19 9l-4-4L4 16v4z"/><line x1="13.5" y1="6.5" x2="17.5" y2="10.5"/>',note:'<path d="M5 4h14v12l-4 4H5z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/>',
@@ -1982,9 +2012,9 @@ var REL=(function(){
     if(R.etat==='rectification') et='<div class="rl-etat"><b>Renvoyée en correction</b>'+(o.envoyes?' · '+o.envoyes+' action'+(o.envoyes>1?'s':'')+' envoyée'+(o.envoyes>1?'s':''):'')+'. Tu peux encore valider.'+(o.suivante?' <button type="button" class="mini" data-act="suivante">Suivante : '+e(o.suivante)+' →</button>':'')+'</div>';
     else et='<div class="rl-etat"><span class="rl-pt-'+(pts?'av':'ok')+'">'+(pts?nbS(pts,'point à regarder','points à regarder'):'Tout est au vert')+'</span> · <b>'+at+'</b> '+(at>1?'corrections':'correction')+' en attente'+(at?' (panneau « Renvoyer en correction »)':'')+'</div>';
     // ordre de lecture : le geste risqué à gauche, discret ; le geste attendu à droite, en plein
-    return et+'<div class="in"><button type="button" class="db no'+(o.arme?' arme':'')+'" data-act="refuser">'+(o.arme?'Confirmer le refus':'Refuser')+'</button>'+
-      '<button type="button" class="db rec" data-act="corriger" title="Tu donnes des consignes, la diète est refaite en les respectant. Une consigne « durable » vaut aussi pour les prochaines diètes du client."><span class="lg">Renvoyer en correction</span><span class="sm">Corriger</span> <kbd>C</kbd></button>'+
-      '<button type="button" class="db ok" data-act="valider"><span class="lg">'+(R.xid?'Valider la diète':'Valider et envoyer')+'</span><span class="sm">Valider</span> <kbd>V</kbd></button></div>'+
+    return et+'<div class="in"><button type="button" class="db no'+(o.arme?' arme':'')+'" data-act="refuser">'+ico(IC.croix)+(o.arme?'Confirmer le refus':'Refuser')+'</button>'+
+      '<button type="button" class="db rec" data-act="corriger" title="Tu donnes des consignes, la diète est refaite en les respectant. Une consigne « durable » vaut aussi pour les prochaines diètes du client.">'+ico(IC.renv)+'<span class="lg">Renvoyer en correction</span><span class="sm">Corriger</span> <kbd>C</kbd></button>'+
+      '<button type="button" class="db ok" data-act="valider">'+ico(IC.ok)+'<span class="lg">'+(R.xid?'Valider la diète':'Valider et envoyer')+'</span><span class="sm">Valider</span> <kbd>V</kbd></button></div>'+
       (o.arme?'<div class="rl-etat rl-arme">La diète sera entièrement refaite. Ajoute au moins une action pour qu’on sache quoi changer.</div>':'')+
       '<p class="rl-dec-aide"><span><b>Modifier</b> : tu retouches toi-même, tout de suite, cette version seulement.</span>'+
       '<span><b>Renvoyer en correction</b> : tu donnes des consignes, la diète est refaite ; une consigne durable vaut aussi pour les prochaines.</span></p>';
@@ -2936,7 +2966,7 @@ var ED=(function(){
         '<button type="button" class="db" data-act="pdf">Aperçu de la fiche PDF</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(sn)+' →</button>':'')+'</div>';
     else h=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:sn,attente:(RL.co.liste||[]).length});
     d.innerHTML='<h4 class="rl-h">Ta décision</h4>'+h;
-    if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML=h; } }
+    if(t){ t.className='rl-dec rl-dec-top'+(RL.S?' ed-dec':''); t.innerHTML='<h4 class="rl-h rl-dec-titre">Ta décision</h4>'+h; } }
   // essai : la diète s'affiche en « semaine » OU en « jour » (au lieu des deux l'une sous l'autre)
   function rlVue(v){ var m=document.querySelector('#p-relire .rl-main'); if(!m) return; m.dataset.v=v;
     [].forEach.call(m.querySelectorAll('.rl-vues [data-v]'),function(b){ b.setAttribute('aria-selected',String(b.dataset.v===v)); }); }

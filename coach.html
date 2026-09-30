@@ -2835,9 +2835,10 @@ var ED=(function(){
      une décision. Tant que supabase/edition_programmes.sql n'est pas lancé : message clair pour
      l'édition, et les corrections partent comme des remarques écrites (sans la colonne action). */
   var RL={R:null,co:{}}, FE={cb:null,filtre:null,retour:null,t:0}, ALIM=null;
-  // NOUVELLE DISPOSITION DE LA RELECTURE (essai 30/09) : active dans la maquette, et sur la vraie page avec ?essai=1
-  var ESSAI=!!window.ELY_MAQUETTE_COACH;
-  try{ var qe=/[?&]essai=([01])/.exec(location.search); if(qe) localStorage.setItem('ely_rl_essai',qe[1]); ESSAI=ESSAI||localStorage.getItem('ely_rl_essai')==='1'; }catch(e){}
+  // NOUVELLE DISPOSITION DE LA RELECTURE : validée par Dimitri le 30/09, active pour tout le monde.
+  // Secours : ?essai=0 dans l'adresse ré-affiche l'ancienne (le temps de la visite, rien n'est retenu).
+  var ESSAI=!/[?&]essai=0/.test(location.search);
+  try{ localStorage.removeItem('ely_rl_essai'); }catch(e){}
   function depuis(t){ if(!t) return '—'; var h=(Date.now()-new Date(t).getTime())/3600000;
     return h<1?'il y a moins d’une heure':h<24?'il y a '+Math.floor(h)+' h':h<48?'hier':'le '+dateFr(t); }
   function avecCible(menu,cible){ return (!menu||menu.cible||!cible)?menu:Object.assign({},menu,{cible:cible}); }

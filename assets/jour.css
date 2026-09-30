@@ -28,7 +28,10 @@ html[data-theme="obscur"] .meals .meal{background:var(--void2)}
 .meal.din .meal-hd{background:var(--p-bleu);border-color:var(--b-bleu)}
 .meal-in{padding:12px 14px 13px;display:flex;flex-direction:column;flex:1}
 .meal-in .dish{font:700 16px/1.3 var(--texte);color:var(--ice);margin:0 0 5px}
-.meal-in .ings-l{font:15px/1.55 var(--texte);color:var(--gris);margin:0}
+.meal-in .ings-l{list-style:none;font:15px/1.45 var(--texte);color:var(--gris);margin:2px 0 0;padding:0}
+.meal-in .ings-l li{position:relative;padding:4px 0 4px 15px;border-bottom:1px dotted color-mix(in srgb,var(--mb,var(--line)) 60%,transparent)}
+.meal-in .ings-l li:last-child{border-bottom:0}
+.meal-in .ings-l li::before{content:"";position:absolute;left:1px;top:calc(4px + .6em);width:6px;height:6px;border-radius:50%;background:var(--mb,var(--blue))}
 .meal-in .seas{margin-top:8px;font-style:normal}
 .meal-in .mac{display:flex;gap:14px;margin-top:auto;padding-top:10px;border-top:0;font:600 13px/1 var(--texte);color:var(--ice);font-variant-numeric:tabular-nums;letter-spacing:0}
 .meal-in .mac span{display:inline-flex;align-items:center;gap:6px}

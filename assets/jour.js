@@ -34,11 +34,12 @@
   // les cartes d'un jour (la recette se déroule sous le plat, dans .rc)
   function meals(d){
     var m=d.repas.map(function(r,i){
-      var ings=r.ings.map(ingPhrase).join(' · '), id='rc-'+d.j+'-'+i;
+      // un aliment par ligne, comme sur leurs fiches (Damien 30/09 : « l'effet liste plutôt qu'à la suite »)
+      var ings='<li>'+r.ings.map(ingPhrase).join('</li><li>')+'</li>', id='rc-'+d.j+'-'+i;
       return '<article class="meal '+coulRepas(r.type)+' rv"><div class="meal-hd"><span>'+r.emo+' '+r.type+'</span><i>'+r.kcal+' kcal</i></div>'+
         '<div class="meal-in"><button type="button" class="dish plat" aria-expanded="false" aria-controls="'+id+'" data-j="'+d.j+'" data-i="'+i+'">'+
           '<span class="dn">'+r.rec+'</span><span class="voir">Voir la recette<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>'+
-        '<p class="ings-l">'+ings+'</p>'+
+        '<ul class="ings-l">'+ings+'</ul>'+
         (r.seas?'<p class="seas">'+r.seas+'</p>':'')+
         '<div class="mac"><span class="p">P '+r.m[0]+'</span><span class="g">G '+r.m[1]+'</span><span class="l">L '+r.m[2]+'</span></div></div>'+
         '<div class="rc" id="'+id+'"><div class="rc-in"></div></div></article>';

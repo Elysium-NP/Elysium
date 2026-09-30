@@ -395,6 +395,18 @@
   .notif-btn{flex:none;font:600 14px/1 var(--texte);color:#111;background:var(--brand);border:0;border-radius:999px;padding:12px 18px;cursor:pointer;transition:background .2s,box-shadow .2s}
   .notif-btn:hover{background:#5ab1ff;box-shadow:0 10px 22px -14px rgba(20,102,184,.7)}
   @media(max-width:520px){.notif-btn{width:100%}}
+  /* alertes compactes, sous la conversation (29/09) */
+  .dash-sub:has(#statuspill[hidden]){display:none}   /* pastille masquée : pas de ligne vide au-dessus des rubriques */
+  .profil-dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0;margin:4px 0 0}
+  .profil-dl dt,.profil-dl dd{padding:10px 0;border-bottom:1px solid var(--line);margin:0}
+  .profil-dl dt{font:13.5px/1.4 var(--texte);color:var(--steel);padding-right:18px}
+  .profil-dl dd{font:600 15px/1.4 var(--texte);color:var(--ice);text-align:right;overflow-wrap:anywhere}
+  .profil-dl dt:nth-last-child(2),.profil-dl dd:last-child{border-bottom:0}
+  @media(max-width:520px){.profil-dl{grid-template-columns:1fr}.profil-dl dt{border-bottom:0;padding:10px 0 2px;font-size:12.5px}.profil-dl dd{text-align:left;padding:0 0 10px}}
+  #notif-box{margin:16px 0 0;padding:10px 12px;gap:10px;flex-wrap:nowrap}
+  #notif-box .notif-ic{width:32px;height:32px} #notif-box .notif-ic svg{width:16px;height:16px}
+  #notif-box .notif-tx b{font:600 14px/1.3 var(--texte)} #notif-box .notif-tx small{font-size:12px}
+  #notif-box .notif-btn{width:auto;padding:10px 14px;font-size:13.5px}
 
   /* ===== D · point « questionnaire » de la courbe ===== */
   .cpq{fill:var(--b-violet);stroke:var(--void);stroke-width:1.5}
@@ -529,15 +541,15 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
 <div class="card wide rv" id="c-msg" data-rub="messages" hidden>
       <div class="ch"><h3>Mes messages</h3><span class="tag" id="msg-tag">Coachs</span></div>
       <p>Une question sur ton programme ? Écris à Damien &amp; Yoann, ils te répondent ici.</p>
-      <!-- alertes navigateur : visible seulement tant que la permission n'a pas été demandée -->
-      <div class="notif" id="notif-box" hidden>
-        <span class="notif-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.6 2H4.4z"/><path d="M10 20.5a2.1 2.1 0 0 0 4 0"/></svg></span>
-        <span class="notif-tx"><b>Reçois une alerte dès qu’un coach te répond</b><small>Une alerte sur cet appareil, rien d’autre. Tu peux la couper à tout moment.</small></span>
-        <button type="button" id="notif-on" class="notif-btn">Activer les notifications</button>
-      </div>
       <div class="fil-msg" id="fil-msg"></div>
       <form id="msg-form"><textarea id="msg-txt" placeholder="Ton message…" required maxlength="4000"></textarea><button type="submit">Envoyer</button></form>
       <p id="msg-err" class="foot-note" aria-live="polite"></p>
+      <!-- alertes navigateur : visible seulement tant que la permission n'a pas été demandée -->
+      <div class="notif" id="notif-box" hidden>
+        <span class="notif-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.6 2H4.4z"/><path d="M10 20.5a2.1 2.1 0 0 0 4 0"/></svg></span>
+        <span class="notif-tx"><b>Reçois une alerte dès qu’un coach te répond</b><small>Sur cet appareil, rien d’autre. Tu peux la couper à tout moment.</small></span>
+        <button type="button" id="notif-on" class="notif-btn">Activer</button>
+      </div>
     </div>
 
     <!-- MON GUIDE NUTRITION hors programme (sans formule, ou programme pas encore prêt) : seulement si ACHAT_EBOOK -->
@@ -557,13 +569,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     <!-- PROFIL -->
     <div class="card rv" id="c-profil" data-rub="compte">
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
-      <p>Prénom : <b id="pprenom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
-      <p style="margin-top:8px">Nom : <b id="pnom" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
-      <p style="margin-top:8px">Sexe : <b id="psexe" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
-      <p style="margin-top:8px">Naissance : <b id="pnais" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
-      <p style="margin-top:8px">Taille : <b id="ptaille" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
-      <p style="margin-top:8px">Email : <b id="pemail" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.02em">—</b></p>
-      <p style="margin-top:8px">Membre depuis : <b id="pdate" style="color:var(--ice);font-family:var(--disp);font-weight:500;font-size:16px;letter-spacing:.03em">—</b></p>
+      <dl class="profil-dl"><dt>Prénom</dt><dd id="pprenom">—</dd><dt>Nom</dt><dd id="pnom">—</dd><dt>Sexe</dt><dd id="psexe">—</dd><dt>Naissance</dt><dd id="pnais">—</dd><dt>Taille</dt><dd id="ptaille">—</dd><dt>Email</dt><dd id="pemail">—</dd><dt>Membre depuis</dt><dd id="pdate">—</dd></dl>
       <p class="foot-note" style="margin-top:12px">Ces informations, définies à l'inscription, sont fixes (hors correction exceptionnelle). Ton objectif et tes préférences viennent de ton questionnaire nutrition.</p>
     </div>
 
@@ -1276,7 +1282,7 @@ var PROG = {
     var quest = ADMIN ? !!uu.quest : REEL.quest;
     var pill=document.getElementById('statuspill'), c=document.getElementById('progcard'), pv=document.getElementById('progview');
     if(paid && (ADMIN ? quest : REEL.prog)){
-      pill.textContent='Programme actif'; pill.className='pill paid';
+      pill.textContent='Programme actif'; pill.className='pill paid'; pill.hidden=true;   // l'état normal : rien à signaler
       c.hidden=true; pv.hidden=false; buildProgView();
       bonjour.hidden=true;   // Yoann 27/09 : le prénom est déjà le titre de la diète, pas de doublon
       renderGuides();
@@ -1285,7 +1291,7 @@ var PROG = {
     renderGuides();          // hors programme : carte « Mon guide nutrition » (seulement si ACHAT_EBOOK)
     pv.hidden=true; c.hidden=false; bonjour.hidden=false;
     if(!paid){
-      pill.textContent='Compte gratuit'; pill.className='pill free';
+      pill.textContent='Compte gratuit'; pill.className='pill free'; pill.hidden=false;
       c.className='card wide locked hors-appli';   // appli MyEly : ni prix ni paiement (règles des stores)
       var f=uu.formule&&(NOM_FORMULE[cleFormule(uu.formule)]||esc(uu.formule)), fp=uu.formule_prix;
       var choiceLine = f
@@ -1303,12 +1309,12 @@ var PROG = {
         if(!code){ location.href='choisir.html'; return; }
         location.href='recap.html?formule='+code; });   // récapitulatif avant paiement, puis Stripe depuis le récap
     } else if(quest){
-      pill.textContent='Programmation en cours'; pill.className='pill paid';
+      pill.textContent='Programmation en cours'; pill.className='pill paid'; pill.hidden=false;
       c.className='card wide';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">En cours</span></div>'+
         '<p>Questionnaire reçu. Damien &amp; Yoann construisent ta programmation <b style="color:var(--ice)">à la main, au gramme près</b>. Elle s\'affichera ici dès qu\'elle sera prête.</p>';
     } else {
-      pill.textContent='Questionnaire à remplir'; pill.className='pill paid';
+      pill.textContent='Questionnaire à remplir'; pill.className='pill paid'; pill.hidden=false;
       c.className='card wide';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">À activer</span></div>'+
         '<p>Paiement validé ✓. Dernière étape : réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et ton coach construit ton programme sur-mesure (il s\'affichera ici, en haut de ton espace, + PDF par mail).</p>'+
@@ -1608,7 +1614,7 @@ var PROG = {
 
   if(/[?&]paiement=ok/.test(location.search)){
     history.replaceState(null,'',location.pathname);
-    var pill=document.getElementById('statuspill'); pill.textContent='Paiement reçu · activation…'; pill.className='pill paid';
+    var pill=document.getElementById('statuspill'); pill.hidden=false; pill.textContent='Paiement reçu · activation…'; pill.className='pill paid';
     (function attendre(n){
       ElyAuth.refresh().then(function(uu){
         if((uu&&uu.paid)||n>=10){ renderProgram(); renderAbo(); if(uu&&uu.paid&&!ADMIN) chargerReel().then(renderProgram); return; }

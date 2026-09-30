@@ -872,15 +872,6 @@
   .rl-ecarts{display:none}
   .rl-v2 .rl-graphe{display:none}
   .rl-v2 .rl-ecarts{display:block;overflow-x:auto}
-  .rl-ecarts table{width:100%;border-collapse:separate;border-spacing:4px;font:600 13.5px/1 var(--texte);font-variant-numeric:tabular-nums}
-  .rl-ecarts th{font-size:11.5px;letter-spacing:.06em;color:var(--steel);text-align:center;padding:4px}
-  .rl-ecarts tbody th{text-align:left;letter-spacing:0;font-size:13px;color:var(--gris);white-space:nowrap;padding-right:10px}
-  .rl-ecarts td{text-align:center;padding:10px 4px;border-radius:8px;background:var(--void2);color:var(--ice)}
-  .rl-ecarts td.ok{background:rgba(111,183,82,.28);box-shadow:inset 0 0 0 1px rgba(111,183,82,.55)}
-  .rl-ecarts td.av{background:rgba(240,179,90,.32);box-shadow:inset 0 0 0 1px rgba(240,179,90,.7)}
-  .rl-ecarts td.ko{background:rgba(217,110,110,.34);box-shadow:inset 0 0 0 1px rgba(217,110,110,.75)}
-  .rl-ecarts .leg b.ok{color:#2f6b1a} .rl-ecarts .leg b.av{color:#8a5a00} .rl-ecarts .leg b.ko{color:#9b1c1c}
-  html[data-theme="obscur"] .rl-ecarts .leg b.ok{color:#8fd07a} html[data-theme="obscur"] .rl-ecarts .leg b.av{color:#f0b35a} html[data-theme="obscur"] .rl-ecarts .leg b.ko{color:#f3b4b4}
 
   /* essai 30/09 (suite 2) */
   .rl-dec-aide{display:none}
@@ -888,16 +879,42 @@
   .rl-v2 .rl-dec-fin .rl-dec-aide{text-align:left}
   .rl-v2 .rl-dec .rl-dec-aide b{color:var(--gris);font-weight:600}
   @media(max-width:1100px){.rl-v2 .rl-dec .rl-dec-aide{text-align:left}}
-  .rl-ecarts td b{display:block;font-weight:700}
-  .rl-ecarts td small{display:block;margin-top:4px;font:500 11.5px/1.2 var(--texte);color:var(--gris);font-variant-numeric:tabular-nums}
-  .rl-ecarts tbody th small{display:block;margin-top:3px;font:400 11px/1.2 var(--texte);color:var(--steel)}
+  /* libellés au même poids que le reste de la page (Dimitri 30/09) */
   /* la cible : sa propre colonne, en évidence, pour comparer d'un coup d'œil (Dimitri 30/09) */
-  .rl-ecarts th.cib{color:var(--blue);font-size:12px}
-  .rl-ecarts td.cib{background:color-mix(in srgb,var(--brand) 16%,transparent);box-shadow:inset 0 0 0 2px var(--brand);padding:8px 10px}
-  .rl-ecarts td.cib b{font-size:16px;color:var(--ice)}
+
+  /* écarts à la cible : une carte, un jour par colonne, une jauge par case */
+  .rl-v2 .rl-ecarts{padding:6px;border:1px solid var(--line);border-radius:18px;background:var(--void2)}
+  .rl-ecarts table{width:100%;border-collapse:separate;border-spacing:5px;font:700 15px/1 var(--texte);font-variant-numeric:tabular-nums;color:var(--ice)}
+  .rl-ecarts thead th{padding:8px 4px 4px;font:700 13px/1 var(--texte);letter-spacing:.06em;color:var(--ice);text-align:center}
+  .rl-ecarts thead th.cib{color:var(--blue);text-transform:uppercase;font-size:11.5px;letter-spacing:.12em}
+  .rl-ecarts tbody th{padding:0 14px 0 10px;text-align:left;white-space:nowrap;font:700 14.5px/1.2 var(--texte);color:var(--ice)}
+  .rl-ecarts tbody th .mac{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:9px;vertical-align:0}
+  .rl-ecarts tbody tr:hover th{color:var(--blue)}
+  .rl-ecarts tbody th .mac.k{background:var(--steel)}
+  .rl-ecarts td{position:relative;min-width:74px;padding:11px 6px 15px;border-radius:12px;text-align:center;background:var(--fond);transition:transform .15s,box-shadow .15s}
+  .rl-ecarts td b{display:block;font-size:16px;letter-spacing:-.01em}
+  .rl-ecarts td small{display:block;margin-top:5px;font:500 12px/1 var(--texte);color:var(--gris)}
+  .rl-ecarts td:not(.cib):hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+  .rl-ecarts td.ok{--st:#5a9e3d;background:color-mix(in srgb,#93c47d 26%,var(--fond))}
+  .rl-ecarts td.av{--st:#d08a1c;background:color-mix(in srgb,#f0b35a 30%,var(--fond))}
+  .rl-ecarts td.ko{--st:#c24a4a;background:color-mix(in srgb,#e07a7a 30%,var(--fond))}
+  .rl-ecarts td.ok b{color:#2f6b1a} .rl-ecarts td.av b{color:#8a5a00} .rl-ecarts td.ko b{color:#9b1c1c}
+  /* la jauge : la zone verte au milieu (±5 %), le point = où tombe le jour (bornée à ±15 %) */
+  .rl-ecarts .gj{position:absolute;left:12px;right:12px;bottom:6px;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent 0 33.3%,color-mix(in srgb,#5a9e3d 45%,transparent) 33.3% 66.7%,transparent 66.7%),color-mix(in srgb,var(--ice) 10%,transparent)}
+  .rl-ecarts .gj i{position:absolute;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--st,var(--steel));box-shadow:0 0 0 2px var(--fond)}
+  /* la cible : sa propre colonne, en bleu */
+  .rl-ecarts td.cib{min-width:84px;padding:11px 10px;background:color-mix(in srgb,var(--brand) 14%,var(--fond));box-shadow:inset 0 0 0 2px var(--brand)}
+  .rl-ecarts td.cib b{font-size:17px}
   .rl-ecarts td.cib small{color:var(--blue);font-weight:700}
-  html[data-theme="obscur"] .rl-ecarts td.cib small,html[data-theme="obscur"] .rl-ecarts th.cib{color:var(--brand)}
-  .rl-ecarts td{padding:8px 4px}
+  /* légende en pastilles */
+  .rl-ec-leg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:4px 6px 6px;font:500 12px/1 var(--texte);color:var(--gris)}
+  .rl-ec-leg span:first-child{margin-right:6px}
+  .rl-ec-leg span+span{padding:5px 10px;border-radius:999px;font-weight:700;color:var(--ice)}
+  .rl-ec-leg .ok{background:color-mix(in srgb,#93c47d 30%,transparent)} .rl-ec-leg .av{background:color-mix(in srgb,#f0b35a 34%,transparent)} .rl-ec-leg .ko{background:color-mix(in srgb,#e07a7a 34%,transparent)}
+  html[data-theme="obscur"] .rl-ecarts td.ok b{color:#9ad884} html[data-theme="obscur"] .rl-ecarts td.av b{color:#f5c27a} html[data-theme="obscur"] .rl-ecarts td.ko b{color:#f3a5a5}
+  html[data-theme="obscur"] .rl-ecarts td.cib small,html[data-theme="obscur"] .rl-ecarts thead th.cib{color:var(--brand)}
+  html[data-theme="obscur"] .rl-ecarts td:not(.cib):hover{box-shadow:0 4px 14px rgba(0,0,0,.4)}
+  @media(prefers-reduced-motion:reduce){.rl-ecarts td{transition:none}.rl-ecarts td:hover{transform:none}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1375,14 +1392,14 @@ var REL=(function(){
   // tableau lisible d'un coup d'œil : un jour par colonne, une macro par ligne, le % de la cible coloré
   // (vert : ±5 % · jaune : jusqu'à ±10 % · rouge : au-delà)
   function ecartsTable(R){ var m=R.menu||{}, c=m.cible||{}, J=(m.jours||[]).filter(function(j){ return !j.off; });
-    var L=[['kcal','Calories'],['proteines','Protéines'],['glucides','Glucides'],['lipides','Lipides']];
+    var L=[['kcal','Calories','k'],['proteines','Protéines','p'],['glucides','Glucides','g'],['lipides','Lipides','l']];
     return '<div class="rl-ecarts"><table><thead><tr><th></th><th class="cib">Cible</th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
       L.map(function(l){ var u=l[0]==='kcal'?' kcal':' g';
-        return '<tr><th>'+l[1]+'</th><td class="cib"><b>'+g0(c[l[0]])+'</b><small>'+u.trim()+'</small></td>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
+        return '<tr><th><i class="mac '+l[2]+'"></i>'+l[1]+'</th><td class="cib"><b>'+g0(c[l[0]])+'</b><small>'+u.trim()+'</small></td>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
         if(!isFinite(x)) return '<td>—</td>';
         var a=Math.abs(x), cl=a<=TOL?'ok':a<=0.10?'av':'ko';
-        return '<td class="'+cl+'"><b>'+Math.round(100+x*100)+' %</b><small>'+g0(s[l[0]])+u+'</small></td>'; }).join('')+'</tr>'; }).join('')+
-      '</tbody></table><p class="leg" style="margin:6px 0 0">% de la cible · <b class="ok">vert</b> ±5 % · <b class="av">jaune</b> jusqu’à ±10 % · <b class="ko">rouge</b> au-delà.</p></div>'; }
+        return '<td class="'+cl+'"><b>'+Math.round(100+x*100)+' %</b><small>'+g0(s[l[0]])+u+'</small><i class="gj"><i style="left:'+Math.max(3,Math.min(97,50+x/0.15*50)).toFixed(1)+'%"></i></i></td>'; }).join('')+'</tr>'; }).join('')+
+      '</tbody></table><p class="rl-ec-leg"><span>% de la cible, grammes dessous</span><span class="ok">±5 %</span><span class="av">jusqu’à ±10 %</span><span class="ko">au-delà</span></p></div>'; }
   function pct(x){ var s=n(x*100,1); return (x>0&&s!=='0'?'+':'')+s+' %'; }
   function g0(v){ return n(Math.round(+v||0)); }
   function gx(v){ return v==null||v===''||!isFinite(+v)?'—':g0(v); }

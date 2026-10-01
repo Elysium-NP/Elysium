@@ -1269,6 +1269,26 @@
   .rl-v2 .rl-cour li:hover+li{border-top-color:transparent}
   .rl-v2 .rl-cour li b{font-size:14px}
   @media(prefers-reduced-motion:reduce){.rl-v2 .rl-cour-c,.rl-v2 .rl-cour li{transition:none}}
+
+  /* ===== onglet Client (01/10) ===== */
+  /* le titre de la carte (toujours ouverte dans cet onglet) : un vrai titre, sans flèche */
+  .rl-v2 .rl-side[data-s="client"] details.rl-rq>summary{pointer-events:none;min-height:0;margin:0 0 4px;font:400 21px/1.2 var(--titre);color:var(--ice)}
+  .rl-v2 .rl-side[data-s="client"] details.rl-rq>summary::before{display:none}
+  .rl-v2 .rl-side[data-s="client"] .rl-dl{margin-top:12px}
+  /* réponses en pastilles : refus / allergies en rouge pâle, à garder en vert pâle ; « aucun » en discret */
+  .rl-pu{display:flex;flex-wrap:wrap;gap:5px}
+  .rl-pu i{font-style:normal;padding:4px 9px;border-radius:999px;font:600 12.5px/1.25 var(--texte)}
+  .rl-pu.ko i{background:color-mix(in srgb,#e07a7a 18%,transparent);color:#9b1c1c;box-shadow:inset 0 0 0 1px color-mix(in srgb,#e07a7a 40%,transparent)}
+  .rl-pu.ok i{background:color-mix(in srgb,#93c47d 22%,transparent);color:#2f6b1a;box-shadow:inset 0 0 0 1px color-mix(in srgb,#93c47d 45%,transparent)}
+  html[data-theme="obscur"] .rl-pu.ko i{color:#f3b4b4} html[data-theme="obscur"] .rl-pu.ok i{color:#a9dd94}
+  .rl-rien{font-weight:500;color:var(--steel)}
+  /* questionnaire complet : une barre à déplier, comme « Analyse détaillée » */
+  .rl-v2 .rl-side .q-rep{margin-top:14px;border-top:0;padding-top:0}
+  .rl-v2 .rl-side .q-rep>summary{padding:10px 16px;border:1px solid var(--line);border-radius:14px;background:var(--void);transition:border-color .15s,background-color .15s}
+  .rl-v2 .rl-side .q-rep>summary:hover{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 6%,var(--void))}
+  .rl-v2 .rl-side .q-rep[open]>summary{border-color:color-mix(in srgb,var(--brand) 55%,var(--line))}
+  .rl-v2 .rl-side .q-bloc h5,.rl-v2 .rl-side .q-veille h5{color:var(--blue);letter-spacing:.14em}
+  html[data-theme="obscur"] .rl-v2 .rl-side .q-bloc h5,html[data-theme="obscur"] .rl-v2 .rl-side .q-veille h5{color:var(--brand)}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -2126,8 +2146,12 @@ var REL=(function(){
     if(aj.length) h+=ck('ko','Macros à ajuster à la main','<ul class="rl-na">'+aj.map(function(t){ return '<li>'+e(propre(t))+'</li>'; }).join('')+'</ul>Clique le jour concerné, puis <b>Modifier</b> pour corriger les grammages.');
     var nk=L.filter(function(x){ return x!=='ok'; }).length;
     return '<h4 class="rl-h">À vérifier avant d’envoyer <span class="n'+(nk?' av':' ok')+'">'+(nk?nbS(nk,'point à regarder','points à regarder'):'tout est bon')+'</span></h4><div class="cks">'+h+'</div>'+
-      '<details class="rl-rq"><summary>Ce que le client a répondu</summary><dl class="rl-dl">'+[['Objectif',rp.objectif||'—'],['Aliments refusés',rp.refuses||'Aucun'],['Allergies',rp.allergies||'Aucune'],['Régime',rp.regime||'Aucun'],['À conserver',rp.conserver||'—']]
-      .map(function(q){ return '<dt>'+q[0]+'</dt><dd>'+e(q[1])+'</dd>'; }).join('')+'</dl></details>';
+      '<details class="rl-rq"><summary>Ce que le client a répondu</summary><dl class="rl-dl">'+[['Objectif',rp.objectif||'—'],['Aliments refusés',rp.refuses||'Aucun','ko'],['Allergies',rp.allergies||'Aucune','ko'],['Régime',rp.regime||'Aucun'],['À conserver',rp.conserver||'—','ok']]
+      .map(function(q){ return '<dt>'+q[0]+'</dt><dd>'+reponse(q[1],q[2])+'</dd>'; }).join('')+'</dl></details>';
+    // une réponse « liste » (refus, allergies, à garder) se lit en pastilles ; « aucun / — » en discret
+    function reponse(v,cl){ var t=String(v).trim(); if(/^(aucune?s?|non|rien|—|-)$/i.test(t)) return '<span class="rl-rien">'+e(t)+'</span>';
+      var L=t.split(/\s*[,;\n\/]+\s*/).filter(Boolean); if(!cl||L.length<2) return e(t);
+      return '<span class="rl-pu '+cl+'">'+L.map(function(x){ return '<i>'+e(x)+'</i>'; }).join('')+'</span>'; }
   }
 
   /* 6a. APERÇU CLIENT d'un jour (rendu simple type fiche) */

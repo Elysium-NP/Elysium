@@ -1199,6 +1199,38 @@
   .rl-v2 #rl-notes .jn:not(.note):last-child::after{display:none}
   .rl-v2 #rl-notes .jn:not(.note)~.jn:not(.note)::before{background:var(--steel);box-shadow:none}
   .rl-v2 #rl-notes .jn:not(.note) small{margin-top:2px}
+
+  /* ===== onglet « Le jour » : même langage que le reste (01/10) ===== */
+  /* jours et Vue coach / Aperçu client : contrôles segmentés, actif en bleu */
+  .rl-v2 .rl-jtabs{gap:4px;padding:5px;border:1px solid var(--line);border-radius:16px;background:var(--void);width:max-content;max-width:100%}
+  .rl-v2 .rl-jtabs button{border:0;border-radius:11px;min-height:38px;padding:0 16px;transition:background-color .15s,color .15s,box-shadow .15s}
+  .rl-v2 .rl-jtabs button:hover:not([aria-selected="true"]){background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--ice)}
+  .rl-v2 .rl-jtabs button[aria-selected="true"]{background:var(--blue);color:#fff;box-shadow:0 4px 14px color-mix(in srgb,var(--brand) 32%,transparent)}
+  .rl-v2 .rl-jtabs button[aria-selected="true"] i{box-shadow:0 0 0 2px #fff}
+  .rl-v2 .rl-mode{padding:4px;gap:2px;border-radius:14px;background:var(--void)}
+  .rl-v2 .rl-mode button{min-height:34px;padding:0 14px;border-radius:10px;font-size:13px}
+  .rl-v2 .rl-mode button.on{box-shadow:0 3px 10px color-mix(in srgb,var(--brand) 28%,transparent)}
+  .rl-v2 .rl-aide{font-size:12px;color:var(--steel);max-width:52ch;text-align:right;line-height:1.45}
+  /* cartes de repas : bandeau de couleur en haut (comme les rayons des courses), lignes qui s'éclairent */
+  .rl-v2 .rl-meal{background:var(--void);padding-bottom:0;transition:border-color .15s,box-shadow .15s}
+  .rl-v2 .rl-meal:hover{border-color:color-mix(in srgb,var(--bc,var(--brand)) 55%,var(--line))}
+  .rl-v2 .rl-meal>header{box-shadow:inset 0 4px 0 var(--bc,transparent);padding-top:14px}
+  .rl-v2 .rl-meal h5 small{border:0;background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--blue);padding:4px 9px}
+  html[data-theme="obscur"] .rl-v2 .rl-meal h5 small{color:#7cc0ff}
+  .rl-v2 .rl-ing:not(.h){border-radius:8px;transition:background-color .12s}
+  .rl-v2 .rl-ing:not(.h):not(.ref):hover{background:color-mix(in srgb,var(--brand) 7%,transparent)}
+  .rl-v2 .rl-meal .rl-mm{margin:auto 14px 0;padding:10px 12px 0;border:1px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0;background:var(--void2)}
+  .rl-v2 .rl-meal .rl-mm b{font-size:14px}
+  .rl-v2 .rl-meal .rl-stk{margin:0 14px;height:7px;border-radius:0 0 12px 12px;border:1px solid var(--line);border-top:0;box-sizing:content-box;padding:8px 12px 10px;background:var(--void2)}
+  .rl-v2 .rl-meal .rl-stk i:first-child{border-radius:99px 0 0 99px} .rl-v2 .rl-meal .rl-stk i:last-child{border-radius:0 99px 99px 0}
+  .rl-v2 .rl-meal footer .mini{border-radius:999px;padding:7px 14px;transition:border-color .15s,color .15s,background-color .15s}
+  .rl-v2 .rl-meal footer .mini:hover{border-color:#e0a24a;color:#8a5a00;background:color-mix(in srgb,#f0b35a 12%,transparent)}
+  html[data-theme="obscur"] .rl-v2 .rl-meal footer .mini:hover{color:#f5c27a}
+  /* total du jour face à la cible : dans un cadre, comme la cible de l'en-tête */
+  .rl-v2 #rl-jour .rl-cib{margin-top:8px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--void);gap:14px}
+  .rl-v2 #rl-jour .rl-cb{font-size:13.5px;color:var(--ice);font-weight:600}
+  .rl-v2 #rl-jour .rl-cb .v{font-size:13px}
+  @media(prefers-reduced-motion:reduce){.rl-v2 .rl-jtabs button,.rl-v2 .rl-meal,.rl-v2 .rl-ing{transition:none}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>

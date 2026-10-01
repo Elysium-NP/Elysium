@@ -1231,6 +1231,26 @@
   .rl-v2 #rl-jour .rl-cb{font-size:13.5px;color:var(--ice);font-weight:600}
   .rl-v2 #rl-jour .rl-cb .v{font-size:13px}
   @media(prefers-reduced-motion:reduce){.rl-v2 .rl-jtabs button,.rl-v2 .rl-meal,.rl-v2 .rl-ing{transition:none}}
+
+  /* ===== onglet « La semaine » : même langage que le reste (01/10) ===== */
+  .rl-v2 #rl-sem>h4.rl-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;font:400 22px/1.2 var(--titre);color:var(--ice);text-transform:none;letter-spacing:0}
+  .rl-v2 #rl-sem>h4.rl-h .n{margin:0;padding:5px 11px;border-radius:999px;font:700 12px/1.2 var(--texte)}
+  .rl-v2 #rl-sem>h4.rl-h .n.ok{background:color-mix(in srgb,#93c47d 26%,transparent);color:#2f6b1a}
+  .rl-v2 #rl-sem>h4.rl-h .n.av{background:color-mix(in srgb,#f0b35a 24%,transparent);color:#8a5a00}
+  html[data-theme="obscur"] .rl-v2 #rl-sem>h4.rl-h .n.ok{color:#9ad884} html[data-theme="obscur"] .rl-v2 #rl-sem>h4.rl-h .n.av{color:#f5c27a}
+  .rl-v2 #rl-sem .rl-det{border-radius:999px;padding:8px 14px;font-weight:700;transition:border-color .15s,color .15s,background-color .15s}
+  .rl-v2 #rl-sem .rl-det:hover{border-color:var(--brand);color:var(--blue);background:color-mix(in srgb,var(--brand) 8%,transparent)}
+  .rl-v2 .rl-sem{border-radius:16px;background:var(--void)}
+  /* jour sélectionné : en bleu, comme tous les onglets actifs */
+  .rl-v2 .rl-t thead button.on{background:var(--blue);color:#fff;box-shadow:0 4px 14px color-mix(in srgb,var(--brand) 30%,transparent)}
+  .rl-v2 .rl-t thead button{font-weight:700}
+  /* plats : badge ×N en pastille, survol plus net */
+  .rl-v2 .rl-cel .rl-x{background:rgba(0,0,0,.08);font-weight:800}
+  html[data-theme="obscur"] .rl-v2 .rl-cel .rl-x{background:rgba(255,255,255,.1)}
+  .rl-v2 .rl-cel:hover{box-shadow:inset 3px 0 0 var(--bc,transparent),0 6px 18px rgba(0,0,0,.12);border-color:color-mix(in srgb,var(--bc,var(--brand)) 60%,transparent)}
+  /* ligne Total : le total en avant, l'écart en pastille de couleur */
+  .rl-v2 .rl-tot b{font-size:16px}
+  .rl-v2 .rl-tot .jg{height:7px}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1794,7 +1814,7 @@ var REL=(function(){
   function semaine(R,o){ o=o||{};
     var m=R.menu||{}, c=m.cible||{}, J=m.jours||[], T=types(m), F=frequences(m), INT=interdits(R), hl=o.surligne, act=o.jour;
     var det=true; try{ det=localStorage.getItem('ely_sem_compact')!=='1'; }catch(x){}
-    var h='<h4 class="rl-h">La semaine <span class="n">'+joursOk(R)+'/'+actifs(m).length+' jours à ±5 % de la cible</span>'+
+    var h='<h4 class="rl-h">La semaine <span class="n'+(joursOk(R)===actifs(m).length?' ok':' av')+'">'+joursOk(R)+'/'+actifs(m).length+' jours à ±5 % de la cible</span>'+
       '<button type="button" class="mini rl-det" data-act="sem-detail" aria-pressed="'+det+'">'+(det?'Vue compacte':'Voir le détail')+'</button></h4>'+
       (o.swap?'<div class="ed-swap"><span>Échange en cours : touche le repas qui doit prendre la place de <b>'+e(titre(repasDe(J[o.swap.i],o.swap.ty)||{}))+'</b>.</span><button type="button" class="mini" data-act="ed-swap-stop">Annuler l’échange</button></div>':
        o.edit?'<p class="leg" style="margin:0 0 8px">Glisse un plat sur un autre pour les échanger, ou utilise « Échanger » sous le repas. Point bleu = modifié.</p>':'')+

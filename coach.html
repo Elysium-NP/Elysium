@@ -1174,6 +1174,31 @@
   .rl-v2 .rl-dl dt{font:600 10.5px/1.5 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
   .rl-v2 .rl-dl dd{font-size:13.5px;line-height:1.45}
   @media(prefers-reduced-motion:reduce){.rl-v2 .rl-vues button,.rl-v2 .rl-stabs button,.rl-v2 details.rl-plus>summary{transition:none}}
+
+  /* onglet Notes : notes en bulles signées, saisie soignée, journal de relecture en frise */
+  .rl-v2 #rl-notes>h4{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;margin:0 0 6px;font:400 21px/1.2 var(--titre);color:var(--ice);text-transform:none;letter-spacing:0}
+  .rl-v2 #rl-notes>h4 .n{padding:5px 10px;border-radius:999px;font:700 12px/1.2 var(--texte);background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--blue)}
+  .rl-v2 #rl-notes>h4 .n.ok{background:color-mix(in srgb,#93c47d 26%,transparent);color:#2f6b1a}
+  .rl-v2 #rl-notes>h4 .n.av{background:color-mix(in srgb,#f0b35a 24%,transparent);color:#8a5a00}
+  html[data-theme="obscur"] .rl-v2 #rl-notes>h4 .n{color:#7cc0ff} html[data-theme="obscur"] .rl-v2 #rl-notes>h4 .n.ok{color:#9ad884} html[data-theme="obscur"] .rl-v2 #rl-notes>h4 .n.av{color:#f5c27a}
+  .rl-v2 #rl-notes>.leg{font-size:13px;color:var(--gris);margin-bottom:12px!important}
+  .rl-v2 #rl-notes .jn.note{margin:0 0 8px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--b-jaune) 55%,var(--line));border-left:4px solid var(--b-jaune);border-radius:4px 14px 14px 4px;background:color-mix(in srgb,var(--p-jaune) 40%,var(--void));font-size:14px;line-height:1.5}
+  html[data-theme="obscur"] .rl-v2 #rl-notes .jn.note{background:color-mix(in srgb,#ffd966 7%,var(--void))}
+  .rl-v2 #rl-notes .jn.note small{margin-top:6px;font-size:12px;color:var(--steel)}
+  .rl-v2 #rl-notes .jn.note small b{color:var(--gris);font-weight:700}
+  .rl-v2 #rl-notes .jn-f{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--void)}
+  .rl-v2 #rl-notes .jn-f textarea{min-height:76px;border-radius:10px;padding:10px 12px;background:var(--void2);transition:border-color .15s,box-shadow .15s}
+  .rl-v2 #rl-notes .jn-f textarea:focus{outline:0;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
+  .rl-v2 #rl-notes .jn-f .rl-btns{justify-content:flex-end}
+  .rl-v2 #rl-notes .jn-f .ed-btn{min-height:38px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--brand);background:var(--brand);color:#111;font:700 13px/1 var(--texte);box-shadow:0 4px 14px color-mix(in srgb,var(--brand) 28%,transparent)}
+  .rl-v2 #rl-notes .jn-f .ed-btn:hover{filter:brightness(1.07)}
+  .rl-v2 #rl-notes .rl-sub{margin:22px 0 10px}
+  .rl-v2 #rl-notes .jn:not(.note){position:relative;margin:0;padding:0 0 14px 22px;border-top:0;font-size:13.5px}
+  .rl-v2 #rl-notes .jn:not(.note)::before{content:"";position:absolute;left:4px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 20%,transparent)}
+  .rl-v2 #rl-notes .jn:not(.note)::after{content:"";position:absolute;left:8px;top:18px;bottom:2px;width:1px;background:var(--line)}
+  .rl-v2 #rl-notes .jn:not(.note):last-child::after{display:none}
+  .rl-v2 #rl-notes .jn:not(.note)~.jn:not(.note)::before{background:var(--steel);box-shadow:none}
+  .rl-v2 #rl-notes .jn:not(.note) small{margin-top:2px}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -2189,9 +2214,9 @@ var REL=(function(){
   /* 6c. NOTES INTERNES (partagées entre coachs : table notes_coachs ; sur l'appareil tant que le script n'est pas lancé) + JOURNAL de relecture
      N = [{id, texte, par, quand, v, mien}] ; o = {partage: true|false|null (pas encore su), ta: id du champ de saisie} */
   function blocNotes(N,o){ o=o||{};
-    return '<h4>Notes internes <span class="n">'+(o.partage==null?'…':o.partage?'partagées entre coachs':'sur cet appareil')+'</span></h4>'+
+    return '<h4>Notes internes <span class="n'+(o.partage===false?' av':o.partage?' ok':'')+'">'+(o.partage==null?'…':o.partage?'partagées entre coachs':'sur cet appareil')+'</span></h4>'+
       '<p class="leg" style="margin:0 0 8px">Entre coachs, jamais visibles du client.'+(o.partage===false?' Notes gardées sur cet appareil tant que le script supabase/notes_coachs.sql n’est pas lancé.':'')+'</p>'+
-      (N||[]).map(function(x){ return '<div class="jn note">'+e(x.texte)+'<small>'+e(x.par)+' · '+e(x.quand)+(x.v?' · v'+e(x.v):'')+
+      (N||[]).map(function(x){ return '<div class="jn note">'+e(x.texte)+'<small><b>'+e(x.par)+'</b> · '+e(x.quand)+(x.v?' · v'+e(x.v):'')+
         (x.mien&&x.id!=null?' · <button type="button" class="lien" data-act="note-sup" data-id="'+e(x.id)+'">supprimer</button>':'')+'</small></div>'; }).join('')+
       '<div class="jn-f"><textarea id="'+(o.ta||'rl-note-t')+'" placeholder="Ex. « vu avec Yoann : on garde le chocolat du soir »" aria-label="Nouvelle note interne"></textarea>'+
       '<div class="rl-btns" style="margin-top:8px"><button type="button" class="mini ed-btn" data-act="note-aj">Ajouter la note</button></div></div>';

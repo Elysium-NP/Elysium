@@ -1251,6 +1251,24 @@
   /* ligne Total : le total en avant, l'écart en pastille de couleur */
   .rl-v2 .rl-tot b{font-size:16px}
   .rl-v2 .rl-tot .jg{height:7px}
+
+  /* ===== onglet « Les courses » : aligné sur La semaine / Le jour (01/10) ===== */
+  .rl-v2 .rl-cour-t{justify-content:flex-start;align-items:center;gap:8px 12px;margin-bottom:16px}
+  .rl-v2 .rl-cour-t>div{display:contents}
+  .rl-v2 .rl-cour-t .rl-h{order:0;font:400 22px/1.2 var(--titre)}
+  .rl-v2 .rl-cour-src{order:1}
+  .rl-v2 .rl-cour-n{order:2;margin-left:auto;font:600 12.5px/1 var(--texte);color:var(--steel)}
+  /* cartes de rayon : même bandeau que les cartes de repas (trait de couleur en haut, en-tête teinté) */
+  .rl-v2 .rl-cour-c{border-top:1px solid var(--line);transition:border-color .15s,box-shadow .15s}
+  .rl-v2 .rl-cour-c>h4{box-shadow:inset 0 4px 0 var(--bc);padding-top:15px}
+  .rl-v2 .rl-cour-c:hover{border-color:color-mix(in srgb,var(--bc) 60%,var(--line));box-shadow:0 6px 18px rgba(0,0,0,.10)}
+  .rl-v2 .rl-cour-c ul{padding:6px 8px 4px}
+  .rl-v2 .rl-cour li{padding:7px 6px;border-radius:8px;transition:background-color .12s}
+  .rl-v2 .rl-cour li+li{border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+  .rl-v2 .rl-cour li:hover{background:color-mix(in srgb,var(--brand) 7%,transparent);border-top-color:transparent}
+  .rl-v2 .rl-cour li:hover+li{border-top-color:transparent}
+  .rl-v2 .rl-cour li b{font-size:14px}
+  @media(prefers-reduced-motion:reduce){.rl-v2 .rl-cour-c,.rl-v2 .rl-cour li{transition:none}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>

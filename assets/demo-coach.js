@@ -50,6 +50,13 @@
     for(var w=0;w<5;w++) DB.poids.push({user_id:d.user_id,date:jourIso(debut+(w*7+2)*JOUR),kg:Math.round((depart+sens*w+(w%2?0.2:-0.1))*10)/10});
     DB.mensurations.push({id:k,user_id:d.user_id,date:jourIso(debut+3*JOUR),epaules:homme?112:98,poitrine:homme?100:90,taille:homme?86:72,hanches:homme?98:100,cuisse:homme?58:56,bras:homme?34:28});
   });
+  // une cliente d'EXEMPLE venue du Google Form (pas de compte) : diète validée + fiche de sa version -> bouton « Envoyer par mail »
+  if(DIETES[0]){ var gf=DIETES[0];
+    DB.programmes.push({id:9100,user_id:null,version:1,statut:'valide',menu:gf.menu,cible:gf.cible,
+      diagnostic:Object.assign({calcul:calculDemo(gf),pdf:{chemin:'p/9100.pdf',le:iso(now-JOUR),version:1}},gf.diagnostic||{}),
+      created_at:iso(now-2*JOUR),traite_at:iso(now-JOUR),traite_par:MOI.id,
+      client_externe:{id:'gf:lea-martin',source:'google_form',prenom:'Léa',nom:'Martin',sexe:'Femme',age:31,email:'lea.martin@exemple.fr',
+        horodateur_form:'30/09/2026 18:20:11',questionnaire:{'Quel est ton objectif principal ?':'Perte de poids'}}}); }
   // deux fils de messages : un client Formule Elysium (messagerie ouverte) et un ancien fil d'un client Odyssée
   // (lecture seule : la messagerie est réservée à la Formule Elysium depuis le 02/10)
   if(DB.profiles[0]){ var a=(DB.profiles.filter(function(p){ return p.formule==='f3'; })[0]||DB.profiles[0]).id, b=(DB.profiles[2]||DB.profiles[0]).id;
@@ -127,7 +134,11 @@
     from:function(t){ return new Req(t); }, rpc:rpc,
     channel:function(){ var c={on:function(){ return c; },subscribe:function(){ return c; }}; return c; },
     removeChannel:function(){},
-    storage:{from:function(){ return {createSignedUrl:function(){ return Promise.resolve({data:null,error:{message:'Maquette : pas de fichier PDF.'}}); }}; }},
+    // fiches : un PDF factice d'une page (la maquette n'a pas de vraies fiches) ; les autres stockages restent vides
+    storage:{from:function(b){ return {createSignedUrl:function(){ if(b!=='fiches') return Promise.resolve({data:null,error:{message:'Maquette : pas de fichier.'}});
+      var pdf='%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 420 595]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj\n'+
+        '4 0 obj<</Length 68>>stream\nBT /F1 18 Tf 40 520 Td (Fiche d exemple - maquette Elysium) Tj ET\nendstream endobj\n5 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF';
+      return Promise.resolve({data:{signedUrl:URL.createObjectURL(new Blob([pdf],{type:'application/pdf'}))},error:null}); }}; }},
     auth:{mfa:{getAuthenticatorAssuranceLevel:function(){ return Promise.resolve({data:{currentLevel:'aal2',nextLevel:'aal2'},error:null}); },
                listFactors:function(){ return Promise.resolve({data:{totp:[{id:'demo',status:'verified',friendly_name:'Maquette'}],all:[]},error:null}); },
                enroll:function(){ return Promise.resolve({data:null,error:{message:'Maquette'}}); },

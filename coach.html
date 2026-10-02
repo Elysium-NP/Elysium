@@ -3471,36 +3471,17 @@ var ED=(function(){
      depuis la boîte Elysium. Droit demandé : gmail.send seulement (« envoyer en votre nom » : la page ne lit ni la boîte ni
      les brouillons) + l'adresse du compte, pour dire d'où part le mail. L'ID client est public ; aucun secret ; le jeton
      reste en mémoire dans la page (≈ 1 h), jamais stocké. Règle de sécurité : _headers, chemins /coach* seulement.
-     ⚠️ MODE D'ESSAI (?gmail=1, retenu sur l'appareil ; ?gmail=0 pour l'éteindre) tant que le HTML d'origine du modèle des
-     coachs n'est pas branché : MAIL_HTML ci-dessous reprend LEUR texte mot pour mot, dans une mise en forme sobre provisoire. */
-  var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='', GMAIL_ON=false, gJeton=null, gDe='';
+     ⚠️ MODE D'ESSAI (?gmail=1, retenu sur l'appareil ; ?gmail=0 pour l'éteindre) tant que Dimitri n'a pas fait un envoi réel.
+     L'envoi n'est permis que depuis la boîte commune (GMAIL_BOITE) ; depuis un autre compte, seulement vers soi-même (essai). */
+  var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='elysium.np.pro@gmail.com', GMAIL_ON=false, gJeton=null, gDe='';
   try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')==='1'; }catch(e){}
-  var MAIL_PTS=['Toutes les informations annexes au programme sont détaillées directement dans le PDF joint.','Le respect du programme à la lettre est primordial pour optimiser les résultats.',
-    'Cette programmation est conçue pour être suivie pendant une durée maximale de 12 semaines.',
-    'N’hésitez pas à revenir vers nous avant ce délai si vous souhaitez refaire une programmation pour assurer la continuité de votre objectif, ou si celui-ci a évolué.',
-    'Gardez ou développez une activité physique régulière en complément de votre programme.','Nous attendons un retour régulier de votre évolution afin de suivre vos progrès et vos ressentis.',
-    'Si vous êtes satisfait de notre travail, n’hésitez pas à nous recommander autour de vous.'];
-  var MAIL_INSTA='https://www.instagram.com/elysium.nutrition.performance/';
-  var MAIL_TXT='Bonjour,\n\nNous avons le plaisir de vous transmettre votre programmation personnalisée Elysium Nutrition & Performance.\n\nVOTRE PROGRAMME EST PRÊT\n\n'+
-    'Vous trouverez votre document personnalisé en pièce jointe de cet email, au format PDF.\n\nCette programmation a été construite à partir des informations fournies dans votre questionnaire afin de correspondre au mieux à votre profil, vos contraintes et vos objectifs.\n\n'+
-    'AVANT DE COMMENCER\n\n'+MAIL_PTS.map(function(p){ return '✓ '+p; }).join('\n')+'\n\nRetrouvez-nous sur Instagram :\n\n@elysium.nutrition.performance\n'+MAIL_INSTA+'\n\nPARTENARIAT PROZIS\n\n'+
-    'Nous sommes également partenaires Prozis. Sur www.prozis.com ou directement via l’application Prozis, vous pourrez bénéficier de -10% ainsi que de cadeaux (selon le montant de votre commande) avec le code :\n\nVOTRE CODE PROMO\nELYSIUM\n\n'+
-    'UNE QUESTION ?\n\nSi un point du programme n’est pas clair ou si vous avez besoin d’une précision, n’hésitez pas à nous contacter sur Instagram.\n\nNous vous remercions sincèrement pour votre confiance.\n\n'+
-    'Nous vous souhaitons une excellente réussite dans l’atteinte de vos objectifs.\n\nSportivement,\n\nDamien & Yoann\n\nElysium Nutrition & Performance\n\nELYSIUM NUTRITION & PERFORMANCE\n© 2026 — Tous droits réservés\n';
-  var MAIL_HTML=(function(){ var B='#16324f', T='font:700 13px Arial,sans-serif;letter-spacing:.14em;color:'+B+';margin:26px 0 10px', P='margin:0 0 14px';
-    return '<div style="background:#eef2f7;padding:24px 12px"><div style="max-width:500px;margin:0 auto;background:#ffffff;border-radius:12px;padding:26px 24px;font:15px/1.6 Arial,sans-serif;color:#3b4350">'+
-      '<p style="'+P+'">Bonjour,</p><p style="'+P+'">Nous avons le plaisir de vous transmettre votre programmation personnalisée <b style="color:'+B+'">Elysium Nutrition &amp; Performance</b>.</p>'+
-      '<p style="'+T+'">VOTRE PROGRAMME EST PRÊT</p><p style="'+P+'">Vous trouverez votre document personnalisé en pièce jointe de cet email, au format PDF.</p>'+
-      '<p style="'+P+'">Cette programmation a été construite à partir des informations fournies dans votre questionnaire afin de correspondre au mieux à votre profil, vos contraintes et vos objectifs.</p>'+
-      '<p style="'+T+'">AVANT DE COMMENCER</p>'+MAIL_PTS.map(function(p){ return '<p style="margin:0 0 8px">✓ '+p+'</p>'; }).join('')+
-      '<p style="margin:18px 0 6px">Retrouvez-nous sur Instagram :</p><p style="'+P+'"><a href="'+MAIL_INSTA+'" style="color:'+B+';font-weight:700">@elysium.nutrition.performance</a></p>'+
-      '<p style="'+P+'"><a href="'+MAIL_INSTA+'" style="display:inline-block;background:'+B+';color:#ffffff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:999px">Nous suivre sur Instagram</a></p>'+
-      '<p style="'+T+'">PARTENARIAT PROZIS</p><p style="'+P+'">Nous sommes également partenaires Prozis. Sur <a href="https://www.prozis.com" style="color:'+B+'">www.prozis.com</a> ou directement via l’application Prozis, vous pourrez bénéficier de -10% ainsi que de cadeaux (selon le montant de votre commande) avec le code :</p>'+
-      '<div style="border:1px solid #c9d6e6;border-radius:10px;padding:14px;text-align:center;margin:0 0 14px"><div style="font:700 11px Arial,sans-serif;letter-spacing:.14em;color:#6b7686">VOTRE CODE PROMO</div><div style="font:700 22px Arial,sans-serif;letter-spacing:.12em;color:'+B+';margin-top:6px">ELYSIUM</div></div>'+
-      '<p style="'+T+'">UNE QUESTION ?</p><p style="'+P+'">Si un point du programme n’est pas clair ou si vous avez besoin d’une précision, n’hésitez pas à nous contacter sur Instagram.</p>'+
-      '<p style="'+P+'">Nous vous remercions sincèrement pour votre confiance.</p><p style="'+P+'">Nous vous souhaitons une excellente réussite dans l’atteinte de vos objectifs.</p>'+
-      '<p style="'+P+'">Sportivement,</p><p style="'+P+'"><b style="color:'+B+'">Damien &amp; Yoann</b><br>Elysium Nutrition &amp; Performance</p>'+
-      '<p style="margin:22px 0 0;padding-top:14px;border-top:1px solid #dfe6ee;font:11px Arial,sans-serif;letter-spacing:.08em;color:#8a94a3;text-align:center">ELYSIUM NUTRITION &amp; PERFORMANCE<br>© 2026 — Tous droits réservés</p></div></div>'; })();
+  // LE MODÈLE = celui des coachs, mot pour mot et dans LEUR mise en forme : corps HTML et version texte repris du mail
+  // « Votre programmation est prête » envoyé le 02/10 depuis leur boîte (assets/mail-programmation.html / .txt).
+  // Identique pour tous les clients (ni nom ni prénom). Pour le faire évoluer : remplacer ces deux fichiers, rien d'autre.
+  var MAIL_HTML='', MAIL_TXT='', gMod=null;
+  function gmailModele(){ if(!gMod) gMod=Promise.all(['assets/mail-programmation.html?v=1','assets/mail-programmation.txt?v=1'].map(function(u){
+      return fetch(u).then(function(r){ if(!r.ok) throw new Error('modele'); return r.text(); }); })).then(function(L){ MAIL_HTML=L[0]; MAIL_TXT=L[1]; }).catch(function(e){ gMod=null; throw e; });
+    return gMod; }
   var gScr=null;
   function gmailScript(){ if(!gScr) gScr=new Promise(function(ok,ko){ var x=document.createElement('script'); x.src='https://accounts.google.com/gsi/client'; x.async=true;
       x.onload=function(){ ok(); }; x.onerror=function(){ gScr=null; ko(new Error('script')); }; document.head.appendChild(x); }); return gScr; }
@@ -3522,10 +3503,13 @@ var ED=(function(){
       '--'+L,'Content-Type: application/pdf; name="'+motMime(nomF)+'"','Content-Disposition: attachment; filename="'+motMime(nomF)+'"; filename*=UTF-8\'\''+encodeURIComponent(nomF),'Content-Transfer-Encoding: base64','',b64(octetsPdf),
       '--'+L+'--',''].join(n); }
   // 1er clic : connexion Google, puis le mail tel qu'il partira ; rien n'est encore envoyé
-  function gmailPreparer(a,d,dire){ dire('Connexion à Google…');
+  function gmailPreparer(a,d,dire){ if(!MAIL_HTML){ dire('Le modèle du mail n’est pas encore chargé : réessaie dans un instant.'); gmailModele().catch(function(){}); return; }
+    dire('Connexion à Google…');
     gmailJeton().then(function(j){ gJeton=j; return fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+j}}).then(function(r){ return r.ok?r.json():{}; }); })
-      .then(function(u){ gDe=String(u.email||''); var autre=GMAIL_BOITE&&gDe.toLowerCase()!==GMAIL_BOITE.toLowerCase(), z=$('mail-ap'); dire('');
-        z.hidden=false; z.innerHTML='<p class="dlg-de'+(autre?' ko':'')+'">Le mail partira de <b>'+esc(gDe||'ton compte Google')+'</b>'+(autre?' : ce n’est pas la boîte Elysium ('+esc(GMAIL_BOITE)+'). Reconnecte-toi avec elle.':'')+' vers <b>'+esc(a)+'</b>.</p>'+
+      .then(function(u){ gDe=String(u.email||''); var autre=!gDe||gDe.toLowerCase()!==GMAIL_BOITE.toLowerCase(), essai=autre&&!!gDe&&a.toLowerCase()===gDe.toLowerCase(), z=$('mail-ap'); dire('');
+        autre=autre&&!essai;                        // un autre compte ne peut écrire qu'à lui-même (essai) : jamais à un client
+        z.hidden=false; z.innerHTML='<p class="dlg-de'+(autre?' ko':'')+'">'+(autre?'Tu es connecté avec <b>'+esc(gDe||'un compte inconnu')+'</b> : ce n’est pas la boîte Elysium ('+esc(GMAIL_BOITE)+'). Clique « Changer de compte » et choisis-la.'
+            :'Le mail partira de <b>'+esc(gDe)+'</b> vers <b>'+esc(a)+'</b>.'+(essai?' Essai : un autre compte que la boîte Elysium ne peut écrire qu’à lui-même.':''))+'</p>'+
           '<div class="dlg-ap">'+MAIL_HTML+'</div>'+
           '<div class="dlg-b" style="margin-top:12px"><button type="button" class="db ok" data-m="gmail-envoyer"'+(autre?' disabled':'')+'>Envoyer le mail maintenant</button><button type="button" class="db" data-m="gmail">Changer de compte</button></div>';
         $('mail-g').hidden=true; z.scrollIntoView({block:'nearest'}); })
@@ -3558,7 +3542,7 @@ var ED=(function(){
         '<button type="button" class="db rec" data-m="mail">Ouvrir mon mail</button><button type="button" class="db" data-m="copier">Copier l’adresse</button><button type="button" class="db" data-m="fermer">Fermer</button></div>'+
         '<p class="dlg-n" id="mail-msg" aria-live="polite"></p>');
     d.showModal(); if(!pret) return;
-    if(GMAIL_ON) gmailScript().catch(function(){});   // chargé d'avance : la fenêtre Google doit s'ouvrir dans le geste du clic
+    if(GMAIL_ON){ gmailScript().catch(function(){}); gmailModele().catch(function(){}); }   // chargé d'avance : la fenêtre Google doit s'ouvrir dans le geste du clic
     // la fiche est chargée tout de suite : le partage doit partir dans le geste du clic (sinon le navigateur le refuse)
     sb.storage.from('fiches').createSignedUrl(pf.chemin,300).then(function(r){ if(r.error||!r.data) throw 0; return fetch(r.data.signedUrl); })
       .then(function(r){ if(!r.ok) throw 0; return r.blob(); }).then(function(bl){ if(!d.open) return;

@@ -3497,11 +3497,12 @@ var ED=(function(){
      depuis la boîte Elysium. Droit demandé : gmail.send seulement (« envoyer en votre nom » : la page ne lit ni la boîte ni
      les brouillons) + l'adresse du compte, pour dire d'où part le mail. L'ID client est public ; aucun secret ; le jeton
      reste en mémoire dans la page (≈ 1 h), jamais stocké. Règle de sécurité : _headers, chemins /coach* seulement.
-     ⚠️ REVENU EN MODE D'ESSAI le 02/10 à 20:30 (?gmail=1, retenu sur l'appareil ; ?gmail=0 l'éteint) : les deux premiers envois réels
-     n'affichaient pas de pièce jointe dans Gmail. À rouvrir aux coachs seulement après un envoi où le PDF est bien visible et s'ouvre.
-     L'envoi n'est permis que depuis la boîte commune (GMAIL_BOITE) ; depuis un autre compte, seulement vers soi-même (essai). */
+     OUVERT AUX COACHS le 02/10 à 23:20, après un envoi réel complet fait par Dimitri (boîte commune -> son adresse) : fenêtre
+     « Envoyé », mail reçu avec son PDF, trace notée. Jamais dans la maquette. ?gmail=0 l'éteint sur un appareil, ?gmail=1 le rallume.
+     Trois défauts corrigés avant ça, à ne pas refaire : séparateurs du message qui se préfixaient, connexion Google lancée deux
+     fois qui effaçait le droit d'envoi, et adresse /upload/ de Gmail dont la réponse est illisible par un site. */
   var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='elysium.np.pro@gmail.com', GMAIL_ON=false, gJeton=null, gDe='', gTour=0;
-  try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')==='1'; }catch(e){}
+  try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')!=='0'; }catch(e){ GMAIL_ON=!window.ELY_MAQUETTE_COACH; }
   // LE MODÈLE = celui des coachs, mot pour mot et dans LEUR mise en forme : corps HTML et version texte repris du mail
   // « Votre programmation est prête » envoyé le 02/10 depuis leur boîte (assets/mail-programmation-html.txt et mail-programmation.txt).
   // Identique pour tous les clients (ni nom ni prénom). Pour le faire évoluer : remplacer ces deux fichiers, rien d'autre.

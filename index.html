@@ -200,7 +200,11 @@
   .tag.sig{background:var(--bleu);border-color:var(--bleu);color:#0a0d12}
   .plate h3{font-size:21px;margin:10px 0 6px}
   .plate p{margin:0;font-size:14px;color:var(--ink2)}
-  .plate .mac{margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
+  /* macros des cartes de plat : 4 valeurs bien séparées (le style commun des repas ne couvre que .meal-in) */
+  .plate .mac{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:12px;padding-top:10px;border-top:1px solid var(--rule);font:600 13px/1.2 var(--texte);font-variant-numeric:tabular-nums;color:var(--ink)}
+  .plate .mac span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .plate .mac span::before{content:"";flex:none;width:9px;height:9px;border-radius:2px;background:var(--c)}
+  .plate .mac .p{--c:#cc0000} .plate .mac .g{--c:#3d85c6} .plate .mac .l{--c:#f1c232}
   .plate .kc{margin-left:auto;color:var(--ink)}
   .plate .kc::before{display:none}
   .fine{font-size:13px;color:var(--mute);margin-top:18px}

@@ -3476,10 +3476,10 @@ var ED=(function(){
   var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='elysium.np.pro@gmail.com', GMAIL_ON=false, gJeton=null, gDe='';
   try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')==='1'; }catch(e){}
   // LE MODÈLE = celui des coachs, mot pour mot et dans LEUR mise en forme : corps HTML et version texte repris du mail
-  // « Votre programmation est prête » envoyé le 02/10 depuis leur boîte (assets/mail-programmation.html / .txt).
+  // « Votre programmation est prête » envoyé le 02/10 depuis leur boîte (assets/mail-programmation-html.txt et mail-programmation.txt).
   // Identique pour tous les clients (ni nom ni prénom). Pour le faire évoluer : remplacer ces deux fichiers, rien d'autre.
   var MAIL_HTML='', MAIL_TXT='', gMod=null;
-  function gmailModele(){ if(!gMod) gMod=Promise.all(['assets/mail-programmation.html?v=1','assets/mail-programmation.txt?v=1'].map(function(u){
+  function gmailModele(){ if(!gMod) gMod=Promise.all(['assets/mail-programmation-html.txt?v=1','assets/mail-programmation.txt?v=1'].map(function(u){
       return fetch(u).then(function(r){ if(!r.ok) throw new Error('modele'); return r.text(); }); })).then(function(L){ MAIL_HTML=L[0]; MAIL_TXT=L[1]; }).catch(function(e){ gMod=null; throw e; });
     return gMod; }
   var gScr=null;

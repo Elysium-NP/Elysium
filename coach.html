@@ -1324,6 +1324,11 @@
   .rl-calc-g small{flex-basis:100%;margin-bottom:4px;font:600 10.5px/1.2 var(--texte);letter-spacing:.08em;text-transform:uppercase;color:var(--steel)}
   .rl-calc-g b{font:700 17px/1 var(--texte);color:var(--ice);font-variant-numeric:tabular-nums}
   .rl-calc-g em{font:500 12px/1 var(--texte);font-style:normal;color:var(--gris)}
+
+  /* écarts en grammes (02/10) : légende à deux familles, chiffre un peu plus serré pour « +87 kcal » */
+  .rl-ec-leg i{font-style:normal;font-weight:600;color:var(--gris);margin-left:6px}
+  .rl-ec-leg i:first-child{margin-left:0}
+  .rl-ecarts td b{font-size:15px;white-space:nowrap}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1802,13 +1807,16 @@ var REL=(function(){
   // (vert : ±5 % · jaune : jusqu'à ±10 % · rouge : au-delà)
   function ecartsTable(R){ var m=R.menu||{}, c=m.cible||{}, J=(m.jours||[]).filter(function(j){ return !j.off; });
     var L=[['kcal','Calories','k'],['proteines','Protéines','p'],['glucides','Glucides','g'],['lipides','Lipides','l']];
-    return '<div class="rl-ecarts"><header class="rl-ec-tete"><div><h4>Macros jour par jour</h4><p>en % de la cible, grammes dessous</p></div>'+
-      '<p class="rl-ec-leg"><span class="ok">±5 %</span><span class="av">jusqu’à ±10 %</span><span class="ko">au-delà</span></p></header><table><thead><tr><th></th><th class="cib">Cible</th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
+    // Damien 02/10 : l'écart s'écrit en GRAMMES (leur règle de finition = ±5 g sur P, G et L), plus en % ; la ligne des calories en kcal.
+    // Couleurs : P / G / L vert jusqu'à ±5 g, jaune jusqu'à ±10 g, rouge au-delà ; calories comme partout ailleurs (±5 %, ±10 %).
+    return '<div class="rl-ecarts"><header class="rl-ec-tete"><div><h4>Macros jour par jour</h4><p>écart à la cible, valeur servie dessous</p></div>'+
+      '<p class="rl-ec-leg"><i>P · G · L</i><span class="ok">±5 g</span><span class="av">jusqu’à ±10 g</span><span class="ko">au-delà</span><i>Calories</i><span class="ok">±5 %</span><span class="av">±10 %</span></p></header><table><thead><tr><th></th><th class="cib">Cible</th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
       L.map(function(l){ var u=l[0]==='kcal'?' kcal':' g';
         return '<tr><th><i class="mac '+l[2]+'"></i>'+l[1]+'</th><td class="cib"><b>'+g0(c[l[0]])+'</b><small>'+u.trim()+'</small></td>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
         if(!isFinite(x)) return '<td>—</td>';
-        var a=Math.abs(x), cl=a<=TOL?'ok':a<=0.10?'av':'ko';
-        return '<td class="'+cl+'"><b>'+Math.round(100+x*100)+' %</b><small>'+g0(s[l[0]])+u+'</small><i class="gj"><i style="left:'+Math.max(3,Math.min(97,50+x/0.15*50)).toFixed(1)+'%"></i></i></td>'; }).join('')+'</tr>'; }).join('')+
+        var kc=l[0]==='kcal', d=Math.round(s[l[0]])-Math.round(c[l[0]]), a=kc?Math.abs(x):Math.abs(d), cl=kc?(a<=TOL?'ok':a<=0.10?'av':'ko'):(a<=5?'ok':a<=10?'av':'ko'),
+            pos=kc?50+x/0.15*50:50+d/15*50;            // jauge : ±15 % (calories) ou ±15 g (P, G, L) ; la zone verte du milieu = ±5
+        return '<td class="'+cl+'"><b>'+(d>0?'+':d<0?'−':'')+g0(Math.abs(d))+u+'</b><small>'+g0(s[l[0]])+u+'</small><i class="gj"><i style="left:'+Math.max(3,Math.min(97,pos)).toFixed(1)+'%"></i></i></td>'; }).join('')+'</tr>'; }).join('')+
       '</tbody></table></div>'; }
   function pct(x){ var s=n(x*100,1); return (x>0&&s!=='0'?'+':'')+s+' %'; }
   function g0(v){ return n(Math.round(+v||0)); }

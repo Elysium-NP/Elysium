@@ -134,11 +134,11 @@
     from:function(t){ return new Req(t); }, rpc:rpc,
     channel:function(){ var c={on:function(){ return c; },subscribe:function(){ return c; }}; return c; },
     removeChannel:function(){},
-    // fiches : un PDF factice d'une page (la maquette n'a pas de vraies fiches) ; les autres stockages restent vides
-    storage:{from:function(b){ return {createSignedUrl:function(){ if(b!=='fiches') return Promise.resolve({data:null,error:{message:'Maquette : pas de fichier.'}});
-      var pdf='%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 420 595]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj\n'+
-        '4 0 obj<</Length 68>>stream\nBT /F1 18 Tf 40 520 Td (Fiche d exemple - maquette Elysium) Tj ET\nendstream endobj\n5 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF';
-      return Promise.resolve({data:{signedUrl:URL.createObjectURL(new Blob([pdf],{type:'application/pdf'}))},error:null}); }}; }},
+    // fiches : un vrai petit PDF d'exemple servi par le site (la sécurité du site interdit de charger un fichier fabriqué
+    // dans le navigateur) ; les autres stockages restent vides
+    storage:{from:function(b){ return {createSignedUrl:function(){ return Promise.resolve(b==='fiches'
+      ? {data:{signedUrl:new URL('assets/fiche-maquette.pdf',location.origin+'/').href},error:null}
+      : {data:null,error:{message:'Maquette : pas de fichier.'}}); }}; }},
     auth:{mfa:{getAuthenticatorAssuranceLevel:function(){ return Promise.resolve({data:{currentLevel:'aal2',nextLevel:'aal2'},error:null}); },
                listFactors:function(){ return Promise.resolve({data:{totp:[{id:'demo',status:'verified',friendly_name:'Maquette'}],all:[]},error:null}); },
                enroll:function(){ return Promise.resolve({data:null,error:{message:'Maquette'}}); },

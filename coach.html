@@ -1108,7 +1108,7 @@
   /* cible du jour : un cadre, 4 chiffres séparés par un filet, un trait de couleur par macro */
   .rl-cible{display:block;margin-top:14px}
   .rl-cible .rl-cl{display:block;margin:0 0 6px}
-  .rl-cib4{width:0;min-width:max(100%,440px);box-sizing:border-box;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border:1px solid var(--line);border-radius:14px;background:var(--void);overflow:hidden}
+  .rl-cib4{width:0;min-width:max(100%,480px);box-sizing:border-box;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border:1px solid var(--line);border-radius:14px;background:var(--void);overflow:hidden}
   .rl-cib4>div{--m:var(--brand);display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;padding:10px 14px 11px}
   .rl-cib4>div+div{border-left:1px solid var(--line)}
   .rl-cib4 small::before{content:"";display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:50%;background:var(--m);vertical-align:0}
@@ -1329,6 +1329,10 @@
   .rl-ec-leg i{font-style:normal;font-weight:600;color:var(--gris);margin-left:6px}
   .rl-ec-leg i:first-child{margin-left:0}
   .rl-ecarts td b{font-size:15px;white-space:nowrap}
+
+  /* répartition de la cible en % : pastille à côté des grammes */
+  .rl-cib4 u{margin-left:auto;padding:3px 7px;border-radius:999px;text-decoration:none;font:700 11.5px/1.2 var(--texte);color:var(--ice);background:color-mix(in srgb,var(--m) 22%,transparent);font-variant-numeric:tabular-nums;white-space:nowrap}
+  @media(max-width:560px){.rl-cib4{min-width:100%}}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1805,14 +1809,21 @@ var REL=(function(){
   function ecart(v,c){ return c?(v-c)/c:NaN; }
   // tableau lisible d'un coup d'œil : un jour par colonne, une macro par ligne, le % de la cible coloré
   // (vert : ±5 % · jaune : jusqu'à ±10 % · rouge : au-delà)
+  // RÉPARTITION DE LA CIBLE EN % (Damien 02/10) : énergie de chaque macro (P × 4, G × 4, L × 9) rapportée à la SOMME des trois
+  // (et non à cible.kcal, que les arrondis font différer) ; arrondi au plus fort reste pour que le total fasse toujours 100 %.
+  function repartition(c){ c=c||{}; var e={proteines:4*(+c.proteines||0),glucides:4*(+c.glucides||0),lipides:9*(+c.lipides||0)}, t=e.proteines+e.glucides+e.lipides;
+    if(!(t>0)) return null; var K=['proteines','glucides','lipides'], r={}, reste=100;
+    K.forEach(function(k){ r[k]=Math.floor(e[k]/t*100); reste-=r[k]; });
+    K.slice().sort(function(a,b){ return (e[b]/t*100-r[b])-(e[a]/t*100-r[a]); }).slice(0,reste).forEach(function(k){ r[k]++; });
+    return r; }
   function ecartsTable(R){ var m=R.menu||{}, c=m.cible||{}, J=(m.jours||[]).filter(function(j){ return !j.off; });
-    var L=[['kcal','Calories','k'],['proteines','Protéines','p'],['glucides','Glucides','g'],['lipides','Lipides','l']];
+    var L=[['kcal','Calories','k'],['proteines','Protéines','p'],['glucides','Glucides','g'],['lipides','Lipides','l']], RP=repartition(c);
     // Damien 02/10 : l'écart s'écrit en GRAMMES (leur règle de finition = ±5 g sur P, G et L), plus en % ; la ligne des calories en kcal.
     // Couleurs : P / G / L vert jusqu'à ±5 g, jaune jusqu'à ±10 g, rouge au-delà ; calories comme partout ailleurs (±5 %, ±10 %).
     return '<div class="rl-ecarts"><header class="rl-ec-tete"><div><h4>Macros jour par jour</h4><p>écart à la cible, valeur servie dessous</p></div>'+
       '<p class="rl-ec-leg"><i>P · G · L</i><span class="ok">±5 g</span><span class="av">jusqu’à ±10 g</span><span class="ko">au-delà</span><i>Calories</i><span class="ok">±5 %</span><span class="av">±10 %</span></p></header><table><thead><tr><th></th><th class="cib">Cible</th>'+J.map(function(j){ return '<th>J'+e(j.jour)+'</th>'; }).join('')+'</tr></thead><tbody>'+
       L.map(function(l){ var u=l[0]==='kcal'?' kcal':' g';
-        return '<tr><th><i class="mac '+l[2]+'"></i>'+l[1]+'</th><td class="cib"><b>'+g0(c[l[0]])+'</b><small>'+u.trim()+'</small></td>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
+        return '<tr><th><i class="mac '+l[2]+'"></i>'+l[1]+'</th><td class="cib"><b>'+g0(c[l[0]])+'</b><small>'+u.trim()+(RP&&RP[l[0]]!=null?' · '+RP[l[0]]+' %':'')+'</small></td>'+J.map(function(j){ var s=totJour(j), x=ecart(s[l[0]],c[l[0]]);
         if(!isFinite(x)) return '<td>—</td>';
         var kc=l[0]==='kcal', d=Math.round(s[l[0]])-Math.round(c[l[0]]), a=kc?Math.abs(x):Math.abs(d), cl=kc?(a<=TOL?'ok':a<=0.10?'av':'ko'):(a<=5?'ok':a<=10?'av':'ko'),
             pos=kc?50+x/0.15*50:50+d/15*50;            // jauge : ±15 % (calories) ou ±15 g (P, G, L) ; la zone verte du milieu = ±5
@@ -1884,7 +1895,7 @@ var REL=(function(){
     // cible du jour : 4 chiffres côte à côte dans un seul cadre, chacun avec sa couleur de macro (celles du PDF)
     h+='<div class="rl-cible"><span class="rl-cl">Cible du jour</span><div class="rl-cib4">'+
       '<div class="k"><small>Calories</small><b>'+g0(c.kcal)+'</b><em>kcal</em></div>'+
-      MAC.slice(1).map(function(k){ return '<div class="'+k[2]+'"><small>'+k[1]+'</small><b>'+g0(c[k[0]])+'</b><em>g</em></div>'; }).join('')+'</div></div></div>'+
+      MAC.slice(1).map(function(k){ var rp=repartition(c); return '<div class="'+k[2]+'"><small>'+k[1]+'</small><b>'+g0(c[k[0]])+'</b><em>g</em>'+(rp?'<u title="Part des calories de la cible">'+rp[k[0]]+' %</u>':'')+'</div>'; }).join('')+'</div></div></div>'+
       '<div class="rl-sante" aria-label="Carte de santé de la diète"><div class="rl-sante-t">Contrôles de la diète</div>'+sante(R).map(function(v){
         return '<button type="button" class="vy '+v.et+'" data-act="va" data-va="'+v.va+'"><span class="vy-i">'+ico(IC[v.et])+'</span><span class="vy-t"><small>'+v.k+'</small><b>'+v.v+'</b></span></button>'; }).join('')+'</div></div>';
     if(R.note) h+='<div class="rl-note j">Correction déjà demandée par <b>'+e(R.note.par)+'</b> : « '+e(R.note.texte)+' »</div>';

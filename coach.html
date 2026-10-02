@@ -3573,12 +3573,20 @@ var ED=(function(){
   function gmailEnvoyer(a,d,dire){ var bt=d.querySelector('[data-m="gmail-envoyer"]'); if(!bt||bt.disabled) return;
     if(!gJeton){ $('mail-ap').hidden=true; $('mail-g').hidden=false; dire('La connexion à Google n’est plus active : rien n’a été envoyé. Clique à nouveau sur « Envoyer depuis Gmail ».'); return; }
     var lib=bt.innerHTML; bt.disabled=true; bt.textContent='Envoi en cours…'; dire('Envoi en cours, ne ferme pas la fenêtre…');
-    mailF.arrayBuffer().then(function(buf){ return fetch('https://gmail.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=media',
-        {method:'POST',headers:{Authorization:'Bearer '+gJeton,'Content-Type':'message/rfc822'},body:gmailMessage(a,new Uint8Array(buf),mailF.name)}); })
-      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok||!j.id) throw new Error((j.error&&j.error.message)||('HTTP '+r.status)); return j; }); })
+    // ⚠️ Adresse NORMALE de l'API (JSON, message en base64url), pas celle des gros envois (/upload/…) : cette dernière ne renvoie pas
+    // l'en-tête qui autorise le site à lire sa réponse. Le mail partait, le navigateur cachait la réponse, et la page disait
+    // « non envoyé » à tort (essai de Dimitri, 02/10 soir : mail reçu avec son PDF, page en erreur) -> risque de double envoi.
+    var parti=false;
+    mailF.arrayBuffer().then(function(buf){ var brut=btoa(gmailMessage(a,new Uint8Array(buf),mailF.name)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); parti=true;
+        return fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send',{method:'POST',headers:{Authorization:'Bearer '+gJeton,'Content-Type':'application/json'},body:JSON.stringify({raw:brut})}); })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok||!j.id){ var er=new Error((j.error&&j.error.message)||('HTTP '+r.status)); er.refus=true; throw er; } return j; }); })
       .then(function(){ bt.textContent='Envoyé'; var z=$('mail-ap').querySelector('.dlg-de'); if(z){ z.className='dlg-de ok'; z.innerHTML='Mail envoyé à <b>'+esc(a)+'</b> depuis <b>'+esc(gDe)+'</b>, le '+new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'. Il est dans les messages envoyés de la boîte.'; }
         dire(''); mailNoter(a,dire); })
-      .catch(function(e){ bt.disabled=false; bt.innerHTML=lib; dire('Mail NON envoyé ('+String((e&&e.message)||'erreur').slice(0,120)+'). Tu peux réessayer, ou passer par « Autres moyens d’envoyer ».'); }); }
+      .catch(function(e){ var m=String((e&&e.message)||'erreur').slice(0,120);
+        // Gmail a répondu « non » : rien n'est parti, on peut recommencer. Aucune réponse lisible (réseau coupé…) : on ne SAIT PAS,
+        // et on ne laisse pas renvoyer à l'aveugle (un client ne doit pas recevoir deux fois son mail).
+        if((e&&e.refus)||!parti){ bt.disabled=false; bt.innerHTML=lib; dire('Mail NON envoyé ('+m+'). Tu peux réessayer, ou passer par « Autres moyens d’envoyer ».'); }
+        else{ bt.textContent='Résultat inconnu'; dire('Pas de réponse de Gmail ('+m+') : le mail est PEUT-ÊTRE parti. Regarde les messages envoyés de la boîte Elysium AVANT de recommencer.'); } }); }
 
   function mailFiche(){ var R=RL.R, pf=(R.diagnostic||{}).pdf, pret=!!(pf&&pf.chemin&&+pf.version===+R.version&&R.etat==='valide'), ce=(cur&&cur.client_externe)||{},
         nomF='Programmation alimentaire - '+([ce.nom,ce.prenom].filter(Boolean).join(' ')||R.nom||'client')+'.pdf', d=$('dlg-mail');

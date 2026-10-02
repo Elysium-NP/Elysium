@@ -3480,7 +3480,7 @@ var ED=(function(){
   function rlDec(){ var d=$('rl-dec'), t=$('rl-dec-top'), s=suivante(), sn=s&&((s.prenom||'')+' '+(s.nom||'')).trim(), h;
     d.className='rl-dec rl-dec-fin'+(RL.S?' ed-dec':'');
     if(!RL.S&&RL.R.xid&&RL.R.etat==='valide'&&!RL.R.archive)          // Google Form : rien n'est « envoyé » (pas de compte) ; la fiche PDF viendra ici
-      h='<div class="rl-etat"><b>Validée</b> · lecture seule. '+(function(L){ return L.length?'<span class="rl-pt-ok">PDF envoyé par mail le '+esc(quand(new Date(L[L.length-1].le)))+'</span>.':'Client sans compte : son PDF part par mail.'; })(mailEnvois(RL.R))+'</div><div class="in"><button type="button" class="db" data-act="file">← Retour à la file</button>'+
+      h='<div class="rl-etat"><b>Validée</b> · lecture seule. '+(function(L){ return L.length?'<span class="rl-pt-ok">PDF envoyé par mail le '+esc(quand(new Date(L[L.length-1].le)))+' à '+esc(L[L.length-1].a||'?')+'</span>.':'Client sans compte : son PDF part par mail.'; })(mailEnvois(RL.R))+'</div><div class="in"><button type="button" class="db" data-act="file">← Retour à la file</button>'+
         '<button type="button" class="db" data-act="pdf">Aperçu de la fiche PDF</button><button type="button" class="db rec" data-act="mail">Envoyer par mail</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(sn)+' →</button>':'')+'</div>';
     else h=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:sn,attente:(RL.co.liste||[]).length});
     d.innerHTML='<h4 class="rl-h">Ta décision</h4>'+h;

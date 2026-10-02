@@ -3487,7 +3487,8 @@ var ED=(function(){
       x.onload=function(){ ok(); }; x.onerror=function(){ gScr=null; ko(new Error('script')); }; document.head.appendChild(x); }); return gScr; }
   function gmailJeton(){ return gmailScript().then(function(){ return new Promise(function(ok,ko){
       var SC='https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/userinfo.email';
-      google.accounts.oauth2.initTokenClient({client_id:GMAIL_ID,scope:SC,hint:GMAIL_BOITE||undefined,
+      google.accounts.oauth2.initTokenClient({client_id:GMAIL_ID,scope:SC,prompt:'select_account',   // pas de compte présélectionné : Google affiche le choix (une présélection d'un autre compte que celui ouvert faisait échouer la fenêtre)
+        
         callback:function(r){ if(r&&r.access_token&&google.accounts.oauth2.hasGrantedAllScopes(r,'https://www.googleapis.com/auth/gmail.send')) ok(r.access_token); else ko(new Error(r&&r.error?r.error:'refus')); },
         error_callback:function(e){ ko(new Error(e&&e.type?e.type:'ferme')); }}).requestAccessToken(); }); }); }
   function b64(octets){ var t='', i; for(i=0;i<octets.length;i+=0x8000) t+=String.fromCharCode.apply(null,octets.subarray(i,i+0x8000)); return btoa(t).replace(/(.{76})/g,'$1\r\n'); }

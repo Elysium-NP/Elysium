@@ -23,9 +23,14 @@
     obj:'Quel est ton objectif principal ?', refus:'Des aliments que tu refuses de manger / que tu n’aimes pas ou des restrictions religieuses\nou éthiques ? (Intolérances, écœurements, goûts...)\n(Attention à ne rien oublier, aucune modification ne sera faite une fois la programmation terminée)',
     all:'Allergies, intolérances ou pathologies à signaler ?', reg:'As-tu un régime particulier ? (choix multiple possible)',
     cons:'Y a-t-il des aliments que tu souhaites absolument conserver dans ton alimentation ?'};
+  // données de calcul d'EXEMPLE (le moteur déposera les vraies dans diagnostic.calcul) : cohérentes avec la cible de la diète
+  function calculDemo(d){ var kc=+(d.cible||{}).kcal||2200, p=d.profil_maquette||{}, h=/^h/i.test(p.sexe||''), poids=h?84:68, aj=/masse/i.test(JSON.stringify(d.questionnaire_cle||{}))?10:-15,
+        tdee=Math.round(kc/(1+aj/100)), pal=1.55;
+    return {pal:pal,tmb:Math.round(tdee/pal),tdee:tdee,ajustement_pct:aj,ajustement_kcal:kc-tdee,prot_g_kg:Math.round(((d.cible||{}).proteines||0)/(poids-2)*100)/100,
+      lip_g_kg:Math.round(((d.cible||{}).lipides||0)/(poids-2)*100)/100,poids:poids,poids_forme:poids-2,taille:h?178:165,age:parseInt(String(p.age_approx||'35'),10)||35}; }
   var vus={}, k=0;
   DIETES.forEach(function(d){
-    DB.programmes.push({id:d.id,user_id:d.user_id,version:d.version,statut:d.statut,menu:d.menu,cible:d.cible,diagnostic:d.diagnostic||{},
+    DB.programmes.push({id:d.id,user_id:d.user_id,version:d.version,statut:d.statut,menu:d.menu,cible:d.cible,diagnostic:Object.assign({calcul:calculDemo(d)},d.diagnostic||{}),
       created_at:d.created_at,traite_at:d.traite_at||null,traite_par:d.traite_at?MOI.id:null,client_externe:null});
     if(vus[d.user_id]) return; vus[d.user_id]=1; k++;
     var p=d.profil_maquette||{}, nm=String(p.prenom||'Client').split(' '), homme=/^h/i.test(p.sexe||''), age=parseInt(String(p.age_approx||'35'),10)+2,

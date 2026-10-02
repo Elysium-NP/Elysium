@@ -1352,7 +1352,7 @@
   .dlg-res input:focus{outline:0;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
   .dlg-n{margin:6px 0 0;font-size:13px;color:var(--gris)}
   .dlg-ko{margin:0 0 12px;padding:12px 14px;border:1px solid color-mix(in srgb,#f0b35a 60%,var(--line));border-radius:12px;background:color-mix(in srgb,#f0b35a 10%,transparent);font-size:14px}
-  .dlg-msg{margin:12px 0 0;font-size:13.5px;color:var(--ice)}
+  .dlg-msg{margin:12px 0 0;padding:11px 14px;border:1px solid color-mix(in srgb,#f0b35a 60%,var(--line));border-radius:12px;background:color-mix(in srgb,#f0b35a 12%,transparent);font:600 14px/1.45 var(--texte);color:var(--ice)}
   .dlg-msg:empty{display:none}
   .dlg-b{display:flex;flex-wrap:wrap;gap:8px}
   .dlg-b .db{min-height:40px;padding:8px 14px;font-size:13.5px}
@@ -3500,7 +3500,7 @@ var ED=(function(){
      ⚠️ REVENU EN MODE D'ESSAI le 02/10 à 20:30 (?gmail=1, retenu sur l'appareil ; ?gmail=0 l'éteint) : les deux premiers envois réels
      n'affichaient pas de pièce jointe dans Gmail. À rouvrir aux coachs seulement après un envoi où le PDF est bien visible et s'ouvre.
      L'envoi n'est permis que depuis la boîte commune (GMAIL_BOITE) ; depuis un autre compte, seulement vers soi-même (essai). */
-  var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='elysium.np.pro@gmail.com', GMAIL_ON=false, gJeton=null, gDe='';
+  var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='elysium.np.pro@gmail.com', GMAIL_ON=false, gJeton=null, gDe='', gTour=0;
   try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')==='1'; }catch(e){}
   // LE MODÈLE = celui des coachs, mot pour mot et dans LEUR mise en forme : corps HTML et version texte repris du mail
   // « Votre programmation est prête » envoyé le 02/10 depuis leur boîte (assets/mail-programmation-html.txt et mail-programmation.txt).
@@ -3552,9 +3552,11 @@ var ED=(function(){
       .catch(function(){ dire('Mail envoyé, mais l’envoi n’a pas pu être noté dans le journal : préviens l’autre coach.'); }); }
   // 1er clic : connexion Google, puis le mail tel qu'il partira ; rien n'est encore envoyé
   function gmailPreparer(a,d,dire){ if(!MAIL_HTML){ dire('Le modèle du mail n’est pas encore chargé : réessaie dans un instant.'); gmailModele().catch(function(){}); return; }
-    dire('Connexion à Google…');
-    gmailJeton().then(function(j){ gJeton=j; return fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+j}}).then(function(r){ return r.ok?r.json():{}; }); })
-      .then(function(u){ gDe=String(u.email||''); var autre=!gDe||gDe.toLowerCase()!==GMAIL_BOITE.toLowerCase(), essai=autre&&!!gDe&&a.toLowerCase()===gDe.toLowerCase(), z=$('mail-ap'); dire('');
+    var tour=++gTour, bts=d.querySelectorAll('[data-m="gmail"],[data-m="gmail-envoyer"]'); [].forEach.call(bts,function(b){ b.disabled=true; });
+    function fin(){ [].forEach.call(d.querySelectorAll('[data-m="gmail"]'),function(b){ b.disabled=false; }); }
+    dire('Connexion à Google… (une fenêtre Google s’ouvre)');
+    gmailJeton().then(function(j){ if(tour!==gTour) return Promise.reject({remplacee:1}); gJeton=j; return fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+j}}).then(function(r){ return r.ok?r.json():{}; }); })
+      .then(function(u){ if(tour!==gTour) return Promise.reject({remplacee:1}); fin(); gDe=String(u.email||''); var autre=!gDe||gDe.toLowerCase()!==GMAIL_BOITE.toLowerCase(), essai=autre&&!!gDe&&a.toLowerCase()===gDe.toLowerCase(), z=$('mail-ap'); dire('');
         autre=autre&&!essai;                        // un autre compte ne peut écrire qu'à lui-même (essai) : jamais à un client
         z.hidden=false; z.innerHTML='<p class="dlg-de'+(autre?' ko':'')+'">'+(autre?'Tu es connecté avec <b>'+esc(gDe||'un compte inconnu')+'</b> : ce n’est pas la boîte Elysium ('+esc(GMAIL_BOITE)+'). Clique « Changer de compte » et choisis-la.'
             :'Le mail partira de <b>'+esc(gDe)+'</b> vers <b>'+esc(a)+'</b>.'+(essai?' Essai : un autre compte que la boîte Elysium ne peut écrire qu’à lui-même.':''))+'</p>'+
@@ -3564,15 +3566,19 @@ var ED=(function(){
         // le modèle fait 600 px de large (+ 2 × 12 px de marge) : réduit à la largeur réelle de l'aperçu, ordinateur comme téléphone
         var ap=z.querySelector('.dlg-ap'); if(ap&&ap.firstElementChild) ap.firstElementChild.style.zoom=Math.min(1,ap.clientWidth/624).toFixed(3);
         z.scrollIntoView({block:'nearest'}); })
-      .catch(function(e){ gJeton=null; dire(/popup|ferme|closed/i.test(e.message)?'Fenêtre Google fermée : rien n’a été envoyé.':'Connexion à Google refusée ou impossible : rien n’a été envoyé.'); }); }
+      .catch(function(e){ if(tour!==gTour||(e&&e.remplacee)) return;      // une connexion remplacée par une plus récente : on l'ignore
+        gJeton=null; fin(); $('mail-ap').hidden=true; $('mail-g').hidden=false;
+        dire(/popup|ferme|closed/i.test(String(e&&e.message))?'Fenêtre Google fermée : rien n’a été envoyé. Clique à nouveau sur « Envoyer depuis Gmail ».':'Connexion à Google refusée ou impossible : rien n’a été envoyé.'); }); }
   // 2e clic, celui du coach : l'envoi
-  function gmailEnvoyer(a,d,dire){ var bt=d.querySelector('[data-m="gmail-envoyer"]'); if(!gJeton||!bt||bt.disabled) return; bt.disabled=true; dire('Envoi…');
+  function gmailEnvoyer(a,d,dire){ var bt=d.querySelector('[data-m="gmail-envoyer"]'); if(!bt||bt.disabled) return;
+    if(!gJeton){ $('mail-ap').hidden=true; $('mail-g').hidden=false; dire('La connexion à Google n’est plus active : rien n’a été envoyé. Clique à nouveau sur « Envoyer depuis Gmail ».'); return; }
+    var lib=bt.innerHTML; bt.disabled=true; bt.textContent='Envoi en cours…'; dire('Envoi en cours, ne ferme pas la fenêtre…');
     mailF.arrayBuffer().then(function(buf){ return fetch('https://gmail.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=media',
         {method:'POST',headers:{Authorization:'Bearer '+gJeton,'Content-Type':'message/rfc822'},body:gmailMessage(a,new Uint8Array(buf),mailF.name)}); })
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok||!j.id) throw new Error((j.error&&j.error.message)||('HTTP '+r.status)); return j; }); })
       .then(function(){ bt.textContent='Envoyé'; var z=$('mail-ap').querySelector('.dlg-de'); if(z){ z.className='dlg-de ok'; z.innerHTML='Mail envoyé à <b>'+esc(a)+'</b> depuis <b>'+esc(gDe)+'</b>, le '+new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'. Il est dans les messages envoyés de la boîte.'; }
         dire(''); mailNoter(a,dire); })
-      .catch(function(e){ bt.disabled=false; dire('Mail NON envoyé ('+String(e.message||'erreur').slice(0,120)+'). Tu peux réessayer, ou passer par « Télécharger le PDF ».'); }); }
+      .catch(function(e){ bt.disabled=false; bt.innerHTML=lib; dire('Mail NON envoyé ('+String((e&&e.message)||'erreur').slice(0,120)+'). Tu peux réessayer, ou passer par « Autres moyens d’envoyer ».'); }); }
 
   function mailFiche(){ var R=RL.R, pf=(R.diagnostic||{}).pdf, pret=!!(pf&&pf.chemin&&+pf.version===+R.version&&R.etat==='valide'), ce=(cur&&cur.client_externe)||{},
         nomF='Programmation alimentaire - '+([ce.nom,ce.prenom].filter(Boolean).join(' ')||R.nom||'client')+'.pdf', d=$('dlg-mail');
@@ -3593,12 +3599,12 @@ var ED=(function(){
         '<div class="dlg-g" id="mail-g"'+(GMAIL_ON?'':' hidden')+'><button type="button" class="db ok" data-m="gmail" disabled>'+MAIL_COCHE+'Envoyer depuis Gmail</button>'+
           '<p>Ton modèle « Votre programmation est prête », tel quel, avec le PDF joint. Tu relis le mail, puis c’est ton second clic qui l’envoie depuis la boîte Elysium.</p></div>'+
         '<div id="mail-ap" hidden></div>'+
+        '<p class="dlg-msg" id="mail-msg" role="status" aria-live="polite"></p>'+
         // les autres moyens, repliés (ouverts quand l'envoi Gmail n'est pas proposé)
         '<details class="dlg-autres"'+(GMAIL_ON?'':' open')+'><summary>'+(GMAIL_ON?'Autres moyens d’envoyer':'Envoyer depuis ton mail')+'</summary>'+
           (GMAIL_ON?'':'<p class="dlg-n" style="margin:0 0 10px">Récupère le PDF, ouvre ton mail (destinataire et objet déjà remplis), insère ton modèle « Votre programmation est prête » et joins le PDF.</p>')+
           '<div class="dlg-b"><button type="button" class="db" data-m="partager" hidden>Partager le PDF</button><button type="button" class="db" data-m="telecharger" disabled>Télécharger le PDF</button>'+
-          '<button type="button" class="db" data-m="mail">Ouvrir mon mail</button><button type="button" class="db" data-m="copier">Copier l’adresse</button></div></details>'+
-        '<p class="dlg-msg" id="mail-msg" aria-live="polite"></p>');
+          '<button type="button" class="db" data-m="mail">Ouvrir mon mail</button><button type="button" class="db" data-m="copier">Copier l’adresse</button></div></details>');
     d.showModal(); if(!pret) return;
     if(GMAIL_ON){ gmailScript().catch(function(){}); gmailModele().catch(function(){}); }   // chargé d'avance : la fenêtre Google doit s'ouvrir dans le geste du clic
     // la fiche est chargée tout de suite : le partage doit partir dans le geste du clic (sinon le navigateur le refuse)

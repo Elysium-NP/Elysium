@@ -1940,7 +1940,8 @@ var REL=(function(){
     // cible du jour : 4 chiffres côte à côte dans un seul cadre, chacun avec sa couleur de macro (celles du PDF)
     h+='<div class="rl-cible"><span class="rl-cl">Cible du jour</span><div class="rl-cib4">'+
       '<div class="k"><small>Calories</small><b>'+g0(c.kcal)+'</b><em>kcal</em></div>'+
-      MAC.slice(1).map(function(k){ var rp=repartition(c); return '<div class="'+k[2]+'"><small>'+k[1]+'</small><b>'+g0(c[k[0]])+'</b><em>g</em>'+(rp?'<u title="Part des calories de la cible">'+rp[k[0]]+' %</u>':'')+'</div>'; }).join('')+'</div></div></div>'+
+      // ordre demandé par Damien (02/10) pour ce bandeau : Calories | Glucides | Protéines | Lipides
+      [MAC[2],MAC[1],MAC[3]].map(function(k){ var rp=repartition(c); return '<div class="'+k[2]+'"><small>'+k[1]+'</small><b>'+g0(c[k[0]])+'</b><em>g</em>'+(rp?'<u title="Part des calories de la cible">'+rp[k[0]]+' %</u>':'')+'</div>'; }).join('')+'</div></div></div>'+
       '<div class="rl-sante" aria-label="Carte de santé de la diète"><div class="rl-sante-t">Contrôles de la diète</div>'+sante(R).map(function(v){
         return '<button type="button" class="vy '+v.et+'" data-act="va" data-va="'+v.va+'"><span class="vy-i">'+ico(IC[v.et])+'</span><span class="vy-t"><small>'+v.k+'</small><b>'+v.v+'</b></span></button>'; }).join('')+'</div></div>';
     if(R.note) h+='<div class="rl-note j">Correction déjà demandée par <b>'+e(R.note.par)+'</b> : « '+e(R.note.texte)+' »</div>';

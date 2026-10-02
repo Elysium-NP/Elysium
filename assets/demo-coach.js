@@ -45,8 +45,9 @@
     for(var w=0;w<5;w++) DB.poids.push({user_id:d.user_id,date:jourIso(debut+(w*7+2)*JOUR),kg:Math.round((depart+sens*w+(w%2?0.2:-0.1))*10)/10});
     DB.mensurations.push({id:k,user_id:d.user_id,date:jourIso(debut+3*JOUR),epaules:homme?112:98,poitrine:homme?100:90,taille:homme?86:72,hanches:homme?98:100,cuisse:homme?58:56,bras:homme?34:28});
   });
-  // un petit fil de messages sur deux clients
-  if(DB.profiles[0]){ var a=DB.profiles[0].id, b=(DB.profiles[2]||DB.profiles[0]).id;
+  // deux fils de messages : un client Formule Elysium (messagerie ouverte) et un ancien fil d'un client Odyssée
+  // (lecture seule : la messagerie est réservée à la Formule Elysium depuis le 02/10)
+  if(DB.profiles[0]){ var a=(DB.profiles.filter(function(p){ return p.formule==='f3'; })[0]||DB.profiles[0]).id, b=(DB.profiles[2]||DB.profiles[0]).id;
     DB.messages.push({id:1,client_id:a,auteur_id:a,texte:'Bonjour, est-ce que je peux remplacer le riz par des pâtes le midi ?',created_at:iso(now-2*JOUR),lu_at:null,depuis_equipe:false},
                      {id:2,client_id:b,auteur_id:MOI.id,texte:'Ta nouvelle diète est en ligne. Pense à ta pesée du lundi matin, à jeun.',created_at:iso(now-3*JOUR),lu_at:iso(now-3*JOUR),depuis_equipe:true},
                      {id:3,client_id:b,auteur_id:b,texte:'Merci ! Je commence lundi.',created_at:iso(now-3*JOUR+3600000),lu_at:iso(now-3*JOUR+7200000),depuis_equipe:false}); }

@@ -1289,6 +1289,12 @@
   .rl-v2 .rl-side .q-rep[open]>summary{border-color:color-mix(in srgb,var(--brand) 55%,var(--line))}
   .rl-v2 .rl-side .q-bloc h5,.rl-v2 .rl-side .q-veille h5{color:var(--blue);letter-spacing:.14em}
   html[data-theme="obscur"] .rl-v2 .rl-side .q-bloc h5,html[data-theme="obscur"] .rl-v2 .rl-side .q-veille h5{color:var(--brand)}
+
+  /* messagerie réservée à la Formule Elysium : anciens fils en lecture seule */
+  .msg-ls{margin:12px 0 0;padding:12px 14px;border:1px dashed var(--line);border-radius:12px;font-size:13.5px;line-height:1.5;color:var(--gris)}
+  .msg-ls b{color:var(--ice)}
+  .fil.ls{opacity:.72}
+  .fil-ls{font:600 10.5px/1 var(--texte);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);border:1px solid var(--line);border-radius:999px;padding:2px 7px;margin-left:4px;vertical-align:1px}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
 <script src="assets/jour.js?v=2"></script>
@@ -1524,7 +1530,7 @@
 <script src="assets/site.js?v=prix2"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script>/* maquette (/coach-maquette) : la même page, sur des données d'exemple (assets/demo-coach.js), sans aucune connexion */
-document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=1':'ely-auth.js?v=appli2')+'"><\/script>');</script>
+document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=2':'ely-auth.js?v=appli2')+'"><\/script>');</script>
 <script>
 /* ======================================================================
    BOÎTE À OUTILS GRAPHIQUES : SVG faits main, aucune librairie, aucun CDN.
@@ -2940,7 +2946,13 @@ var ED=(function(){
   function bulles(cid){ return MSG.filter(function(m){ return m.client_id===cid; }).map(function(m){ var lui=duClient(m);
       return '<div class="bulle'+(lui?'':' co')+'">'+esc(m.texte)+'<small>'+(lui?'':esc((SIGN&&SIGN[m.auteur_id])||'Coach')+' · ')+heure(m.created_at)+'</small></div>'; }).join('')
     || '<p class="rien">Aucun message pour l’instant.</p>'; }
-  function formMsg(cid,id,pr){ return '<form class="repondre" data-c="'+esc(cid)+'"><textarea id="'+id+'" rows="1" placeholder="Répondre à '+esc(pr)+'…" aria-label="Ta réponse" required maxlength="4000"></textarea><button class="btn-p" type="submit">Envoyer</button></form>'; }
+  // MESSAGERIE = FORMULE ELYSIUM SEULEMENT (Damien & Yoann, 02/10) : on n'écrit plus à un client Odyssée / Olympe
+  // (il reçoit les notifications automatiques) ; ses anciens échanges restent lisibles, rien n'est supprimé.
+  // Client inconnu de la liste (compte coach, données pas encore chargées) : on ne bloque pas, la base tranche.
+  // C'est l'abonnement (Stripe) qui fait foi, comme dans la base (supabase/messagerie_elysium.sql).
+  function msgElysium(cid){ var k=D&&D.par[cid]; if(!k) return true; return cleFormule(k.a&&k.a.formule)==='f3'; }
+  function formMsg(cid,id,pr){ if(!msgElysium(cid)) return '<p class="msg-ls"><b>Lecture seule.</b> La messagerie est réservée à la Formule Elysium : '+esc(pr)+' reçoit les notifications automatiques et répond par son questionnaire de réactualisation.</p>';
+    return '<form class="repondre" data-c="'+esc(cid)+'"><textarea id="'+id+'" rows="1" placeholder="Répondre à '+esc(pr)+'…" aria-label="Ta réponse" required maxlength="4000"></textarea><button class="btn-p" type="submit">Envoyer</button></form>'; }
   // ouvrir un fil = lire ses messages (seulement si l'écran est réellement sous les yeux)
   function lireFil(cid){
     var aLire=MSG.filter(function(m){ return m.client_id===cid && duClient(m) && !m.lu_at; }).map(function(m){ return m.id; });
@@ -2952,14 +2964,14 @@ var ED=(function(){
   }
   function renderMessages(){
     var fils={}; MSG.forEach(function(m){ fils[m.client_id]=m; });   // dernier message de chaque fil
-    var ids=Object.keys(fils).sort(function(a,b){ return (nonLus(b)-nonLus(a)) || (fils[b].created_at>fils[a].created_at?1:-1); });
+    var ids=Object.keys(fils).sort(function(a,b){ return (msgElysium(b)-msgElysium(a)) || (nonLus(b)-nonLus(a)) || (fils[b].created_at>fils[a].created_at?1:-1); });   // clients Elysium d'abord, anciens fils (lecture seule) ensuite
     majNonLus();
     if(voir.p==='fiche'&&FS.s===1&&cur) sousFiche();              // le fil ouvert dans la fiche suit aussi
-    if(!ids.length && !filOuvert){ $('m-fils').innerHTML='<p class="rien"><b>Aucun message</b> : les messages des clients arriveront ici.</p>'; $('m-conv').hidden=true; return; }
+    if(!ids.length && !filOuvert){ $('m-fils').innerHTML='<p class="rien"><b>Aucun message</b> : les messages des clients en Formule Elysium arriveront ici.</p>'; $('m-conv').hidden=true; return; }
     if(!filOuvert||(!fils[filOuvert]&&!NOMS[filOuvert])) filOuvert=ids[0];
     if(filOuvert&&!fils[filOuvert]) ids.unshift(filOuvert);     // fil encore vide : le coach écrit le premier
     $('m-fils').innerHTML=ids.map(function(id){ var n=nonLus(id), t=fils[id]?fils[id].texte:'Nouveau message';
-      return '<button type="button" class="fil'+(id===filOuvert?' on':'')+'" data-fil="'+esc(id)+'"><span><b>'+esc(nomFil(id))+'</b><br>'+esc(t.slice(0,38))+(t.length>38?'…':'')+'</span>'+(n?'<span class="pastille-n">'+n+'</span>':'')+'</button>'; }).join('');
+      return '<button type="button" class="fil'+(id===filOuvert?' on':'')+(msgElysium(id)?'':' ls')+'" data-fil="'+esc(id)+'"><span><b>'+esc(nomFil(id))+'</b>'+(msgElysium(id)?'':' <i class="fil-ls">lecture seule</i>')+'<br>'+esc(t.slice(0,38))+(t.length>38?'…':'')+'</span>'+(n?'<span class="pastille-n">'+n+'</span>':'')+'</button>'; }).join('');
     var z=$('m-conv'); z.hidden=false;
     z.innerHTML='<h4><span class="nom" tabindex="0" role="button" data-u="'+esc(filOuvert)+'">'+esc(nomFil(filOuvert))+'</span> <span class="n">voir sa fiche en cliquant sur son nom</span></h4>'+
       '<div class="bulles" id="bulles">'+bulles(filOuvert)+'</div>'+formMsg(filOuvert,'msg-txt',nomFil(filOuvert).split(' ')[0]);
@@ -3950,7 +3962,7 @@ var ED=(function(){
     if(sx||(age>0&&age<120)) h+='<span class="tag">'+[sx==='HOMME'?'Homme':sx?'Femme':'',age>0&&age<120?age+' ans':''].filter(Boolean).join(' · ')+'</span>';
     if(p.taille_cm) h+='<span class="tag">'+esc(p.taille_cm)+' cm</span>';
     if(c) h+='<span class="tag">inscrit le '+dateFr(c.p.created_at)+'</span>'+(c.a&&c.a.statut!=='canceled'&&c.a.periode_fin?'<span class="tag">échéance '+dateFr(c.a.periode_fin)+'</span>':'');
-    $('fiche-tete').innerHTML=h+'<button type="button" class="mini" data-fs="1">Écrire un message</button>';
+    $('fiche-tete').innerHTML=h+'<button type="button" class="mini" data-fs="1">'+(msgElysium(cur.user_id)?'Écrire un message':'Anciens messages')+'</button>';
   }
   document.addEventListener('click',function(e){
     if(!e.target.closest) return;

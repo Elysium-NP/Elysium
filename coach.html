@@ -1838,7 +1838,9 @@ var REL=(function(){
   var MEALS={petit_dejeuner:'Petit-déjeuner',dejeuner:'Déjeuner',collation:'Collation',collation_2:'Collation',diner:'Dîner'};
   var PASTEL={petit_dejeuner:'jaune',dejeuner:'vert',collation:'violet',collation_2:'violet',diner:'bleu'};
   var ETAT={a_relire:'À relire',rectification:'À corriger',valide:'Validée',refuse:'Refusée',remplace:'Remplacée'};
-  var MAC=[['kcal','kcal','k',''],['proteines','Protéines','p',' g'],['glucides','Glucides','g',' g'],['lipides','Lipides','l',' g']];
+  // ORDRE D'AFFICHAGE dans tout l'espace coach (Damien 02/10, « partout ») : Calories, Glucides, Protéines, Lipides.
+  // L'espace client et le PDF gardent P, G, L. Ne pas confondre avec le MAC du module d'édition (ordre des données).
+  var MAC=[['kcal','kcal','k',''],['glucides','Glucides','g',' g'],['proteines','Protéines','p',' g'],['lipides','Lipides','l',' g']];
   var TOL=0.05;                                   // ± 5 % autour de la cible = vert
   var CONDIMENT=/^(huile|sauce|sirop|miel|sel|epice|vinaigre)/;
   var ML={kcal:'calories',proteines:'protéines',glucides:'glucides',lipides:'lipides'};
@@ -1862,7 +1864,7 @@ var REL=(function(){
     K.slice().sort(function(a,b){ return (e[b]/t*100-r[b])-(e[a]/t*100-r[a]); }).slice(0,reste).forEach(function(k){ r[k]++; });
     return r; }
   function ecartsTable(R){ var m=R.menu||{}, c=m.cible||{}, J=(m.jours||[]).filter(function(j){ return !j.off; });
-    var L=[['kcal','Calories','k'],['proteines','Protéines','p'],['glucides','Glucides','g'],['lipides','Lipides','l']], RP=repartition(c);
+    var L=[['kcal','Calories','k'],['glucides','Glucides','g'],['proteines','Protéines','p'],['lipides','Lipides','l']], RP=repartition(c);
     // Damien 02/10 : l'écart s'écrit en GRAMMES (leur règle de finition = ±5 g sur P, G et L), plus en % ; la ligne des calories en kcal.
     // Couleurs : P / G / L vert jusqu'à ±5 g, jaune jusqu'à ±10 g, rouge au-delà ; calories comme partout ailleurs (±5 %, ±10 %).
     return '<div class="rl-ecarts"><header class="rl-ec-tete"><div><h4>Macros jour par jour</h4><p>écart à la cible, valeur servie dessous</p></div>'+
@@ -1940,8 +1942,7 @@ var REL=(function(){
     // cible du jour : 4 chiffres côte à côte dans un seul cadre, chacun avec sa couleur de macro (celles du PDF)
     h+='<div class="rl-cible"><span class="rl-cl">Cible du jour</span><div class="rl-cib4">'+
       '<div class="k"><small>Calories</small><b>'+g0(c.kcal)+'</b><em>kcal</em></div>'+
-      // ordre demandé par Damien (02/10) pour ce bandeau : Calories | Glucides | Protéines | Lipides
-      [MAC[2],MAC[1],MAC[3]].map(function(k){ var rp=repartition(c); return '<div class="'+k[2]+'"><small>'+k[1]+'</small><b>'+g0(c[k[0]])+'</b><em>g</em>'+(rp?'<u title="Part des calories de la cible">'+rp[k[0]]+' %</u>':'')+'</div>'; }).join('')+'</div></div></div>'+
+      MAC.slice(1).map(function(k){ var rp=repartition(c); return '<div class="'+k[2]+'"><small>'+k[1]+'</small><b>'+g0(c[k[0]])+'</b><em>g</em>'+(rp?'<u title="Part des calories de la cible">'+rp[k[0]]+' %</u>':'')+'</div>'; }).join('')+'</div></div></div>'+
       '<div class="rl-sante" aria-label="Carte de santé de la diète"><div class="rl-sante-t">Contrôles de la diète</div>'+sante(R).map(function(v){
         return '<button type="button" class="vy '+v.et+'" data-act="va" data-va="'+v.va+'"><span class="vy-i">'+ico(IC[v.et])+'</span><span class="vy-t"><small>'+v.k+'</small><b>'+v.v+'</b></span></button>'; }).join('')+'</div></div>';
     if(R.note) h+='<div class="rl-note j">Correction déjà demandée par <b>'+e(R.note.par)+'</b> : « '+e(R.note.texte)+' »</div>';
@@ -1971,7 +1972,7 @@ var REL=(function(){
           // la diète complète, comme sur la fiche PDF (Dimitri 30/09) : ingrédients pesés + macros du repas
           '<span class="rl-ci">'+(r.ingredients||[]).map(function(x){ var rf=refuse(x.ingredient,INT), h1=hl&&x.ingredient===hl;
             return '<span class="'+(rf?'rf':'')+(h1?' h1':'')+'">'+e(ingLabel(x)).replace(/(\d) %/g,'$1 %')+'</span>'; }).join('')+'</span>'+
-          '<span class="rl-cm">'+(function(ma){ return '<b>'+g0(ma.kcal)+' kcal</b><span><i class="mac p"></i>P '+g0(ma.proteines)+'</span><span><i class="mac g"></i>G '+g0(ma.glucides)+'</span><span><i class="mac l"></i>L '+g0(ma.lipides)+'</span>'; })(r.macros||somme(r.ingredients||[]))+'</span>'+
+          '<span class="rl-cm">'+(function(ma){ return '<b>'+g0(ma.kcal)+' kcal</b><span><i class="mac g"></i>G '+g0(ma.glucides)+'</span><span><i class="mac p"></i>P '+g0(ma.proteines)+'</span><span><i class="mac l"></i>L '+g0(ma.lipides)+'</span>'; })(r.macros||somme(r.ingredients||[]))+'</span>'+
           '</button></td>';
       });
       h+='</tr>';
@@ -1979,9 +1980,9 @@ var REL=(function(){
     // total du jour + jauge d'écart aux calories visées (bande verte = ±5 %, repère = le jour)
     h+='<tr class="rl-tr"><th>Total</th>'+J.map(function(j,i){ if(j.off) return td(i,'rl-tot')+'>—</td>'; var s=totJour(j), x=ecart(s.kcal,c.kcal), ok=Math.abs(x)<=TOL,
         pos=isFinite(x)?Math.max(2,Math.min(98,50+x/0.15*50)).toFixed(1):50;
-      return td(i,'rl-tot')+' title="Protéines '+pct(ecart(s.proteines,c.proteines))+' · Glucides '+pct(ecart(s.glucides,c.glucides))+' · Lipides '+pct(ecart(s.lipides,c.lipides))+'"><b>'+g0(s.kcal)+' <small>kcal</small></b>'+
+      return td(i,'rl-tot')+' title="Glucides '+pct(ecart(s.glucides,c.glucides))+' · Protéines '+pct(ecart(s.proteines,c.proteines))+' · Lipides '+pct(ecart(s.lipides,c.lipides))+'"><b>'+g0(s.kcal)+' <small>kcal</small></b>'+
         '<span class="jg'+(ok?' ok':' ko')+'" aria-hidden="true"><span class="jg-z"></span><i style="left:'+pos+'%"></i></span>'+pastille(x)+
-        '<span class="rl-pgl"><span><i class="mac p"></i>'+g0(s.proteines)+'</span><span><i class="mac g"></i>'+g0(s.glucides)+'</span><span><i class="mac l"></i>'+g0(s.lipides)+'</span></span></td>'; }).join('')+'</tr>';
+        '<span class="rl-pgl"><span><i class="mac g"></i>'+g0(s.glucides)+'</span><span><i class="mac p"></i>'+g0(s.proteines)+'</span><span><i class="mac l"></i>'+g0(s.lipides)+'</span></span></td>'; }).join('')+'</tr>';
     h+='</tbody></table></div>'+
       '<p class="leg rl-leg">Jauge : bande verte = ±5 % des calories visées. Clique un plat pour ouvrir son jour'+(o.edit?'':', ou un jour en tête de colonne')+'.</p>';
     var rep=Object.keys(F.plats).filter(function(t){ return F.plats[t].n>1; });
@@ -1992,7 +1993,7 @@ var REL=(function(){
     // l'analyse fine reste à portée, repliée : la grille d'abord
     h+='<details class="rl-plus" id="rl-plus"'+(o.plus||hl?' open':'')+'><summary>Analyse détaillée <span>macros jour par jour · '+nbS(fq.length,'aliment très présent','aliments très présents')+'</span></summary>'+
       '<div class="rl-sub rl-sub-graphe">Macros par jour, en % de la cible</div><div class="rl-graphe"><div id="rl-graph"></div>'+
-      G.leg([['Calories','var(--steel)'],['Protéines','#cc0000'],['Glucides','#3d85c6'],['Lipides','#f1c232'],['zone ±5 %','color-mix(in srgb,var(--b-vert) 45%,transparent)']])+'</div>'+
+      G.leg([['Calories','var(--steel)'],['Glucides','#3d85c6'],['Protéines','#cc0000'],['Lipides','#f1c232'],['zone ±5 %','color-mix(in srgb,var(--b-vert) 45%,transparent)']])+'</div>'+
       ecartsTable(R)+
       '<div class="rl-freq"><div class="rl-sub">Aliments très présents <span style="text-transform:none;letter-spacing:0;font-weight:400">(plus de 3 jours sur '+actifs(m).length+', clic = surligner dans la grille)</span></div>'+
       (fq.length?'<div class="rl-chips">'+fq.map(function(k){ var a=F.aliments[k];
@@ -2001,7 +2002,7 @@ var REL=(function(){
   }
   // le petit graphique (à monter avec G.mount(cadre, function(w){ return REL.graphe(R,w); }))
   function graphe(R,w){ var m=R.menu||{}, c=m.cible||{}, J=actifs(m);
-    var S=MAC.map(function(k,x){ return {nom:k[1],c:['var(--steel)','#cc0000','#3d85c6','#f1c232'][x],v:J.map(function(j){ return c[k[0]]?Math.round(totJour(j)[k[0]]/c[k[0]]*100):null; })}; });
+    var S=MAC.map(function(k,x){ return {nom:k[1],c:['var(--steel)','#3d85c6','#cc0000','#f1c232'][x],v:J.map(function(j){ return c[k[0]]?Math.round(totJour(j)[k[0]]/c[k[0]]*100):null; })}; });
     return G.ligne(w,{h:200,x:J.map(function(j){ return 'J'+j.jour; }),tx:function(i){ return 'Jour '+J[i].jour; },points:true,cible:100,cibleT:'cible',zone:[95,105],
       series:S,f:function(v){ return v+' % de la cible'; },fy:function(v){ return v+' %'; },
       label:'Calories et macros de chaque jour en pourcentage de la cible'}); }
@@ -2019,13 +2020,13 @@ var REL=(function(){
   // barres « total du jour face à la cible »
   function cibles(tot,c,nj){
     return '<div class="rl-sub" style="margin-top:18px">Total du jour '+nj+' face à la cible</div><div class="rl-cib">'+MAC.map(function(k,x){
-      var v=tot[k[0]], cc=c[k[0]]||1, r1=v/cc, col=['var(--brand)','#cc0000','#3d85c6','#f1c232'][x];
+      var v=tot[k[0]], cc=c[k[0]]||1, r1=v/cc, col=['var(--brand)','#3d85c6','#cc0000','#f1c232'][x];
       return '<div class="rl-cb"><span><i class="mac '+k[2]+'"></i>'+k[1]+'</span><span class="tr"><em></em><i style="width:'+(Math.min(r1,1.3)/1.3*100).toFixed(1)+'%;background:'+col+'"></i><u></u></span>'+
         '<span class="v">'+g0(v)+' / '+g0(cc)+k[3]+'<small>'+pastille(ecart(v,cc))+'</small></span></div>'; }).join('')+'</div>'+
       '<p class="leg" style="margin-left:0">Trait vertical = la cible ; bande verte = ±5 %.</p>';
   }
   function stk(ma){ var ek=(ma.proteines*4+ma.glucides*4+ma.lipides*9)||1;
-    return '<div class="rl-stk" title="Part des calories : protéines, glucides, lipides"><i style="width:'+(ma.proteines*4/ek*100).toFixed(1)+'%;background:#cc0000"></i><i style="width:'+(ma.glucides*4/ek*100).toFixed(1)+'%;background:#3d85c6"></i><i style="width:'+(ma.lipides*9/ek*100).toFixed(1)+'%;background:#f1c232"></i></div>'; }
+    return '<div class="rl-stk" title="Part des calories : glucides, protéines, lipides"><i style="width:'+(ma.glucides*4/ek*100).toFixed(1)+'%;background:#3d85c6"></i><i style="width:'+(ma.proteines*4/ek*100).toFixed(1)+'%;background:#cc0000"></i><i style="width:'+(ma.lipides*9/ek*100).toFixed(1)+'%;background:#f1c232"></i></div>'; }
   // empreinte d'un repas (titre + aliments + grammes) : sert à repérer ce qui a été modifié
   function sig(r){ return r?titre(r)+'|'+(r.recette||'')+'|'+(r.ingredients||[]).map(function(x){ return x.ingredient+':'+Math.round(+x.grammes||0); }).join(','):''; }
   function sigJ(j){ return (j.repas||[]).map(sig).join('#'); }
@@ -2041,11 +2042,11 @@ var REL=(function(){
       var ma=r.macros||somme(r.ingredients||[]), part=tot.kcal?Math.round(ma.kcal/tot.kcal*100):0, ti=titre(r), p=F.plats[ti];
       return '<article class="rl-meal" id="rl-m-'+r.type+'" data-i="'+i+'" data-ty="'+r.type+'"><header class="m-'+(PASTEL[r.type]||'bleu')+'"><span>'+ml(r.type)+'</span><span>'+part+' % de la journée</span></header>'+
         '<h5>'+e(ti)+(p&&p.n>1?'<small>×'+p.n+' dans la semaine</small>':'')+'</h5><div class="rl-ings">'+
-        '<div class="rl-ing h"><span>Ingrédient</span><span>Grammes</span><span>kcal</span><span class="pm">P</span><span class="gm">G</span><span class="lm">L</span></div>'+
+        '<div class="rl-ing h"><span>Ingrédient</span><span>Grammes</span><span>kcal</span><span class="gm">G</span><span class="pm">P</span><span class="lm">L</span></div>'+
         (r.ingredients||[]).map(function(x,k){ var rf=refuse(x.ingredient,INT), fa=F.aliments[x.ingredient];
           return '<div class="rl-ing'+(rf?' ref':'')+'" data-k="'+k+'"'+(rf?' title="Refusé par le client : '+e(rf)+'"':'')+'><span>'+e(cap(x.ingredient))+(fa&&fa.jours>3?'<span class="rl-fq">'+fa.jours+' j</span>':'')+
             (x.affichage?'<small>'+e(x.affichage)+'</small>':'')+(rf?'<small>refusé : « '+e(rf)+' »</small>':'')+'</span><span class="gr">'+gx(x.grammes)+' g</span><span>'+gx(x.kcal)+'</span>'+
-            '<span class="pm">'+gx(x.proteines)+'</span><span class="gm">'+gx(x.glucides)+'</span><span class="lm">'+gx(x.lipides)+'</span></div>'; }).join('')+
+            '<span class="gm">'+gx(x.glucides)+'</span><span class="pm">'+gx(x.proteines)+'</span><span class="lm">'+gx(x.lipides)+'</span></div>'; }).join('')+
         (!(r.ingredients||[]).length?'<p class="ed-vide">Repas vidé.</p>':'')+'</div>'+
         '<div class="rl-mm">'+macrosTxt(ma)+'</div>'+stk(ma)+
         (P?'<div class="rl-cmp">'+compRepas(repasDe(P,r.type),r,R.precedentVersion)+'</div>':'')+
@@ -2071,13 +2072,13 @@ var REL=(function(){
         '<div class="ed-titre"><input type="text" data-ed="titre" value="'+e(ti)+'" aria-label="Nom du plat" enterkeyhint="done" autocomplete="off"></div>'+
         (neuf?'<p class="ed-warn">Plat pris dans le catalogue : quantités de départ, à ajuster (l’équilibreur, plus bas, calcule la bonne quantité).</p>':'')+
         (rep?'<p class="ed-warn">Plat servi '+p.n+' fois (jours '+p.jours.join(', ')+') : la répétition n’est acceptée qu’au petit-déjeuner et à la collation.</p>':'')+
-        '<div class="rl-ings"><div class="ed-ing h"><span>Aliment</span><span>Grammes</span><span>kcal</span><span class="pm">P</span><span class="gm">G</span><span class="lm">L</span><span></span></div>'+
+        '<div class="rl-ings"><div class="ed-ing h"><span>Aliment</span><span>Grammes</span><span>kcal</span><span class="gm">G</span><span class="pm">P</span><span class="lm">L</span><span></span></div>'+
         (r.ingredients||[]).map(function(x,k){ var rf=refuse(x.ingredient,INT), rl=o.refLigne?o.refLigne(r,x):null,
             mo=!rl||rl.ingredient!==x.ingredient||Math.round(+rl.grammes||0)!==Math.round(+x.grammes||0), al=mo&&o.alertes?o.alertes(x):[], st=o.pas?o.pas(x):'5 g';
           return '<div class="ed-ing'+(rf?' ref':'')+(mo?' mod':'')+'" data-k="'+k+'"><button type="button" class="ed-nom n" data-act="ed-remplacer" title="Remplacer cet aliment">'+e(cap(x.ingredient))+
               (x.affichage?'<small>'+e(x.affichage)+'</small>':'')+(rf?'<small>refusé : « '+e(rf)+' »</small>':'')+al.map(function(t){ return '<small class="bw">'+e(t)+'</small>'; }).join('')+'</button>'+
             '<span class="st"><button type="button" data-act="ed-moins" aria-label="Moins ('+e(st)+')">−</button><input type="number" inputmode="numeric" min="0" max="3000" value="'+Math.round(+x.grammes||0)+'" data-ed="g" aria-label="Grammes de '+e(x.ingredient)+'"><span class="u">g</span><button type="button" data-act="ed-plus" aria-label="Plus ('+e(st)+')">+</button></span>'+
-            '<span class="kc">'+gx(x.kcal)+'<small class="u2"> kcal</small></span><span class="pm">'+gx(x.proteines)+'</span><span class="gm">'+gx(x.glucides)+'</span><span class="lm">'+gx(x.lipides)+'</span>'+
+            '<span class="kc">'+gx(x.kcal)+'<small class="u2"> kcal</small></span><span class="gm">'+gx(x.glucides)+'</span><span class="pm">'+gx(x.proteines)+'</span><span class="lm">'+gx(x.lipides)+'</span>'+
             '<button type="button" class="ed-x x" data-act="ed-suppr" aria-label="Retirer '+e(x.ingredient)+' du repas" title="Retirer">×</button></div>'; }).join('')+
         (vide?'<p class="ed-vide">Repas vidé : ajoute des aliments ou restaure-le.</p>':'')+
         '<button type="button" class="ed-add" data-act="ed-ajouter">+ Ajouter un aliment</button></div>'+
@@ -2137,7 +2138,7 @@ var REL=(function(){
     var M=L.filter(function(a){ return !w||norm(a.nom+' '+a.id).indexOf(w)>=0; }).slice(0,80);
     return M.length?M.map(function(a){ var rf=refuse(a.id,INT)||refuse(a.nom,INT), v=a.p100||{};
       return '<button type="button" class="al'+(rf?' ref':'')+'" data-sh="'+e(a.id)+'"><span>'+e(cap(a.nom))+'</span><span class="tag">'+g0(v.kcal)+' kcal</span>'+
-        '<small>pour 100 g : P '+n(+v.p||0,1)+' · G '+n(+v.g||0,1)+' · L '+n(+v.l||0,1)+(a.piece?' · à la pièce ('+g0(a.piece.g)+' g)':'')+(rf?' · refusé par le client (« '+e(rf)+' »)':'')+'</small></button>'; }).join('')
+        '<small>pour 100 g : G '+n(+v.g||0,1)+' · P '+n(+v.p||0,1)+' · L '+n(+v.l||0,1)+(a.piece?' · à la pièce ('+g0(a.piece.g)+' g)':'')+(rf?' · refusé par le client (« '+e(rf)+' »)':'')+'</small></button>'; }).join('')
       :'<p class="leg">Aucun aliment ne correspond.</p>';
   }
   // L = plats du catalogue [{cle, titre, repas, ingredients}] ; ty = type du repas à remplacer (les plats de ce repas d'abord)
@@ -2188,7 +2189,7 @@ var REL=(function(){
     D.sort(function(x,y){ return Math.abs(y[1])-Math.abs(x[1]); });
     return '<h4>Ce qui a changé <span class="n">v'+e(R.precedentVersion)+' → v'+e(R.version)+'</span></h4>'+
       '<div class="ligne"><span>Cible calories</span><b>'+g0(ca.kcal)+' → '+g0(cb.kcal)+' kcal</b></div>'+
-      '<div class="ligne"><span>Protéines · glucides · lipides</span><b>'+[ca.proteines,ca.glucides,ca.lipides].map(g0).join(' · ')+' → '+[cb.proteines,cb.glucides,cb.lipides].map(g0).join(' · ')+' g</b></div>'+
+      '<div class="ligne"><span>Glucides · protéines · lipides</span><b>'+[ca.glucides,ca.proteines,ca.lipides].map(g0).join(' · ')+' → '+[cb.glucides,cb.proteines,cb.lipides].map(g0).join(' · ')+' g</b></div>'+
       '<div class="ligne"><span>Plats remplacés</span><b>'+rempl+' sur '+total+'</b></div>'+
       '<div class="rl-sub">Grammes sur la semaine</div>'+(D.length?D.slice(0,10).map(function(d){ return '<div class="ligne"><span>'+e(cap(d[0]))+'</span><span class="'+(d[1]>0?'plus':'moins')+'">'+g0(d[2])+' → '+g0(d[3])+' g ('+(d[1]>0?'+':'−')+g0(Math.abs(d[1]))+')</span></div>'; }).join('')+
         (D.length>10?'<p class="leg" style="margin-left:0">+ '+(D.length-10)+' autres aliments modifiés.</p>':''):'<p class="leg" style="margin-left:0">Aucun gramme modifié.</p>')+
@@ -2237,7 +2238,7 @@ var REL=(function(){
     var rj=Array.isArray((R.diagnostic||{}).reajustement)?R.diagnostic.reajustement.filter(Boolean):[];
     if(rj.length){
       var nomPlat=function(k){ return k==null?'—':String(k).replace(/_/g,' '); };
-      var mac=function(o){ if(!o||typeof o!=='object') return ''; return [['kcal','kcal',''],['proteines','P',' g'],['glucides','G',' g'],['lipides','L',' g']]
+      var mac=function(o){ if(!o||typeof o!=='object') return ''; return [['kcal','kcal',''],['glucides','G',' g'],['proteines','P',' g'],['lipides','L',' g']]
         .filter(function(m){ return o[m[0]]!=null; }).map(function(m){ return m[1]+' '+Math.round(+o[m[0]])+m[2]; }).join(' · '); };
       var aVoir=rj.some(function(x){ return /NON|à vérifier|à la main|non reprise/i.test(String(x.raison||'')); });
       h+=ck(aVoir?'av':'ok','Ce qui a changé depuis la version validée','<ul class="rl-na">'+rj.map(function(x){ var t;

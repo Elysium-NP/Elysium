@@ -1357,7 +1357,8 @@
   .dlg-g .db{align-self:flex-start;min-height:44px;padding:10px 18px}
   .dlg-de{margin:16px 0 10px;padding:10px 12px;border-radius:10px;font-size:14px;background:color-mix(in srgb,var(--brand) 12%,transparent)}
   .dlg-de.ko{background:color-mix(in srgb,#e07a7a 18%,transparent)} .dlg-de.ok{background:color-mix(in srgb,#93c47d 26%,transparent)}
-  .dlg-ap{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#eef2f7}
+  .dlg-ap{max-height:320px;overflow-y:auto;overflow-x:hidden;border:1px solid var(--line);border-radius:12px;background:#eef2f7}
+  .dlg-ap>*{zoom:.88}   /* le modèle fait 600 px de large : réduit pour tenir dans la fenêtre, sans défilement horizontal */
   dialog.dlg:has(#mail-ap:not([hidden])){width:min(640px,calc(100vw - 32px))}
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=2">
@@ -3471,10 +3472,10 @@ var ED=(function(){
      depuis la boîte Elysium. Droit demandé : gmail.send seulement (« envoyer en votre nom » : la page ne lit ni la boîte ni
      les brouillons) + l'adresse du compte, pour dire d'où part le mail. L'ID client est public ; aucun secret ; le jeton
      reste en mémoire dans la page (≈ 1 h), jamais stocké. Règle de sécurité : _headers, chemins /coach* seulement.
-     ⚠️ MODE D'ESSAI (?gmail=1, retenu sur l'appareil ; ?gmail=0 pour l'éteindre) tant que Dimitri n'a pas fait un envoi réel.
+     Ouvert à tous les coachs depuis le 02/10 (premier envoi réel fait par Dimitri) ; jamais dans la maquette ; ?gmail=0 l'éteint sur un appareil (?gmail=1 le rallume).
      L'envoi n'est permis que depuis la boîte commune (GMAIL_BOITE) ; depuis un autre compte, seulement vers soi-même (essai). */
   var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='elysium.np.pro@gmail.com', GMAIL_ON=false, gJeton=null, gDe='';
-  try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')==='1'; }catch(e){}
+  try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')!=='0'; }catch(e){ GMAIL_ON=!window.ELY_MAQUETTE_COACH; }
   // LE MODÈLE = celui des coachs, mot pour mot et dans LEUR mise en forme : corps HTML et version texte repris du mail
   // « Votre programmation est prête » envoyé le 02/10 depuis leur boîte (assets/mail-programmation-html.txt et mail-programmation.txt).
   // Identique pour tous les clients (ni nom ni prénom). Pour le faire évoluer : remplacer ces deux fichiers, rien d'autre.
@@ -3536,8 +3537,8 @@ var ED=(function(){
         (ce.email?'':'<p class="dlg-n">Adresse absente de sa fiche : saisis-la (elle est dans le Google Form).</p>')+
         '<label>Objet</label><p class="dlg-v">'+esc(MAIL_OBJET)+'</p>'+
         '<label>Pièce jointe</label><p class="dlg-v" id="mail-f">'+esc(nomF)+' <small>préparation…</small></p>'+
-        '<label>Texte</label><p class="dlg-n" style="margin-top:0">Dans Gmail, insère ton modèle « Votre programmation est prête ».</p>'+
-        '<div class="dlg-g" id="mail-g"'+(GMAIL_ON?'':' hidden')+'><button type="button" class="db ok" data-m="gmail" disabled>Envoyer depuis Gmail</button><p class="dlg-n" style="margin:0">Le mail part de la boîte Elysium, avec le texte du modèle et la fiche jointe. Tu le relis avant d’envoyer.</p></div>'+
+        '<label>Texte</label><p class="dlg-n" style="margin-top:0">'+(GMAIL_ON?'Ton modèle « Votre programmation est prête », tel quel. Tu le relis avant d’envoyer.':'Dans Gmail, insère ton modèle « Votre programmation est prête ».')+'</p>'+
+        '<div class="dlg-g" id="mail-g"'+(GMAIL_ON?'':' hidden')+'><button type="button" class="db ok" data-m="gmail" disabled>Envoyer depuis Gmail</button><p class="dlg-n" style="margin:0">Le mail part de la boîte Elysium, avec le modèle et la fiche jointe. Rien n’est envoyé avant ton second clic.</p></div>'+
         '<div id="mail-ap" hidden></div>'+
         '<div class="dlg-b"><button type="button" class="db ok" data-m="partager" hidden>Partager la fiche</button><button type="button" class="db rec" data-m="telecharger" disabled>Télécharger la fiche</button>'+
         '<button type="button" class="db rec" data-m="mail">Ouvrir mon mail</button><button type="button" class="db" data-m="copier">Copier l’adresse</button><button type="button" class="db" data-m="fermer">Fermer</button></div>'+

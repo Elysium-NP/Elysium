@@ -1595,7 +1595,7 @@
 <script src="assets/site.js?v=prix2"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script>/* maquette (/coach-maquette) : la même page, sur des données d'exemple (assets/demo-coach.js), sans aucune connexion */
-document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=5':'ely-auth.js?v=appli2')+'"><\/script>');</script>
+document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=6':'ely-auth.js?v=appli2')+'"><\/script>');</script>
 <script>
 /* ======================================================================
    BOÎTE À OUTILS GRAPHIQUES : SVG faits main, aucune librairie, aucun CDN.
@@ -2209,6 +2209,11 @@ var REL=(function(){
     // motifs de relecture en langage coach (diagnostic.a_relire, 29/09) : une journée hors ±5 g n'est jamais « prête »
     var ar=Array.isArray((R.diagnostic||{}).a_relire)?R.diagnostic.a_relire.filter(Boolean):[];
     if(ar.length) h+=ck('ko','À regarder de près','<ul class="rl-na">'+ar.map(function(t){ return '<li>'+e(propre(t))+'</li>'; }).join('')+'</ul>');
+    // contrôle du moteur repassé sur une RETOUCHE de coach (diagnostic.controle, 02/10) : {version, le, bloquants[], a_relire[]}.
+    // Avertissement seulement, jamais bloquant ; ignoré s'il vient d'une autre version (une version éditée hérite du diagnostic du parent).
+    var ctl=(R.diagnostic||{}).controle;
+    if(ctl&&typeof ctl==='object'&&+ctl.version===+R.version){ var cl=[].concat(Array.isArray(ctl.bloquants)?ctl.bloquants:[],Array.isArray(ctl.a_relire)?ctl.a_relire:[]).filter(Boolean);
+      if(cl.length) h+=ck('av','Contrôle de ta retouche','<ul class="rl-na">'+cl.map(function(t){ return '<li>'+e(propre(String(t).replace(/^\s*RÈGLE COACH\s*:\s*programme\s*:\s*/i,'')))+'</li>'; }).join('')+'</ul>À toi de voir : ces points n’empêchent pas de valider.'); }
     // réajustement au nouveau poids (diagnostic.reajustement, suivi.py) : ce qui a bougé depuis la version validée
     var rj=Array.isArray((R.diagnostic||{}).reajustement)?R.diagnostic.reajustement.filter(Boolean):[];
     if(rj.length){
@@ -3256,7 +3261,7 @@ var ED=(function(){
       '<div class="carte" id="rl-co" hidden></div><div class="carte" id="rl-live" hidden></div><div class="carte" id="rl-modifs" hidden></div><div class="carte" id="rl-ctrl"></div><div class="carte" id="rl-comp" hidden></div><div class="carte" id="rl-alim"></div><div class="carte" id="rl-notes"></div></aside></div>'+
       '<div class="rl-dec" id="rl-dec"></div>';
     $('p-relire').classList.toggle('rl-v2',ESSAI);
-    tout(); rlNotes(); renderFile(); voir('relire'); hauteur();
+    tout(); rlNotes(); renderFile(); voir('relire'); hauteur(); veilleFiche();
     if(!c.externe) chargerNotes(c.user_id).then(function(){ afficherNotes(c.user_id); });   // notes liées au compte : pas pour le Google Form
     // en différé, sans bloquer l'écran : la version d'avant (comparaison), la dernière demande de correction, les consignes durables
     if(c.externe){ var PX=(EXT.par[c.ext_id]||[]).filter(function(x){ return x.version<c.version&&x.menu; }).pop();   // déjà en mémoire
@@ -3562,6 +3567,22 @@ var ED=(function(){
     if(g==='gmail-envoyer'&&mailF){ gmailEnvoyer(a,d,dire); return; }
     if(g==='copier'){ (navigator.clipboard?navigator.clipboard.writeText(a):Promise.reject()).then(function(){ dire('Adresse copiée.'); }).catch(function(){ dire('Copie impossible : sélectionne l’adresse à la main.'); }); return; }
     if(g==='mail'){ location.href='mailto:'+encodeURIComponent(a)+'?subject='+encodeURIComponent(MAIL_OBJET); dire('Ton mail s’ouvre : joins la fiche téléchargée, insère ton modèle, envoie.'); } }
+  /* APRÈS UNE RETOUCHE (02/10) : le moteur refait tout seul la fiche PDF, la liste de courses et un contrôle de la version
+     retouchée (programmes.diagnostic.pdf / .controle, menu.courses). Tant que la fiche de CETTE version manque, la page relit
+     la ligne toutes les 10 s (10 min au plus) et se met à jour sans rechargement : « Aperçu PDF » et « Envoyer par mail » se
+     débloquent d'eux-mêmes. Lecture seule ; rien n'est relu pendant qu'un coach modifie la diète. */
+  var veilleT=null;
+  function veilleFiche(){ clearInterval(veilleT); veilleT=null; var R=RL.R; if(!R||!R.pid||R.archive||window.ELY_MAQUETTE_COACH) return;
+    function manque(){ var pf=(R.diagnostic||{}).pdf; return !(pf&&pf.chemin&&+pf.version===+R.version); }
+    if(!manque()) return; var n=0;
+    veilleT=setInterval(function(){ if(RL.R!==R||++n>60){ clearInterval(veilleT); veilleT=null; return; } if(RL.S||document.visibilityState!=='visible') return;
+      sb.from('programmes').select('menu,diagnostic').eq('id',R.pid).maybeSingle().then(function(r){ if(r.error||!r.data||RL.R!==R||RL.S) return;
+        var d=r.data.diagnostic||{}, m=r.data.menu||{}, avant=JSON.stringify([(R.diagnostic||{}).pdf,(R.diagnostic||{}).controle,!!(R.menu||{}).courses]);
+        R.diagnostic=d; if(cur&&cur.programme_id===R.pid) cur.diagnostic=d;
+        if(m.courses&&R.menu&&!R.menu.courses) R.menu.courses=m.courses;
+        if(JSON.stringify([d.pdf,d.controle,!!(R.menu||{}).courses])===avant) return;
+        rlSide(); rlCourses();
+        if(!manque()){ clearInterval(veilleT); veilleT=null; toast('La fiche de cette version est prête.'); } }).catch(function(){}); },10000); }
   // essai : la diète s'affiche en « semaine » OU en « jour » (au lieu des deux l'une sous l'autre)
   function rlVue(v){ var m=document.querySelector('#p-relire .rl-main'); if(!m) return; m.dataset.v=v;
     [].forEach.call(m.querySelectorAll('.rl-vues [data-v]'),function(b){ b.setAttribute('aria-selected',String(b.dataset.v===v)); }); }

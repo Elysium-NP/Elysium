@@ -126,6 +126,10 @@
       var d=clone(o.diagnostic||{}); delete d.verdict; delete d.pdf; d.edition={par:MOI.id,le:iso(Date.now()),depuis_programme:o.id,depuis_version:o.version,changements:args.p_changements};
       var n={id:++seq,user_id:o.user_id,client_externe:o.client_externe,version:o.version+1,menu:clone(args.p_menu),cible:clone(o.cible),diagnostic:d,
         statut:args.p_valider?'valide':'en_attente',traite_par:args.p_valider?MOI.id:null,traite_at:args.p_valider?iso(Date.now()):null,created_at:iso(Date.now())};
+      // la maquette joue aussi la « veille » du moteur, tout de suite : fiche, liste de courses et contrôle de la version retouchée
+      d.pdf={chemin:'p/'+n.id+'.pdf',le:iso(Date.now()),version:n.version};
+      d.controle={version:n.version,le:iso(Date.now()),bloquants:[],a_relire:['RÈGLE COACH : programme : exemple de la maquette — pulpe de tomate : 200 g sur la semaine pour un plancher d’achat de 300 g']};
+      if(o.menu&&o.menu.courses) n.menu.courses=clone(o.menu.courses);
       DB.programmes.push(n); o.statut='remplace'; o.traite_par=MOI.id; o.traite_at=iso(Date.now());
       return Promise.resolve({data:n.id,error:null}); }
     return Promise.resolve({data:null,error:{message:'fonction absente de la maquette : '+nom}});

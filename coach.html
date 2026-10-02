@@ -1595,7 +1595,7 @@
 <script src="assets/site.js?v=prix2"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script>/* maquette (/coach-maquette) : la même page, sur des données d'exemple (assets/demo-coach.js), sans aucune connexion */
-document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=6':'ely-auth.js?v=appli2')+'"><\/script>');</script>
+document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=7':'ely-auth.js?v=appli2')+'"><\/script>');</script>
 <script>
 /* ======================================================================
    BOÎTE À OUTILS GRAPHIQUES : SVG faits main, aucune librairie, aucun CDN.
@@ -3448,7 +3448,8 @@ var ED=(function(){
       else L.push({t:x.created_at,texte:'v'+x.version+' déposée'+(rc&&rc.depuis_version?' (corrections de la v'+rc.depuis_version+')':'')});
       // « remplace » : remplacée par une retouche (déjà dite) ou par la version corrigée (c'était donc un renvoi en correction)
       var dec=x.statut==='remplace'?(nx&&!(nx.diagnostic||{}).edition?DEC.rectification:null):DEC[x.statut];
-      if(dec&&x.traite_at) L.push({t:x.traite_at,texte:'v'+x.version+' '+dec+(x.traite_par?' par '+nomCoach(x.traite_par):'')}); });
+      if(dec&&x.traite_at) L.push({t:x.traite_at,texte:'v'+x.version+' '+dec+(x.traite_par?' par '+nomCoach(x.traite_par):'')});
+      (Array.isArray(d.envois_mail)?d.envois_mail:[]).forEach(function(m){ if(m&&m.le) L.push({t:m.le,texte:'v'+x.version+' : fiche envoyée par mail à '+(m.a||'?')+(m.par?' par '+nomCoach(m.par):'')}); }); });
     var G2={}; (D.rc||[]).forEach(function(r){ if(V[r.programme_id]==null) return; var k=r.programme_id+'|'+r.coach_id+'|'+String(r.created_at).slice(0,16);
       (G2[k]=G2[k]||{t:r.created_at,pid:r.programme_id,coach:r.coach_id,n:0}).n++; });
     Object.keys(G2).forEach(function(k){ var g=G2[k]; L.push({t:g.t,texte:g.n+' action'+(g.n>1?'s':'')+' de correction sur la v'+V[g.pid]+' par '+nomCoach(g.coach)}); });
@@ -3461,7 +3462,7 @@ var ED=(function(){
   function rlDec(){ var d=$('rl-dec'), t=$('rl-dec-top'), s=suivante(), sn=s&&((s.prenom||'')+' '+(s.nom||'')).trim(), h;
     d.className='rl-dec rl-dec-fin'+(RL.S?' ed-dec':'');
     if(!RL.S&&RL.R.xid&&RL.R.etat==='valide'&&!RL.R.archive)          // Google Form : rien n'est « envoyé » (pas de compte) ; la fiche PDF viendra ici
-      h='<div class="rl-etat"><b>Validée</b> · lecture seule. Client sans compte : sa fiche PDF s’ouvre ici.</div><div class="in"><button type="button" class="db" data-act="file">← Retour à la file</button>'+
+      h='<div class="rl-etat"><b>Validée</b> · lecture seule. '+(function(L){ return L.length?'<span class="rl-pt-ok">Fiche envoyée par mail le '+esc(quand(new Date(L[L.length-1].le)))+'</span>.':'Client sans compte : sa fiche part par mail.'; })(mailEnvois(RL.R))+'</div><div class="in"><button type="button" class="db" data-act="file">← Retour à la file</button>'+
         '<button type="button" class="db" data-act="pdf">Aperçu de la fiche PDF</button><button type="button" class="db rec" data-act="mail">Envoyer par mail</button>'+(s?'<button type="button" class="db ok" data-act="suivante">Suivante : '+esc(sn)+' →</button>':'')+'</div>';
     else h=RL.S?REL.barreEdition({n:ED.journal(RL.S).length,undo:RL.S.passe.length,redo:RL.S.futur.length,envoi:RL.envoi}):REL.decision(RL.R,{arme:RL.arme,envoyes:RL.envoyes,suivante:sn,attente:(RL.co.liste||[]).length});
     d.innerHTML='<h4 class="rl-h">Ta décision</h4>'+h;
@@ -3509,6 +3510,19 @@ var ED=(function(){
       '--'+A+'--',
       '--'+L,'Content-Type: application/pdf; name="'+motMime(nomF)+'"','Content-Disposition: attachment; filename="'+motMime(nomF)+'"; filename*=UTF-8\'\''+encodeURIComponent(nomF),'Content-Transfer-Encoding: base64','',b64(octetsPdf),
       '--'+L+'--',''].join(n); }
+  /* TRACE DE L'ENVOI (Dimitri 02/10) : un client du Google Form n'a pas de compte, donc pas de notes internes (table liée au
+     compte). L'envoi est noté dans la diète elle-même : programmes.diagnostic.envois_mail = [{le, par, a, de, version}], relu
+     dans le journal de relecture par les deux coachs. Ligne relue juste avant l'écriture, pour ne rien écraser. Si la note
+     échoue, le mail est quand même parti : on le dit. Seuls les envois faits depuis la page sont connus. */
+  function mailEnvois(R){ var L=((R||{}).diagnostic||{}).envois_mail; return (Array.isArray(L)?L:[]).filter(function(m){ return m&&m.le&&+m.version===+R.version; }); }
+  function mailNoter(a,dire){ var R=RL.R, m={le:new Date().toISOString(),par:moi.id,a:a,de:gDe,version:R.version};
+    sb.from('programmes').select('diagnostic').eq('id',R.pid).maybeSingle().then(function(r){ if(r.error||!r.data) throw new Error('lecture');
+        var d=r.data.diagnostic||{}; d.envois_mail=(Array.isArray(d.envois_mail)?d.envois_mail:[]).concat([m]);
+        return sb.from('programmes').update({diagnostic:d}).eq('id',R.pid).then(function(u){ if(u.error) throw new Error('ecriture'); return d; }); })
+      .then(function(d){ R.diagnostic=d; if(cur&&cur.programme_id===R.pid) cur.diagnostic=d;
+        ((R.xid&&EXT.par[R.xid])||[]).forEach(function(x){ if(x.id===R.pid) x.diagnostic=d; });
+        if(RL.R===R){ rlNotes(); rlDec(); } })
+      .catch(function(){ dire('Mail envoyé, mais l’envoi n’a pas pu être noté dans le journal : préviens l’autre coach.'); }); }
   // 1er clic : connexion Google, puis le mail tel qu'il partira ; rien n'est encore envoyé
   function gmailPreparer(a,d,dire){ if(!MAIL_HTML){ dire('Le modèle du mail n’est pas encore chargé : réessaie dans un instant.'); gmailModele().catch(function(){}); return; }
     dire('Connexion à Google…');
@@ -3527,7 +3541,7 @@ var ED=(function(){
         {method:'POST',headers:{Authorization:'Bearer '+gJeton,'Content-Type':'message/rfc822'},body:gmailMessage(a,new Uint8Array(buf),mailF.name)}); })
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok||!j.id) throw new Error((j.error&&j.error.message)||('HTTP '+r.status)); return j; }); })
       .then(function(){ bt.textContent='Envoyé'; var z=$('mail-ap').querySelector('.dlg-de'); if(z){ z.className='dlg-de ok'; z.innerHTML='Mail envoyé à <b>'+esc(a)+'</b> depuis <b>'+esc(gDe)+'</b>, le '+new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'. Il est dans les messages envoyés de la boîte.'; }
-        dire(''); })
+        dire(''); mailNoter(a,dire); })
       .catch(function(e){ bt.disabled=false; dire('Mail NON envoyé ('+String(e.message||'erreur').slice(0,120)+'). Tu peux réessayer, ou passer par « Télécharger la fiche ».'); }); }
 
   function mailFiche(){ var R=RL.R, pf=(R.diagnostic||{}).pdf, pret=!!(pf&&pf.chemin&&+pf.version===+R.version&&R.etat==='valide'), ce=(cur&&cur.client_externe)||{},
@@ -3538,6 +3552,7 @@ var ED=(function(){
     d.innerHTML='<h3>Envoyer la fiche par mail</h3>'+(!pret
       ? '<p class="dlg-ko"><b>La fiche de cette version (v'+esc(R.version)+') n’est pas encore prête.</b> Elle est refaite après chaque modification : réessaie quand « Aperçu de la fiche PDF » l’ouvre. On n’envoie jamais la fiche d’une ancienne version.</p><div class="dlg-b"><button type="button" class="db" data-m="fermer">Fermer</button></div>'
       : '<p class="dlg-i">C’est toi qui envoies, depuis la boîte Elysium. La page prépare le destinataire, l’objet et la fiche au bon nom.</p>'+
+        mailEnvois(R).map(function(m){ return '<p class="dlg-ko" style="margin-top:10px"><b>Déjà envoyée</b> le '+esc(quand(new Date(m.le)))+' à '+esc(m.a||'?')+(m.par?' par '+esc(nomCoach(m.par)):'')+'.</p>'; }).join('')+
         '<label for="mail-a">Destinataire</label><input type="email" id="mail-a" value="'+esc(ce.email||'')+'" placeholder="adresse du client" autocomplete="off">'+
         (ce.email?'':'<p class="dlg-n">Adresse absente de sa fiche : saisis-la (elle est dans le Google Form).</p>')+
         '<label>Objet</label><p class="dlg-v">'+esc(MAIL_OBJET)+'</p>'+

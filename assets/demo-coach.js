@@ -53,7 +53,8 @@
   // une cliente d'EXEMPLE venue du Google Form (pas de compte) : diète validée + fiche de sa version -> bouton « Envoyer par mail »
   if(DIETES[0]){ var gf=DIETES[0];
     DB.programmes.push({id:9100,user_id:null,version:1,statut:'valide',menu:gf.menu,cible:gf.cible,
-      diagnostic:Object.assign({calcul:calculDemo(gf),pdf:{chemin:'p/9100.pdf',le:iso(now-JOUR),version:1}},gf.diagnostic||{}),
+      diagnostic:Object.assign({calcul:calculDemo(gf),pdf:{chemin:'p/9100.pdf',le:iso(now-JOUR),version:1},
+        envois_mail:[{le:iso(now-JOUR+3600000),par:MOI.id,a:'lea.martin@exemple.fr',de:'elysium.np.pro@gmail.com',version:1}]},gf.diagnostic||{}),
       created_at:iso(now-2*JOUR),traite_at:iso(now-JOUR),traite_par:MOI.id,
       client_externe:{id:'gf:lea-martin',source:'google_form',prenom:'Léa',nom:'Martin',sexe:'Femme',age:31,email:'lea.martin@exemple.fr',
         horodateur_form:'30/09/2026 18:20:11',questionnaire:{'Quel est ton objectif principal ?':'Perte de poids'}}}); }

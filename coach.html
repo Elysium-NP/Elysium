@@ -3497,10 +3497,11 @@ var ED=(function(){
      depuis la boîte Elysium. Droit demandé : gmail.send seulement (« envoyer en votre nom » : la page ne lit ni la boîte ni
      les brouillons) + l'adresse du compte, pour dire d'où part le mail. L'ID client est public ; aucun secret ; le jeton
      reste en mémoire dans la page (≈ 1 h), jamais stocké. Règle de sécurité : _headers, chemins /coach* seulement.
-     Ouvert à tous les coachs depuis le 02/10 (premier envoi réel fait par Dimitri) ; jamais dans la maquette ; ?gmail=0 l'éteint sur un appareil (?gmail=1 le rallume).
+     ⚠️ REVENU EN MODE D'ESSAI le 02/10 à 20:30 (?gmail=1, retenu sur l'appareil ; ?gmail=0 l'éteint) : les deux premiers envois réels
+     n'affichaient pas de pièce jointe dans Gmail. À rouvrir aux coachs seulement après un envoi où le PDF est bien visible et s'ouvre.
      L'envoi n'est permis que depuis la boîte commune (GMAIL_BOITE) ; depuis un autre compte, seulement vers soi-même (essai). */
   var GMAIL_ID='701496916605-n82c85juif33gg4osrh9o8r0i8nahm6e.apps.googleusercontent.com', GMAIL_BOITE='elysium.np.pro@gmail.com', GMAIL_ON=false, gJeton=null, gDe='';
-  try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')!=='0'; }catch(e){ GMAIL_ON=!window.ELY_MAQUETTE_COACH; }
+  try{ var qg=/[?&]gmail=([01])/.exec(location.search); if(qg) localStorage.setItem('ely_gmail',qg[1]); GMAIL_ON=!window.ELY_MAQUETTE_COACH&&localStorage.getItem('ely_gmail')==='1'; }catch(e){}
   // LE MODÈLE = celui des coachs, mot pour mot et dans LEUR mise en forme : corps HTML et version texte repris du mail
   // « Votre programmation est prête » envoyé le 02/10 depuis leur boîte (assets/mail-programmation-html.txt et mail-programmation.txt).
   // Identique pour tous les clients (ni nom ni prénom). Pour le faire évoluer : remplacer ces deux fichiers, rien d'autre.
@@ -3521,13 +3522,20 @@ var ED=(function(){
   function b64u(txt){ return b64(new TextEncoder().encode(txt)); }
   function motMime(txt){ return '=?UTF-8?B?'+btoa(String.fromCharCode.apply(null,new TextEncoder().encode(txt)))+'?='; }
   // le message complet (RFC 822) : texte brut + HTML, et la fiche en pièce jointe sous son nom
-  function gmailMessage(a,octetsPdf,nomF){ var L='=_ely_'+Date.now().toString(36), A=L+'_alt', n='\r\n';
+  // ⚠️ Deux pièges corrigés le 02/10 soir (les essais de 19:39 et 19:58 n'affichaient pas de pièce jointe dans Gmail) :
+  //  - les deux séparateurs ne doivent JAMAIS commencer l'un par l'autre (RFC 2046) : sinon un lecteur prend ceux du corps pour ceux
+  //    de l'ensemble et découpe mal le message ;
+  //  - le nom du fichier : une version sans accent entre guillemets + la vraie en filename*= (RFC 2231) ; pas de « =?UTF-8?B?…?= »
+  //    dans un paramètre (interdit, et trop long ici).
+  function gmailMessage(a,octetsPdf,nomF){ var x=Date.now().toString(36), L='=_ely_ensemble_'+x, A='=_ely_corps_'+x, n='\r\n',
+        ascii=nomF.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7e]/g,'_').replace(/["\\]/g,'_'),
+        utf=encodeURIComponent(nomF).replace(/['()*]/g,function(c){ return '%'+c.charCodeAt(0).toString(16).toUpperCase(); });
     return ['To: '+a,'Subject: '+motMime(MAIL_OBJET),'MIME-Version: 1.0','Content-Type: multipart/mixed; boundary="'+L+'"','',
       '--'+L,'Content-Type: multipart/alternative; boundary="'+A+'"','',
       '--'+A,'Content-Type: text/plain; charset=UTF-8','Content-Transfer-Encoding: base64','',b64u(MAIL_TXT),
       '--'+A,'Content-Type: text/html; charset=UTF-8','Content-Transfer-Encoding: base64','',b64u('<!doctype html><html><body style="margin:0">'+MAIL_HTML+'</body></html>'),
       '--'+A+'--',
-      '--'+L,'Content-Type: application/pdf; name="'+motMime(nomF)+'"','Content-Disposition: attachment; filename="'+motMime(nomF)+'"; filename*=UTF-8\'\''+encodeURIComponent(nomF),'Content-Transfer-Encoding: base64','',b64(octetsPdf),
+      '--'+L,'Content-Type: application/pdf; name="'+ascii+'"','Content-Disposition: attachment; filename="'+ascii+'";'+n+' filename*=UTF-8\'\''+utf,'Content-Transfer-Encoding: base64','',b64(octetsPdf),
       '--'+L+'--',''].join(n); }
   /* TRACE DE L'ENVOI (Dimitri 02/10) : un client du Google Form n'a pas de compte, donc pas de notes internes (table liée au
      compte). L'envoi est noté dans la diète elle-même : programmes.diagnostic.envois_mail = [{le, par, a, de, version}], relu

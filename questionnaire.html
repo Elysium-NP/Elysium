@@ -462,70 +462,95 @@
 <script>
 /* QUESTIONNAIRE DE RÉACTUALISATION (QUESTIONNAIRE_REACTUALISATION.md, v4 validée par Damien le 03/10).
    Ce n'est PAS une autre page : c'est ce questionnaire-ci, avec les MÊMES champs et donc les MÊMES clés data-q
-   (le moteur relit une réactualisation comme un questionnaire de départ). On ajoute la pesée (1) et l'avis sur
-   les plats (2), on masque ce qui ne se redemande pas, et tout arrive pré-rempli : le client ne change que ce qui a bougé.
-   Les réponses masquées restent dans l'envoi (collect lit tout le formulaire), avec la valeur d'avant.
-   ⚠️ Pour l'instant : DÉMONSTRATION SEULE (?reac=f1|f2|f3|f3-semaine), rien n'est lu ni écrit en base.
+   (le moteur relit une réactualisation comme un questionnaire de départ : supabase_bridge.reponses_a_jour). On ajoute
+   la pesée (1) et l'avis sur les plats (2), on masque ce qui ne se redemande pas, et tout arrive pré-rempli : le client
+   ne change que ce qui a bougé. Les réponses masquées restent dans l'envoi (collect lit tout le formulaire), avec la valeur
+   d'avant ; « Poids (en kg) » prend la pesée du jour.
+   Adresses : ?reac (toutes les questions de la formule) · ?reac=semaine (Elysium : la pesée seule) ;
+   démonstration sans base : ?reac=f1|f2|f3|f3-semaine.
    Questions par formule : Odyssée 1, 4, 6, 7 ; Olympe toutes ; Elysium la pesée seule chaque semaine, toutes les 4 semaines.
-   La 3 (menu commun en couple) attend que le duo existe. */
+   La 3 (menu commun en couple) attend que le duo existe.
+   Enregistrement (script principal) : poids (pesée du jour) -> retours (avis) -> reactualisations (une ligne par envoi). */
 (function(){
-  var m=/[?&]reac=(f1|f2|f3|f3-semaine)(?:&|#|$)/.exec(location.search); if(!m) return;
-  var F=m[1], form=document.getElementById('qform');
-  var QF={f1:[1,4,6,7],f2:[1,2,4,5,6,7,8,9,10,11],f3:[1,2,4,5,6,7,8,9,10,11],'f3-semaine':[1]}[F];
+  var m=/[?&]reac(?:=([\w-]*))?(?:&|#|$)/.exec(location.search); if(!m) return;
+  var v=m[1]||'', DEMO=/^f[123](-semaine)?$/.test(v)?v:null, form=document.getElementById('qform');
   var NOMS={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Elysium · toutes les 4 semaines','f3-semaine':'Formule Elysium · chaque semaine'};
   document.documentElement.classList.add('reac');
   function step(n){ var i=form.querySelector('[name="'+n+'"]'); return i&&i.closest('.qstep'); }
   function cacher(el){ if(el) el.hidden=true; }
-  // 1. la pesée du matin (va dans les pesées du suivi, pas dans les réponses : pas de data-q)
-  var p1=document.createElement('div'); p1.className='qstep'; p1.setAttribute('data-reac','1');
+  // 1. la pesée du matin (va dans les pesées du suivi ; elle est aussi recopiée dans « Poids (en kg) »)
+  var p1=document.createElement('div'); p1.className='qstep';
   p1.innerHTML='<h2>Ton poids ce matin.</h2><p class="qhint">Le matin de ton jour off, à jeun, avant de manger ou de boire. '+
     '<b>Obligatoire</b>&nbsp;: sans pesée, on ne peut rien réajuster.</p>'+
     '<div class="qgrid"><div class="qfield"><label>Poids ce matin (kg)</label><input type="number" name="pesee" min="35" max="250" step="0.1" placeholder="kg" required></div></div>';
   // 2. les plats, un par un (table retours)
-  var p2=document.createElement('div'); p2.className='qstep'; p2.setAttribute('data-reac','2');
+  var p2=document.createElement('div'); p2.className='qstep';
   p2.innerHTML='<h2>Tes plats, un par un.</h2><p class="qhint">Pour ta prochaine diète&nbsp;: <b>à garder</b> revient à coup sûr, '+
     '<b>à revoir</b> peut revenir sans être imposé, <b>plus jamais</b> ne revient plus. Sans avis, on varie.</p><div class="rq-plats" id="rq-plats"></div>';
   // les questions du départ, dans l'ordre du document de Damien
   var S={o:step('objectif'),i:step('ideal'),t:step('metier'),a:step('pas'),pd:step('pdj'),c:step('conserver'),r:step('refuses'),al:step('allergies'),rg:step('regime'),op:step('options')};
   var ORDRE=[[p1,[1]],[p2,[2]],[S.o,[4]],[S.i,[4]],[S.t,[5]],[S.a,[6,7]],[S.pd,[8]],[S.op,[8,11]],[S.c,[9]],[S.r,[9]],[S.al,[10]],[S.rg,[10]]];
   var fin=form.querySelector('.qend');
-  [].forEach.call(form.querySelectorAll('.qstep'),function(x){ x.hidden=true; });
-  ORDRE.forEach(function(o){ form.insertBefore(o[0],fin); o[0].hidden=!o[1].some(function(q){ return QF.indexOf(q)>-1; }); });
-  [].forEach.call(form.querySelectorAll('.qstep'),function(x){ x.classList.remove('active'); });
+  [].forEach.call(form.querySelectorAll('.qstep'),function(x){ x.hidden=true; x.classList.remove('active'); });
+  ORDRE.forEach(function(o){ form.insertBefore(o[0],fin); });
   // dans les étapes gardées : ce qui ne se redemande pas (ressenti, poids du départ, téléphone)
   var re=form.querySelector('[name="ressenti"]').closest('.qcards'); cacher(re.previousElementSibling); cacher(re);
   cacher(S.i.querySelector('.qgrid')); cacher(S.i.querySelector('.qhint'));
   S.i.querySelector('h2').textContent='Le poids que tu vises.';
   cacher(S.r.querySelector('.qwarn'));
-  // en-tête, fin de page, confirmation, remerciement
-  var it=form.querySelector('.qintro'), heb=F==='f3-semaine';
-  it.querySelector('.kick').textContent=heb?'Ta pesée de la semaine':'Réactualiser mon programme';
-  it.querySelector('h1').textContent=heb?'Ta pesée.':'Qu’est-ce qui a changé ?';
-  it.querySelector('p').innerHTML=heb?'Une seule question cette semaine&nbsp;: ton poids. Tes coachs réajustent tes quantités à partir de là.'
-    :'<b>Tes réponses de la dernière fois sont déjà remplies</b>&nbsp;: change seulement ce qui a bougé. Deux minutes.';
-  fin.querySelector('.qwarn').innerHTML='Relis-toi, puis envoie&nbsp;: tes coachs s’en servent pour '+(heb?'réajuster tes quantités.':'ta prochaine diète.');
-  document.getElementById('next').textContent=heb?'Envoyer ma pesée':'Envoyer mes réponses';
-  var md=document.getElementById('modal');
-  md.querySelector('h3').textContent='On envoie ?'; md.querySelector('p').textContent='Tes coachs s’en servent pour '+(heb?'réajuster tes quantités.':'ta prochaine diète.');
-  document.getElementById('myes').textContent='Oui, j’envoie';
-  var th=document.getElementById('scr-thanks');
-  th.querySelector('p').innerHTML=(heb?'Merci, ta pesée est enregistrée. Damien &amp; Yoann réajustent tes quantités.':'Merci. Damien &amp; Yoann s’en servent pour ta prochaine diète, <b>à la main, au gramme près</b>.')+
-    '<br><br><b>Démonstration&nbsp;: rien n’a été enregistré.</b>';
-  th.querySelector('a.btn').href='espace.html?demo='+F.slice(0,2);
-  document.title='ELYSIUM · '+(heb?'Ta pesée de la semaine':'Réactualiser mon programme');
-  // bandeau de démonstration : les quatre versions
+  // la pesée du jour est AUSSI le « Poids (en kg) » envoyé (le moteur lit le poids dans cette clé) : une seule vérité
+  form.addEventListener('input',function(e){ if(e.target.name==='pesee') form.querySelector('[name="poids"]').value=e.target.value; },true);
+  // l'avis sur les plats : trois boutons par plat, re-clic = sans avis
+  var L=document.getElementById('rq-plats');
+  L.addEventListener('click',function(e){ var b=e.target.closest('button[data-a]'); if(!b) return; var row=b.closest('.rq-pl'), on=b.classList.contains('on');
+    [].forEach.call(row.querySelectorAll('button'),function(x){ x.classList.remove('on'); }); if(!on) b.classList.add('on'); });
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  window.ELY_REAC={demo:DEMO, hebdo:/semaine$/.test(v),
+    // G = [[intitulé du repas, [[clé moteur, titre], …]], …] ; A = avis déjà donnés {clé: avis}
+    plats:function(G,A){ A=A||{};
+      L.innerHTML=G.map(function(g){ return '<h4>'+esc(g[0])+'</h4>'+g[1].map(function(p){
+        return '<div class="rq-pl" data-k="'+esc(p[0])+'"><span>'+esc(p[1])+'</span><div class="rq-b">'+[['garder','À garder'],['revoir','À revoir'],['plus_jamais','Plus jamais']].map(function(a){
+          return '<button type="button" data-a="'+a[0]+'"'+(A[p[0]]===a[0]?' class="on"':'')+'>'+a[1]+'</button>'; }).join('')+'</div></div>'; }).join(''); }).join(''); },
+    avis:function(){ var o={}; [].forEach.call(L.querySelectorAll('.rq-pl'),function(r){ var b=r.querySelector('button.on'); o[r.getAttribute('data-k')]=b?b.getAttribute('data-a'):null; }); return o; },
+    // F = f1 | f2 | f3 : les questions de la formule (la pesée seule pour Elysium en ?reac=semaine)
+    formule:function(F){ var heb=F==='f3'&&this.hebdo;
+      var QF=heb?[1]:{f1:[1,4,6,7],f2:[1,2,4,5,6,7,8,9,10,11],f3:[1,2,4,5,6,7,8,9,10,11]}[F]||[1,2,4,5,6,7,8,9,10,11];
+      ORDRE.forEach(function(o){ o[0].hidden=!o[1].some(function(q){ return QF.indexOf(q)>-1; }); });
+      var it=form.querySelector('.qintro');
+      it.querySelector('.kick').textContent=heb?'Ta pesée de la semaine':'Réactualiser mon programme';
+      it.querySelector('h1').textContent=heb?'Ta pesée.':'Qu’est-ce qui a changé ?';
+      it.querySelector('p').innerHTML=heb?'Une seule question cette semaine&nbsp;: ton poids. Tes coachs réajustent tes quantités à partir de là.'
+        :'<b>Tes réponses de la dernière fois sont déjà remplies</b>&nbsp;: change seulement ce qui a bougé. Deux minutes.';
+      fin.querySelector('.qwarn').innerHTML='Relis-toi, puis envoie&nbsp;: tes coachs s’en servent pour '+(heb?'réajuster tes quantités.':'ta prochaine diète.');
+      document.getElementById('next').textContent=heb?'Envoyer ma pesée':'Envoyer mes réponses';
+      var md=document.getElementById('modal');
+      md.querySelector('h3').textContent='On envoie ?'; md.querySelector('p').textContent='Tes coachs s’en servent pour '+(heb?'réajuster tes quantités.':'ta prochaine diète.');
+      document.getElementById('myes').textContent='Oui, j’envoie';
+      document.getElementById('scr-thanks').querySelector('p').innerHTML=(heb?'Merci, ta pesée est enregistrée. Damien &amp; Yoann réajustent tes quantités.'
+        :'Merci. Damien &amp; Yoann s’en servent pour ta prochaine diète, <b>à la main, au gramme près</b>.')+(DEMO?'<br><br><b>Démonstration&nbsp;: rien n’a été enregistré.</b>':'');
+      document.title='ELYSIUM · '+(heb?'Ta pesée de la semaine':'Réactualiser mon programme');
+      this.hebdoReel=heb; }
+  };
+  // réactualisation pas ouverte (pas de questionnaire de départ validé, pas d'abonnement, table absente) : l'écran « verrouillé » le dit
+  window.ELY_REAC.ferme=function(titre,texte){ var s=document.getElementById('scr-lock');
+    s.querySelector('h2').textContent=titre; s.querySelector('p').textContent=texte; var a=s.querySelector('a'); a.href='espace.html'; a.textContent='Retour à mon espace'; };
+
+  if(!DEMO){ window.ELY_REAC.formule('f2'); return; }        // vrai client : la formule est appliquée après lecture du compte
+  // ---- DÉMONSTRATION : une cliente d'exemple, rien n'est lu ni écrit ----
+  window.ELY_REAC.formule(DEMO.slice(0,2));
+  document.getElementById('scr-thanks').querySelector('a.btn').href='espace.html?demo='+DEMO.slice(0,2);
   var bd=document.createElement('div'); bd.className='rq-demo';
-  bd.innerHTML='Démonstration du questionnaire de réactualisation, pour une cliente d’exemple&nbsp;: <b>'+NOMS[F]+'</b>. Rien n’est enregistré.<br>Voir aussi&nbsp;: '+
+  bd.innerHTML='Démonstration du questionnaire de réactualisation, pour une cliente d’exemple&nbsp;: <b>'+NOMS[DEMO]+'</b>. Rien n’est enregistré.<br>Voir aussi&nbsp;: '+
     [['f1','Odyssée'],['f2','Olympe'],['f3','Elysium (4 semaines)'],['f3-semaine','Elysium (chaque semaine)']].map(function(x){
-      return x[0]===F?'<b>'+x[1]+'</b>':'<a href="?reac='+x[0]+'">'+x[1]+'</a>'; }).join(' · ');
-  form.insertBefore(bd,it);
-  // la cliente d'exemple : ses réponses du questionnaire de départ (mêmes clés), son menu, sa dernière pesée
-  window.ELY_REAC={formule:F, pesee:71.4, plats:[
-    ['Petit-déjeuner',['Tartines poulet & Saint-Môret','Galettes de riz, poulet & fromage']],
-    ['Déjeuner',['Bœuf, pâtes & poivron','Thon, pâtes & concombre','Poulet, riz & tomates cerises','Pâtes au poulet','Steak, riz & poivron','Thon, blé & concombre']],
-    ['Dîner',['Axoa de bœuf & semoule','Poisson blanc, patate douce & haricots verts','Bœuf, riz & maïs (au Saint-Môret)','Pâtes au poulet, pesto & parmesan','Poulet, semoule & ratatouille','Thon, pâtes & maïs']]],
-    reponses:{}};
-  var R=window.ELY_REAC.reponses;
+      return x[0]===DEMO?'<b>'+x[1]+'</b>':'<a href="?reac='+x[0]+'">'+x[1]+'</a>'; }).join(' · ');
+  form.insertBefore(bd,form.querySelector('.qintro'));
+  function pl(t){ return t.map(function(x){ return [x,x]; }); }
+  window.ELY_REAC.plats([['Petit-déjeuner',pl(['Tartines poulet & Saint-Môret','Galettes de riz, poulet & fromage'])],
+    ['Déjeuner',pl(['Bœuf, pâtes & poivron','Thon, pâtes & concombre','Poulet, riz & tomates cerises','Pâtes au poulet','Steak, riz & poivron','Thon, blé & concombre'])],
+    ['Dîner',pl(['Axoa de bœuf & semoule','Poisson blanc, patate douce & haricots verts','Bœuf, riz & maïs (au Saint-Môret)','Pâtes au poulet, pesto & parmesan','Poulet, semoule & ratatouille','Thon, pâtes & maïs'])]]);
+  window.ELY_REAC.pesee=71.4;
+  var R=window.ELY_REAC.reponses={};
   function q(n){ return form.querySelector('[name="'+n+'"]').getAttribute('data-q'); }
   R[q('objectif')]='Perte de poids'; R[q('ressenti')]='En surpoids'; R[q('poids')]='74.2'; R[q('telephone')]='06 12 34 56 78';
   R[q('ideal')]='5 à 8 kilos'; R[q('profession')]='Assistante de direction'; R[q('metier')]='Rester assis la majorité de la journée (bureau, conduite…)';
@@ -534,16 +559,6 @@
   R[q('refuses')]='Porc, Roti de porc'; R[q('options')]='Je veux le même petit déjeuner chaque jour';
   R[q('veut_ent')]='Non'; R[q('connu')]='Instagram'; R[q('adresse')]='2 rue de la Chapelle'; R[q('cp')]='80000'; R[q('ville')]='Amiens';
   R[q('cgv')]=form.querySelector('[name="cgv"]').value;
-  // l'avis sur les plats : trois boutons par plat, re-clic = sans avis
-  var AV={}, h='';
-  window.ELY_REAC.plats.forEach(function(g){ h+='<h4>'+g[0]+'</h4>'+g[1].map(function(t){
-    return '<div class="rq-pl"><span>'+t.replace(/&/g,'&amp;')+'</span><div class="rq-b"><button type="button" data-a="garder">À garder</button>'+
-      '<button type="button" data-a="revoir">À revoir</button><button type="button" data-a="plus_jamais">Plus jamais</button></div></div>'; }).join(''); });
-  // la pesée du jour est AUSSI le « Poids (en kg) » envoyé (le moteur lit le poids dans cette clé) : une seule vérité
-  form.addEventListener('input',function(e){ if(e.target.name==='pesee') form.querySelector('[name="poids"]').value=e.target.value; },true);
-  var L=document.getElementById('rq-plats'); L.innerHTML=h;
-  L.addEventListener('click',function(e){ var b=e.target.closest('button[data-a]'); if(!b) return; var row=b.closest('.rq-pl'), on=b.classList.contains('on');
-    [].forEach.call(row.querySelectorAll('button'),function(x){ x.classList.remove('on'); }); if(!on) b.classList.add('on'); });
 })();
 </script>
 <script src="assets/site.js?v=prix2"></script>
@@ -686,7 +701,7 @@
   var sb=null, uid=null, tmr=null;
   function flash(txt){ saveTag.textContent=txt; saveTag.classList.add('on'); clearTimeout(flash._t); flash._t=setTimeout(function(){ saveTag.classList.remove('on'); },1800); }
   function saveDraft(){
-    if(!sb||!uid) return Promise.resolve();
+    if(!sb||!uid||window.ELY_REAC) return Promise.resolve();   // réactualisation : jamais de brouillon dans le questionnaire de départ
     return sb.from('questionnaires').upsert({
       user_id:uid, type:'nutrition', reponses:collect(), etape:0, statut:'brouillon'
     },{onConflict:'user_id,type'}).then(function(r){
@@ -761,10 +776,12 @@
   }
 
   /* ---------- démarrage ---------- */
-  if(window.ELY_REAC){
-    restore(ELY_REAC.reponses); form.querySelector('[name="pesee"]').placeholder='Dernière : '+String(ELY_REAC.pesee).replace('.',',')+' kg';
-    document.dispatchEvent(new CustomEvent('ely:restaure')); show(''); progress();
-    document.getElementById('myes').onclick=function(e){ e.stopImmediatePropagation(); modal.classList.remove('on'); show('scr-thanks'); confetti(); };
+  if(window.ELY_REAC){ var RQ=window.ELY_REAC, pes=form.querySelector('[name="pesee"]');
+    if(RQ.demo){
+      restore(RQ.reponses); pes.placeholder='Dernière : '+String(RQ.pesee).replace('.',',')+' kg';
+      document.dispatchEvent(new CustomEvent('ely:restaure')); show(''); progress();
+      document.getElementById('myes').onclick=function(){ modal.classList.remove('on'); show('scr-thanks'); confetti(); };
+    } else reacReel(RQ,pes);
     return; }
   if(!ElyAuth.requireAuth('connexion.html')) return;
   ElyAuth.ready.then(function(u){
@@ -785,6 +802,62 @@
           });
       });
   }).catch(function(){ show(''); progress(); });
+
+  /* ---------- RÉACTUALISATION d'un vrai client ----------
+     Pré-rempli comme le relit le moteur (supabase_bridge.reponses_a_jour) : réponses du départ validé, recouvertes clé par clé
+     par la dernière réactualisation si elle est plus récente (une valeur vide ne recouvre rien).
+     Envoi dans cet ordre : pesée (poids) -> avis (retours) -> la ligne reactualisations EN DERNIER. Les deux premiers
+     s'écrasent sans risque : après une erreur, renvoyer ne crée pas de doublon de réactualisation. */
+  function cleF(v){ v=String(v||''); if(/^f[123]$/.test(v)) return v; return /odyss/i.test(v)?'f1':/olympe/i.test(v)?'f2':/lysium/i.test(v)?'f3':null; }
+  function platsDe(menu){ var LIB={petit_dejeuner:'Petit-déjeuner',dejeuner:'Déjeuner',collation:'Collation',collation_2:'Collation',diner:'Dîner'}, G={}, vus={};
+    ((menu&&menu.jours)||[]).forEach(function(j){ if(j.off) return; (j.repas||[]).forEach(function(rp){
+      var k=rp.recette_base||rp.recette; if(!k||vus[k]) return; vus[k]=1; var t=LIB[rp.type]||'Autres'; (G[t]=G[t]||[]).push([k,rp.titre||k]); }); });
+    return ['Petit-déjeuner','Déjeuner','Collation','Dîner','Autres'].filter(function(t){ return G[t]; }).map(function(t){ return [t,G[t]]; }); }
+  function reacReel(RQ,pes){
+    var P=null, F=null, AV0={};
+    if(!ElyAuth.requireAuth('connexion.html')) return;
+    ElyAuth.ready.then(function(u){
+      if(!u) return;
+      sb=ElyAuth.client; uid=u.id;
+      if(!u.paid){ RQ.ferme('Abonnement à activer','Le questionnaire de réactualisation fait partie de ton abonnement.'); show('scr-lock'); return; }
+      F=cleF((u.abonnement&&u.abonnement.formule)||u.formule);
+      return Promise.all([
+        sb.from('questionnaires').select('reponses,valide_at').eq('user_id',uid).eq('type','nutrition').eq('statut','valide').maybeSingle(),
+        sb.from('reactualisations').select('reponses,created_at').eq('user_id',uid).order('created_at',{ascending:false}).limit(1),
+        sb.from('programmes').select('id,version,menu').eq('user_id',uid).eq('statut','valide').order('version',{ascending:false}).limit(1),
+        sb.from('poids').select('kg').eq('user_id',uid).order('date',{ascending:false}).limit(1)
+      ]).then(function(r){
+        var dep=r[0].data;
+        if(!dep){ RQ.ferme('Pas encore de programme','Le questionnaire de réactualisation s’ouvre une fois ton premier programme construit.'); show('scr-lock'); return; }
+        if(r[1].error){ RQ.ferme('Bientôt disponible','Le questionnaire de réactualisation ouvre très bientôt. En attendant, ta pesée se fait dans ton espace, onglet Suivi.'); show('scr-lock'); return; }
+        var rep=Object.assign({},dep.reponses||{}), d=r[1].data&&r[1].data[0];
+        if(d&&(!dep.valide_at||new Date(d.created_at)>new Date(dep.valide_at))) Object.keys(d.reponses||{}).forEach(function(k){
+          var x=d.reponses[k]; if(x!==null&&x!==undefined&&String(x).trim()!=='') rep[k]=x; });
+        P=(r[2].data&&r[2].data[0])||null;
+        RQ.formule(F); restore(rep);
+        var w=r[3].data&&r[3].data[0]; if(w) pes.placeholder='Dernière : '+String(w.kg).replace('.',',')+' kg';
+        return (P?sb.from('retours').select('plat,avis').eq('user_id',uid).eq('programme_id',P.id):Promise.resolve({data:[]})).then(function(rt){
+          ((rt&&rt.data)||[]).forEach(function(x){ AV0[x.plat]=x.avis; });
+          RQ.plats(platsDe(P&&P.menu),AV0);
+          document.dispatchEvent(new CustomEvent('ely:restaure')); show(''); progress();
+        });
+      });
+    }).catch(function(){ RQ.ferme('Connexion impossible','Recharge la page dans un instant.'); show('scr-lock'); });
+    document.getElementById('myes').onclick=function(){
+      var b=this; if(b.disabled) return; b.disabled=true; b.textContent='Envoi…';
+      var kg=parseFloat(String(pes.value).replace(',','.')), jour=new Date().toLocaleDateString('sv-SE'), rep=collect();
+      var E=[function(){ return sb.from('poids').upsert({user_id:uid,date:jour,kg:kg},{onConflict:'user_id,date'}); }];
+      if(P&&!document.getElementById('rq-plats').closest('.qstep').hidden){ var A=RQ.avis();
+        Object.keys(A).forEach(function(k){
+          if(A[k]&&A[k]!==AV0[k]) E.push(function(){ return sb.from('retours').upsert({user_id:uid,programme_id:P.id,plat:k,avis:A[k]},{onConflict:'user_id,programme_id,plat'}); });
+          else if(!A[k]&&AV0[k]) E.push(function(){ return sb.from('retours').delete().eq('user_id',uid).eq('programme_id',P.id).eq('plat',k); }); }); }
+      E.push(function(){ return sb.from('reactualisations').insert({user_id:uid,programme_id:P?P.id:null,version_programme:P?P.version:null,formule:F,hebdo:!!RQ.hebdoReel,reponses:rep}); });
+      E.reduce(function(pr,f){ return pr.then(function(){ return f().then(function(r){ if(r&&r.error) throw r.error; }); }); },Promise.resolve())
+        .then(function(){ modal.classList.remove('on'); show('scr-thanks'); confetti(); })
+        .catch(function(){ b.disabled=false; b.textContent='Oui, j’envoie'; modal.classList.remove('on');
+          err.textContent='Envoi impossible pour le moment. Réessaie dans un instant : rien n’est perdu.'; });
+    };
+  }
 
   /* ---------- confettis (canvas, zéro dépendance) ---------- */
   function confetti(){
@@ -812,7 +885,7 @@
   var reduit=matchMedia('(prefers-reduced-motion:reduce)').matches, html=document.documentElement;
   var form=document.getElementById('qform'), tous=[].slice.call(form.querySelectorAll('.qstep'));
   // la jauge ne compte que les blocs à questions obligatoires (le bloc facultatif serait « rempli » d'office)
-  var blocs=tous.filter(function(b){ return !b.hidden&&b.querySelector('[required],[data-req]'); });
+  function blocsVis(){ return [].filter.call(form.querySelectorAll('.qstep'),function(b){ return !b.hidden&&b.querySelector('[required],[data-req]'); }); }
   if(!reduit) html.classList.add('anim');
   // un bloc est complet quand toutes ses réponses obligatoires sont données
   function complet(b){
@@ -829,7 +902,7 @@
   var dernierPalier=-1, pret=false;
   function bravo(t){ var e=document.getElementById('bravo'); e.textContent=t; e.classList.add('on'); clearTimeout(bravo._t); bravo._t=setTimeout(function(){ e.classList.remove('on'); },2200); }
   function maj(source){
-    var n=0; blocs.forEach(function(b){ var f=complet(b); if(f&&!b.classList.contains('fait')&&pret&&source){ b.classList.add('juste'); setTimeout(function(){ b.classList.remove('juste'); },700); }
+    var blocs=blocsVis(), n=0; blocs.forEach(function(b){ var f=complet(b); if(f&&!b.classList.contains('fait')&&pret&&source){ b.classList.add('juste'); setTimeout(function(){ b.classList.remove('juste'); },700); }
       b.classList.toggle('fait',f); if(f) n++; });
     var r=blocs.length?n/blocs.length:0;
     document.getElementById('s-compte').textContent=n+' / '+blocs.length;
@@ -848,7 +921,7 @@
     maj(true);
     // bloc tout juste complété par un choix -> on glisse doucement au suivant
     if(b&&!avant&&b.classList.contains('fait')&&(e.target.type==='radio'||e.target.type==='checkbox')){
-      var i=tous.indexOf(b), s=tous.slice(i+1).filter(function(x){ return !x.hidden; })[0];
+      var T=[].slice.call(form.querySelectorAll('.qstep')), s=T.slice(T.indexOf(b)+1).filter(function(x){ return !x.hidden; })[0];
       if(s) setTimeout(function(){ s.scrollIntoView({behavior:reduit?'auto':'smooth',block:'start'}); },900);
     }
   });

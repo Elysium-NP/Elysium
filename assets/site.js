@@ -21,6 +21,9 @@ window.ELY_PRIX_EBOOK = '14,90 €';
       var ab=document.createElement('div'); ab.className='apercu-bandeau';
       ab.innerHTML='Aperçu du nouveau style, pour validation. <a href="?style=site">Revenir au site actuel</a>';
       document.body.appendChild(ab);
+      // la maquette poussée (feuille et script dédiés, chargés seulement ici)
+      var lk=document.createElement('link'); lk.rel='stylesheet'; lk.href='assets/apercu-appli.css?v=3'; document.head.appendChild(lk);
+      var sc=document.createElement('script'); sc.src='assets/apercu-appli.js?v=1'; document.body.appendChild(sc);
     }
   }catch(e){}
 

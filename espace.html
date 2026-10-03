@@ -439,7 +439,7 @@
   /* médaille de profil (ou l'initiale) */
   .p-medaille{display:flex;justify-content:center;margin:0 0 14px}
   .p-medaille .av{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:var(--pilule);font:800 34px/1 Arial,Helvetica,sans-serif;color:var(--ice)}
-  .p-medaille .av.md{background:none;filter:drop-shadow(0 6px 10px rgba(60,40,10,.3))} .p-medaille .av svg{width:100%;height:100%}
+  .p-medaille .av.md{background:none;box-shadow:var(--ombre)} .p-medaille .av svg{width:100%;height:100%}
   /* ===== STYLE « COMME UNE APPLI CONNUE » (04/10) : mêmes écrans que l'appli MyEly ===== */
   .membre .card .ch{border-bottom:0;padding-bottom:0;margin-bottom:14px}
   .membre .card .ch::after,.membre .card .ch h3::before{display:none}
@@ -482,7 +482,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
 <script>if(ELY_DEMO) window.supabase=null;</script>
 <script src="assets/ely-auth.js?v=appli3"></script>
 <script src="assets/jour.js?v=3"></script>
-<script src="assets/medaille.js?v=1"></script>
+<script src="assets/medaille.js?v=2"></script>
 <script>if(!ELY_DEMO) ElyAuth.requireAuth('connexion.html');</script>
 <link rel="stylesheet" href="assets/jour.css?v=4">
 </head>
@@ -670,7 +670,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
      restent en maquette. Un bandeau qui ment sur l'état réel finit par tromper tout le monde. -->
 <div class="demo-banner hors-appli" id="demobanner" style="display:none">⚠︎ Compte et questionnaire sont réels et sécurisés. En revanche, le paiement est simulé et le programme affiché est un exemple — le tien arrivera une fois ta programmation faite.</div>
 
-<script src="assets/site.js?v=0410h"></script>
+<script src="assets/site.js?v=0410i"></script>
 <script>
 /* Exemple de programme (en prod : chargé depuis l'API du membre une fois construit par le coach). Structure identique au moteur. */
 var PROG = {

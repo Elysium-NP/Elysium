@@ -155,7 +155,7 @@ body.apercu-appli .appbar{display:none}
   body.apercu-appli .apercu-bandeau{bottom:calc(84px + env(safe-area-inset-bottom,0px));font-size:11.5px}
   body.apercu-appli .day{border-radius:48px}
 }
-body.apercu-appli .figures .fg:last-child .v{font-size:clamp(28px,3.2vw,42px)!important;letter-spacing:-.04em!important}
+body.apercu-appli section:not(.sec) .figures .fg:last-child .v{font-size:clamp(28px,3.2vw,42px)!important;letter-spacing:-.04em!important}
 body.apercu-appli .two h2{font-size:clamp(32px,4.2vw,54px)!important}
 /* boutons : texte toujours centré dans la pilule (les pages hors accueil gardaient un padding vertical) */
 body.apercu-appli .btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important;padding-bottom:0!important;line-height:1.1!important;text-align:center}
@@ -175,3 +175,21 @@ body.apercu-appli .sec-head .lbl::before{content:"";width:7px;height:7px;border-
 body.apercu-appli .sec-head .lbl::after{content:attr(data-t);font-size:11px}
 body.apercu-appli .sec-head h2{margin-top:0!important}
 body.apercu-appli .sec-head h2::after,body.apercu-appli .sec-head::after{display:none!important}
+
+/* ---------- Méthode : les 4 étapes en cartes d'appli, 2 × 2 ---------- */
+body.apercu-appli .trace,body.apercu-appli .spine-fill{display:none!important}
+body.apercu-appli .steps{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px!important;margin-top:30px!important}
+@media(max-width:760px){body.apercu-appli .steps{grid-template-columns:1fr}}
+body.apercu-appli .step{display:flex!important;flex-direction:column;gap:14px!important;padding:26px 24px!important;border:0!important;margin:0!important}
+body.apercu-appli .step::before,body.apercu-appli .step::after{display:none!important}
+body.apercu-appli .step .sn{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:color-mix(in srgb,var(--a-brand) 16%,var(--carte));
+  color:var(--a-bleu)!important;font:800 20px/1 Arial,Helvetica,sans-serif!important;letter-spacing:-.02em}
+body.apercu-appli .step .st h3{font:800 24px/1.1 Arial,Helvetica,sans-serif!important;text-transform:none!important;letter-spacing:-.03em!important;color:var(--a-encre)!important;margin:0 0 8px!important}
+body.apercu-appli .step .st p{font:15.5px/1.6 Arial,Helvetica,sans-serif!important;color:var(--a-doux)!important}
+body.apercu-appli .step .st p b{color:var(--a-encre)!important;font-weight:800!important}
+
+/* citation de la Méthode : grande carte bleue, comme celle de l'accueil */
+body.apercu-appli .quote{background:var(--a-brand)!important;padding:clamp(28px,4vw,48px)!important;border-radius:var(--a-rr)!important;box-shadow:0 20px 40px color-mix(in srgb,var(--a-brand) 30%,transparent)!important}
+body.apercu-appli .quote blockquote{font:800 clamp(24px,3vw,38px)/1.12 Arial,Helvetica,sans-serif!important;letter-spacing:-.035em;color:#111!important;margin:0}
+body.apercu-appli .quote figcaption{margin-top:16px;font:700 12px Arial,Helvetica,sans-serif!important;letter-spacing:.12em;color:rgba(0,0,0,.6)!important}
+body.apercu-appli .partner-strip{border:0!important;padding:16px 22px!important;border-radius:999px;background:var(--carte);box-shadow:var(--ombre);margin-top:22px!important;flex-wrap:wrap}

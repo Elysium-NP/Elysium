@@ -1,6 +1,6 @@
 /* MÉDAILLES DE PROFIL : le même dessin que l'appli MyEly (app/appli.js, MyEly.avatar), recopié pour que le site les affiche.
    La clé vient de profiles.avatar (app/supabase/avatar_profil.sql). Le site ne fait qu'AFFICHER : le choix et les succès
-   restent dans l'appli. ⚠️ Si l'appli change ses emblèmes ou leur dessin, recopier ici. */
+   restent dans l'appli. ⚠️ Si l'appli change ses emblèmes ou leur dessin, recopier ici (dernière copie : 04/10, style « appli connue »). */
 (function(){
   var EMBLEMES = [
     ["laurier", "Laurier", '<path d="M12 20c-4-1-7-4-7.5-9M12 20c4-1 7-4 7.5-9"/><path d="M5 13c-1.5-.5-2.3-1.8-2.3-3.2 1.4.1 2.5.9 2.8 2.2M6.2 16.2c-1.6 0-2.8-.9-3.3-2.3 1.4-.3 2.7.3 3.4 1.5M4.6 9.8C3.4 8.9 3 7.5 3.4 6.2c1.3.5 2.1 1.6 2 3M19 13c1.5-.5 2.3-1.8 2.3-3.2-1.4.1-2.5.9-2.8 2.2M17.8 16.2c1.6 0 2.8-.9 3.3-2.3-1.4-.3-2.7.3-3.4 1.5M19.4 9.8c1.2-.9 1.6-2.3 1.2-3.6-1.3.5-2.1 1.6-2 3"/>', "bronze"],
@@ -20,20 +20,12 @@
     html: function (cle, initiale, cls) {
       var e = EMBLEMES.filter(function (x) { return x[0] === cle; })[0];
       if (!e) return '<span class="av ' + (cls || "") + '">' + initiale + "</span>";
-      var M = { bronze: ["#E9BE95", "#8A5530", "#F2CDA8", "#B97D50", "#5A3218", "rgba(255,236,214,.75)"],
-        argent: ["#F4F6F9", "#8C95A2", "#FBFCFD", "#C3CAD3", "#3F4956", "rgba(255,255,255,.9)"],
-        or: ["#F8E3A0", "#A0731A", "#FCEDB8", "#D8AB43", "#5E4108", "rgba(255,248,222,.85)"],
-        elysium: ["#9CD0FF", "#0E4F99", "#3AA4FF", "#0D4A8F", "#FFFFFF", "rgba(4,30,70,.55)"] }[e[3]] || [];
-      var id = "md-" + e[3];
-      return '<span class="av emb md ' + (cls || "") + '"><svg viewBox="0 0 100 100" aria-hidden="true"><defs>' +
-        '<linearGradient id="' + id + '-b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + M[0] + '"/><stop offset=".55" stop-color="' + M[3] + '"/><stop offset="1" stop-color="' + M[1] + '"/></linearGradient>' +
-        '<radialGradient id="' + id + '-f" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="' + M[2] + '"/><stop offset="1" stop-color="' + M[3] + '"/></radialGradient></defs>' +
-        '<circle cx="50" cy="50" r="49" fill="url(#' + id + '-b)"/>' +
-        '<circle cx="50" cy="50" r="41.5" fill="url(#' + id + '-f)" stroke="' + M[1] + '" stroke-opacity=".55" stroke-width="1"/>' +
-        '<circle cx="50" cy="50" r="37" fill="none" stroke="' + M[4] + '" stroke-opacity=".45" stroke-width="1.6" stroke-dasharray="0 4.84" stroke-linecap="round"/>' +
-        '<g fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(23 23) scale(2.25)">' +
-        '<g stroke="' + M[5] + '" stroke-width="1.5" transform="translate(.35 .45)">' + e[2] + "</g>" +
-        '<g stroke="' + M[4] + '" stroke-width="1.35">' + e[2] + "</g></g></svg></span>";
+      // style « Comme une appli connue » (04/10) : disque plein à la couleur du rang, emblème au trait épais, rien de gravé
+      var M = { bronze: ["#B9804F", "#FFFFFF"], argent: ["#97A1AD", "#FFFFFF"], or: ["#D3A52A", "#FFFFFF"], elysium: ["#2E9BFF", "#111111"] }[e[3]] || ["#97A1AD", "#FFFFFF"];
+      return '<span class="av emb md ' + (cls || "") + '"><svg viewBox="0 0 100 100" aria-hidden="true">' +
+        '<circle cx="50" cy="50" r="50" fill="' + M[0] + '"/>' +
+        '<circle cx="50" cy="50" r="42" fill="none" stroke="' + M[1] + '" stroke-opacity=".28" stroke-width="2"/>' +
+        '<g fill="none" stroke="' + M[1] + '" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" transform="translate(23 23) scale(2.25)">' + e[2] + "</g></svg></span>";
     }
   };
 })();

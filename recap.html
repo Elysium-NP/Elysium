@@ -153,15 +153,15 @@
       inclus:[PROG,SUIVI,'<b>Un nouveau menu chaque mois</b>','<b>Quantités réajustées à chaque nouveau menu</b>',COURSES],
       rythme:'Un nouveau menu à chaque période de 4 semaines. Tes quantités sont réajustées à chaque changement de menu, à partir de tes pesées&nbsp;: pèse-toi au moins une fois par période, avant la fin de celle-ci.'},
     f3:{nom:'Formule Elysium',sous:'<b>Premium</b> · réajusté chaque semaine + recettes des coachs',prix:'29,90',
-      inclus:[PROG,SUIVI,'<b>Un nouveau menu chaque mois</b>','<b>Quantités réajustées chaque semaine</b>',COURSES,
-              '<b>Recettes des coachs pour chaque repas</b>, pour un maximum de gourmandise','<b>L’e-book Elysium «&nbsp;Bien manger, au gramme&nbsp;près&nbsp;» offert</b> (valeur '+(window.ELY_PRIX_EBOOK||'')+')',MSG],
+      inclus:[PROG,SUIVI,'<b>Un nouveau menu chaque mois</b>','<b>Quantités réajustées chaque semaine</b> pour de meilleurs résultats',
+              '<b>Recettes des coachs pour chaque repas</b>, pour un maximum de gourmandise','<b>L’e-book Elysium «&nbsp;Bien manger, au gramme&nbsp;près&nbsp;» offert</b> (valeur '+(window.ELY_PRIX_EBOOK||'')+')',MSG,COURSES],
       rythme:'Le suivi le plus rapproché&nbsp;: un nouveau menu à chaque période de 4 semaines, et tes quantités réajustées chaque semaine, à partir de ta pesée hebdomadaire. Pèse-toi chaque semaine, le même jour, le matin à jeun.'}
   };
   // ce que les formules du dessus ajoutent (mêmes mots que la page Formules, dans le même ordre)
   var MANQUE={
     f1:[['<b>Un nouveau menu chaque mois</b>','Olympe, Elysium'],['<b>Quantités réajustées à chaque nouveau menu</b>','Olympe'],
-        ['<b>Quantités réajustées chaque semaine</b>','Elysium'],[COURSES,'Olympe, Elysium'],['<b>Recettes des coachs pour chaque repas</b>','Elysium'],['<b>L’e-book «&nbsp;Bien manger, au gramme&nbsp;près&nbsp;»</b> (offert)','Elysium']],
-    f2:[['<b>Quantités réajustées chaque semaine</b>','Elysium'],['<b>Recettes des coachs pour chaque repas</b>, pour un maximum de gourmandise','Elysium'],['<b>L’e-book «&nbsp;Bien manger, au gramme&nbsp;près&nbsp;»</b> (offert)','Elysium']],
+        ['<b>Quantités réajustées chaque semaine</b> pour de meilleurs résultats','Elysium'],[COURSES,'Olympe, Elysium'],['<b>Recettes des coachs pour chaque repas</b>','Elysium'],['<b>L’e-book «&nbsp;Bien manger, au gramme&nbsp;près&nbsp;»</b> (offert)','Elysium']],
+    f2:[['<b>Quantités réajustées chaque semaine</b> pour de meilleurs résultats','Elysium'],['<b>Recettes des coachs pour chaque repas</b>, pour un maximum de gourmandise','Elysium'],['<b>L’e-book «&nbsp;Bien manger, au gramme&nbsp;près&nbsp;»</b> (offert)','Elysium']],
     f3:[]
   };
   var q=new URLSearchParams(location.search), k=q.get('formule');

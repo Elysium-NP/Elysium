@@ -1997,7 +1997,7 @@ var REL=(function(){
       ecartsTable(R)+
       '<div class="rl-freq"><div class="rl-sub">Aliments très présents <span style="text-transform:none;letter-spacing:0;font-weight:400">(plus de 3 jours sur '+actifs(m).length+', clic = surligner dans la grille)</span></div>'+
       (fq.length?'<div class="rl-chips">'+fq.map(function(k){ var a=F.aliments[k];
-        return '<button type="button" class="rl-chip'+(k===hl?' on':'')+'" data-act="surligne" data-ing="'+e(k)+'"><b>'+e(cap(k))+'</b><span>'+a.jours+' jours · '+g0(a.g)+' g</span></button>'; }).join('')+'</div>':'<p class="leg" style="margin-left:0">Aucun aliment au-delà de 3 jours.</p>')+'</div></details>';
+        return '<button type="button" class="rl-chip'+(k===hl?' on':'')+'" data-act="surligne" data-ing="'+e(k)+'"><b>'+e(cap(k))+'</b><span title="'+g0(a.g)+' g">'+a.jours+' jours · '+e(ED.enUnites(k,a.g)||g0(a.g)+' g')+'</span></button>'; }).join('')+'</div>':'<p class="leg" style="margin-left:0">Aucun aliment au-delà de 3 jours.</p>')+'</div></details>';
     return h;
   }
   // le petit graphique (à monter avec G.mount(cadre, function(w){ return REL.graphe(R,w); }))
@@ -2519,6 +2519,9 @@ var ED=(function(){
 
   // « 3 œufs », « Un demi-concombre », « Un poivron et demi », « Un quart de concombre » (units.format_units) ;
   // null quand la quantité ne se nomme pas : la ligne s'affiche alors en grammes, jamais un nom approximatif
+  // total de la semaine en pièces pour les listes d'aliments (Damien 03/10 : « des bananes, pas des grammes ») ; null = en grammes
+  function enUnites(id,g){ var al=aliment(id), p=al&&al.piece; if(!p||!(g>0)) return null; var u=g/p.g, r=Math.round(u*2)/2;
+    u=Math.abs(u-r)<.05?r:Math.round(u*10)/10; return String(u).replace('.',',')+' '+(u>1?p.plur:p.un); }
   function affichage(id,g){ var al=aliment(id), p=al&&al.piece; if(!p||!g) return null;
     var u=g/p.g, ur=Math.round(u), f=FEM.test(cle(p.un))||FEM.test(cle(id)), un=f?'Une':'Un', demi=f?'demie':'demi';
     if(Math.abs(u-ur)<0.02) return ur>=1?ur+' '+(ur>1?p.plur:p.un):null;
@@ -2690,7 +2693,7 @@ var ED=(function(){
     return L.sort(function(a,b){ return b.sc-a.sc; });
   }
 
-  return {charger:charger,base:function(){ return BASE; },aliment:aliment,cle:cle,pasG:pasG,libPas:libPas,voisin:voisin,affichage:affichage,alertes:alertes,
+  return {charger:charger,base:function(){ return BASE; },aliment:aliment,cle:cle,pasG:pasG,libPas:libPas,voisin:voisin,affichage:affichage,enUnites:enUnites,alertes:alertes,
     session:session,refRepas:refRepas,refLigne:refLigne,cleMoteur:cleMoteur,faire:faire,annuler:annuler,retablir:retablir,journal:journal,deplaces:deplaces,modifie:modifie,
     resultat:resultat,proposer:proposer,candidats:candidats,clone:clone};
 })();
@@ -3412,7 +3415,8 @@ var ED=(function(){
     el.innerHTML='<h4 class="rl-h">Aliments de la semaine <span class="n">'+K.length+'</span></h4>'+
       '<p class="leg" style="margin:0 0 10px">Clique un aliment : il est surligné partout dans la diète. Clique-le encore pour l’éteindre.</p>'+
       '<div class="rl-al">'+K.map(function(k){ var a=A[k], g=Math.round(a.g);
-        return '<button type="button" class="'+(k===RL.hl?'on':'')+'" data-act="surligne" data-ing="'+esc(k)+'"><b>'+esc(a.n.charAt(0).toUpperCase()+a.n.slice(1))+'</b><span>'+a.j+' j · '+(g>=1000?String(Math.round(g/100)/10).replace('.',',')+' kg':g+' g')+'</span></button>'; }).join('')+'</div>'; }
+        return '<button type="button" class="'+(k===RL.hl?'on':'')+'" data-act="surligne" data-ing="'+esc(k)+'"><b>'+esc(a.n.charAt(0).toUpperCase()+a.n.slice(1))+'</b><span title="'+g+' g">'+a.j+' j · '+esc(ED.enUnites(k,g)||(g>=1000?String(Math.round(g/100)/10).replace('.',',')+' kg':g+' g'))+'</span></button>'; }).join('')+'</div>';
+    if(!ED.base().aliments.length&&!rlAlim.att){ rlAlim.att=1; base().then(function(){ rlAlim(); rlSem(); },function(){ rlAlim.att=0; }); } }
   /* ---- NOTES INTERNES PARTAGÉES (table notes_coachs, supabase/notes_coachs.sql) ----
      Tant que la table n'existe pas : l'ancien fonctionnement (localStorage ely_notes_<uid>, sur cet appareil), dit à l'écran.
      Au premier chargement réussi, les notes gardées sur l'appareil sont recopiées dans la table puis effacées de l'appareil. */

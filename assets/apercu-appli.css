@@ -193,3 +193,61 @@ body.apercu-appli .quote{background:var(--a-brand)!important;padding:clamp(28px,
 body.apercu-appli .quote blockquote{font:800 clamp(24px,3vw,38px)/1.12 Arial,Helvetica,sans-serif!important;letter-spacing:-.035em;color:#111!important;margin:0}
 body.apercu-appli .quote figcaption{margin-top:16px;font:700 12px Arial,Helvetica,sans-serif!important;letter-spacing:.12em;color:rgba(0,0,0,.6)!important}
 body.apercu-appli .partner-strip{border:0!important;padding:16px 22px!important;border-radius:999px;background:var(--carte);box-shadow:var(--ombre);margin-top:22px!important;flex-wrap:wrap}
+
+/* chiffres qui sont des mots (« Des années ») : plus petits, jamais coupés */
+body.apercu-appli .figures .v.mot{font-size:clamp(28px,3vw,40px)!important;letter-spacing:-.04em!important;overflow-wrap:normal;word-break:normal;hyphens:none}
+
+/* ---------- Coachs : cartes profil d'appli ---------- */
+body.apercu-appli .coach{padding:10px!important;overflow:hidden}
+body.apercu-appli .coach .ph{border-radius:22px;overflow:hidden}
+body.apercu-appli .coach .ph .fr,body.apercu-appli .coach .ph .scanline,body.apercu-appli .coach .ph::before{display:none!important}
+body.apercu-appli .coach .body{padding:18px 14px 12px!important}
+body.apercu-appli .coach .role{display:inline-flex;padding:6px 11px;border-radius:999px;background:color-mix(in srgb,var(--a-brand) 16%,var(--carte));color:var(--a-bleu)!important;
+  font:800 10.5px/1 Arial,Helvetica,sans-serif!important;letter-spacing:.1em!important;text-transform:uppercase}
+body.apercu-appli .coach h3{font:800 34px/1 Arial,Helvetica,sans-serif!important;letter-spacing:-.04em!important;margin:12px 0 10px!important;text-transform:none!important}
+body.apercu-appli .coach p{font:15.5px/1.6 Arial,Helvetica,sans-serif!important;color:var(--a-doux)!important}
+
+/* ---------- Résultats : tuiles de chiffres, cartes de transformation, avis en bulles ---------- */
+body.apercu-appli .rstat{background:var(--carte)!important;border:0!important;border-radius:24px!important;box-shadow:var(--ombre);padding:22px 28px!important}
+body.apercu-appli .rstat .v{font:800 clamp(36px,4.4vw,56px)/1 Arial,Helvetica,sans-serif!important;letter-spacing:-.05em!important;color:var(--a-encre)!important}
+body.apercu-appli .rstat .k,body.apercu-appli .figures .k{text-transform:none!important;letter-spacing:0!important;font:700 12.5px/1.35 Arial,Helvetica,sans-serif!important;color:var(--a-doux)!important;margin-top:8px}
+body.apercu-appli .tcard{background:var(--carte)!important;border:0!important;border-radius:28px!important;box-shadow:var(--ombre);padding:8px}
+body.apercu-appli .tphoto{border-radius:22px;border:0!important;overflow:hidden}
+body.apercu-appli .tphoto .play{background:var(--a-brand)!important;border:0!important;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+body.apercu-appli .tphoto .play::after{border-color:transparent transparent transparent #111!important}
+body.apercu-appli .tphoto .vtag{border-radius:999px!important;padding:6px 11px!important;background:rgba(17,17,17,.75)!important;color:#fff!important;font:700 11px/1 Arial,Helvetica,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
+body.apercu-appli .tbody{padding:16px 14px 10px!important}
+body.apercu-appli .tnum{font:800 clamp(30px,3.2vw,42px)/1 Arial,Helvetica,sans-serif!important;letter-spacing:-.05em!important;color:var(--a-encre)!important}
+body.apercu-appli .tnum small{display:inline-block!important;margin:0 0 0 8px!important;padding:5px 10px;border-radius:999px;background:var(--pilule);font:700 12px/1 Arial,Helvetica,sans-serif!important;letter-spacing:0!important;color:var(--a-doux)!important;vertical-align:middle}
+body.apercu-appli .tquote,body.apercu-appli .tframe{font:15.5px/1.55 Arial,Helvetica,sans-serif!important;font-style:normal!important;color:var(--a-encre)!important}
+body.apercu-appli .tfoot{border-top:1px solid var(--line)!important}
+body.apercu-appli .tname{font:800 13px/1.2 Arial,Helvetica,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
+body.apercu-appli .tname i{font:600 12px Arial,Helvetica,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
+body.apercu-appli .tlink{padding:8px 13px;border-radius:999px;background:var(--pilule);color:var(--a-encre)!important;font:800 12px/1 Arial,Helvetica,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
+body.apercu-appli .wcard{background:var(--carte)!important;border:0!important;border-radius:4px 26px 26px 26px!important;box-shadow:var(--ombre);padding:26px 24px 22px!important}
+body.apercu-appli .wcard::before,body.apercu-appli .wcard::after{color:var(--a-brand)!important;opacity:1!important}
+body.apercu-appli .wcard .wq{font:16.5px/1.55 Arial,Helvetica,sans-serif!important;font-style:normal!important;color:var(--a-encre)!important}
+body.apercu-appli .wcard .wq b{font-weight:800!important}
+body.apercu-appli .wcard .wa{font:700 12px Arial,Helvetica,sans-serif!important;letter-spacing:0!important;text-transform:none!important;color:var(--a-doux)!important}
+body.apercu-appli .wcard .wa::before{display:none}
+body.apercu-appli .rnote{font:13px/1.6 Arial,Helvetica,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
+body.apercu-appli .rmoreig a{display:inline-flex;padding:13px 20px;border-radius:999px;background:var(--pilule);border:0!important;color:var(--a-encre)!important;font:800 14px/1 Arial,Helvetica,sans-serif;letter-spacing:0;text-transform:none}
+body.apercu-appli .wcard::before,body.apercu-appli .wcard::after{display:none!important}
+body.apercu-appli .wcard .wq{margin-top:0!important}
+
+/* titres : jamais coupés en plein mot */
+body.apercu-appli h1,body.apercu-appli h2,body.apercu-appli h3{overflow-wrap:normal!important;word-break:normal!important;hyphens:manual!important}
+/* FAQ : titres de colonne à leur taille */
+body.apercu-appli .faq-sec .sec-head h2{font-size:clamp(28px,2.9vw,40px)!important;line-height:1.02!important}
+
+/* ---------- Contact : formulaire dans une carte, champs gris arrondis, infos façon réglages ---------- */
+body.apercu-appli .cform{background:var(--carte);border-radius:var(--a-rr);box-shadow:var(--ombre);padding:clamp(22px,4vw,40px)}
+body.apercu-appli .cform label{font:700 13px/1.2 Arial,Helvetica,sans-serif!important;letter-spacing:0!important;text-transform:none!important;color:var(--a-encre)!important}
+body.apercu-appli .cform input,body.apercu-appli .cform select,body.apercu-appli .cform textarea{background:var(--pilule)!important;border:2px solid transparent!important;border-radius:16px!important;padding:14px 16px!important;font:16px/1.35 Arial,Helvetica,sans-serif!important}
+body.apercu-appli .cform input:focus,body.apercu-appli .cform select:focus,body.apercu-appli .cform textarea:focus{border-color:var(--a-brand)!important;background:var(--carte)!important}
+body.apercu-appli .cform .btn{background:var(--a-brand)!important}
+body.apercu-appli .cinfo{background:var(--carte)!important;border:0!important;border-radius:var(--a-rr)!important;box-shadow:var(--ombre);padding:8px 26px!important}
+body.apercu-appli .cinfo .ci .k{display:inline-flex;align-self:flex-start;padding:6px 11px;border-radius:999px;background:color-mix(in srgb,var(--a-brand) 16%,var(--carte));color:var(--a-bleu)!important;
+  font:800 10.5px/1 Arial,Helvetica,sans-serif!important;letter-spacing:.1em!important}
+body.apercu-appli .cinfo .ci a,body.apercu-appli .cinfo .ci .v{font:800 19px/1.25 Arial,Helvetica,sans-serif!important;letter-spacing:-.02em;margin-top:4px}
+body.apercu-appli .cinfo .ci p{font:15px/1.5 Arial,Helvetica,sans-serif!important;color:var(--a-doux)!important}

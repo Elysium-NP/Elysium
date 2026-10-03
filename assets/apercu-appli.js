@@ -32,6 +32,9 @@
   // « // Ta pesée » -> « Ta pesée » (lu par la pastille, voir la feuille)
   [].forEach.call(document.querySelectorAll('.sec-head .lbl'),function(l){ l.setAttribute('data-t',String(l.textContent).replace(/^\s*\/\/\s*/,'').trim()); });
 
+  // chiffres qui sont des mots : une taille à part (voir .v.mot)
+  [].forEach.call(document.querySelectorAll('.figures .v'),function(v){ if(!/\d/.test(v.textContent)) v.classList.add('mot'); });
+
   // 2. la barre d'onglets (mobile)
   var go=document.querySelector('nav.menu a.go'), ici=location.pathname.replace(/\/$/,'/index').replace(/\.html$/,'').split('/').pop()||'index';
   var L=[['Accueil','index.html','accueil','index'],['Méthode','methode.html','methode','methode'],['Formules','formules.html','formules','formules'],['Résultats','resultats.html','resultats','resultats'],

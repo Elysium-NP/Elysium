@@ -4150,6 +4150,50 @@ var ED=(function(){
   }
 
   /* ---------- AUJOURD'HUI ---------- */
+  /* LES 8 LISTES « À faire aujourd'hui », en données : la page les dessine (renderJour) et l'appli des coachs les lit (ElyCoach.aujourdhui).
+     item = {nom, nomHtml, detail (HTML court), cible:{type:'diete'|'client'|'messages', id}} */
+  function listesJour(){
+    var C=D.clients, cl=function(id){ return D.par[id]||{id:id,nom:(NOMS[id]||'Client').trim()}; };
+    function it(nom,nomHtml,detail,type,id){ return {nom:nom,nomHtml:nomHtml,detail:detail,cible:{type:type,id:id}}; }
+    function dePerso(c){ return it(c.nom,nomLien(c),'','client',c.id); }
+    var relire=file.filter(function(c){ return c.etape==='a_relire'||c.etape==='rectification'; }).map(function(c){
+      var k=c.externe?null:cl(c.user_id), nom=c.externe?((c.prenom||'')+' '+(c.nom||'')).trim()||'Client':k.nom;
+      return it(nom,c.externe?nomExt(c):nomLien(k),c.etape==='rectification'?'<span class="tag r">À corriger</span>':typeDiete(c),'diete',c.programme_id); });
+    var nouveaux=file.filter(function(c){ return c.etape==='a_generer'; }).map(function(c){ var k=cl(c.user_id);
+      return it(k.nom,nomLien(k),c.questionnaire_valide_at?heure(c.questionnaire_valide_at):'','client',c.user_id); });
+    var retard=C.filter(function(c){ return c.prog.some(function(x){ return x.statut==='valide'; }); })
+      .map(function(c){ return {c:c, j:c.der?jours(c.der.date):null}; }).filter(function(x){ return x.j==null||x.j>=7; })
+      .sort(function(a,b){ return (b.j==null?999:b.j)-(a.j==null?999:a.j); })
+      .map(function(x){ var i=dePerso(x.c); i.detail=x.j==null?'<span class="retard">aucune pesée</span>':'<span'+(x.j>=14?' class="retard"':'')+'>'+x.j+' jours</span>'; return i; });
+    var impayes=C.filter(function(c){ return c.a&&c.a.statut==='past_due'; }).map(function(c){ var i=dePerso(c);
+      i.detail=(FORM[c.a.formule]||'Impayé')+(AAL2&&c.a.montant_cents!=null?' · '+euros(c.a.montant_cents)+' €':''); return i; });
+    var nl={}; MSG.forEach(function(m){ if(duClient(m)&&!m.lu_at) nl[m.client_id]=m; });
+    var msgs=Object.keys(nl).map(function(id){ var t=nl[id].texte, n=cl(id).nom;
+      return it(n,'<b class="nom" role="button" tabindex="0" data-msg="'+esc(id)+'">'+esc(n)+'</b>','« '+esc(t.slice(0,46))+(t.length>46?'…':'')+' »','messages',id); });
+    // INTÉRESSÉS PAR L'ENTRAÎNEMENT (Dimitri 03/10) : « Oui » à la question du questionnaire, validé depuis moins de 30 jours.
+    // Toutes formules : le message automatique du questionnaire n'arrive que pour la Formule Elysium (messagerie réservée).
+    var ent=C.filter(function(c){ if(!c.q||!c.qv||jours(c.qv)>30) return false;
+        return Object.keys(c.rep).some(function(k){ return /programme d.entra[iî]nement/i.test(k)&&/^Oui/i.test(String(c.rep[k])); }); })
+      .sort(function(a,b){ return new Date(b.qv)-new Date(a.qv); })
+      .map(function(c){ var i=dePerso(c); i.detail=(c.a&&FORM[c.a.formule]?FORM[c.a.formule]+' · ':'')+'il y a '+jours(c.qv)+' j'; return i; });
+    var pj=D.retours.map(function(x){ var k=cl(x.user_id); return it(k.nom,nomLien(k),esc(String(x.plat).replace(/_/g,' ')),'client',x.user_id); });
+    // corrections en cours : renvoyée en correction (nouvelle version attendue), ou version corrigée déposée et pas encore relue
+    var nbA={}; D.rc.forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
+    var pa=function(n,s){ return n+' '+s+(n>1?'s':''); };
+    // (clients du Google Form compris : même calcul sur leurs versions)
+    var corr=C.map(function(c){ return {nom:c.nom,html:nomLien(c),P:c.prog,type:'client',id:c.id}; }).concat(Object.keys(EXT.par).map(function(k){ var P=EXT.par[k], l=ligneExt(P[P.length-1]);
+        return {nom:((l.prenom||'')+' '+(l.nom||'')).trim()||'Client',html:nomExt(l),P:P,type:'diete',id:P[P.length-1].id}; })).map(function(z){
+      var x=z.P[z.P.length-1], rc=x&&(x.diagnostic||{}).rectification, d=null; if(!x) return null;
+      if(x.statut==='rectification') d='v'+x.version+' · '+pa(nbA[x.id]||0,'action')+' posée'+((nbA[x.id]||0)>1?'s':'')+' · nouvelle version attendue';
+      else if(x.statut==='en_attente'&&rc){ var ap=(rc.actions||[]).length, na=(rc.non_appliquees||[]).length, nl2=(rc.notes_libres||[]).length;
+        d='v'+x.version+' à relire · '+pa(nbA[rc.depuis_programme]||ap+na+nl2,'action')+' · '+ap+' appliquée'+(ap>1?'s':'')+
+          (na?' · <span class="retard">'+na+' non appliquée'+(na>1?'s':'')+'</span>':'')+(nl2?' · '+pa(nl2,'note')+' à lire':''); }
+      return d==null?null:it(z.nom,z.html,d,z.type,z.id); }).filter(Boolean);
+    return [{cle:'relire',titre:'Diètes à relire',items:relire,vide:'Rien à relire.'},{cle:'corrections',titre:'Corrections en cours',items:corr,vide:'Aucune correction en cours.'},
+      {cle:'nouveaux',titre:'Nouveaux questionnaires',items:nouveaux,vide:'Aucun nouveau questionnaire.'},{cle:'entrainement',titre:'Intéressés par l’entraînement',items:ent,vide:'Personne ces 30 derniers jours.'},
+      {cle:'pesees',titre:'Pesées en retard',items:retard,vide:'Tout le monde est à jour.'},{cle:'impayes',titre:'Impayés en cours',items:impayes,vide:'Aucun impayé.'},
+      {cle:'messages',titre:'Messages non lus',items:msgs,vide:'Tout est lu.'},{cle:'plus_jamais',titre:'Retours « plus jamais »',items:pj,vide:'Aucun retour pour l’instant.'}];
+  }
   function renderJour(){
     if(!D) return;
     var C=D.clients, base=suivis(), d=new Date(), mois=new Date(d.getFullYear(),d.getMonth(),1).toISOString();
@@ -4162,39 +4206,9 @@ var ED=(function(){
     var pes=base.filter(function(c){ return c.der&&jours(c.der.date)<7; }).length;
     $('j-pesees').innerHTML=pes+'<small> / '+base.length+'</small>';
     $('j-pesees-s').textContent=base.length?Math.round(pes/base.length*100)+' % des clients suivis':'aucun client suivi pour l’instant';
-    var relire=file.filter(function(c){ return c.etape==='a_relire'||c.etape==='rectification'; }).map(function(c){
-      return ligne(c.externe?nomExt(c):nomLien(cl(c.user_id)), c.etape==='rectification'?'<span class="tag r">À corriger</span>':typeDiete(c)); });
-    var nouveaux=file.filter(function(c){ return c.etape==='a_generer'; }).map(function(c){ return ligne(nomLien(cl(c.user_id)), c.questionnaire_valide_at?heure(c.questionnaire_valide_at):''); });
-    var retard=C.filter(function(c){ return c.prog.some(function(x){ return x.statut==='valide'; }); })
-      .map(function(c){ return {c:c, j:c.der?jours(c.der.date):null}; }).filter(function(x){ return x.j==null||x.j>=7; })
-      .sort(function(a,b){ return (b.j==null?999:b.j)-(a.j==null?999:a.j); })
-      .map(function(x){ return ligne(nomLien(x.c), x.j==null?'<span class="retard">aucune pesée</span>':'<span'+(x.j>=14?' class="retard"':'')+'>'+x.j+' jours</span>'); });
-    var impayes=C.filter(function(c){ return c.a&&c.a.statut==='past_due'; }).map(function(c){ return ligne(nomLien(c), (FORM[c.a.formule]||'Impayé')+(AAL2&&c.a.montant_cents!=null?' · '+euros(c.a.montant_cents)+' €':'')); });
-    var nl={}; MSG.forEach(function(m){ if(duClient(m)&&!m.lu_at) nl[m.client_id]=m; });
-    var msgs=Object.keys(nl).map(function(id){ var t=nl[id].texte;
-      return ligne('<b class="nom" role="button" tabindex="0" data-msg="'+esc(id)+'">'+esc(cl(id).nom)+'</b>', '« '+esc(t.slice(0,46))+(t.length>46?'…':'')+' »'); });
-    // INTÉRESSÉS PAR L'ENTRAÎNEMENT (Dimitri 03/10) : « Oui » à la question du questionnaire, validé depuis moins de 30 jours.
-    // Toutes formules : le message automatique du questionnaire n'arrive que pour la Formule Elysium (messagerie réservée).
-    var ent=C.filter(function(c){ if(!c.q||!c.qv||jours(c.qv)>30) return false;
-        return Object.keys(c.rep).some(function(k){ return /programme d.entra[iî]nement/i.test(k)&&/^Oui/i.test(String(c.rep[k])); }); })
-      .sort(function(a,b){ return new Date(b.qv)-new Date(a.qv); })
-      .map(function(c){ return ligne(nomLien(c), (c.a&&FORM[c.a.formule]?FORM[c.a.formule]+' · ':'')+'il y a '+jours(c.qv)+' j'); });
-    var pj=D.retours.map(function(x){ return ligne(nomLien(cl(x.user_id)), esc(String(x.plat).replace(/_/g,' '))); });
-    // corrections en cours : renvoyée en correction (nouvelle version attendue), ou version corrigée déposée et pas encore relue
-    var nbA={}; D.rc.forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
-    var pa=function(n,s){ return n+' '+s+(n>1?'s':''); };
-    // (clients du Google Form compris : même calcul sur leurs versions)
-    var corr=C.map(function(c){ return [nomLien(c),c.prog]; }).concat(Object.keys(EXT.par).map(function(k){ var P=EXT.par[k]; return [nomExt(ligneExt(P[P.length-1])),P]; })).map(function(z){
-      var x=z[1][z[1].length-1], rc=x&&(x.diagnostic||{}).rectification; if(!x) return null;
-      if(x.statut==='rectification') return ligne(z[0],'v'+x.version+' · '+pa(nbA[x.id]||0,'action')+' posée'+((nbA[x.id]||0)>1?'s':'')+' · nouvelle version attendue');
-      if(x.statut==='en_attente'&&rc){ var ap=(rc.actions||[]).length, na=(rc.non_appliquees||[]).length, nl=(rc.notes_libres||[]).length;
-        return ligne(z[0],'v'+x.version+' à relire · '+pa(nbA[rc.depuis_programme]||ap+na+nl,'action')+' · '+ap+' appliquée'+(ap>1?'s':'')+
-          (na?' · <span class="retard">'+na+' non appliquée'+(na>1?'s':'')+'</span>':'')+(nl?' · '+pa(nl,'note')+' à lire':'')); }
-      return null; }).filter(Boolean);
-    $('jour-cartes').innerHTML=carte('Diètes à relire',relire.length,relire,'Rien à relire.')+carte('Corrections en cours',corr.length,corr,'Aucune correction en cours.')+carte('Nouveaux questionnaires',nouveaux.length,nouveaux,'Aucun nouveau questionnaire.')+
-      carte('Intéressés par l’entraînement',ent.length,ent,'Personne ces 30 derniers jours.')+
-      carte('Pesées en retard',retard.length,retard,'Tout le monde est à jour.')+carte('Impayés en cours',impayes.length,impayes,'Aucun impayé.')+
-      carte('Messages non lus',msgs.length,msgs,'Tout est lu.')+carte('Retours « plus jamais »',pj.length,pj,'Aucun retour pour l’instant.');
+    var J=listesJour();
+    $('jour-cartes').innerHTML=J.map(function(x){ return carte(x.titre,x.items.length,x.items.map(function(i){ return ligne(i.nomHtml,i.detail); }),x.vide); }).join('');
+    var relire=J[0].items;
 
     // santé du jour : trois anneaux sur les 7 derniers jours (« — » tant qu'il n'y a rien à mesurer)
     var s7=Date.now()-7*JOUR, dec=0;
@@ -4585,6 +4599,121 @@ var ED=(function(){
       '<p class="leg" style="margin-left:0">Chaque opposition coûte 20 € de frais, même gagnée ; 40 € si elle est perdue après contestation. Un libellé clair sur le relevé bancaire les évite.</p>':'';
   }
 
+  /* ---------- window.ElyCoach : lecture et actions pour l'APPLI DES COACHS (demande n°7 de la session appli, 03/10) ----------
+     L'appli embarque cette page et dessine ses écrans par-dessus. Elle passe UNIQUEMENT par cet objet : les règles (RLS, double
+     vérification, statuts, retours_coach) restent ici. Mêmes données que la page, maquette comprise (demo-coach.js).
+     Événement document « ely:coach » après chaque chargement ou changement (file, tableau de bord, messages, décision). */
+  var _ecT=0;
+  function emettreCoach(){ clearTimeout(_ecT); _ecT=setTimeout(function(){ document.dispatchEvent(new CustomEvent('ely:coach')); },0); }
+  function sansHtml(h){ var d=document.createElement('div'); d.innerHTML=String(h||''); return d.textContent.replace(/\s+/g,' ').trim(); }
+  function formuleDe(uid){ var k=D&&D.par[uid]; return k?cleFormule((k.a&&k.a.formule)||k.p.formule):null; }
+  function ligneDe(pid){ return file.filter(function(x){ return +x.programme_id===+pid; })[0]||null; }
+  function cibleCourte(c){ c=c||{}; return {kcal:c.kcal!=null?+c.kcal:null,P:c.proteines!=null?+c.proteines:null,G:c.glucides!=null?+c.glucides:null,L:c.lipides!=null?+c.lipides:null}; }
+  // une diète, à partir de la ligne de la file, sinon relue en base (ancienne version, client hors file)
+  function lireDiete(pid){ var c=ligneDe(pid); if(c&&c.menu) return Promise.resolve(c);
+    return sb.from('programmes').select('id,user_id,version,menu,cible,diagnostic,statut,client_externe,created_at').eq('id',pid).maybeSingle().then(function(r){
+      var p=r&&r.data; if(!p) throw new Error('Diète introuvable.');
+      if(p.client_externe) return ligneExt(p);
+      var k=D&&D.par[p.user_id], pp=(k&&k.p)||{};
+      return {user_id:p.user_id,prenom:pp.prenom,nom:pp.nom,reponses:k?k.rep:{},programme_id:p.id,version:p.version,menu:p.menu,cible:p.cible,diagnostic:p.diagnostic,
+        statut:p.statut,etape:p.statut==='en_attente'?'a_relire':p.statut,created_at:p.created_at}; }); }
+  function decider(pid,st,motif){
+    var c=ligneDe(pid);
+    return lireDiete(pid).then(function(d){
+      var e=d.etape||(d.statut==='en_attente'?'a_relire':d.statut);
+      if(st==='valide'&&e!=='a_relire'&&e!=='rectification') throw new Error('Cette diète n’est pas à relire.');
+      if(st!=='valide'&&['a_relire','rectification','refuse'].indexOf(e)<0) throw new Error('Cette diète n’est plus modifiable.');
+      var note=String(motif||'').trim(), suite=Promise.resolve({ok:true});
+      if(note) suite=insererRetours(lignesRetours(+pid,[{action:null,motif:'autre',gravite:'a_revoir',jour:null,repas:null,plat:null,lieu:'',texte:'Note',note:note}]));
+      return suite.then(function(x){ if(!x.ok) throw new Error('Envoi impossible : réessaie.');
+        if(st==='rectification'&&e==='refuse') return null;          // déjà refusée : on ajoute seulement la consigne, comme la page
+        return majStatut(+pid,st); }).then(function(err){ if(err) throw new Error('Impossible d’enregistrer : réessaie.');
+        if(c){ c.statut=st; c.etape=st; }
+        if(RL.R&&+RL.R.pid===+pid){ RL.R.etat=st; RL.arme=false; if($('rl-barre')) tout(); }
+        return recharger(c?cleC(c):d.user_id); }); }); }
+  window.ElyCoach={
+    moi:function(){ var n=String($('coachname').textContent||'').trim(); return {id:moi&&moi.id,prenom:n.split(' ')[0]||n,nom:n,email:(moi&&moi.email)||'',is_admin:true}; },
+    aujourdhui:function(){ if(!D) return null; var base=suivis(), mois=new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString();
+      return {kpis:{clients_actifs:D.abos.filter(function(a){ return a.statut==='active'||a.statut==='trialing'; }).length,
+          dietes_mois:D.clients.reduce(function(t,c){ return t+c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at&&x.traite_at>=mois; }).length; },0),
+          mrr_cents:AAL2?D.abos.reduce(function(t,a){ return t+(['active','trialing','past_due'].indexOf(a.statut)>=0?(+a.montant_cents||0):0); },0):null,
+          pesees_semaine:{faites:base.filter(function(c){ return c.der&&jours(c.der.date)<7; }).length,total:base.length}},
+        listes:listesJour().map(function(x){ return {cle:x.cle,titre:x.titre,n:x.items.length,vide:x.vide,
+          items:x.items.map(function(i){ return {nom:i.nom,detail:sansHtml(i.detail),cible:i.cible}; })}; })}; },
+    file:function(){ return file.map(function(c){ var nom=c.externe?((c.prenom||'')+' '+(c.nom||'')).trim():(D&&D.par[c.user_id]?D.par[c.user_id].nom:((c.prenom||'')+' '+(c.nom||'')).trim());
+      return {programme_id:c.programme_id||null,user_id:c.externe?null:c.user_id,cle:cleC(c),externe:!!c.externe,nom:nom||'Client',formule:c.externe?null:formuleDe(c.user_id),
+        etape:c.etape,brouillon:brouillon(c),geste:geste(c)||null,version:c.version||null,
+        attente_h:depot(c)?Math.round((Date.now()-new Date(depot(c)).getTime())/3600000):null,detail:particularites(c).join(' · ')}; }); },
+    diete:function(pid){ return lireDiete(pid).then(function(c){ var m=c.menu||{}, d=c.diagnostic||{}, ctl=d.controle&&+d.controle.version===+c.version?d.controle:null;
+      return {programme_id:c.programme_id,user_id:c.externe?null:c.user_id,nom:((c.prenom||'')+' '+(c.nom||'')).trim()||'Client',formule:c.externe?null:formuleDe(c.user_id),
+        objectif:objectif(c.reponses||{})||null,cible:cibleCourte(m.cible||c.cible),version:c.version,etape:c.etape||(c.statut==='en_attente'?'a_relire':c.statut),
+        a_verifier:particularites(c).concat(ctl?(ctl.bloquants||[]).concat(ctl.a_relire||[]).map(sansHtml):[]),
+        jours:(m.jours||[]).filter(function(j){ return !j.off; }).map(ElyJour.depuisMenu),courses:m.courses||null}; }); },
+    valider:function(pid){ return decider(pid,'valide'); },
+    corriger:function(pid,motif){ if(!String(motif||'').trim()) return Promise.reject(new Error('Écris ce qu’il faut corriger.')); return decider(pid,'rectification',motif); },
+    refuser:function(pid,motif){ return decider(pid,'refuse',motif); },
+    conversations:function(){ var G2={};
+      MSG.forEach(function(m){ var g=G2[m.client_id]||(G2[m.client_id]={user_id:m.client_id,nom:nomFil(m.client_id),non_lus:0,dernier:null,lecture_seule:!msgElysium(m.client_id)});
+        if(duClient(m)&&!m.lu_at) g.non_lus++; g.dernier={texte:m.texte,at:m.created_at}; });
+      return Object.keys(G2).map(function(k){ return G2[k]; }).sort(function(a,b){ return (b.non_lus>0)-(a.non_lus>0)||new Date(b.dernier.at)-new Date(a.dernier.at); }); },
+    messages:function(uid){ lireFil(uid);
+      return Promise.resolve(MSG.filter(function(m){ return m.client_id===uid; }).map(function(m){ var lui=duClient(m);
+        return {texte:m.texte,moi:!lui&&!!moi&&m.auteur_id===moi.id,equipe:!lui,nom:lui?nomFil(uid):((SIGN&&SIGN[m.auteur_id])||'Coach'),at:m.created_at}; })); },
+    envoyer:function(uid,texte){ var t=String(texte||'').trim(); if(!t) return Promise.reject(new Error('Écris ton message.'));
+      if(!msgElysium(uid)) return Promise.reject(new Error('Lecture seule : la messagerie est réservée à la Formule Elysium.'));
+      return sb.from('messages').insert({client_id:uid,auteur_id:moi.id,texte:t,depuis_equipe:true}).then(function(r){
+        if(r.error) throw new Error('Message non envoyé, réessaie.'); return releve(); }); },
+    clients:function(){ return D?D.clients.map(function(c){ return {user_id:c.id,nom:c.nom,formule:formuleDe(c.id),abonnement:c.a?c.a.statut:null,objectif:c.obj||null,
+      derniere_pesee:c.der?{date:c.der.date,kg:+c.der.kg}:null,inscription:c.p.created_at||null}; }):[]; },
+    fiche:function(uid){ var c=D&&D.par[uid]; if(!c) return Promise.reject(new Error('Client introuvable.'));
+      return Promise.all([
+        sb.from('mensurations').select('*').eq('user_id',uid).order('date'),
+        new Promise(function(ok){ ok(sb.storage.from('photos-suivi').list(uid,{limit:50,sortBy:{column:'name',order:'desc'}})); }).then(function(p){   // maquette : pas de liste -> []
+          var L=((p&&p.data)||[]).filter(function(f){ return /\.(jpe?g|png|webp)$/i.test(f.name); }); if(!L.length) return [];
+          return sb.storage.from('photos-suivi').createSignedUrls(L.map(function(f){ return uid+'/'+f.name; }),3600).then(function(s){
+            return (s.data||[]).filter(function(x){ return x&&x.signedUrl; }).map(function(x,i){ return {url:x.signedUrl,date:L[i].name.slice(0,10)}; }); }); },function(){ return []; }),
+        chargerNotes(uid),
+        sb.from('programmes').select('diagnostic').eq('user_id',uid).order('version',{ascending:false}).limit(1)
+      ]).then(function(r){ var w=c.w.map(function(x){ return {t:new Date(x.date+'T12:00:00').getTime(),v:+x.kg}; }), op=objectifPoids(c,w);
+        return {user_id:uid,nom:c.nom,formule:formuleDe(uid),abonnement:c.a?{statut:c.a.statut,periode_fin:c.a.periode_fin||null}:null,objectif:c.obj||null,
+          poids:w,objectif_kg:op?Math.round(op.cible*10)/10:null,
+          dietes:c.prog.slice().reverse().map(function(x){ return {programme_id:x.id,version:x.version,statut:x.statut,date:x.traite_at||x.created_at,par:x.traite_par?nomCoach(x.traite_par):null}; }),
+          questionnaire:{reponses:c.rep,a_interpreter:((((r[3]&&r[3].data)||[])[0]||{}).diagnostic||{}).a_interpreter||null},
+          mensurations:(r[0]&&!r[0].error&&r[0].data)||[],photos:r[1]||[],
+          notes:notesDe(uid).map(function(n){ return {id:n.id||null,auteur:n.par||'',texte:n.texte,quand:n.quand||'',mien:!!n.mien}; })}; }); },
+    ajouterNote:function(uid,texte){ if(!String(texte||'').trim()) return Promise.reject(new Error('Écris ta note d’abord.'));
+      return Promise.resolve(ajouterNote(uid,null,{value:String(texte)})).then(emettreCoach); },
+    supprimerNote:function(id){ return sb.from('notes_coachs').delete().eq('id',id).then(function(r){ if(r.error) throw new Error('Suppression impossible, réessaie.');
+      var uid=Object.keys(NOTES.brut).filter(function(k){ return (NOTES.brut[k]||[]).some(function(n){ return n.id===id; }); })[0];
+      return uid?chargerNotes(uid).then(function(){ afficherNotes(uid); emettreCoach(); }):null; }); },
+    chiffres:function(){ return lireNiveau().then(function(ok){ if(!ok||!D) return {verrou:true};
+      var P=D.pay||[], A=D.abos||[], now=new Date(), an=now.getFullYear(), mo=now.getMonth();
+      function quand(x){ return new Date(x.paye_le||x.echoue_le||x.created_at); }
+      function brut(x){ return x.statut==='failed'?0:+x.montant_cents||0; }
+      function entre(a,b){ return P.filter(function(x){ var t=quand(x); return t>=a&&t<=b; }); }
+      function somme(L){ return L.reduce(function(t,x){ return t+brut(x); },0); }
+      var act=A.filter(function(a){ return ['active','trialing','past_due'].indexOf(a.statut)>=0; }), pf={f1:0,f2:0,f3:0};
+      act.forEach(function(a){ var f=cleFormule(a.formule); if(pf[f]!=null) pf[f]++; });
+      var mois=new Date(an,mo,1).toISOString();
+      return {verrou:false,encaisse_mois_cents:somme(entre(new Date(an,mo,1),now)),encaisse_mois_prec_cents:somme(entre(new Date(an,mo-1,1),new Date(an,mo,1,0,0,0,-1))),
+        mrr_cents:act.reduce(function(t,a){ return t+(+a.montant_cents||0); },0),impayes:A.filter(function(a){ return a.statut==='past_due'; }).length,
+        par_formule:pf,historique_paiements:!D.payErr,
+        dietes_mois:D.clients.reduce(function(t,c){ return t+c.prog.filter(function(x){ return x.statut==='valide'&&x.traite_at&&x.traite_at>=mois; }).length; },0),
+        dietes_total:D.clients.reduce(function(t,c){ return t+c.prog.filter(function(x){ return x.statut==='valide'; }).length; },0)}; }); },
+    mfa:function(code){ code=String(code||'').replace(/\D/g,''); if(code.length!==6) return Promise.reject(new Error('Le code fait 6 chiffres.'));
+      return sb.auth.mfa.listFactors().then(function(r){ if(r.error) throw r.error; var f=(r.data.totp||[])[0];
+        if(!f) throw new Error('Double vérification pas encore activée : fais-le une première fois sur le site, onglet Économie.');
+        return sb.auth.mfa.challengeAndVerify({factorId:f.id,code:code}); }).then(function(r){ if(r&&r.error) throw r.error; return lireNiveau(); })
+        .then(function(ok){ if(!ok) throw new Error('Code non reconnu.'); chargerAbo(); majMfaEtat(); return chargerTout(); })
+        .catch(function(err){ throw new Error(err&&err.message&&/6 chiffres|pas encore activée|non reconnu/.test(err.message)?err.message:mfaErreur(err)); }); },
+    // le site, ouvert directement sur la relecture de cette diète (pour « Modifier au gramme près »)
+    lienSite:function(pid){ return location.origin+location.pathname+'#diete-'+(+pid); }
+  };
+  // chaque redessin de la page prévient l'appli
+  var _rF=renderFile; renderFile=function(){ var x=_rF.apply(this,arguments); emettreCoach(); return x; };
+  var _rJ=renderJour; renderJour=function(){ var x=_rJ.apply(this,arguments); emettreCoach(); return x; };
+  var _rM=renderMessages; renderMessages=function(){ var x=_rM.apply(this,arguments); emettreCoach(); return x; };
+
   /* ---------- démarrage ---------- */
   if(!ElyAuth.requireAuth('connexion.html')) return;
   ElyAuth.ready.then(function(u){
@@ -4611,7 +4740,9 @@ var ED=(function(){
         majMfaEtat(); sonderNotes();
         file=res[0]||[]; renderFile(); recount(); chargerAbo(); chargerMessages();
         chargerTout();
-        var h=location.hash.slice(1); voir(['jour','clients','dietes','msgs','suivi','stats','eco'].indexOf(h)>=0?h:'jour');
+        var h=location.hash.slice(1), dl=/^diete-(\d+)$/.exec(h), dc=dl&&ligneDe(dl[1]);
+        if(dc&&relisable(dc)){ voir('dietes'); relire(dc); }
+        else voir(['jour','clients','dietes','msgs','suivi','stats','eco'].indexOf(h)>=0?h:dl?'dietes':'jour');
       });
     });
   }).catch(function(){ $('gate').classList.add('on'); });

@@ -1683,6 +1683,67 @@ var PROG = {
     document.getElementById('abo-portail').disabled=true;
     document.getElementById('abo-note').textContent='Changer de formule ou résilier : désactivé en démonstration.';
   }
+  /* ---------- window.ElyEspace : lecture et actions pour l'appli MyEly (demande n°6, 03/10) ----------
+     L'appli dessine ses propres écrans au-dessus de cette page. Elle passe UNIQUEMENT par cet objet, jamais par les variables
+     internes (W, Q0, REEL…) : on peut les renommer sans casser l'appli tant que ces formes restent. Mêmes règles que la page
+     (démo, compte mixte, abonnement, RLS). Événement document « ely:espace » à chaque chargement ou changement de données. */
+  var _emis=0;
+  function emettre(){ clearTimeout(_emis); _emis=setTimeout(function(){ document.dispatchEvent(new CustomEvent('ely:espace')); },0); }
+  function etatEspace(){ var uu=moi(), paid=!!uu.paid, quest=ADMIN?!!uu.quest:REEL.quest;
+    if(paid&&(ADMIN?quest:REEL.prog)) return 'programme';            // même règle que renderProgram
+    if(!paid) return 'attente';
+    return quest?'en_cours':'questionnaire'; }
+  function etatMessagerie(){
+    if(!messagerieOuverte()) return {etat:'reservee',texte:'La messagerie avec tes coachs fait partie de la Formule Elysium. Pour signaler un changement ou un souci, utilise ton questionnaire de réactualisation.'};
+    var st=(moi().abonnement||{}).statut;
+    if(!ADMIN&&['past_due','unpaid','canceled'].indexOf(st)>-1) return {etat:'bloquee',texte:'Ta messagerie est en pause : tu peux relire vos échanges.'};
+    return {etat:'ouverte',texte:''}; }
+  function messagesDemo(){ var d=function(j,h){ var x=new Date(Date.now()-j*JOUR_MS); x.setHours(h,12,0,0); return x.toISOString(); };
+    return [{texte:'Bonjour Sophie, ton programme est en ligne. Pense à ta pesée du lundi matin, à jeun : c’est elle qui nous sert à ajuster tes quantités.',moi:false,nom:'Damien - Coach',at:d(6,9)},
+            {texte:'Merci ! Je commence dès lundi.',moi:true,nom:'',at:d(6,12)}]; }
+  window.ElyEspace={
+    etat:etatEspace,
+    user:function(){ var x=moi(); return {prenom:x.prenom||'',nom:x.nom||'',email:x.email||'',formule:formuleClient()||null,created:x.created||null,naissance:x.naissance||null,taille:x.taille||null,sexe:x.sexe||null}; },
+    // le programme tel qu'il est affiché : jours vus (collations du compte mixte comprises), courses, recettes selon la formule, cible du jour
+    prog:function(){ if(etatEspace()!=='programme') return null; var c=cibleVue();
+      return Object.assign({},PROG,{jours:joursVus(),courses:coursesVues(),recettes:recettesClient(),kcal:c.kcal,P:c.P,G:c.G,L:c.L}); },
+    poids:function(){ return weights().map(function(x){ var o={t:x.t,v:x.v}; if(x.q) o.q=true; return o; }); },
+    objectif:function(){ var g=goal(); return g>0?g:null; },
+    ajouterPoids:function(dateISO,kg){
+      var v=parseFloat(String(kg).replace(',','.')), jour=String(dateISO||'').slice(0,10);
+      if(!(v>=30&&v<=250)) return Promise.reject(new Error('Indique un poids entre 30 et 250 kg.'));
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(jour)||jour>_todayISO()) return Promise.reject(new Error('Choisis une date qui n’est pas dans le futur.'));
+      if(DEMO) return Promise.reject(new Error('Désactivé en démonstration : rien n’est enregistré.'));
+      return sb.from('poids').upsert({user_id:u.id,date:jour,kg:Math.round(v*10)/10},{onConflict:'user_id,date'}).then(function(r){
+        if(r.error) throw new Error('Pesée non enregistrée, réessaie dans un instant.');
+        return chargerPoids(false).then(refresh); }); },
+    messagerie:etatMessagerie,
+    messages:function(){
+      if(DEMO) return Promise.resolve(messagerieOuverte()?messagesDemo():[]);
+      return chargerNomsCoachs().then(function(){ return sb.from('messages').select('*').eq('client_id',u.id).order('created_at'); }).then(function(r){
+        if(r.error) return [];
+        var L=r.data||[], aLire=L.filter(function(m){ return (m.auteur_id!==u.id||m.depuis_equipe)&&!m.lu_at; }).map(function(m){ return m.id; });
+        if(aLire.length) sb.from('messages').update({lu_at:new Date().toISOString()}).in('id',aLire).then(function(){ badge('messages',0); });
+        return L.map(function(m){ var mien=m.auteur_id===u.id&&!m.depuis_equipe;
+          return {texte:m.texte,moi:mien,nom:mien?'':(NOMS_C[m.auteur_id]||'Coach'),at:m.created_at}; }); }); },
+    envoyer:function(texte){ var t=String(texte||'').trim();
+      if(!t) return Promise.reject(new Error('Écris ton message.'));
+      if(DEMO) return Promise.reject(new Error('Désactivé en démonstration : rien n’est envoyé.'));
+      var e=etatMessagerie(); if(e.etat!=='ouverte') return Promise.reject(new Error(e.texte));
+      return sb.from('messages').insert({client_id:u.id,auteur_id:u.id,texte:t}).then(function(r){
+        if(r.error) throw new Error('Message non envoyé, réessaie dans un instant.');
+        return chargerMsgs(); }); },
+    fiche:function(){ if(DEMO||!REEL.pdf) return Promise.resolve(null);
+      var x=moi(), nm=('Programme Elysium - '+(x.prenom||'')+' '+(x.nom||'')).trim()+'.pdf';
+      return sb.storage.from('fiches').createSignedUrl(REEL.pdf,300,{download:nm}).then(function(r){ return r.error||!r.data?null:r.data.signedUrl; },function(){ return null; }); },
+    supprimerCompte:function(){ document.getElementById('suppr-btn').click(); },
+    deconnexion:function(){ document.getElementById('logout').click(); }
+  };
+  // chaque fois que la page se redessine, l'appli est prévenue
+  var _rp=renderProgram; renderProgram=function(){ var x=_rp.apply(this,arguments); emettre(); return x; };
+  var _rf=refresh; refresh=function(){ var x=_rf.apply(this,arguments); emettre(); return x; };
+  var _cm=chargerMsgs; chargerMsgs=function(){ var p=_cm.apply(this,arguments); if(p&&p.then) p.then(emettre); else emettre(); return p; };
+
   if(DEMO){ demarrerDemo(); reveal(document); return; }
 
   if(/[?&]paiement=ok/.test(location.search)){

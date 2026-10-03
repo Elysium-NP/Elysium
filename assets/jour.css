@@ -87,3 +87,22 @@ html[data-theme="obscur"] .meals .meal{background:var(--void2)}
 .rc-fermer{position:sticky;bottom:-14px;display:block;width:calc(100% + 30px);margin:10px -15px -14px;padding:11px 0;border:0;
   border-top:1px solid color-mix(in srgb,var(--mb) 55%,transparent);background:color-mix(in srgb,var(--mp) 55%,var(--void2));
   font:600 13.5px/1 var(--texte);color:var(--blue);cursor:pointer;border-radius:0 0 12px 12px}
+
+/* ===== STYLE « COMME UNE APPLI CONNUE » (Damien 03/10, go Dimitri 04/10) — identique à l'appli MyEly =====
+   Carte blanche sans bordure, ombre douce ; en-tête = pastille teintée (couleur du repas de la fiche à 16 %) + icône au trait,
+   type du repas en petit, kcal à droite ; le plat en gras ; un aliment par ligne (Damien 30/09). */
+.meal.pdj{--mc:#f1c232} .meal.dej{--mc:#6aa84f} .meal.col{--mc:#8e7cc3} .meal.din{--mc:#3d85c6}
+.meals .meal{background:var(--carte,#fff);border:0;border-radius:18px;box-shadow:var(--ombre,0 2px 10px rgba(60,45,20,.06))}
+.meals .meal:hover{transform:none;box-shadow:var(--ombre,0 2px 10px rgba(60,45,20,.06))}
+.meal .meal-hd,.meal.pdj .meal-hd,.meal.dej .meal-hd,.meal.col .meal-hd,.meal.din .meal-hd{background:none;border:0;padding:14px 16px 0;gap:12px;justify-content:flex-start}
+.meal-hd .pst{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--mc) 16%,#fff);color:color-mix(in srgb,var(--mc) 75%,#111)}
+html[data-theme="obscur"] .meal-hd .pst{background:color-mix(in srgb,var(--mc) 22%,transparent);color:var(--mc)}
+.meal-hd .pst svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.meal-hd .mt2{flex:1;font:700 12px/1.2 Arial,Helvetica,sans-serif;color:var(--steel)}
+.meal-hd i{font:700 13px/1 Arial,Helvetica,sans-serif;color:var(--ice)}
+.meal-in{padding:8px 16px 14px}
+.meal-in .dish{font:700 16px/1.25 Arial,Helvetica,sans-serif;letter-spacing:-.01em}
+.meal-in .ings-l{font:13.5px/1.45 Arial,Helvetica,sans-serif;color:var(--gris)}
+.meal-in .ings-l li{border-bottom:1px solid var(--filet-doux,#EEE8DF)}
+.meal-in .ings-l li::before{background:var(--mc)}
+.meal-in .mac span{padding:4px 9px;border-radius:999px;background:var(--pilule,#EFEAE2);font:700 11.5px/1 Arial,Helvetica,sans-serif}

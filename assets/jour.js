@@ -7,6 +7,12 @@
   function r0(x){ return Math.round(+x||0); }
   function esc(t){ return String(t).replace(/[&<>"]/g,function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]; }); }
   function deplier(q){ return String(q).replace(/(^|\s)(\d+(?:[.,]\d+)?)\s*tr\.?(?=\s|$)/g,function(_,a,n){ return a+n+(parseFloat(n.replace(',','.'))>1?' tranches':' tranche'); }); }
+  // pastille du repas (style « appli connue », 04/10) : icône au trait, couleur du repas — jamais d'emoji dans la pastille
+  var ICO={pdj:'<path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 7V5M6.3 9.3L5 8M17.7 9.3L19 8"/>',
+    dej:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>',
+    col:'<path d="M6 18c0-7 5-12 13-12 0 8-5 13-12 13"/><path d="M6 18l6-6"/>',
+    din:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>'};
+  function pastille(t){ return '<span class="pst" aria-hidden="true"><svg viewBox="0 0 24 24">'+ICO[coulRepas(t)]+'</svg></span>'; }
   function coulRepas(t){ t=String(t).toLowerCase();
     return /petit/.test(t)?'pdj':/d[ée]jeuner/.test(t)?'dej':/collation/.test(t)?'col':/d[îi]ner/.test(t)?'din':'dej'; }
   function ingPhrase(x){
@@ -36,7 +42,7 @@
     var m=d.repas.map(function(r,i){
       // un aliment par ligne, comme sur leurs fiches (Damien 30/09 : « l'effet liste plutôt qu'à la suite »)
       var ings='<li>'+r.ings.map(ingPhrase).join('</li><li>')+'</li>', id='rc-'+d.j+'-'+i;
-      return '<article class="meal '+coulRepas(r.type)+' rv"><div class="meal-hd"><span>'+r.emo+' '+r.type+'</span><i>'+r.kcal+' kcal</i></div>'+
+      return '<article class="meal '+coulRepas(r.type)+' rv"><div class="meal-hd">'+pastille(r.type)+'<span class="mt2">'+r.type+'</span><i>'+r.kcal+' kcal</i></div>'+
         '<div class="meal-in"><button type="button" class="dish plat" aria-expanded="false" aria-controls="'+id+'" data-j="'+d.j+'" data-i="'+i+'">'+
           '<span class="dn">'+r.rec+'</span><span class="voir">Voir la recette<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>'+
         '<ul class="ings-l">'+ings+'</ul>'+

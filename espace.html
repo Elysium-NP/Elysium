@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=0310a">
+<link rel="stylesheet" href="assets/site.css?v=0410a">
 <style>
   /* ===== Espace membre v2, tableau de bord « télémétrie » (styles propres à la page) ===== */
   .dash-grid .wide{grid-column:1/-1}
@@ -436,6 +436,38 @@
   #msg-form button:disabled,#abo-portail:disabled{opacity:.45;cursor:not-allowed}
   /* bulles : la classe .b de site.css (texte bleu) les colorait par erreur */
   .fil-msg .b{color:var(--ice)}
+  /* ===== STYLE « COMME UNE APPLI CONNUE » (04/10) : mêmes écrans que l'appli MyEly ===== */
+  .membre .card .ch{border-bottom:0;padding-bottom:0;margin-bottom:14px}
+  .membre .card .ch::after,.membre .card .ch h3::before{display:none}
+  .membre .card .ch h3{font-size:19px!important}
+  /* jours : 7 cases égales, le jour actif en noir (clair en version obscure) */
+  .membre #tabs .tab{background:var(--pilule);border:0;border-radius:12px;color:var(--steel);min-height:46px}
+  .membre #tabs .tab b{font:700 13.5px/1.1 Arial,Helvetica,sans-serif}
+  .membre #tabs .tab.on{background:var(--actif);color:var(--actif-t)}
+  .membre #tabs .tab.on b,.membre #tabs .tab.on small{color:var(--actif-t)}
+  html[data-theme="obscur"] .membre #tabs .tab.on{background:var(--actif);color:var(--actif-t);border-color:var(--actif)}
+  html[data-theme="obscur"] .membre #tabs .tab:not(.on){background:var(--pilule);border-color:transparent}
+  /* gros chiffres */
+  .membre .donut .c .v{font-family:Arial,Helvetica,sans-serif;font-weight:800;letter-spacing:-.05em;text-shadow:none}
+  .membre .phd{background:var(--carte);border-color:transparent;box-shadow:var(--ombre);border-radius:20px}
+  .membre .mrow .g{font:800 17px/1 Arial,Helvetica,sans-serif;letter-spacing:-.02em}
+  /* courses : cases arrondies, article coché barré et grisé, quantité en gras à droite */
+  .membre .cat .ci{border-bottom:1px solid var(--line);padding:9px 0}
+  .membre .cat .ci .box{border:1.5px solid #C9BFAF;border-radius:6px}
+  .membre .cat .ci .nm{font:14px/1.35 Arial,Helvetica,sans-serif}
+  .membre .cat .ci b{font:800 13.5px/1 Arial,Helvetica,sans-serif}
+  .membre .cat .ci input:checked ~ .nm{text-decoration:line-through;color:#A79C8C}
+  .membre .cat .ci input:checked ~ b{color:#A79C8C}
+  /* messages : bulles coachs claires, bulles du client bleues */
+  .membre .fil-msg .b{border-radius:4px 16px 16px 16px;padding:10px 13px;font-size:14px}
+  .membre .fil-msg .b.eq{background:var(--carte);border:1px solid var(--line)}
+  .membre .fil-msg .b.moi{background:#1466b8;color:#fff;border-radius:16px 4px 16px 16px}
+  .membre .fil-msg .b.moi time{color:rgba(255,255,255,.75)}
+  .membre #msg-form textarea{border-radius:22px;padding:11px 16px;background:var(--carte)}
+  .membre #msg-form button{width:46px;padding:0;font-size:0;flex:none}
+  .membre #msg-form button::after{content:"";display:block;width:16px;height:16px;margin:auto;background:#111;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat}
 </style>
 <script>/* DÉMONSTRATION DES FORMULES (Damien 28/09) : espace.html?demo=f1|f2|f3, sans connexion.
    Client fictif, données d'exemple. On retire la bibliothèque Supabase avant ely-auth.js : son client
@@ -445,11 +477,11 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
 <script src="assets/vendor/supabase.min.js"></script>
 <script>if(ELY_DEMO) window.supabase=null;</script>
 <script src="assets/ely-auth.js?v=appli2"></script>
-<script src="assets/jour.js?v=2"></script>
+<script src="assets/jour.js?v=3"></script>
 <script>if(!ELY_DEMO) ElyAuth.requireAuth('connexion.html');</script>
-<link rel="stylesheet" href="assets/jour.css?v=2">
+<link rel="stylesheet" href="assets/jour.css?v=3">
 </head>
-<body>
+<body class="membre">
 
 <div class="grain" aria-hidden="true"></div>
 <div class="cur" aria-hidden="true"></div><div class="curdot" aria-hidden="true"></div>

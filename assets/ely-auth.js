@@ -71,6 +71,7 @@
             naissance: p.naissance || "",
             sexe: p.sexe || "",
             taille: p.taille_cm || null,
+            avatar: p.avatar || null,          // médaille choisie dans l'appli MyEly (profiles.avatar), null = l'initiale
             age: calcAge(p.naissance),
             // PAYÉ = abonnement Stripe en cours (actif, en essai, ou paiement en retard de relance).
             // demo_paid : bascule du « coin démo » du compte admin, jamais utilisée par un vrai client.

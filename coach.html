@@ -38,6 +38,7 @@
   /* ---- chiffres clés (présentation de coach-maquette.html) ---- */
   .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   @media(max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  #f-nom .av.md{display:inline-block;width:40px;height:40px;vertical-align:-8px;margin-right:12px} #f-nom .av svg{width:100%;height:100%}
   .kpi{border:1px solid var(--line);background:var(--void2);border-radius:14px;padding:14px 16px;min-width:0}
   .kpi .k{font:600 10.5px/1.3 var(--texte);letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
   .kpi .v{font:700 32px/1 var(--texte);color:var(--ice);margin-top:8px;font-variant-numeric:tabular-nums}
@@ -1381,6 +1382,7 @@
 </style>
 <link rel="stylesheet" href="assets/jour.css?v=3">
 <script src="assets/jour.js?v=3"></script>
+<script src="assets/medaille.js?v=1"></script>
 </head>
 <body class="membre">
 
@@ -1613,7 +1615,7 @@
 <script src="assets/site.js?v=prix2"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script>/* maquette (/coach-maquette) : la même page, sur des données d'exemple (assets/demo-coach.js), sans aucune connexion */
-document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=8':'ely-auth.js?v=appli2')+'"><\/script>');</script>
+document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=8':'ely-auth.js?v=appli3')+'"><\/script>');</script>
 <script>
 /* ======================================================================
    BOÎTE À OUTILS GRAPHIQUES : SVG faits main, aucune librairie, aucun CDN.
@@ -2791,7 +2793,8 @@ var ED=(function(){
   function renderFiche(){
     var c=cur; if(!c) return;
     if(FS.uid!==c.user_id) FS={uid:c.user_id,s:0,pes:null,w:null,q0:null,mens:null,ret:null,ph:null};
-    $('f-nom').textContent=((c.prenom||'')+' '+(c.nom||'')).trim()||'Client';
+    var fk=D&&D.par[c.user_id]&&D.par[c.user_id].p.avatar, fn=((c.prenom||'')+' '+(c.nom||'')).trim()||'Client';   // médaille choisie dans l'appli
+    $('f-nom').innerHTML=(fk&&window.ElyMedaille?ElyMedaille.html(fk,'','f-med'):'')+esc(fn);
     $('f-poids-n').textContent=''; $('f-progres').innerHTML='';
     G.mount('suivi-courbe',function(){ return '<p class="rien">Chargement des pesées…</p>'; });
     G.mount('suivi-frise',function(){ return ''; });
@@ -4119,7 +4122,7 @@ var ED=(function(){
   }
   function chargerTout(){
     return Promise.all([
-      sb.from('profiles').select('id,prenom,nom,sexe,naissance,taille_cm,formule,created_at'),
+      sb.from('profiles').select('id,prenom,nom,sexe,naissance,taille_cm,formule,created_at,avatar'),
       abosLecture(),
       sb.from('poids').select('user_id,date,kg').order('date'),   // ponytail: toutes les pesées ; une vue agrégée quand il y aura des centaines de clients
       sb.from('questionnaires').select('user_id,statut,reponses,valide_at'),
@@ -4642,7 +4645,7 @@ var ED=(function(){
           items:x.items.map(function(i){ return {nom:i.nom,detail:sansHtml(i.detail),cible:i.cible}; })}; })}; },
     file:function(){ return file.map(function(c){ var nom=c.externe?((c.prenom||'')+' '+(c.nom||'')).trim():(D&&D.par[c.user_id]?D.par[c.user_id].nom:((c.prenom||'')+' '+(c.nom||'')).trim());
       return {programme_id:c.programme_id||null,user_id:c.externe?null:c.user_id,cle:cleC(c),externe:!!c.externe,nom:nom||'Client',formule:c.externe?null:formuleDe(c.user_id),
-        etape:c.etape,brouillon:brouillon(c),geste:geste(c)||null,version:c.version||null,
+        avatar:c.externe?null:((D&&D.par[c.user_id]&&D.par[c.user_id].p.avatar)||null),etape:c.etape,brouillon:brouillon(c),geste:geste(c)||null,version:c.version||null,
         attente_h:depot(c)?Math.round((Date.now()-new Date(depot(c)).getTime())/3600000):null,detail:particularites(c).join(' · ')}; }); },
     diete:function(pid){ return lireDiete(pid).then(function(c){ var m=c.menu||{}, d=c.diagnostic||{}, ctl=d.controle&&+d.controle.version===+c.version?d.controle:null;
       return {programme_id:c.programme_id,user_id:c.externe?null:c.user_id,nom:((c.prenom||'')+' '+(c.nom||'')).trim()||'Client',formule:c.externe?null:formuleDe(c.user_id),
@@ -4663,7 +4666,7 @@ var ED=(function(){
       if(!msgElysium(uid)) return Promise.reject(new Error('Lecture seule : la messagerie est réservée à la Formule Elysium.'));
       return sb.from('messages').insert({client_id:uid,auteur_id:moi.id,texte:t,depuis_equipe:true}).then(function(r){
         if(r.error) throw new Error('Message non envoyé, réessaie.'); return releve(); }); },
-    clients:function(){ return D?D.clients.map(function(c){ return {user_id:c.id,nom:c.nom,formule:formuleDe(c.id),abonnement:c.a?c.a.statut:null,objectif:c.obj||null,
+    clients:function(){ return D?D.clients.map(function(c){ return {user_id:c.id,nom:c.nom,avatar:c.p.avatar||null,formule:formuleDe(c.id),abonnement:c.a?c.a.statut:null,objectif:c.obj||null,
       derniere_pesee:c.der?{date:c.der.date,kg:+c.der.kg}:null,inscription:c.p.created_at||null}; }):[]; },
     fiche:function(uid){ var c=D&&D.par[uid]; if(!c) return Promise.reject(new Error('Client introuvable.'));
       return Promise.all([
@@ -4675,7 +4678,7 @@ var ED=(function(){
         chargerNotes(uid),
         sb.from('programmes').select('diagnostic').eq('user_id',uid).order('version',{ascending:false}).limit(1)
       ]).then(function(r){ var w=c.w.map(function(x){ return {t:new Date(x.date+'T12:00:00').getTime(),v:+x.kg}; }), op=objectifPoids(c,w);
-        return {user_id:uid,nom:c.nom,formule:formuleDe(uid),abonnement:c.a?{statut:c.a.statut,periode_fin:c.a.periode_fin||null}:null,objectif:c.obj||null,
+        return {user_id:uid,nom:c.nom,avatar:c.p.avatar||null,formule:formuleDe(uid),abonnement:c.a?{statut:c.a.statut,periode_fin:c.a.periode_fin||null}:null,objectif:c.obj||null,
           poids:w,objectif_kg:op?Math.round(op.cible*10)/10:null,
           dietes:c.prog.slice().reverse().map(function(x){ return {programme_id:x.id,version:x.version,statut:x.statut,date:x.traite_at||x.created_at,par:x.traite_par?nomCoach(x.traite_par):null}; }),
           questionnaire:{reponses:c.rep,a_interpreter:((((r[3]&&r[3].data)||[])[0]||{}).diagnostic||{}).a_interpreter||null},

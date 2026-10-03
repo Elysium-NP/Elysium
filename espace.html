@@ -436,6 +436,10 @@
   #msg-form button:disabled,#abo-portail:disabled{opacity:.45;cursor:not-allowed}
   /* bulles : la classe .b de site.css (texte bleu) les colorait par erreur */
   .fil-msg .b{color:var(--ice)}
+  /* médaille de profil (ou l'initiale) */
+  .p-medaille{display:flex;justify-content:center;margin:0 0 14px}
+  .p-medaille .av{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:var(--pilule);font:800 34px/1 Arial,Helvetica,sans-serif;color:var(--ice)}
+  .p-medaille .av.md{background:none;filter:drop-shadow(0 6px 10px rgba(60,40,10,.3))} .p-medaille .av svg{width:100%;height:100%}
   /* ===== STYLE « COMME UNE APPLI CONNUE » (04/10) : mêmes écrans que l'appli MyEly ===== */
   .membre .card .ch{border-bottom:0;padding-bottom:0;margin-bottom:14px}
   .membre .card .ch::after,.membre .card .ch h3::before{display:none}
@@ -476,8 +480,9 @@
 var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;</script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script>if(ELY_DEMO) window.supabase=null;</script>
-<script src="assets/ely-auth.js?v=appli2"></script>
+<script src="assets/ely-auth.js?v=appli3"></script>
 <script src="assets/jour.js?v=3"></script>
+<script src="assets/medaille.js?v=1"></script>
 <script>if(!ELY_DEMO) ElyAuth.requireAuth('connexion.html');</script>
 <link rel="stylesheet" href="assets/jour.css?v=3">
 </head>
@@ -624,6 +629,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
     <!-- PROFIL -->
     <div class="card rv" id="c-profil" data-rub="compte">
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
+      <div id="p-medaille" class="p-medaille" aria-hidden="true"></div>
       <dl class="profil-dl"><dt>Prénom</dt><dd id="pprenom">—</dd><dt>Nom</dt><dd id="pnom">—</dd><dt>Sexe</dt><dd id="psexe">—</dd><dt>Naissance</dt><dd id="pnais">—</dd><dt>Taille</dt><dd id="ptaille">—</dd><dt>Email</dt><dd id="pemail">—</dd><dt>Membre depuis</dt><dd id="pdate">—</dd></dl>
       <p class="foot-note" style="margin-top:12px">Ces informations, définies à l'inscription, sont fixes (hors correction exceptionnelle). Ton objectif et tes préférences viennent de ton questionnaire nutrition.</p>
       <!-- SUPPRIMER MON COMPTE (demande n°3 de l'appli, exigé par Google Play) : PAS hors-appli. Pour l'instant une demande par e-mail ;
@@ -1719,7 +1725,11 @@ var PROG = {
      L'appli dessine ses propres écrans au-dessus de cette page. Elle passe UNIQUEMENT par cet objet, jamais par les variables
      internes (W, Q0, REEL…) : on peut les renommer sans casser l'appli tant que ces formes restent. Mêmes règles que la page
      (démo, compte mixte, abonnement, RLS). Événement document « ely:espace » à chaque chargement ou changement de données. */
-  var _emis=0;
+  var _emis=0, AVATAR;
+  // la médaille dans « Mon profil » (dessin : assets/medaille.js, le même que l'appli) ; sans médaille, l'initiale
+  function medaille(){ var el=document.getElementById('p-medaille'); if(!el||!window.ElyMedaille) return; var x=moi(), k=AVATAR!==undefined?AVATAR:x.avatar;
+    el.innerHTML=ElyMedaille.html(k,String(x.prenom||'?').charAt(0).toUpperCase(),'pm'); }
+  medaille();
   function emettre(){ clearTimeout(_emis); _emis=setTimeout(function(){ document.dispatchEvent(new CustomEvent('ely:espace')); },0); }
   function etatEspace(){ var uu=moi(), paid=!!uu.paid, quest=ADMIN?!!uu.quest:REEL.quest;
     if(paid&&(ADMIN?quest:REEL.prog)) return 'programme';            // même règle que renderProgram
@@ -1768,11 +1778,17 @@ var PROG = {
     fiche:function(){ if(DEMO||!REEL.pdf) return Promise.resolve(null);
       var x=moi(), nm=('Programme Elysium - '+(x.prenom||'')+' '+(x.nom||'')).trim()+'.pdf';
       return sb.storage.from('fiches').createSignedUrl(REEL.pdf,300,{download:nm}).then(function(r){ return r.error||!r.data?null:r.data.signedUrl; },function(){ return null; }); },
+    // médaille du profil (colonne profiles.avatar, supabase app/supabase/avatar_profil.sql) : clé d'emblème, null = l'initiale
+    avatar:function(){ return AVATAR!==undefined?AVATAR:(moi().avatar||null); },
+    choisirAvatar:function(cle){ var k=cle||null;
+      if(k!==null&&['laurier','colonne','amphore','olivier','chouette','lyre','eclair','casque','vague','soleil','etoile'].indexOf(k)<0) return Promise.reject(new Error('Médaille inconnue.'));
+      if(DEMO) return Promise.reject(new Error('Désactivé en démonstration : rien n’est enregistré.'));
+      return sb.from('profiles').update({avatar:k}).eq('id',u.id).then(function(r){ if(r.error) throw new Error('Médaille non enregistrée, réessaie.'); AVATAR=k; medaille(); emettre(); }); },
     supprimerCompte:function(){ document.getElementById('suppr-btn').click(); },
     deconnexion:function(){ document.getElementById('logout').click(); }
   };
   // chaque fois que la page se redessine, l'appli est prévenue
-  var _rp=renderProgram; renderProgram=function(){ var x=_rp.apply(this,arguments); emettre(); return x; };
+  var _rp=renderProgram; renderProgram=function(){ var x=_rp.apply(this,arguments); medaille(); emettre(); return x; };   // profil relu en base : médaille à jour
   var _rf=refresh; refresh=function(){ var x=_rf.apply(this,arguments); emettre(); return x; };
   var _cm=chargerMsgs; chargerMsgs=function(){ var p=_cm.apply(this,arguments); if(p&&p.then) p.then(emettre); else emettre(); return p; };
 

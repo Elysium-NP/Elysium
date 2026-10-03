@@ -24,6 +24,17 @@
   .qwrap{max-width:680px;margin:0 auto;padding:120px var(--edge) 80px}
   /* En-tête de page (remplace l'ancien compteur « Étape 1 / 19 ») */
   .qintro{margin-bottom:8px}
+  /* questionnaire de réactualisation (démonstration) */
+  .rq-demo{margin:0 0 22px;padding:10px 14px;border-radius:12px;background:var(--p-jaune);border:1px solid var(--b-jaune);font:14px/1.5 var(--texte);color:var(--ice)}
+  .rq-demo a{color:var(--blue);font-weight:600}
+  .rq-plats h4{margin:18px 0 6px;font:600 11px/1.4 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+  .rq-pl{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;padding:10px 0;border-top:1px solid var(--line)}
+  .rq-pl>span{font:600 15px/1.35 var(--texte);color:var(--ice);flex:1 1 220px}
+  .rq-b{display:flex;gap:6px;flex-wrap:wrap}
+  .rq-b button{min-height:36px;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--void2);color:var(--ice);font:600 13px/1 var(--texte);cursor:pointer}
+  .rq-b button[data-a="garder"].on{background:var(--p-vert);border-color:var(--b-vert)}
+  .rq-b button[data-a="revoir"].on{background:var(--p-jaune);border-color:var(--b-jaune)}
+  .rq-b button[data-a="plus_jamais"].on{background:color-mix(in srgb,#cc0000 18%,transparent);border-color:#cc0000}
   .qintro .kick{font-family:var(--disp);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
   .qintro h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,5.4vw,52px);color:var(--ice);text-transform:uppercase;line-height:1.02;letter-spacing:.005em;margin:0 0 14px}
   .qintro p{font-family:var(--disp);font-size:14px;line-height:1.7;color:var(--gris);margin:0}
@@ -404,6 +415,7 @@
   </div>
 </main>
 
+
 <footer class="site-foot hors-appli">
   <img class="foot-logo" src="assets/logo-pied.png" alt="Elysium · Nutrition &amp; Performance" width="200" height="105" loading="lazy" decoding="async">
   <div class="foot-links"><a href="index.html">Accueil</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Coachs</a><a href="formules.html">Formules</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><a href="https://www.instagram.com/elysium.nutrition.performance" target="_blank" rel="noopener" aria-label="Instagram Elysium"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram</a></div>
@@ -447,6 +459,91 @@
   <a class="btn" href="espace.html">Retour à mon espace</a>
 </div></div>
 
+<script>
+/* QUESTIONNAIRE DE RÉACTUALISATION (QUESTIONNAIRE_REACTUALISATION.md, v4 validée par Damien le 03/10).
+   Ce n'est PAS une autre page : c'est ce questionnaire-ci, avec les MÊMES champs et donc les MÊMES clés data-q
+   (le moteur relit une réactualisation comme un questionnaire de départ). On ajoute la pesée (1) et l'avis sur
+   les plats (2), on masque ce qui ne se redemande pas, et tout arrive pré-rempli : le client ne change que ce qui a bougé.
+   Les réponses masquées restent dans l'envoi (collect lit tout le formulaire), avec la valeur d'avant.
+   ⚠️ Pour l'instant : DÉMONSTRATION SEULE (?reac=f1|f2|f3|f3-semaine), rien n'est lu ni écrit en base.
+   Questions par formule : Odyssée 1, 4, 6, 7 ; Olympe toutes ; Elysium la pesée seule chaque semaine, toutes les 4 semaines.
+   La 3 (menu commun en couple) attend que le duo existe. */
+(function(){
+  var m=/[?&]reac=(f1|f2|f3|f3-semaine)(?:&|#|$)/.exec(location.search); if(!m) return;
+  var F=m[1], form=document.getElementById('qform');
+  var QF={f1:[1,4,6,7],f2:[1,2,4,5,6,7,8,9,10,11],f3:[1,2,4,5,6,7,8,9,10,11],'f3-semaine':[1]}[F];
+  var NOMS={f1:'Formule Odyssée',f2:'Formule Olympe',f3:'Formule Elysium · toutes les 4 semaines','f3-semaine':'Formule Elysium · chaque semaine'};
+  document.documentElement.classList.add('reac');
+  function step(n){ var i=form.querySelector('[name="'+n+'"]'); return i&&i.closest('.qstep'); }
+  function cacher(el){ if(el) el.hidden=true; }
+  // 1. la pesée du matin (va dans les pesées du suivi, pas dans les réponses : pas de data-q)
+  var p1=document.createElement('div'); p1.className='qstep'; p1.setAttribute('data-reac','1');
+  p1.innerHTML='<h2>Ton poids ce matin.</h2><p class="qhint">Le matin de ton jour off, à jeun, avant de manger ou de boire. '+
+    '<b>Obligatoire</b>&nbsp;: sans pesée, on ne peut rien réajuster.</p>'+
+    '<div class="qgrid"><div class="qfield"><label>Poids ce matin (kg)</label><input type="number" name="pesee" min="35" max="250" step="0.1" placeholder="kg" required></div></div>';
+  // 2. les plats, un par un (table retours)
+  var p2=document.createElement('div'); p2.className='qstep'; p2.setAttribute('data-reac','2');
+  p2.innerHTML='<h2>Tes plats, un par un.</h2><p class="qhint">Pour ta prochaine diète&nbsp;: <b>à garder</b> revient à coup sûr, '+
+    '<b>à revoir</b> peut revenir sans être imposé, <b>plus jamais</b> ne revient plus. Sans avis, on varie.</p><div class="rq-plats" id="rq-plats"></div>';
+  // les questions du départ, dans l'ordre du document de Damien
+  var S={o:step('objectif'),i:step('ideal'),t:step('metier'),a:step('pas'),pd:step('pdj'),c:step('conserver'),r:step('refuses'),al:step('allergies'),rg:step('regime'),op:step('options')};
+  var ORDRE=[[p1,[1]],[p2,[2]],[S.o,[4]],[S.i,[4]],[S.t,[5]],[S.a,[6,7]],[S.pd,[8]],[S.op,[8,11]],[S.c,[9]],[S.r,[9]],[S.al,[10]],[S.rg,[10]]];
+  var fin=form.querySelector('.qend');
+  [].forEach.call(form.querySelectorAll('.qstep'),function(x){ x.hidden=true; });
+  ORDRE.forEach(function(o){ form.insertBefore(o[0],fin); o[0].hidden=!o[1].some(function(q){ return QF.indexOf(q)>-1; }); });
+  [].forEach.call(form.querySelectorAll('.qstep'),function(x){ x.classList.remove('active'); });
+  // dans les étapes gardées : ce qui ne se redemande pas (ressenti, poids du départ, téléphone)
+  var re=form.querySelector('[name="ressenti"]').closest('.qcards'); cacher(re.previousElementSibling); cacher(re);
+  cacher(S.i.querySelector('.qgrid')); cacher(S.i.querySelector('.qhint'));
+  S.i.querySelector('h2').textContent='Le poids que tu vises.';
+  cacher(S.r.querySelector('.qwarn'));
+  // en-tête, fin de page, confirmation, remerciement
+  var it=form.querySelector('.qintro'), heb=F==='f3-semaine';
+  it.querySelector('.kick').textContent=heb?'Ta pesée de la semaine':'Réactualiser mon programme';
+  it.querySelector('h1').textContent=heb?'Ta pesée.':'Qu’est-ce qui a changé ?';
+  it.querySelector('p').innerHTML=heb?'Une seule question cette semaine&nbsp;: ton poids. Tes coachs réajustent tes quantités à partir de là.'
+    :'<b>Tes réponses de la dernière fois sont déjà remplies</b>&nbsp;: change seulement ce qui a bougé. Deux minutes.';
+  fin.querySelector('.qwarn').innerHTML='Relis-toi, puis envoie&nbsp;: tes coachs s’en servent pour '+(heb?'réajuster tes quantités.':'ta prochaine diète.');
+  document.getElementById('next').textContent=heb?'Envoyer ma pesée':'Envoyer mes réponses';
+  var md=document.getElementById('modal');
+  md.querySelector('h3').textContent='On envoie ?'; md.querySelector('p').textContent='Tes coachs s’en servent pour '+(heb?'réajuster tes quantités.':'ta prochaine diète.');
+  document.getElementById('myes').textContent='Oui, j’envoie';
+  var th=document.getElementById('scr-thanks');
+  th.querySelector('p').innerHTML=(heb?'Merci, ta pesée est enregistrée. Damien &amp; Yoann réajustent tes quantités.':'Merci. Damien &amp; Yoann s’en servent pour ta prochaine diète, <b>à la main, au gramme près</b>.')+
+    '<br><br><b>Démonstration&nbsp;: rien n’a été enregistré.</b>';
+  th.querySelector('a.btn').href='espace.html?demo='+F.slice(0,2);
+  document.title='ELYSIUM · '+(heb?'Ta pesée de la semaine':'Réactualiser mon programme');
+  // bandeau de démonstration : les quatre versions
+  var bd=document.createElement('div'); bd.className='rq-demo';
+  bd.innerHTML='Démonstration du questionnaire de réactualisation, pour une cliente d’exemple&nbsp;: <b>'+NOMS[F]+'</b>. Rien n’est enregistré.<br>Voir aussi&nbsp;: '+
+    [['f1','Odyssée'],['f2','Olympe'],['f3','Elysium (4 semaines)'],['f3-semaine','Elysium (chaque semaine)']].map(function(x){
+      return x[0]===F?'<b>'+x[1]+'</b>':'<a href="?reac='+x[0]+'">'+x[1]+'</a>'; }).join(' · ');
+  form.insertBefore(bd,it);
+  // la cliente d'exemple : ses réponses du questionnaire de départ (mêmes clés), son menu, sa dernière pesée
+  window.ELY_REAC={formule:F, pesee:71.4, plats:[
+    ['Petit-déjeuner',['Tartines poulet & Saint-Môret','Galettes de riz, poulet & fromage']],
+    ['Déjeuner',['Bœuf, pâtes & poivron','Thon, pâtes & concombre','Poulet, riz & tomates cerises','Pâtes au poulet','Steak, riz & poivron','Thon, blé & concombre']],
+    ['Dîner',['Axoa de bœuf & semoule','Poisson blanc, patate douce & haricots verts','Bœuf, riz & maïs (au Saint-Môret)','Pâtes au poulet, pesto & parmesan','Poulet, semoule & ratatouille','Thon, pâtes & maïs']]],
+    reponses:{}};
+  var R=window.ELY_REAC.reponses;
+  function q(n){ return form.querySelector('[name="'+n+'"]').getAttribute('data-q'); }
+  R[q('objectif')]='Perte de poids'; R[q('ressenti')]='En surpoids'; R[q('poids')]='74.2'; R[q('telephone')]='06 12 34 56 78';
+  R[q('ideal')]='5 à 8 kilos'; R[q('profession')]='Assistante de direction'; R[q('metier')]='Rester assis la majorité de la journée (bureau, conduite…)';
+  R[q('pas')]='<10.000'; R[q('seances')]='2'; R[q('pdj')]='Sucré'; R[q('regime')]='Aucun'; R[q('allergies')]='Aucune';
+  R[q('conserver')]='Poulet, Filet de poulet, Cuisse de poulet, Pilon de poulet, Blanc de poulet (fleury michon), Émincé de poulet grillé (Fleury Michon)';
+  R[q('refuses')]='Porc, Roti de porc'; R[q('options')]='Je veux le même petit déjeuner chaque jour';
+  R[q('veut_ent')]='Non'; R[q('connu')]='Instagram'; R[q('adresse')]='2 rue de la Chapelle'; R[q('cp')]='80000'; R[q('ville')]='Amiens';
+  R[q('cgv')]=form.querySelector('[name="cgv"]').value;
+  // l'avis sur les plats : trois boutons par plat, re-clic = sans avis
+  var AV={}, h='';
+  window.ELY_REAC.plats.forEach(function(g){ h+='<h4>'+g[0]+'</h4>'+g[1].map(function(t){
+    return '<div class="rq-pl"><span>'+t.replace(/&/g,'&amp;')+'</span><div class="rq-b"><button type="button" data-a="garder">À garder</button>'+
+      '<button type="button" data-a="revoir">À revoir</button><button type="button" data-a="plus_jamais">Plus jamais</button></div></div>'; }).join(''); });
+  var L=document.getElementById('rq-plats'); L.innerHTML=h;
+  L.addEventListener('click',function(e){ var b=e.target.closest('button[data-a]'); if(!b) return; var row=b.closest('.rq-pl'), on=b.classList.contains('on');
+    [].forEach.call(row.querySelectorAll('button'),function(x){ x.classList.remove('on'); }); if(!on) b.classList.add('on'); });
+})();
+</script>
 <script src="assets/site.js?v=prix2"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script src="assets/ely-auth.js?v=appli2"></script>
@@ -559,6 +656,7 @@
   function eachRequired(fn){
     var vus={};
     form.querySelectorAll('[required]').forEach(function(el){
+      if(el.closest('[hidden]')) return;              // partie masquée (réactualisation, entreprise) : pas demandée
       if(el.type==='radio'){
         if(vus[el.name]) return;                       // un groupe de boutons = UNE question
         vus[el.name]=1;
@@ -567,6 +665,7 @@
     });
     // groupes de cases à cocher obligatoires (au moins une) : « required » forcerait CHAQUE case
     form.querySelectorAll('[data-req]').forEach(function(el){
+      if(el.closest('[hidden]')) return;
       fn(el, !!form.querySelector('input[name="'+el.name+'"]:checked'));
     });
   }
@@ -632,6 +731,7 @@
   });
   document.getElementById('mno').addEventListener('click',function(){ modal.classList.remove('on'); });
   document.getElementById('myes').addEventListener('click',function(){
+    if(window.ELY_REAC) return;
     var b=this; b.disabled=true; b.textContent='Envoi…';
     sb.from('questionnaires').upsert({
       user_id:uid, type:'nutrition', reponses:collect(), etape:0, statut:'valide'
@@ -659,6 +759,11 @@
   }
 
   /* ---------- démarrage ---------- */
+  if(window.ELY_REAC){
+    restore(ELY_REAC.reponses); form.querySelector('[name="pesee"]').placeholder='Dernière : '+String(ELY_REAC.pesee).replace('.',',')+' kg';
+    document.dispatchEvent(new CustomEvent('ely:restaure')); show(''); progress();
+    document.getElementById('myes').onclick=function(e){ e.stopImmediatePropagation(); modal.classList.remove('on'); show('scr-thanks'); confetti(); };
+    return; }
   if(!ElyAuth.requireAuth('connexion.html')) return;
   ElyAuth.ready.then(function(u){
     if(!u) return;                                   // requireAuth redirige déjà
@@ -705,12 +810,13 @@
   var reduit=matchMedia('(prefers-reduced-motion:reduce)').matches, html=document.documentElement;
   var form=document.getElementById('qform'), tous=[].slice.call(form.querySelectorAll('.qstep'));
   // la jauge ne compte que les blocs à questions obligatoires (le bloc facultatif serait « rempli » d'office)
-  var blocs=tous.filter(function(b){ return b.querySelector('[required],[data-req]'); });
+  var blocs=tous.filter(function(b){ return !b.hidden&&b.querySelector('[required],[data-req]'); });
   if(!reduit) html.classList.add('anim');
   // un bloc est complet quand toutes ses réponses obligatoires sont données
   function complet(b){
     var ok=true, vus={};
     b.querySelectorAll('[required],[data-req]').forEach(function(el){
+      if(el.closest('[hidden]')) return;
       if(el.type==='radio'||el.type==='checkbox'){ if(vus[el.name]) return; vus[el.name]=1;
         if(!b.querySelector('input[name="'+el.name+'"]:checked')) ok=false; }
       else if(!String(el.value).trim()) ok=false;
@@ -740,7 +846,7 @@
     maj(true);
     // bloc tout juste complété par un choix -> on glisse doucement au suivant
     if(b&&!avant&&b.classList.contains('fait')&&(e.target.type==='radio'||e.target.type==='checkbox')){
-      var i=tous.indexOf(b), s=tous[i+1];
+      var i=tous.indexOf(b), s=tous.slice(i+1).filter(function(x){ return !x.hidden; })[0];
       if(s) setTimeout(function(){ s.scrollIntoView({behavior:reduit?'auto':'smooth',block:'start'}); },900);
     }
   });

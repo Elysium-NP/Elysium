@@ -468,7 +468,7 @@
    d'avant ; « Poids (en kg) » prend la pesée du jour.
    Adresses : ?reac (toutes les questions de la formule) · ?reac=semaine (Elysium : la pesée seule) ;
    démonstration sans base : ?reac=f1|f2|f3|f3-semaine.
-   Questions par formule : Odyssée 1, 4, 6, 7 ; Olympe toutes ; Elysium la pesée seule chaque semaine, toutes les 4 semaines.
+   Questions par formule (v5, Damien 03/10 : « tout ce dont on se sert ») : Odyssée 1, 4, 5, 6, 7 ; Olympe toutes ; Elysium la pesée seule chaque semaine, toutes les 4 semaines.
    La 3 (menu commun en couple) attend que le duo existe.
    Enregistrement (script principal) : poids (pesée du jour) -> retours (avis) -> reactualisations (une ligne par envoi). */
 (function(){
@@ -515,7 +515,7 @@
     avis:function(){ var o={}; [].forEach.call(L.querySelectorAll('.rq-pl'),function(r){ var b=r.querySelector('button.on'); o[r.getAttribute('data-k')]=b?b.getAttribute('data-a'):null; }); return o; },
     // F = f1 | f2 | f3 : les questions de la formule (la pesée seule pour Elysium en ?reac=semaine)
     formule:function(F){ var heb=F==='f3'&&this.hebdo;
-      var QF=heb?[1]:{f1:[1,4,6,7],f2:[1,2,4,5,6,7,8,9,10,11],f3:[1,2,4,5,6,7,8,9,10,11]}[F]||[1,2,4,5,6,7,8,9,10,11];
+      var QF=heb?[1]:{f1:[1,4,5,6,7],f2:[1,2,4,5,6,7,8,9,10,11],f3:[1,2,4,5,6,7,8,9,10,11]}[F]||[1,2,4,5,6,7,8,9,10,11];
       ORDRE.forEach(function(o){ o[0].hidden=!o[1].some(function(q){ return QF.indexOf(q)>-1; }); });
       var it=form.querySelector('.qintro');
       it.querySelector('.kick').textContent=heb?'Ta pesée de la semaine':'Réactualiser mon programme';

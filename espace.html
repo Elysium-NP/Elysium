@@ -72,7 +72,9 @@
   .obj-meta{font-family:var(--disp);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);margin-top:5px}
   .obj-meta b{color:var(--blue);font-weight:600}
   .phd .macros{display:flex;align-items:center;gap:26px}
-  .donut{position:relative;width:154px;height:154px;flex:none}
+  .donut{position:relative;width:180px;height:180px;flex:none}
+  .donut .pct{font-family:var(--disp);font-weight:700;font-size:13px;fill:var(--ice);text-anchor:middle;dominant-baseline:central;font-variant-numeric:tabular-nums;opacity:0;transition:opacity .4s}
+  .donut.fini .pct{opacity:1}
   .donut svg{filter:drop-shadow(0 0 8px rgba(46,155,255,.5));overflow:visible}
   .donut .arc{transition:opacity .3s,filter .3s}
   .donut.dim .arc{opacity:.28}
@@ -87,7 +89,6 @@
   .mrow .sw{width:10px;height:10px;flex:none;border-radius:2px;box-shadow:0 0 7px currentColor}
   .mrow .l{font-family:var(--disp);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);flex:1}
   .mrow .g{font-family:var(--disp);font-weight:700;font-size:16px;color:var(--ice);font-variant-numeric:tabular-nums}
-  .mrow .p{font-family:var(--disp);font-size:11px;color:var(--steel);width:34px;text-align:right}
   .tabs{display:flex;gap:6px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   /* dès la tablette, la rangée passe à la ligne au lieu de déborder (le bouton Imprimer était coupé) ; sur téléphone : défilement horizontal */
   @media(min-width:700px){.tabs{flex-wrap:wrap;overflow:visible}}
@@ -292,7 +293,7 @@
   @media(max-width:600px){
     .phd{gap:14px!important;padding:16px!important}
     .phd .macros{flex-direction:row!important;align-items:center!important;gap:16px!important}
-    .phd .donut{width:112px;height:112px}
+    .phd .donut{width:136px;height:136px}
     .phd .donut .c .v{font-size:25px}
     .phd .mlist{gap:0;flex:1;min-width:0}
     .phd .mrow{padding:8px 0}
@@ -300,7 +301,6 @@
     .phd .mrow .top{gap:6px}
     .phd .mrow .l{font-size:10.5px;letter-spacing:.06em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .phd .mrow .g{font-size:15px;white-space:nowrap}
-    .phd .mrow .p{width:30px}
   }
   .dash-hd .coachlink:hover{background:rgba(46,155,255,.1);color:var(--ice)}
   .dash-hd .coachlink[hidden]{display:none}
@@ -1016,24 +1016,28 @@ var PROG = {
       var segs=[['g','#3d85c6',G*4],['p','#cc0000',P*4],['l','#f1c232',L*9]];
       var rmo=matchMedia('(prefers-reduced-motion:reduce)').matches||/\bstatic\b/.test(location.search);
       var donut=document.getElementById('p-donut');
-      donut.innerHTML='<svg viewBox="0 0 140 140" width="152" height="152">'+
+      var acc0=0, PCT={g:gp,p:pp,l:lp};
+      donut.innerHTML='<svg viewBox="-14 -14 168 168" width="180" height="180">'+
         '<circle cx="70" cy="70" r="'+R+'" fill="none" stroke="rgba(60,45,20,.08)" stroke-width="15"/>'+
         segs.map(function(s){return '<circle class="arc a-'+s[0]+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="'+s[1]+'" color="'+s[1]+'" stroke-width="15" stroke-dasharray="0 '+C.toFixed(1)+'" transform="rotate(-90 70 70)"/>';}).join('')+
+        // le % au milieu de son arc, juste à l'extérieur de l'anneau
+        segs.map(function(s){ var a=(acc0+s[2]/2)/kc*2*Math.PI-Math.PI/2; acc0+=s[2];
+          return '<text class="pct" x="'+(70+73*Math.cos(a)).toFixed(1)+'" y="'+(70+73*Math.sin(a)).toFixed(1)+'">'+PCT[s[0]]+'%</text>'; }).join('')+
         '</svg><div class="c"><div class="v" id="p-kc">0</div><div class="u">kcal<br>par jour</div></div>';
       document.getElementById('p-mlist').innerHTML=
         lrow('g','#3d85c6','Glucides',G,gp)+lrow('p','#cc0000','Protéines',P,pp)+lrow('l','#f1c232','Lipides',L,lp);
-      function lrow(id,cc,l,g,p){ return '<div class="mrow" data-arc="'+id+'"><div class="top"><span class="sw" style="background:'+cc+';color:'+cc+'"></span><span class="l">'+l+'</span><span class="g">'+g+' g</span><span class="p">'+p+'%</span></div></div>'; }
+      function lrow(id,cc,l,g,p){ return '<div class="mrow" data-arc="'+id+'"><div class="top"><span class="sw" style="background:'+cc+';color:'+cc+'"></span><span class="l">'+l+'</span><span class="g">'+g+' g</span></div></div>'; }
       [].forEach.call(host.querySelectorAll('.mrow'),function(r){
         r.addEventListener('mouseenter',function(){ donut.classList.add('dim'); var a=donut.querySelector('.a-'+r.dataset.arc); if(a) a.classList.add('hot'); });
         r.addEventListener('mouseleave',function(){ donut.classList.remove('dim'); [].forEach.call(donut.querySelectorAll('.arc'),function(x){x.classList.remove('hot');}); });
       });
       function setArcs(t){ var acc=0; segs.forEach(function(s){ var len=s[2]/kc*C*t, el=donut.querySelector('.a-'+s[0]);
         el.setAttribute('stroke-dasharray',len.toFixed(1)+' '+(C-len).toFixed(1)); el.setAttribute('stroke-dashoffset',(-acc).toFixed(1)); acc+=len; }); }
-      if(rmo){ setArcs(1); document.getElementById('p-kc').textContent=CIB.kcal; }
+      if(rmo){ setArcs(1); document.getElementById('p-kc').textContent=CIB.kcal; donut.classList.add('fini'); }
       else{
         var t0=null, dur=1050, ease=function(x){return 1-Math.pow(1-x,3);};
         requestAnimationFrame(function frame(ts){ if(!t0)t0=ts; var t=Math.min(1,(ts-t0)/dur), e=ease(t);
-          setArcs(e); document.getElementById('p-kc').textContent=Math.round(CIB.kcal*e); if(t<1) requestAnimationFrame(frame); });
+          setArcs(e); document.getElementById('p-kc').textContent=Math.round(CIB.kcal*e); if(t<1) requestAnimationFrame(frame); else donut.classList.add('fini'); });
       }
     })();
 

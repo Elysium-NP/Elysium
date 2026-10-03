@@ -494,6 +494,8 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
         <button id="wgoal" class="ghostb" type="button">Objectif</button>
       </div>
       <p id="wmsg" class="foot-note" aria-live="polite"></p>
+      <!-- Formule Elysium : la pesée de la semaine passe par le questionnaire de réactualisation (?reac=semaine) -->
+      <div class="dashcta" id="w-hebdo" hidden><a class="btn" href="questionnaire.html?reac=semaine">Ma pesée de la semaine</a></div>
     </div>
 
     <!-- MENSURATIONS (regroupé avec le poids — suivi physique) -->
@@ -536,6 +538,7 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
         <li><b class="n">Plus jamais</b> ne revient plus</li>
       </ul>
       <p class="avis-sans">Sans avis, on varie : ta prochaine diète ne reprend pas les plats de ce menu-ci.</p>
+      <div class="dashcta"><a class="btn" href="questionnaire.html?reac">Remplir mon questionnaire de réactualisation</a></div>
       <p class="avis-compte" id="avis-compte" aria-live="polite"></p>
       <div class="avis-liste" id="avis-liste"></div>
       <p id="avis-msg" class="foot-note" aria-live="polite"></p>
@@ -1363,6 +1366,7 @@ var PROG = {
   function avisCompte(){ var n=document.querySelectorAll('#avis-liste .avis-l').length, f=document.querySelectorAll('#avis-liste .avis-l button.on').length;
     document.getElementById('avis-compte').innerHTML='<b>'+f+'</b> plat'+(f>1?'s':'')+' noté'+(f>1?'s':'')+' sur '+n; }
   function chargerAvis(){
+    document.getElementById('w-hebdo').hidden=!(!ADMIN&&!DEMO&&f3Actif());
     var card=document.getElementById('c-avis');
     if(ADMIN||!REEL.pid||!REEL.menu){ card.hidden=true; return; }
     var jr=REEL.depuis?(Date.now()-new Date(REEL.depuis).getTime())/86400000:0;

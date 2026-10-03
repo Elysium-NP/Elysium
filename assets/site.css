@@ -883,3 +883,9 @@ body.membre .card .ch .tag,body.membre .pill{border:0;background:var(--pilule);c
 body.membre .btn{border-radius:999px}
 body.membre .kpi{background:var(--carte);border-color:transparent;box-shadow:var(--ombre);border-radius:18px}
 body.membre .kpi .v{font-family:Arial,Helvetica,sans-serif;font-weight:800;letter-spacing:-.04em}
+
+/* maquette du style sur la vitrine (?style=appli) : bandeau discret en bas d'écran */
+.apercu-bandeau{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9999;max-width:calc(100% - 24px);
+  padding:9px 16px;border-radius:999px;background:var(--actif);color:var(--actif-t);font:600 13px/1.3 Arial,Helvetica,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.18);text-align:center}
+.apercu-bandeau a{color:inherit;text-decoration:underline;margin-left:6px}
+body.apercu-appli .plan{background:var(--carte);box-shadow:var(--ombre)}

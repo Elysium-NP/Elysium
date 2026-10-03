@@ -106,3 +106,4 @@ html[data-theme="obscur"] .meal-hd .pst{background:color-mix(in srgb,var(--mc) 2
 .meal-in .ings-l li{border-bottom:1px solid var(--filet-doux,#EEE8DF)}
 .meal-in .ings-l li::before{background:var(--mc)}
 .meal-in .mac span{padding:4px 9px;border-radius:999px;background:var(--pilule,#EFEAE2);font:700 11.5px/1 Arial,Helvetica,sans-serif}
+.meal-in .mac{gap:6px;flex-wrap:wrap} .meal-in .mac span{white-space:nowrap}

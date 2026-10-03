@@ -12,6 +12,18 @@ window.ELY_PRIX_EBOOK = '14,90 €';
   document.addEventListener('touchstart', function(){}, { passive:true });
   var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
+  // MAQUETTE DU STYLE « COMME UNE APPLI CONNUE » SUR LA VITRINE (lot 2, à valider) : ?style=appli l'allume, ?style=site
+  // l'éteint ; retenu pendant la visite (sessionStorage). Sans le paramètre, le site public ne change pas.
+  try{
+    var stl=/[?&]style=(appli|site)(?:&|#|$)/.exec(location.search); if(stl) sessionStorage.setItem('ely_style',stl[1]);
+    if(sessionStorage.getItem('ely_style')==='appli'&&!document.body.classList.contains('membre')){
+      document.body.classList.add('membre','apercu-appli');
+      var ab=document.createElement('div'); ab.className='apercu-bandeau';
+      ab.innerHTML='Aperçu du nouveau style, pour validation. <a href="?style=site">Revenir au site actuel</a>';
+      document.body.appendChild(ab);
+    }
+  }catch(e){}
+
   // Signale que le JS tourne : la CSS ne masque les .reveal QUE si cette classe est là
   // (sinon échec JS = page blanche). Posée avant tout traitement.
   document.documentElement.classList.add('reveal-ready');

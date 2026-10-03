@@ -1613,7 +1613,7 @@
 <script src="assets/site.js?v=prix2"></script>
 <script src="assets/vendor/supabase.min.js"></script>
 <script>/* maquette (/coach-maquette) : la même page, sur des données d'exemple (assets/demo-coach.js), sans aucune connexion */
-document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=7':'ely-auth.js?v=appli2')+'"><\/script>');</script>
+document.write('<script src="assets/'+(/maquette/.test(location.pathname+location.search)?'demo-coach.js?v=8':'ely-auth.js?v=appli2')+'"><\/script>');</script>
 <script>
 /* ======================================================================
    BOÎTE À OUTILS GRAPHIQUES : SVG faits main, aucune librairie, aucun CDN.
@@ -4122,7 +4122,7 @@ var ED=(function(){
       sb.from('profiles').select('id,prenom,nom,sexe,naissance,taille_cm,formule,created_at'),
       abosLecture(),
       sb.from('poids').select('user_id,date,kg').order('date'),   // ponytail: toutes les pesées ; une vue agrégée quand il y aura des centaines de clients
-      sb.from('questionnaires').select('user_id,statut,reponses'),
+      sb.from('questionnaires').select('user_id,statut,reponses,valide_at'),
       sb.from('admins').select('user_id,nom'),
       sb.from('programmes').select('id,user_id,version,statut,diagnostic,created_at,traite_at,traite_par').order('version'),
       sb.from('retours').select('user_id,plat,created_at').eq('avis','plus_jamais').order('created_at',{ascending:false}).limit(8),
@@ -4140,7 +4140,7 @@ var ED=(function(){
         p.formule=cleFormule(p.formule);
         var q=qs[p.id], rep=(q&&q.statut==='valide'&&q.reponses)||{}, w=pd[p.id]||[];
         return {id:p.id, p:p, nom:((p.prenom||'')+' '+(p.nom||'')).trim()||'Sans nom', a:ab[p.id]||null, w:w, der:w[w.length-1]||null,
-          q:!!(q&&q.statut==='valide'), rep:rep, obj:objectif(rep), prog:pr[p.id]||[]}; })};
+          q:!!(q&&q.statut==='valide'), qv:q&&q.valide_at, rep:rep, obj:objectif(rep), prog:pr[p.id]||[]}; })};
       D.clients.forEach(function(c){ D.par[c.id]=c; });
       $('g-noms').innerHTML=D.clients.map(function(c){ return '<option value="'+esc(c.nom)+'">'; }).join('');
       renderFile(); renderJour(); renderTable(); renderResultats(); renderEcheancier(); renderGraphes(); renderEco(); renderStats();
@@ -4173,6 +4173,12 @@ var ED=(function(){
     var nl={}; MSG.forEach(function(m){ if(duClient(m)&&!m.lu_at) nl[m.client_id]=m; });
     var msgs=Object.keys(nl).map(function(id){ var t=nl[id].texte;
       return ligne('<b class="nom" role="button" tabindex="0" data-msg="'+esc(id)+'">'+esc(cl(id).nom)+'</b>', '« '+esc(t.slice(0,46))+(t.length>46?'…':'')+' »'); });
+    // INTÉRESSÉS PAR L'ENTRAÎNEMENT (Dimitri 03/10) : « Oui » à la question du questionnaire, validé depuis moins de 30 jours.
+    // Toutes formules : le message automatique du questionnaire n'arrive que pour la Formule Elysium (messagerie réservée).
+    var ent=C.filter(function(c){ if(!c.q||!c.qv||jours(c.qv)>30) return false;
+        return Object.keys(c.rep).some(function(k){ return /programme d.entra[iî]nement/i.test(k)&&/^Oui/i.test(String(c.rep[k])); }); })
+      .sort(function(a,b){ return new Date(b.qv)-new Date(a.qv); })
+      .map(function(c){ return ligne(nomLien(c), (c.a&&FORM[c.a.formule]?FORM[c.a.formule]+' · ':'')+'il y a '+jours(c.qv)+' j'); });
     var pj=D.retours.map(function(x){ return ligne(nomLien(cl(x.user_id)), esc(String(x.plat).replace(/_/g,' '))); });
     // corrections en cours : renvoyée en correction (nouvelle version attendue), ou version corrigée déposée et pas encore relue
     var nbA={}; D.rc.forEach(function(x){ nbA[x.programme_id]=(nbA[x.programme_id]||0)+1; });
@@ -4186,6 +4192,7 @@ var ED=(function(){
           (na?' · <span class="retard">'+na+' non appliquée'+(na>1?'s':'')+'</span>':'')+(nl?' · '+pa(nl,'note')+' à lire':'')); }
       return null; }).filter(Boolean);
     $('jour-cartes').innerHTML=carte('Diètes à relire',relire.length,relire,'Rien à relire.')+carte('Corrections en cours',corr.length,corr,'Aucune correction en cours.')+carte('Nouveaux questionnaires',nouveaux.length,nouveaux,'Aucun nouveau questionnaire.')+
+      carte('Intéressés par l’entraînement',ent.length,ent,'Personne ces 30 derniers jours.')+
       carte('Pesées en retard',retard.length,retard,'Tout le monde est à jour.')+carte('Impayés en cours',impayes.length,impayes,'Aucun impayé.')+
       carte('Messages non lus',msgs.length,msgs,'Tout est lu.')+carte('Retours « plus jamais »',pj.length,pj,'Aucun retour pour l’instant.');
 

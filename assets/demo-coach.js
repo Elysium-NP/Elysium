@@ -41,7 +41,9 @@
     rep['Poids (en kg)']=String(depart); rep['Nombre moyen de pas par jour ? (Si tu utilises une montre connectée ou ton téléphone)']='10.000–13.000';
     rep['En moyenne, combien de séances de sport fais-tu (ou feras-tu) par semaine ?']=String(2+k%4); rep['Es-tu plutôt team sucré ou salé au petit-déjeuner ? (choix multiple possible)']=k%2?'Sucré':'Sucré, Salé';
     rep['Ville']='Amiens'; rep['Code postal']='80000';
-    DB.questionnaires.push({user_id:d.user_id,type:'nutrition',statut:'valide',reponses:rep,valide_at:iso(debut+JOUR),created_at:iso(debut)});
+    // un client sur quatre intéressé par l'entraînement, questionnaire validé récemment : carte « Intéressés par l'entraînement »
+    var ent=k%4===2; rep["Serais-tu intéressé(e) par un programme d'entraînement afin d'optimiser tes résultats ? (15% de remise si les 2 programmes sont pris en même temps)"]=ent?'Oui (Je rempli le questionnaire disponible en description)':'Non';
+    DB.questionnaires.push({user_id:d.user_id,type:'nutrition',statut:'valide',reponses:rep,valide_at:iso(ent?now-(2+k)*JOUR:debut+JOUR),created_at:iso(debut)});
     var f=p.formule||'f2';
     DB.abonnements.push({user_id:d.user_id,formule:f,statut:'active',montant_cents:PRIX[f],periode_fin:iso(now+(5+k*3)*JOUR),resiliation_prevue:false,resilie_le:null,stripe_subscription_id:'sub_demo_'+k});
     for(var m=0;m<2;m++) DB.paiements.push({id:'pay_demo_'+k+'_'+m,user_id:d.user_id,stripe_customer_id:'cus_demo_'+k,formule:f,montant_cents:PRIX[f],frais_cents:Math.round(PRIX[f]*0.015+25),

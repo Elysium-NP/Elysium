@@ -297,7 +297,7 @@
         <h2>Un régime particulier&nbsp;?</h2>
         <p class="qhint">Plusieurs choix possibles.</p>
         <div class="qcards">
-          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Aucun" data-req="1"><span class="dot"></span><span class="tx">Aucun</span></label>
+          <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Aucun" data-req="1" data-seul="1"><span class="dot"></span><span class="tx">Aucun</span></label>
           <!-- retiré pour le moment (Damien 27/09, le moteur ne le gère pas encore) : <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Végétarien"><span class="dot"></span><span class="tx">Végétarien</span></label> -->
           <!-- retiré pour le moment (Damien 27/09, le moteur ne le gère pas encore) : <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Vegan"><span class="dot"></span><span class="tx">Vegan</span></label> -->
           <label class="qcard"><input type="checkbox" name="regime" data-q="As-tu un régime particulier ? (choix multiple possible)" value="Pescétarien"><span class="dot"></span><span class="tx">Pescétarien</span></label>
@@ -333,12 +333,13 @@
       <!-- 10 -->
       <div class="qstep">
         <h2>Pour aller plus loin.</h2>
-        <p class="qhint">Facultatif, plusieurs choix possibles.</p>
+        <p class="qhint">Plusieurs choix possibles. Si rien ne te concerne, coche « Aucune de ces options ».</p>
         <div class="qcards one">
-          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux le même petit déjeuner chaque jour"><span class="dot"></span><span class="tx">Je veux le même petit déjeuner chaque jour</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux le même petit déjeuner chaque jour" data-req="1"><span class="dot"></span><span class="tx">Je veux le même petit déjeuner chaque jour</span></label>
           <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je préfère 3 repas par jour (sans collation)"><span class="dot"></span><span class="tx">Je préfère 3 repas par jour (sans collation)</span></label>
           <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)"><span class="dot"></span><span class="tx">Je veux que le plat du midi soit le même que celui de la veille au soir (gain de temps)</span></label>
           <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Je veux que les plats du midi soient froids"><span class="dot"></span><span class="tx">Je veux que les plats du midi soient froids</span></label>
+          <label class="qcard"><input type="checkbox" name="options" data-q="FACULTATIF - Pour aller plus loin (choix multiple possible)" value="Aucune de ces options" data-seul="1"><span class="dot"></span><span class="tx">Aucune de ces options</span></label>
         </div>
       </div>
 
@@ -371,8 +372,8 @@
           <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Partenariat / Entreprise / CSE"><span class="dot"></span><span class="tx">Partenariat / Entreprise / CSE</span></label>
           <label class="qcard"><input type="radio" name="connu" data-q="Comment as-tu connu Elysium Nutrition &amp; Performance ?" value="Autre"><span class="dot"></span><span class="tx">Autre</span></label>
         </div>
-        <div class="qgrid" style="margin-top:16px">
-          <div class="qfield full"><label>Si partenariat / entreprise / CSE, précise (optionnel)</label>
+        <div class="qgrid" id="q-entreprise" style="margin-top:16px" hidden>
+          <div class="qfield full"><label>Le nom de ton entreprise ou de ton CSE</label>
             <input type="text" name="entreprise" data-q="Si vous avez sélectionné &quot;Partenariat / Entreprise / CSE&quot; à la question précédente, merci d&#x27;indiquer le nom de votre entreprise ou de votre CSE." placeholder="Nom de l&#x27;entreprise ou du CSE"></div>
         </div>
       </div>
@@ -601,6 +602,16 @@
   function queueSave(){ clearTimeout(tmr); tmr=setTimeout(saveDraft,800); }
   form.noValidate=true;   // champs de recherche d'aliments : le texte envoyé est dans une zone masquée
   form.addEventListener('input',function(){ progress(); queueSave(); });
+  // cases exclusives (« Aucune de ces options », « Aucun ») et nom de l'entreprise demandé seulement si « Partenariat / Entreprise / CSE ».
+  // En phase de capture : tout est en place avant que la jauge et la sauvegarde ne lisent le formulaire.
+  function dependances(){ var p=form.querySelector('input[name="connu"][value^="Partenariat"]'), z=document.getElementById('q-entreprise'), i=z.querySelector('input');
+    z.hidden=!(p&&p.checked); i.required=!z.hidden; if(z.hidden) i.value=''; }
+  form.addEventListener('change',function(e){ var el=e.target;
+    if(el.type==='checkbox'&&el.checked) form.querySelectorAll('input[name="'+el.name+'"]').forEach(function(x){
+      if(x!==el&&(el.hasAttribute('data-seul')||x.hasAttribute('data-seul'))) x.checked=false; });
+    dependances(); },true);
+  document.addEventListener('ely:restaure',function(){ dependances(); progress(); });
+  dependances();
   form.addEventListener('change',function(){ progress(); queueSave(); });
 
   /* ---------- validation définitive ----------

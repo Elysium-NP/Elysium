@@ -539,6 +539,8 @@
   window.ELY_REAC.plats.forEach(function(g){ h+='<h4>'+g[0]+'</h4>'+g[1].map(function(t){
     return '<div class="rq-pl"><span>'+t.replace(/&/g,'&amp;')+'</span><div class="rq-b"><button type="button" data-a="garder">À garder</button>'+
       '<button type="button" data-a="revoir">À revoir</button><button type="button" data-a="plus_jamais">Plus jamais</button></div></div>'; }).join(''); });
+  // la pesée du jour est AUSSI le « Poids (en kg) » envoyé (le moteur lit le poids dans cette clé) : une seule vérité
+  form.addEventListener('input',function(e){ if(e.target.name==='pesee') form.querySelector('[name="poids"]').value=e.target.value; },true);
   var L=document.getElementById('rq-plats'); L.innerHTML=h;
   L.addEventListener('click',function(e){ var b=e.target.closest('button[data-a]'); if(!b) return; var row=b.closest('.rq-pl'), on=b.classList.contains('on');
     [].forEach.call(row.querySelectorAll('button'),function(x){ x.classList.remove('on'); }); if(!on) b.classList.add('on'); });

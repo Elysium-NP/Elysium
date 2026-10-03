@@ -157,3 +157,21 @@ body.apercu-appli .appbar{display:none}
 }
 body.apercu-appli .figures .fg:last-child .v{font-size:clamp(28px,3.2vw,42px)!important;letter-spacing:-.04em!important}
 body.apercu-appli .two h2{font-size:clamp(32px,4.2vw,54px)!important}
+/* boutons : texte toujours centré dans la pilule (les pages hors accueil gardaient un padding vertical) */
+body.apercu-appli .btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important;padding-bottom:0!important;line-height:1.1!important;text-align:center}
+body.apercu-appli .plan .btn{display:flex!important}
+/* encadré final des pages (« Prêt à commencer ») : une vraie carte, avec de l'air */
+body.apercu-appli .cta{border-top:0!important;padding:clamp(48px,8vh,90px) var(--edge)!important}
+body.apercu-appli .cta-in{padding:clamp(32px,5vw,64px) clamp(22px,4vw,56px)!important;border-radius:var(--a-rr)!important}
+body.apercu-appli .cta-in .kick,body.apercu-appli .cta-in .eyebrow{margin-top:0!important}
+body.apercu-appli .cta{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+body.apercu-appli .cta::before,body.apercu-appli .cta::after{display:none!important}
+/* en-têtes de section des pages : plus de grand numéro ni de « // », la pastille de l'appli à la place */
+body.apercu-appli .sec-head .no{display:none!important}
+body.apercu-appli .sec-head{display:block!important}
+body.apercu-appli .sec-head .lbl{display:inline-flex!important;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;background:var(--pilule);color:var(--a-encre)!important;
+  font:800 11px/1 Arial,Helvetica,sans-serif!important;letter-spacing:.14em!important;text-transform:uppercase;margin-bottom:18px;font-size:0!important}
+body.apercu-appli .sec-head .lbl::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--a-brand)}
+body.apercu-appli .sec-head .lbl::after{content:attr(data-t);font-size:11px}
+body.apercu-appli .sec-head h2{margin-top:0!important}
+body.apercu-appli .sec-head h2::after,body.apercu-appli .sec-head::after{display:none!important}

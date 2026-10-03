@@ -29,6 +29,9 @@
   }
   (function essai(k){ if(!telephone()&&k<40) setTimeout(function(){ essai(k+1); },150); })(0);
 
+  // « // Ta pesée » -> « Ta pesée » (lu par la pastille, voir la feuille)
+  [].forEach.call(document.querySelectorAll('.sec-head .lbl'),function(l){ l.setAttribute('data-t',String(l.textContent).replace(/^\s*\/\/\s*/,'').trim()); });
+
   // 2. la barre d'onglets (mobile)
   var go=document.querySelector('nav.menu a.go'), ici=location.pathname.replace(/\/$/,'/index').replace(/\.html$/,'').split('/').pop()||'index';
   var L=[['Accueil','index.html','accueil','index'],['Méthode','methode.html','methode','methode'],['Formules','formules.html','formules','formules'],['Résultats','resultats.html','resultats','resultats'],

@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png?v=creme">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=creme">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=creme">
-<link rel="stylesheet" href="assets/site.css?v=2909j">
+<link rel="stylesheet" href="assets/site.css?v=0310a">
 <style>
   /* ===== Espace membre v2, tableau de bord « télémétrie » (styles propres à la page) ===== */
   .dash-grid .wide{grid-column:1/-1}
@@ -284,6 +284,17 @@
   .esp-nav span{white-space:nowrap}
   /* saisie du poids : vrais boutons (ils passaient sous les champs, écrasés à 12 px de haut) */
   .wrow button{flex:1 1 130px;min-height:46px;padding:0 18px;border-radius:999px;font:600 14.5px/1 var(--texte);letter-spacing:0;text-transform:none}
+  .suppr{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+  .suppr button{background:none;border:0;padding:6px 0;color:#b42318;font:600 14px/1.3 var(--texte);text-decoration:underline;cursor:pointer}
+  html[data-theme="obscur"] .suppr button{color:#ff8a80}
+  dialog.dsup{position:fixed;inset:0;margin:auto;height:fit-content;max-width:min(480px,calc(100vw - 32px));padding:22px 22px 18px;border:1px solid var(--line);border-radius:16px;background:var(--void2);color:var(--gris);font:15px/1.55 var(--texte)}
+  dialog.dsup::backdrop{background:rgba(0,0,0,.45)}
+  dialog.dsup h3{margin:0 0 10px;font:400 22px/1.2 var(--titre);color:var(--ice)}
+  dialog.dsup p{margin:0 0 10px}
+  dialog.dsup b{color:var(--ice)}
+  .dsup-b{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .dsup-b .ghostb{min-height:42px}
+  #dsup-oui{min-height:42px;padding:0 18px;border:0;border-radius:999px;background:#b42318;color:#fff;font:600 14px/1 var(--texte);cursor:pointer}
   .wrow button.ghostb{background:none;color:var(--blue);border:1.5px solid var(--blue)}
   /* haut de page resserré : les rubriques arrivent tout de suite sous l'en-tête */
   main.dash{padding-top:84px}
@@ -476,6 +487,11 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
   <section id="progview" data-rub="menu" hidden></section>
   <!-- Carte programme (verrou / CTA questionnaire) — mutuellement exclusive avec #progview -->
   <div class="card wide locked" id="progcard" data-rub="menu" style="margin-bottom:16px"></div>
+  <!-- appli MyEly, compte pas encore payé (demande n°5) : message NEUTRE, sans lien, sans prix, sans dire où payer (Apple 3.1.3) -->
+  <div class="card wide seulement-appli" id="appli-attente" data-rub="menu" style="margin-bottom:16px" hidden>
+    <div class="ch"><h3>Mon programme nutrition</h3></div>
+    <p>Ton abonnement n'est pas encore actif. Dès qu'il l'est, ton questionnaire et ta diète apparaissent ici.</p>
+  </div>
 
   <!-- ===== SECTION 2 · POIDS & MENSURATIONS (suivi physique) ===== -->
   <!-- TUILES DE TÉLÉMÉTRIE (poids) -->
@@ -578,7 +594,18 @@ var ELY_DEMO=(/[?&]demo=(f[123])(?:&|#|$)/.exec(location.search)||[])[1]||null;<
       <div class="ch"><h3>Mon profil</h3><span class="tag">Compte</span></div>
       <dl class="profil-dl"><dt>Prénom</dt><dd id="pprenom">—</dd><dt>Nom</dt><dd id="pnom">—</dd><dt>Sexe</dt><dd id="psexe">—</dd><dt>Naissance</dt><dd id="pnais">—</dd><dt>Taille</dt><dd id="ptaille">—</dd><dt>Email</dt><dd id="pemail">—</dd><dt>Membre depuis</dt><dd id="pdate">—</dd></dl>
       <p class="foot-note" style="margin-top:12px">Ces informations, définies à l'inscription, sont fixes (hors correction exceptionnelle). Ton objectif et tes préférences viennent de ton questionnaire nutrition.</p>
+      <!-- SUPPRIMER MON COMPTE (demande n°3 de l'appli, exigé par Google Play) : PAS hors-appli. Pour l'instant une demande par e-mail ;
+           la suppression automatique (fonction serveur : anonymiser, garder les factures, puis supprimer) attend la décision des coachs sur l'abonnement. -->
+      <p class="suppr"><button type="button" id="suppr-btn">Supprimer mon compte</button></p>
+      <p id="suppr-msg" class="foot-note" aria-live="polite"></p>
     </div>
+    <dialog id="dlg-suppr" class="dsup" aria-labelledby="dsup-t">
+      <h3 id="dsup-t">Supprimer ton compte&nbsp;?</h3>
+      <p><b>C'est définitif.</b> Tu ne pourras plus te connecter, ni retrouver ta diète, tes pesées, tes photos et tes messages.</p>
+      <p>Nous gardons seulement, <b>rendues anonymes</b> (sans ton nom, ton e-mail ni ta date de naissance), tes diètes, pesées et réponses au questionnaire, pour améliorer nos programmes ; et tes factures, dix ans, comme la loi l'impose.</p>
+      <p>Ta demande part par e-mail&nbsp;: ton application mail s'ouvre avec le message prêt, il ne reste qu'à l'envoyer. Ton compte est supprimé sous 30 jours au plus, et on te le confirme. <a href="supprimer-compte.html">En savoir plus</a></p>
+      <div class="dsup-b"><button type="button" class="ghostb" id="dsup-non">Annuler</button><button type="button" id="dsup-oui">Envoyer ma demande</button></div>
+    </dialog>
 
     <!-- DÉMO -->
     <div class="card rv" id="democard" data-rub="compte" style="display:none">
@@ -1286,10 +1313,13 @@ var PROG = {
     ElyAuth.portail().catch(function(e){ b.disabled=false; b.textContent='Changer de formule ou résilier'; alert(e.message); });
   });
 
+  // adresses de l'appli MyEly dans les stores : à remplir à la publication (le bloc « continue ici ou télécharge l'appli » s'allume alors)
+  var STORES={ios:'',android:''};
   function renderProgram(){
     var uu=moi(), paid=!!uu.paid;
     var quest = ADMIN ? !!uu.quest : REEL.quest;
     var pill=document.getElementById('statuspill'), c=document.getElementById('progcard'), pv=document.getElementById('progview');
+    document.getElementById('appli-attente').hidden=paid;
     if(paid && (ADMIN ? quest : REEL.prog)){
       pill.textContent='Programme actif'; pill.className='pill paid'; pill.hidden=true;   // l'état normal : rien à signaler
       c.hidden=true; pv.hidden=false; buildProgView();
@@ -1327,7 +1357,10 @@ var PROG = {
       c.className='card wide';
       c.innerHTML='<div class="ch"><h3>Mon programme nutrition</h3><span class="tag">À activer</span></div>'+
         '<p>Paiement validé ✓. Dernière étape : réponds au <b style="color:var(--ice)">questionnaire nutrition</b> et ton coach construit ton programme sur-mesure (il s\'affichera ici, en haut de ton espace, + PDF par mail).</p>'+
-        '<div class="dashcta"><a class="btn" href="'+FORM_URL+'">Remplir le questionnaire nutrition</a></div>';
+        '<div class="dashcta"><a class="btn" href="'+FORM_URL+'">Remplir le questionnaire nutrition</a></div>'+
+        // APRÈS LE PAIEMENT, sur le site seulement (demande n°4) : continuer ici ou passer par l'appli. Caché tant que les deux adresses des stores sont vides.
+        (STORES.ios&&STORES.android?'<div class="appli-choix hors-appli"><p>Continue ici, ou télécharge l’appli <b style="color:var(--ice)">MyEly</b> pour remplir ton questionnaire et suivre ta diète depuis ton téléphone. Même e-mail, même mot de passe.</p>'+
+          '<div class="dashcta"><a class="btn" href="'+STORES.ios+'" target="_blank" rel="noopener">App Store</a><a class="btn" href="'+STORES.android+'" target="_blank" rel="noopener">Google Play</a></div></div>':'');
     }
   }
 
@@ -1496,6 +1529,14 @@ var PROG = {
   document.addEventListener('keydown',function(e){ if(e.key!=='Enter'&&e.key!==' ') return; var g=e.target.closest&&e.target.closest('.goto'); if(g){ e.preventDefault(); gotoCard(g.getAttribute('data-goto')); } });
 
   // ---- déconnexion + démo paiement ----
+  // supprimer mon compte : confirmation, puis la demande part par e-mail (adresse du compte dans le message)
+  document.getElementById('suppr-btn').addEventListener('click',function(){ if(enDemo(document.getElementById('suppr-msg'))) return; document.getElementById('dlg-suppr').showModal(); });
+  document.getElementById('dsup-non').addEventListener('click',function(){ document.getElementById('dlg-suppr').close(); });
+  document.getElementById('dsup-oui').addEventListener('click',function(){ var m=moi().email||'', NL=String.fromCharCode(10);
+    location.href='mailto:elysium.np.pro@gmail.com?subject='+encodeURIComponent('Suppression de mon compte Elysium')+
+      '&body='+encodeURIComponent('Bonjour,'+NL+NL+'Je demande la suppression de mon compte Elysium'+(m?' (adresse du compte : '+m+')':'')+'.'+NL);
+    document.getElementById('dlg-suppr').close();
+    document.getElementById('suppr-msg').textContent='Ta demande est prête dans ton application mail : pense à l’envoyer. On te confirme la suppression par e-mail.'; });
   document.getElementById('logout').addEventListener('click',function(){ if(DEMO){ location.href='formules.html'; return; } ElyAuth.logout(); location.href='index.html'; });
 
   // ---- aiguillage selon le TYPE DE COMPTE (voir ElyAuth.acces) ----

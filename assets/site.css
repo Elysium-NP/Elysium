@@ -891,3 +891,5 @@ body.membre .kpi .v{font-family:Arial,Helvetica,sans-serif;font-weight:800;lette
 body.apercu-appli .plan{background:var(--carte);box-shadow:var(--ombre)}
 /* texte provisoire [à compléter] : passe à la ligne (débordait sur téléphone, page Supprimer mon compte) */
 .fill{white-space:normal!important;overflow-wrap:anywhere;display:inline}
+.apercu-bandeau .ab-court{display:none}
+@media(max-width:760px){.apercu-bandeau .ab-court{display:inline}}

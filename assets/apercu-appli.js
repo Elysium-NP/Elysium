@@ -42,4 +42,8 @@
   var bar=document.createElement('nav'); bar.className='appbar'; bar.setAttribute('aria-label','Navigation');
   bar.innerHTML=L.map(function(x){ return '<a href="'+x[1]+'"'+(ici===x[3]?' aria-current="page"':'')+'>'+svg(I[x[2]])+x[0]+'</a>'; }).join('');
   document.body.appendChild(bar);
+  // bouton clair / obscur sur mobile (le menu qui le porte est masqué) : il actionne le vrai bouton du site
+  var tb=document.querySelector('nav.menu .theme-btn');
+  if(tb){ var m=document.createElement('button'); m.type='button'; m.className='theme-mob'; m.setAttribute('aria-label','Changer de thème');
+    m.innerHTML=svg('<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>'); m.addEventListener('click',function(){ tb.click(); }); document.body.appendChild(m); }
 })();

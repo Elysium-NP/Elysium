@@ -269,3 +269,12 @@ body.apercu-appli .theme-mob svg{width:18px;height:18px;fill:none;stroke:current
   body.apercu-appli .apercu-bandeau{padding:7px 14px;font-size:11.5px;white-space:nowrap}
   body.apercu-appli .apercu-bandeau .ab-long{display:none}
 }
+
+/* toucher d'appli : boutons et cartes s'enfoncent légèrement (rien si « réduire les animations ») */
+@media(prefers-reduced-motion:no-preference){
+  body.apercu-appli .btn,body.apercu-appli .more,body.apercu-appli nav.menu a,body.apercu-appli .appbar a,body.apercu-appli .tlink,body.apercu-appli .theme-mob{transition:transform .12s ease,background .2s,color .2s}
+  body.apercu-appli .btn:active,body.apercu-appli .more:active,body.apercu-appli nav.menu a:active,body.apercu-appli .appbar a:active,body.apercu-appli .tlink:active,body.apercu-appli .theme-mob:active{transform:scale(.96)}
+  body.apercu-appli .plate,body.apercu-appli .tcard,body.apercu-appli .step,body.apercu-appli .plan,body.apercu-appli .myths summary{transition:transform .15s ease,box-shadow .2s}
+  body.apercu-appli .plate:active,body.apercu-appli .tcard:active,body.apercu-appli .plan:active{transform:scale(.985)}
+}
+body.apercu-appli .btn:focus-visible,body.apercu-appli nav.menu a:focus-visible,body.apercu-appli .appbar a:focus-visible{outline:3px solid var(--a-brand);outline-offset:3px}

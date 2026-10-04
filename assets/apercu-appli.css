@@ -251,3 +251,12 @@ body.apercu-appli .cinfo .ci .k{display:inline-flex;align-self:flex-start;paddin
   font:800 10.5px/1 Arial,Helvetica,sans-serif!important;letter-spacing:.1em!important}
 body.apercu-appli .cinfo .ci a,body.apercu-appli .cinfo .ci .v{font:800 19px/1.25 Arial,Helvetica,sans-serif!important;letter-spacing:-.02em;margin-top:4px}
 body.apercu-appli .cinfo .ci p{font:15px/1.5 Arial,Helvetica,sans-serif!important;color:var(--a-doux)!important}
+
+/* ---------- pages légales : sommaire gris arrondi, articles numérotés en pastilles ---------- */
+body.apercu-appli .legal .toc{background:var(--pilule)!important;border:0!important;border-radius:24px!important}
+body.apercu-appli .legal .toc .toc-k{color:var(--a-encre)!important;font-weight:800!important}
+body.apercu-appli .legal .toc a b,body.apercu-appli .legal .toc b{color:var(--a-bleu)}
+body.apercu-appli .legal h3{font:800 clamp(20px,2.4vw,26px)/1.15 Arial,Helvetica,sans-serif!important;text-transform:none!important;letter-spacing:-.03em!important}
+body.apercu-appli .legal h3 .num{background:color-mix(in srgb,var(--a-brand) 16%,var(--carte))!important;border:0!important;color:var(--a-bleu)!important;font:800 13px/1 Arial,Helvetica,sans-serif!important;border-radius:12px!important}
+body.apercu-appli .legal p,body.apercu-appli .legal li{font-family:Arial,Helvetica,sans-serif}
+body.apercu-appli .legal .intro{background:color-mix(in srgb,var(--a-brand) 10%,var(--carte))!important;border:0!important;border-radius:20px!important}

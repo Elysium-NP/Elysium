@@ -22,7 +22,7 @@ window.ELY_PRIX_EBOOK = '14,90 €';
       ab.innerHTML='Aperçu du nouveau style, pour validation. <a href="?style=site">Revenir au site actuel</a>';
       document.body.appendChild(ab);
       // la maquette poussée (feuille et script dédiés, chargés seulement ici)
-      var lk=document.createElement('link'); lk.rel='stylesheet'; lk.href='assets/apercu-appli.css?v=12'; document.head.appendChild(lk);
+      var lk=document.createElement('link'); lk.rel='stylesheet'; lk.href='assets/apercu-appli.css?v=13'; document.head.appendChild(lk);
       var sc=document.createElement('script'); sc.src='assets/apercu-appli.js?v=3'; document.body.appendChild(sc);
     }
   }catch(e){}
